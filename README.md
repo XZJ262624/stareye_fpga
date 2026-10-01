@@ -3,7 +3,7 @@
 面向2026全国大学生嵌入式芯片与系统设计竞赛FPGA赛道，目标平台为易灵思VF-Ti60F225。
 技术路线：摄像头采集→灰度化→滤波→边缘检测→HDMI显示；扩展多算子切换、自适应阈值、彩色叠加、OSD、延迟与资源测试。
 
-当前 P0 进行中，M0～M7 未开始。Git 初始化已经验收，本轮完成首次提交范围收敛，等待用户确认提交。
+M0基础验收通过：I3完整编译PASS、用户报告JTAG配置PASS及流水灯功能定性PASS。断电后仍有流水灯，但用户此前已固化官方例程，不能证明本轮I3 bitstream的持久性；本轮未SPI Active/Flash固化。 P0其余需求待冻结，M1～M7未开始。
 
 | 路径 | 用途 |
 | --- | --- |
@@ -21,7 +21,6 @@
 
 背景、状态、决定和交接以 docs/ 为统一事实源，自动调度仍以根 AGENTS.md 为准。原方案全文保留，当前操作遵守用户本轮授权范围。
 
-本轮没有复制安装包或参考工程，新增工程目录为空，未放 .gitkeep。Git 不跟踪空目录，后续有实际文件再纳入版本管理。
-Git 仓库已初始化，当前分支 main，无提交。首次暂存仅包含 .gitignore、AGENTS.md、README.md 与 docs/ 中六份 Markdown 项目文档；未执行 git commit，未生成 RTL，未进入 M0。
-根 .gitignore 排除整个 document/ 和 reports/git_baseline_inventory/，保留原有 Efinity 生成目录、仿真缓存、Python 缓存与临时文件规则。以后只将经过筛选的必要资料复制到 reference/；本轮不移动、不删除 document/ 内任何文件。
-指导操作先解释目的，一次只给1～3个实际操作；真实硬件连接、下载与画面需要用户确认。
+[最小LED工作工程](efinity/m0_led_i3/LED_8bit_Test.xml)、[构建报告](reports/m0_led_i3/BUILD_REPORT.md)、[上板验收](reports/m0_led_i3/ACCEPTANCE_REPORT.md)和[器件/编译核查](docs/MINIMAL_REFERENCE_CHECK.md)记录本轮结果。厂商原始工程完全保留，未编写算法业务RTL，未自动下载或Flash固化。
+
+Git分支main；M0独立提交范围已核查，实际提交哈希以git log为准。根.gitignore排除document、历史盘点和工程生成目录，保留关键reports。指导先解释目的，一次只给1～3个操作；实际下载与硬件现象需要用户确认。

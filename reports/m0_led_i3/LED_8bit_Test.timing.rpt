@@ -1,0 +1,1300 @@
+
+Efinix Static Timing Analysis Report
+Version: 2025.1.110.5.9
+Date: Thu Oct  1 19:00:34 2026
+
+Copyright (C) 2013 - 2025 Efinix, Inc. All rights reserved.
+
+Top-level Entity Name: LED_8bit_Test
+
+SDC Filename: LED_8bit_Test_I3.sdc
+
+Timing Model: I3
+	process : typical
+	temperature : -40C to 100C
+	voltage : 0.95 +/-30mV
+	speedgrade : 3
+	technology : t16ff
+	status : final
+
+---------- Table of Contents (begin) ----------
+   1. Clock Frequency Summary
+   2. Clock Relationship Summary
+   3. Path Details for Max Critical Paths
+   4. Path Details for Min Critical Paths
+---------- Table of Contents (end) ------------
+
+---------- 1. Clock Frequency Summary (begin) ----------
+
+User target constrained clocks
+   Clock Name     Period (ns)  Frequency (MHz)   Waveform          Targets
+pll_inst1_CLKOUT0    10.417        95.997      {0.000 5.208} {pll_inst1_CLKOUT0}
+
+Maximum possible analyzed clocks frequency
+   Clock Name     Period (ns)  Frequency (MHz)     Edge
+pll_inst1_CLKOUT0    2.022        494.560         (R-R)
+
+Geomean max period: 2.022
+
+---------- Clock Frequency Summary (end) ---------------
+
+---------- 2. Clock Relationship Summary (begin) ----------
+
+Setup (Max) Clock Relationship
+  Launch Clock      Capture Clock   Constraint (ns)     Slack (ns)          Edge
+pll_inst1_CLKOUT0 pll_inst1_CLKOUT0      10.417           8.395            (R-R)
+
+Hold (Min) Clock Relationship
+  Launch Clock      Capture Clock   Constraint (ns)     Slack (ns)          Edge
+pll_inst1_CLKOUT0 pll_inst1_CLKOUT0      0.000            0.092            (R-R)
+
+NOTE: Values are in nanoseconds.
+
+---------- Clock Relationship Summary (end) ---------------
+
+---------- 3. Path Details for Max Critical Paths (begin) ----------
+
+################################################################################
+Path Detail Report (pll_inst1_CLKOUT0 vs pll_inst1_CLKOUT0)
+################################################################################
+
+
+++++ Path 1 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : u_led_water_display/delay_cnt[1]~FF|CLK
+Path End      : u_led_water_display/led_state[1]~FF|CE 
+Launch Clock  : pll_inst1_CLKOUT0 (RISE)               
+Capture Clock : pll_inst1_CLKOUT0 (RISE)               
+Slack         : 8.395 (required time - arrival time)   
+Delay         : 1.662                                  
+
+Logic Level             : 3
+Non-global nets on path : 4
+Global nets on path     : 0
+
+Launch Clock Path Delay        : 2.104
++ Clock To Q + Data Path Delay : 1.896
+--------------------------------------
+End-of-path arrival time       : 4.000
+
+Constraint                     : 10.417
++ Capture Clock Path Delay     :  2.104
+- Clock Uncertainty            :  0.126
+---------------------------------------
+End-of-path required time      : 12.395
+
+Launch Clock Path
+                 name                    model name   delay (ns)  cumulative delay (ns) pins on net    location
+=================================================================================================================
+pll_inst1_CLKOUT0                          inpad        0.000             0.000               0        (0,162) 
+pll_inst1_CLKOUT0                          inpad        0.126             0.126              37        (0,162) 
+pll_inst1_CLKOUT0                          net          1.978             2.104              37        (0,162) 
+   Routing elements:
+      Manhattan distance of X:213, Y:148
+u_led_water_display/delay_cnt[1]~FF|CLK    ff           0.000             2.104              37        (213,14)
+
+Data Path
+                 name                   model name   delay (ns)  cumulative delay (ns) pins on net    location
+================================================================================================================
+u_led_water_display/delay_cnt[1]~FF|Q      ff          0.130             0.130              3         (213,14)
+u_led_water_display/delay_cnt[1]           net         0.338             0.468              3         (213,14)
+   Routing elements:
+      Manhattan distance of X:0, Y:1
+LUT__266|in[1]                             lut         0.063             0.531              3         (213,13)
+LUT__266|out                               lut         0.000             0.531              2         (213,13)
+n114                                       net         0.387             0.918              2         (213,13)
+   Routing elements:
+      Manhattan distance of X:1, Y:13
+LUT__268|in[2]                             lut         0.061             0.979              2         (212,26)
+LUT__268|out                               lut         0.000             0.979              3         (212,26)
+n116                                       net         0.253             1.232              3         (212,26)
+   Routing elements:
+      Manhattan distance of X:0, Y:12
+LUT__271|in[0]                             lut         0.061             1.293              3         (212,14)
+LUT__271|out                               lut         0.000             1.293              5         (212,14)
+u_led_water_display/equal_10/n47           net         0.499             1.792              5         (212,14)
+   Routing elements:
+      Manhattan distance of X:3, Y:4
+u_led_water_display/led_state[1]~FF|CE     ff          0.104             1.896              5         (215,10)
+
+Capture Clock Path
+                 name                    model name   delay (ns)  cumulative delay (ns) pins on net    location
+=================================================================================================================
+pll_inst1_CLKOUT0                          inpad        0.000             0.000               0        (0,162) 
+pll_inst1_CLKOUT0                          inpad        0.126             0.126              37        (0,162) 
+pll_inst1_CLKOUT0                          net          1.978             2.104              37        (0,162) 
+   Routing elements:
+      Manhattan distance of X:215, Y:152
+u_led_water_display/led_state[1]~FF|CLK    ff           0.000             2.104              37        (215,10)
+
+++++ Path 2 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : u_led_water_display/delay_cnt[23]~FF|CLK
+Path End      : u_led_water_display/led_state[1]~FF|CE  
+Launch Clock  : pll_inst1_CLKOUT0 (RISE)                
+Capture Clock : pll_inst1_CLKOUT0 (RISE)                
+Slack         : 8.456 (required time - arrival time)    
+Delay         : 1.601                                   
+
+Logic Level             : 3
+Non-global nets on path : 4
+Global nets on path     : 0
+
+Launch Clock Path Delay        : 2.104
++ Clock To Q + Data Path Delay : 1.835
+--------------------------------------
+End-of-path arrival time       : 3.939
+
+Constraint                     : 10.417
++ Capture Clock Path Delay     :  2.104
+- Clock Uncertainty            :  0.126
+---------------------------------------
+End-of-path required time      : 12.395
+
+Launch Clock Path
+                  name                    model name   delay (ns)  cumulative delay (ns) pins on net    location
+==================================================================================================================
+pll_inst1_CLKOUT0                           inpad        0.000             0.000               0        (0,162) 
+pll_inst1_CLKOUT0                           inpad        0.126             0.126              37        (0,162) 
+pll_inst1_CLKOUT0                           net          1.978             2.104              37        (0,162) 
+   Routing elements:
+      Manhattan distance of X:213, Y:125
+u_led_water_display/delay_cnt[23]~FF|CLK    ff           0.000             2.104              37        (213,37)
+
+Data Path
+                 name                   model name   delay (ns)  cumulative delay (ns) pins on net    location
+================================================================================================================
+u_led_water_display/delay_cnt[23]~FF|Q     ff          0.130             0.130              3         (213,37)
+u_led_water_display/delay_cnt[23]          net         0.295             0.425              3         (213,37)
+   Routing elements:
+      Manhattan distance of X:0, Y:1
+LUT__267|in[3]                             lut         0.063             0.488              3         (213,38)
+LUT__267|out                               lut         0.000             0.488              2         (213,38)
+n115                                       net         0.369             0.857              2         (213,38)
+   Routing elements:
+      Manhattan distance of X:1, Y:12
+LUT__268|in[3]                             lut         0.061             0.918              2         (212,26)
+LUT__268|out                               lut         0.000             0.918              3         (212,26)
+n116                                       net         0.253             1.171              3         (212,26)
+   Routing elements:
+      Manhattan distance of X:0, Y:12
+LUT__271|in[0]                             lut         0.061             1.232              3         (212,14)
+LUT__271|out                               lut         0.000             1.232              5         (212,14)
+u_led_water_display/equal_10/n47           net         0.499             1.731              5         (212,14)
+   Routing elements:
+      Manhattan distance of X:3, Y:4
+u_led_water_display/led_state[1]~FF|CE     ff          0.104             1.835              5         (215,10)
+
+Capture Clock Path
+                 name                    model name   delay (ns)  cumulative delay (ns) pins on net    location
+=================================================================================================================
+pll_inst1_CLKOUT0                          inpad        0.000             0.000               0        (0,162) 
+pll_inst1_CLKOUT0                          inpad        0.126             0.126              37        (0,162) 
+pll_inst1_CLKOUT0                          net          1.978             2.104              37        (0,162) 
+   Routing elements:
+      Manhattan distance of X:215, Y:152
+u_led_water_display/led_state[1]~FF|CLK    ff           0.000             2.104              37        (215,10)
+
+++++ Path 3 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : u_led_water_display/delay_cnt[1]~FF|CLK
+Path End      : u_led_water_display/led_state[2]~FF|CE 
+Launch Clock  : pll_inst1_CLKOUT0 (RISE)               
+Capture Clock : pll_inst1_CLKOUT0 (RISE)               
+Slack         : 8.507 (required time - arrival time)   
+Delay         : 1.550                                  
+
+Logic Level             : 3
+Non-global nets on path : 4
+Global nets on path     : 0
+
+Launch Clock Path Delay        : 2.104
++ Clock To Q + Data Path Delay : 1.784
+--------------------------------------
+End-of-path arrival time       : 3.888
+
+Constraint                     : 10.417
++ Capture Clock Path Delay     :  2.104
+- Clock Uncertainty            :  0.126
+---------------------------------------
+End-of-path required time      : 12.395
+
+Launch Clock Path
+                 name                    model name   delay (ns)  cumulative delay (ns) pins on net    location
+=================================================================================================================
+pll_inst1_CLKOUT0                          inpad        0.000             0.000               0        (0,162) 
+pll_inst1_CLKOUT0                          inpad        0.126             0.126              37        (0,162) 
+pll_inst1_CLKOUT0                          net          1.978             2.104              37        (0,162) 
+   Routing elements:
+      Manhattan distance of X:213, Y:148
+u_led_water_display/delay_cnt[1]~FF|CLK    ff           0.000             2.104              37        (213,14)
+
+Data Path
+                 name                   model name   delay (ns)  cumulative delay (ns) pins on net    location
+================================================================================================================
+u_led_water_display/delay_cnt[1]~FF|Q      ff          0.130             0.130              3         (213,14)
+u_led_water_display/delay_cnt[1]           net         0.338             0.468              3         (213,14)
+   Routing elements:
+      Manhattan distance of X:0, Y:1
+LUT__266|in[1]                             lut         0.063             0.531              3         (213,13)
+LUT__266|out                               lut         0.000             0.531              2         (213,13)
+n114                                       net         0.387             0.918              2         (213,13)
+   Routing elements:
+      Manhattan distance of X:1, Y:13
+LUT__268|in[2]                             lut         0.061             0.979              2         (212,26)
+LUT__268|out                               lut         0.000             0.979              3         (212,26)
+n116                                       net         0.253             1.232              3         (212,26)
+   Routing elements:
+      Manhattan distance of X:0, Y:12
+LUT__271|in[0]                             lut         0.061             1.293              3         (212,14)
+LUT__271|out                               lut         0.000             1.293              5         (212,14)
+u_led_water_display/equal_10/n47           net         0.387             1.680              5         (212,14)
+   Routing elements:
+      Manhattan distance of X:1, Y:4
+u_led_water_display/led_state[2]~FF|CE     ff          0.104             1.784              5         (213,10)
+
+Capture Clock Path
+                 name                    model name   delay (ns)  cumulative delay (ns) pins on net    location
+=================================================================================================================
+pll_inst1_CLKOUT0                          inpad        0.000             0.000               0        (0,162) 
+pll_inst1_CLKOUT0                          inpad        0.126             0.126              37        (0,162) 
+pll_inst1_CLKOUT0                          net          1.978             2.104              37        (0,162) 
+   Routing elements:
+      Manhattan distance of X:213, Y:152
+u_led_water_display/led_state[2]~FF|CLK    ff           0.000             2.104              37        (213,10)
+
+++++ Path 4 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : u_led_water_display/delay_cnt[1]~FF|CLK
+Path End      : u_led_water_display/led_state[0]~FF|CE 
+Launch Clock  : pll_inst1_CLKOUT0 (RISE)               
+Capture Clock : pll_inst1_CLKOUT0 (RISE)               
+Slack         : 8.529 (required time - arrival time)   
+Delay         : 1.528                                  
+
+Logic Level             : 3
+Non-global nets on path : 4
+Global nets on path     : 0
+
+Launch Clock Path Delay        : 2.104
++ Clock To Q + Data Path Delay : 1.762
+--------------------------------------
+End-of-path arrival time       : 3.866
+
+Constraint                     : 10.417
++ Capture Clock Path Delay     :  2.104
+- Clock Uncertainty            :  0.126
+---------------------------------------
+End-of-path required time      : 12.395
+
+Launch Clock Path
+                 name                    model name   delay (ns)  cumulative delay (ns) pins on net    location
+=================================================================================================================
+pll_inst1_CLKOUT0                          inpad        0.000             0.000               0        (0,162) 
+pll_inst1_CLKOUT0                          inpad        0.126             0.126              37        (0,162) 
+pll_inst1_CLKOUT0                          net          1.978             2.104              37        (0,162) 
+   Routing elements:
+      Manhattan distance of X:213, Y:148
+u_led_water_display/delay_cnt[1]~FF|CLK    ff           0.000             2.104              37        (213,14)
+
+Data Path
+                 name                   model name   delay (ns)  cumulative delay (ns) pins on net    location
+================================================================================================================
+u_led_water_display/delay_cnt[1]~FF|Q      ff          0.130             0.130              3         (213,14)
+u_led_water_display/delay_cnt[1]           net         0.338             0.468              3         (213,14)
+   Routing elements:
+      Manhattan distance of X:0, Y:1
+LUT__266|in[1]                             lut         0.063             0.531              3         (213,13)
+LUT__266|out                               lut         0.000             0.531              2         (213,13)
+n114                                       net         0.387             0.918              2         (213,13)
+   Routing elements:
+      Manhattan distance of X:1, Y:13
+LUT__268|in[2]                             lut         0.061             0.979              2         (212,26)
+LUT__268|out                               lut         0.000             0.979              3         (212,26)
+n116                                       net         0.253             1.232              3         (212,26)
+   Routing elements:
+      Manhattan distance of X:0, Y:12
+LUT__271|in[0]                             lut         0.061             1.293              3         (212,14)
+LUT__271|out                               lut         0.000             1.293              5         (212,14)
+u_led_water_display/equal_10/n47           net         0.365             1.658              5         (212,14)
+   Routing elements:
+      Manhattan distance of X:1, Y:5
+u_led_water_display/led_state[0]~FF|CE     ff          0.104             1.762              5         (213,9) 
+
+Capture Clock Path
+                 name                    model name   delay (ns)  cumulative delay (ns) pins on net    location
+=================================================================================================================
+pll_inst1_CLKOUT0                          inpad        0.000             0.000               0        (0,162)
+pll_inst1_CLKOUT0                          inpad        0.126             0.126              37        (0,162)
+pll_inst1_CLKOUT0                          net          1.978             2.104              37        (0,162)
+   Routing elements:
+      Manhattan distance of X:213, Y:153
+u_led_water_display/led_state[0]~FF|CLK    ff           0.000             2.104              37        (213,9)
+
+++++ Path 5 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : u_led_water_display/delay_cnt[1]~FF|CLK
+Path End      : u_led_water_display/led_state[3]~FF|CE 
+Launch Clock  : pll_inst1_CLKOUT0 (RISE)               
+Capture Clock : pll_inst1_CLKOUT0 (RISE)               
+Slack         : 8.530 (required time - arrival time)   
+Delay         : 1.527                                  
+
+Logic Level             : 3
+Non-global nets on path : 4
+Global nets on path     : 0
+
+Launch Clock Path Delay        : 2.104
++ Clock To Q + Data Path Delay : 1.761
+--------------------------------------
+End-of-path arrival time       : 3.865
+
+Constraint                     : 10.417
++ Capture Clock Path Delay     :  2.104
+- Clock Uncertainty            :  0.126
+---------------------------------------
+End-of-path required time      : 12.395
+
+Launch Clock Path
+                 name                    model name   delay (ns)  cumulative delay (ns) pins on net    location
+=================================================================================================================
+pll_inst1_CLKOUT0                          inpad        0.000             0.000               0        (0,162) 
+pll_inst1_CLKOUT0                          inpad        0.126             0.126              37        (0,162) 
+pll_inst1_CLKOUT0                          net          1.978             2.104              37        (0,162) 
+   Routing elements:
+      Manhattan distance of X:213, Y:148
+u_led_water_display/delay_cnt[1]~FF|CLK    ff           0.000             2.104              37        (213,14)
+
+Data Path
+                 name                   model name   delay (ns)  cumulative delay (ns) pins on net    location
+================================================================================================================
+u_led_water_display/delay_cnt[1]~FF|Q      ff          0.130             0.130              3         (213,14)
+u_led_water_display/delay_cnt[1]           net         0.338             0.468              3         (213,14)
+   Routing elements:
+      Manhattan distance of X:0, Y:1
+LUT__266|in[1]                             lut         0.063             0.531              3         (213,13)
+LUT__266|out                               lut         0.000             0.531              2         (213,13)
+n114                                       net         0.387             0.918              2         (213,13)
+   Routing elements:
+      Manhattan distance of X:1, Y:13
+LUT__268|in[2]                             lut         0.061             0.979              2         (212,26)
+LUT__268|out                               lut         0.000             0.979              3         (212,26)
+n116                                       net         0.253             1.232              3         (212,26)
+   Routing elements:
+      Manhattan distance of X:0, Y:12
+LUT__271|in[0]                             lut         0.061             1.293              3         (212,14)
+LUT__271|out                               lut         0.000             1.293              5         (212,14)
+u_led_water_display/equal_10/n47           net         0.364             1.657              5         (212,14)
+   Routing elements:
+      Manhattan distance of X:3, Y:5
+u_led_water_display/led_state[3]~FF|CE     ff          0.104             1.761              5         (215,9) 
+
+Capture Clock Path
+                 name                    model name   delay (ns)  cumulative delay (ns) pins on net    location
+=================================================================================================================
+pll_inst1_CLKOUT0                          inpad        0.000             0.000               0        (0,162)
+pll_inst1_CLKOUT0                          inpad        0.126             0.126              37        (0,162)
+pll_inst1_CLKOUT0                          net          1.978             2.104              37        (0,162)
+   Routing elements:
+      Manhattan distance of X:215, Y:153
+u_led_water_display/led_state[3]~FF|CLK    ff           0.000             2.104              37        (215,9)
+
+++++ Path 6 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : u_led_water_display/delay_cnt[18]~FF|CLK
+Path End      : u_led_water_display/led_state[1]~FF|CE  
+Launch Clock  : pll_inst1_CLKOUT0 (RISE)                
+Capture Clock : pll_inst1_CLKOUT0 (RISE)                
+Slack         : 8.547 (required time - arrival time)    
+Delay         : 1.510                                   
+
+Logic Level             : 3
+Non-global nets on path : 4
+Global nets on path     : 0
+
+Launch Clock Path Delay        : 2.104
++ Clock To Q + Data Path Delay : 1.744
+--------------------------------------
+End-of-path arrival time       : 3.848
+
+Constraint                     : 10.417
++ Capture Clock Path Delay     :  2.104
+- Clock Uncertainty            :  0.126
+---------------------------------------
+End-of-path required time      : 12.395
+
+Launch Clock Path
+                  name                    model name   delay (ns)  cumulative delay (ns) pins on net    location
+==================================================================================================================
+pll_inst1_CLKOUT0                           inpad        0.000             0.000               0        (0,162) 
+pll_inst1_CLKOUT0                           inpad        0.126             0.126              37        (0,162) 
+pll_inst1_CLKOUT0                           net          1.978             2.104              37        (0,162) 
+   Routing elements:
+      Manhattan distance of X:213, Y:130
+u_led_water_display/delay_cnt[18]~FF|CLK    ff           0.000             2.104              37        (213,32)
+
+Data Path
+                 name                   model name   delay (ns)  cumulative delay (ns) pins on net    location
+================================================================================================================
+u_led_water_display/delay_cnt[18]~FF|Q     ff          0.130             0.130              3         (213,32)
+u_led_water_display/delay_cnt[18]          net         0.204             0.334              3         (213,32)
+   Routing elements:
+      Manhattan distance of X:0, Y:6
+LUT__267|in[0]                             lut         0.063             0.397              3         (213,38)
+LUT__267|out                               lut         0.000             0.397              2         (213,38)
+n115                                       net         0.369             0.766              2         (213,38)
+   Routing elements:
+      Manhattan distance of X:1, Y:12
+LUT__268|in[3]                             lut         0.061             0.827              2         (212,26)
+LUT__268|out                               lut         0.000             0.827              3         (212,26)
+n116                                       net         0.253             1.080              3         (212,26)
+   Routing elements:
+      Manhattan distance of X:0, Y:12
+LUT__271|in[0]                             lut         0.061             1.141              3         (212,14)
+LUT__271|out                               lut         0.000             1.141              5         (212,14)
+u_led_water_display/equal_10/n47           net         0.499             1.640              5         (212,14)
+   Routing elements:
+      Manhattan distance of X:3, Y:4
+u_led_water_display/led_state[1]~FF|CE     ff          0.104             1.744              5         (215,10)
+
+Capture Clock Path
+                 name                    model name   delay (ns)  cumulative delay (ns) pins on net    location
+=================================================================================================================
+pll_inst1_CLKOUT0                          inpad        0.000             0.000               0        (0,162) 
+pll_inst1_CLKOUT0                          inpad        0.126             0.126              37        (0,162) 
+pll_inst1_CLKOUT0                          net          1.978             2.104              37        (0,162) 
+   Routing elements:
+      Manhattan distance of X:215, Y:152
+u_led_water_display/led_state[1]~FF|CLK    ff           0.000             2.104              37        (215,10)
+
+++++ Path 7 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : u_led_water_display/delay_cnt[3]~FF|CLK
+Path End      : u_led_water_display/led_state[1]~FF|CE 
+Launch Clock  : pll_inst1_CLKOUT0 (RISE)               
+Capture Clock : pll_inst1_CLKOUT0 (RISE)               
+Slack         : 8.549 (required time - arrival time)   
+Delay         : 1.508                                  
+
+Logic Level             : 3
+Non-global nets on path : 4
+Global nets on path     : 0
+
+Launch Clock Path Delay        : 2.104
++ Clock To Q + Data Path Delay : 1.742
+--------------------------------------
+End-of-path arrival time       : 3.846
+
+Constraint                     : 10.417
++ Capture Clock Path Delay     :  2.104
+- Clock Uncertainty            :  0.126
+---------------------------------------
+End-of-path required time      : 12.395
+
+Launch Clock Path
+                 name                    model name   delay (ns)  cumulative delay (ns) pins on net    location
+=================================================================================================================
+pll_inst1_CLKOUT0                          inpad        0.000             0.000               0        (0,162) 
+pll_inst1_CLKOUT0                          inpad        0.126             0.126              37        (0,162) 
+pll_inst1_CLKOUT0                          net          1.978             2.104              37        (0,162) 
+   Routing elements:
+      Manhattan distance of X:213, Y:145
+u_led_water_display/delay_cnt[3]~FF|CLK    ff           0.000             2.104              37        (213,17)
+
+Data Path
+                 name                   model name   delay (ns)  cumulative delay (ns) pins on net    location
+================================================================================================================
+u_led_water_display/delay_cnt[3]~FF|Q      ff          0.130             0.130              3         (213,17)
+u_led_water_display/delay_cnt[3]           net         0.184             0.314              3         (213,17)
+   Routing elements:
+      Manhattan distance of X:0, Y:4
+LUT__266|in[3]                             lut         0.063             0.377              3         (213,13)
+LUT__266|out                               lut         0.000             0.377              2         (213,13)
+n114                                       net         0.387             0.764              2         (213,13)
+   Routing elements:
+      Manhattan distance of X:1, Y:13
+LUT__268|in[2]                             lut         0.061             0.825              2         (212,26)
+LUT__268|out                               lut         0.000             0.825              3         (212,26)
+n116                                       net         0.253             1.078              3         (212,26)
+   Routing elements:
+      Manhattan distance of X:0, Y:12
+LUT__271|in[0]                             lut         0.061             1.139              3         (212,14)
+LUT__271|out                               lut         0.000             1.139              5         (212,14)
+u_led_water_display/equal_10/n47           net         0.499             1.638              5         (212,14)
+   Routing elements:
+      Manhattan distance of X:3, Y:4
+u_led_water_display/led_state[1]~FF|CE     ff          0.104             1.742              5         (215,10)
+
+Capture Clock Path
+                 name                    model name   delay (ns)  cumulative delay (ns) pins on net    location
+=================================================================================================================
+pll_inst1_CLKOUT0                          inpad        0.000             0.000               0        (0,162) 
+pll_inst1_CLKOUT0                          inpad        0.126             0.126              37        (0,162) 
+pll_inst1_CLKOUT0                          net          1.978             2.104              37        (0,162) 
+   Routing elements:
+      Manhattan distance of X:215, Y:152
+u_led_water_display/led_state[1]~FF|CLK    ff           0.000             2.104              37        (215,10)
+
+++++ Path 8 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : u_led_water_display/delay_cnt[21]~FF|CLK
+Path End      : u_led_water_display/led_state[1]~FF|CE  
+Launch Clock  : pll_inst1_CLKOUT0 (RISE)                
+Capture Clock : pll_inst1_CLKOUT0 (RISE)                
+Slack         : 8.567 (required time - arrival time)    
+Delay         : 1.490                                   
+
+Logic Level             : 3
+Non-global nets on path : 4
+Global nets on path     : 0
+
+Launch Clock Path Delay        : 2.104
++ Clock To Q + Data Path Delay : 1.724
+--------------------------------------
+End-of-path arrival time       : 3.828
+
+Constraint                     : 10.417
++ Capture Clock Path Delay     :  2.104
+- Clock Uncertainty            :  0.126
+---------------------------------------
+End-of-path required time      : 12.395
+
+Launch Clock Path
+                  name                    model name   delay (ns)  cumulative delay (ns) pins on net    location
+==================================================================================================================
+pll_inst1_CLKOUT0                           inpad        0.000             0.000               0        (0,162) 
+pll_inst1_CLKOUT0                           inpad        0.126             0.126              37        (0,162) 
+pll_inst1_CLKOUT0                           net          1.978             2.104              37        (0,162) 
+   Routing elements:
+      Manhattan distance of X:213, Y:127
+u_led_water_display/delay_cnt[21]~FF|CLK    ff           0.000             2.104              37        (213,35)
+
+Data Path
+                 name                   model name   delay (ns)  cumulative delay (ns) pins on net    location
+================================================================================================================
+u_led_water_display/delay_cnt[21]~FF|Q     ff          0.130             0.130              3         (213,35)
+u_led_water_display/delay_cnt[21]          net         0.184             0.314              3         (213,35)
+   Routing elements:
+      Manhattan distance of X:0, Y:3
+LUT__267|in[1]                             lut         0.063             0.377              3         (213,38)
+LUT__267|out                               lut         0.000             0.377              2         (213,38)
+n115                                       net         0.369             0.746              2         (213,38)
+   Routing elements:
+      Manhattan distance of X:1, Y:12
+LUT__268|in[3]                             lut         0.061             0.807              2         (212,26)
+LUT__268|out                               lut         0.000             0.807              3         (212,26)
+n116                                       net         0.253             1.060              3         (212,26)
+   Routing elements:
+      Manhattan distance of X:0, Y:12
+LUT__271|in[0]                             lut         0.061             1.121              3         (212,14)
+LUT__271|out                               lut         0.000             1.121              5         (212,14)
+u_led_water_display/equal_10/n47           net         0.499             1.620              5         (212,14)
+   Routing elements:
+      Manhattan distance of X:3, Y:4
+u_led_water_display/led_state[1]~FF|CE     ff          0.104             1.724              5         (215,10)
+
+Capture Clock Path
+                 name                    model name   delay (ns)  cumulative delay (ns) pins on net    location
+=================================================================================================================
+pll_inst1_CLKOUT0                          inpad        0.000             0.000               0        (0,162) 
+pll_inst1_CLKOUT0                          inpad        0.126             0.126              37        (0,162) 
+pll_inst1_CLKOUT0                          net          1.978             2.104              37        (0,162) 
+   Routing elements:
+      Manhattan distance of X:215, Y:152
+u_led_water_display/led_state[1]~FF|CLK    ff           0.000             2.104              37        (215,10)
+
+++++ Path 9 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : u_led_water_display/delay_cnt[23]~FF|CLK
+Path End      : u_led_water_display/led_state[2]~FF|CE  
+Launch Clock  : pll_inst1_CLKOUT0 (RISE)                
+Capture Clock : pll_inst1_CLKOUT0 (RISE)                
+Slack         : 8.568 (required time - arrival time)    
+Delay         : 1.489                                   
+
+Logic Level             : 3
+Non-global nets on path : 4
+Global nets on path     : 0
+
+Launch Clock Path Delay        : 2.104
++ Clock To Q + Data Path Delay : 1.723
+--------------------------------------
+End-of-path arrival time       : 3.827
+
+Constraint                     : 10.417
++ Capture Clock Path Delay     :  2.104
+- Clock Uncertainty            :  0.126
+---------------------------------------
+End-of-path required time      : 12.395
+
+Launch Clock Path
+                  name                    model name   delay (ns)  cumulative delay (ns) pins on net    location
+==================================================================================================================
+pll_inst1_CLKOUT0                           inpad        0.000             0.000               0        (0,162) 
+pll_inst1_CLKOUT0                           inpad        0.126             0.126              37        (0,162) 
+pll_inst1_CLKOUT0                           net          1.978             2.104              37        (0,162) 
+   Routing elements:
+      Manhattan distance of X:213, Y:125
+u_led_water_display/delay_cnt[23]~FF|CLK    ff           0.000             2.104              37        (213,37)
+
+Data Path
+                 name                   model name   delay (ns)  cumulative delay (ns) pins on net    location
+================================================================================================================
+u_led_water_display/delay_cnt[23]~FF|Q     ff          0.130             0.130              3         (213,37)
+u_led_water_display/delay_cnt[23]          net         0.295             0.425              3         (213,37)
+   Routing elements:
+      Manhattan distance of X:0, Y:1
+LUT__267|in[3]                             lut         0.063             0.488              3         (213,38)
+LUT__267|out                               lut         0.000             0.488              2         (213,38)
+n115                                       net         0.369             0.857              2         (213,38)
+   Routing elements:
+      Manhattan distance of X:1, Y:12
+LUT__268|in[3]                             lut         0.061             0.918              2         (212,26)
+LUT__268|out                               lut         0.000             0.918              3         (212,26)
+n116                                       net         0.253             1.171              3         (212,26)
+   Routing elements:
+      Manhattan distance of X:0, Y:12
+LUT__271|in[0]                             lut         0.061             1.232              3         (212,14)
+LUT__271|out                               lut         0.000             1.232              5         (212,14)
+u_led_water_display/equal_10/n47           net         0.387             1.619              5         (212,14)
+   Routing elements:
+      Manhattan distance of X:1, Y:4
+u_led_water_display/led_state[2]~FF|CE     ff          0.104             1.723              5         (213,10)
+
+Capture Clock Path
+                 name                    model name   delay (ns)  cumulative delay (ns) pins on net    location
+=================================================================================================================
+pll_inst1_CLKOUT0                          inpad        0.000             0.000               0        (0,162) 
+pll_inst1_CLKOUT0                          inpad        0.126             0.126              37        (0,162) 
+pll_inst1_CLKOUT0                          net          1.978             2.104              37        (0,162) 
+   Routing elements:
+      Manhattan distance of X:213, Y:152
+u_led_water_display/led_state[2]~FF|CLK    ff           0.000             2.104              37        (213,10)
+
+++++ Path 10 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : u_led_water_display/delay_cnt[23]~FF|CLK
+Path End      : u_led_water_display/led_state[0]~FF|CE  
+Launch Clock  : pll_inst1_CLKOUT0 (RISE)                
+Capture Clock : pll_inst1_CLKOUT0 (RISE)                
+Slack         : 8.590 (required time - arrival time)    
+Delay         : 1.467                                   
+
+Logic Level             : 3
+Non-global nets on path : 4
+Global nets on path     : 0
+
+Launch Clock Path Delay        : 2.104
++ Clock To Q + Data Path Delay : 1.701
+--------------------------------------
+End-of-path arrival time       : 3.805
+
+Constraint                     : 10.417
++ Capture Clock Path Delay     :  2.104
+- Clock Uncertainty            :  0.126
+---------------------------------------
+End-of-path required time      : 12.395
+
+Launch Clock Path
+                  name                    model name   delay (ns)  cumulative delay (ns) pins on net    location
+==================================================================================================================
+pll_inst1_CLKOUT0                           inpad        0.000             0.000               0        (0,162) 
+pll_inst1_CLKOUT0                           inpad        0.126             0.126              37        (0,162) 
+pll_inst1_CLKOUT0                           net          1.978             2.104              37        (0,162) 
+   Routing elements:
+      Manhattan distance of X:213, Y:125
+u_led_water_display/delay_cnt[23]~FF|CLK    ff           0.000             2.104              37        (213,37)
+
+Data Path
+                 name                   model name   delay (ns)  cumulative delay (ns) pins on net    location
+================================================================================================================
+u_led_water_display/delay_cnt[23]~FF|Q     ff          0.130             0.130              3         (213,37)
+u_led_water_display/delay_cnt[23]          net         0.295             0.425              3         (213,37)
+   Routing elements:
+      Manhattan distance of X:0, Y:1
+LUT__267|in[3]                             lut         0.063             0.488              3         (213,38)
+LUT__267|out                               lut         0.000             0.488              2         (213,38)
+n115                                       net         0.369             0.857              2         (213,38)
+   Routing elements:
+      Manhattan distance of X:1, Y:12
+LUT__268|in[3]                             lut         0.061             0.918              2         (212,26)
+LUT__268|out                               lut         0.000             0.918              3         (212,26)
+n116                                       net         0.253             1.171              3         (212,26)
+   Routing elements:
+      Manhattan distance of X:0, Y:12
+LUT__271|in[0]                             lut         0.061             1.232              3         (212,14)
+LUT__271|out                               lut         0.000             1.232              5         (212,14)
+u_led_water_display/equal_10/n47           net         0.365             1.597              5         (212,14)
+   Routing elements:
+      Manhattan distance of X:1, Y:5
+u_led_water_display/led_state[0]~FF|CE     ff          0.104             1.701              5         (213,9) 
+
+Capture Clock Path
+                 name                    model name   delay (ns)  cumulative delay (ns) pins on net    location
+=================================================================================================================
+pll_inst1_CLKOUT0                          inpad        0.000             0.000               0        (0,162)
+pll_inst1_CLKOUT0                          inpad        0.126             0.126              37        (0,162)
+pll_inst1_CLKOUT0                          net          1.978             2.104              37        (0,162)
+   Routing elements:
+      Manhattan distance of X:213, Y:153
+u_led_water_display/led_state[0]~FF|CLK    ff           0.000             2.104              37        (213,9)
+
+---------- Path Details for Max Critical Paths (end) ---------------
+
+---------- 4. Path Details for Min Critical Paths (begin) ----------
+
+################################################################################
+Path Detail Report (pll_inst1_CLKOUT0 vs pll_inst1_CLKOUT0)
+################################################################################
+
+
+++++ Path 1 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : u_led_water_display/led_state[1]~FF|CLK
+Path End      : u_led_water_display/led_state[2]~FF|D  
+Launch Clock  : pll_inst1_CLKOUT0 (RISE)               
+Capture Clock : pll_inst1_CLKOUT0 (RISE)               
+Slack         : 0.092 (arrival time - required time)   
+Delay         : 0.090                                  
+
+Logic Level             : 1
+Non-global nets on path : 1
+Global nets on path     : 0
+
+Launch Clock Path Delay        : 1.189
++ Clock To Q + Data Path Delay : 0.162
+--------------------------------------
+End-of-path arrival time       : 1.351
+
+Constraint                     : 0.000
++ Capture Clock Path Delay     : 1.189
++ Clock Uncertainty            : 0.070
+--------------------------------------
+End-of-path required time      : 1.259
+
+Launch Clock Path
+                 name                    model name   delay (ns)  cumulative delay (ns) pins on net    location
+=================================================================================================================
+pll_inst1_CLKOUT0                          inpad        0.000             0.000               0        (0,162) 
+pll_inst1_CLKOUT0                          inpad        0.070             0.070              37        (0,162) 
+pll_inst1_CLKOUT0                          net          1.119             1.189              37        (0,162) 
+   Routing elements:
+      Manhattan distance of X:215, Y:152
+u_led_water_display/led_state[1]~FF|CLK    ff           0.000             1.189              37        (215,10)
+
+Data Path
+                name                   model name   delay (ns)  cumulative delay (ns) pins on net    location
+===============================================================================================================
+u_led_water_display/led_state[1]~FF|Q     ff          0.072             0.072              13        (215,10)
+u_led_water_display/led_state[1]          net         0.055             0.127              13        (215,10)
+   Routing elements:
+      Manhattan distance of X:2, Y:0
+LUT__274|in[2]                            lut         0.035             0.162              13        (213,10)
+LUT__274|out                              lut         0.000             0.162               2        (213,10)
+u_led_water_display/led_state[2]~FF|D     ff          0.000             0.162               2        (213,10)
+
+Capture Clock Path
+                 name                    model name   delay (ns)  cumulative delay (ns) pins on net    location
+=================================================================================================================
+pll_inst1_CLKOUT0                          inpad        0.000             0.000               0        (0,162) 
+pll_inst1_CLKOUT0                          inpad        0.070             0.070              37        (0,162) 
+pll_inst1_CLKOUT0                          net          1.119             1.189              37        (0,162) 
+   Routing elements:
+      Manhattan distance of X:213, Y:152
+u_led_water_display/led_state[2]~FF|CLK    ff           0.000             1.189              37        (213,10)
+
+++++ Path 2 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : u_led_water_display/led_state[0]~FF|CLK
+Path End      : u_led_water_display/led_state[3]~FF|D  
+Launch Clock  : pll_inst1_CLKOUT0 (RISE)               
+Capture Clock : pll_inst1_CLKOUT0 (RISE)               
+Slack         : 0.095 (arrival time - required time)   
+Delay         : 0.093                                  
+
+Logic Level             : 1
+Non-global nets on path : 1
+Global nets on path     : 0
+
+Launch Clock Path Delay        : 1.189
++ Clock To Q + Data Path Delay : 0.165
+--------------------------------------
+End-of-path arrival time       : 1.354
+
+Constraint                     : 0.000
++ Capture Clock Path Delay     : 1.189
++ Clock Uncertainty            : 0.070
+--------------------------------------
+End-of-path required time      : 1.259
+
+Launch Clock Path
+                 name                    model name   delay (ns)  cumulative delay (ns) pins on net    location
+=================================================================================================================
+pll_inst1_CLKOUT0                          inpad        0.000             0.000               0        (0,162)
+pll_inst1_CLKOUT0                          inpad        0.070             0.070              37        (0,162)
+pll_inst1_CLKOUT0                          net          1.119             1.189              37        (0,162)
+   Routing elements:
+      Manhattan distance of X:213, Y:153
+u_led_water_display/led_state[0]~FF|CLK    ff           0.000             1.189              37        (213,9)
+
+Data Path
+                name                   model name   delay (ns)  cumulative delay (ns) pins on net    location
+===============================================================================================================
+u_led_water_display/led_state[0]~FF|Q     ff          0.072             0.072              13        (213,9)
+u_led_water_display/led_state[0]          net         0.059             0.131              13        (213,9)
+   Routing elements:
+      Manhattan distance of X:2, Y:0
+LUT__275|in[2]                            lut         0.034             0.165              13        (215,9)
+LUT__275|out                              lut         0.000             0.165               2        (215,9)
+u_led_water_display/led_state[3]~FF|D     ff          0.000             0.165               2        (215,9)
+
+Capture Clock Path
+                 name                    model name   delay (ns)  cumulative delay (ns) pins on net    location
+=================================================================================================================
+pll_inst1_CLKOUT0                          inpad        0.000             0.000               0        (0,162)
+pll_inst1_CLKOUT0                          inpad        0.070             0.070              37        (0,162)
+pll_inst1_CLKOUT0                          net          1.119             1.189              37        (0,162)
+   Routing elements:
+      Manhattan distance of X:215, Y:153
+u_led_water_display/led_state[3]~FF|CLK    ff           0.000             1.189              37        (215,9)
+
+++++ Path 3 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : u_led_water_display/led_state[2]~FF|CLK
+Path End      : u_led_water_display/led_state[1]~FF|D  
+Launch Clock  : pll_inst1_CLKOUT0 (RISE)               
+Capture Clock : pll_inst1_CLKOUT0 (RISE)               
+Slack         : 0.095 (arrival time - required time)   
+Delay         : 0.093                                  
+
+Logic Level             : 1
+Non-global nets on path : 1
+Global nets on path     : 0
+
+Launch Clock Path Delay        : 1.189
++ Clock To Q + Data Path Delay : 0.165
+--------------------------------------
+End-of-path arrival time       : 1.354
+
+Constraint                     : 0.000
++ Capture Clock Path Delay     : 1.189
++ Clock Uncertainty            : 0.070
+--------------------------------------
+End-of-path required time      : 1.259
+
+Launch Clock Path
+                 name                    model name   delay (ns)  cumulative delay (ns) pins on net    location
+=================================================================================================================
+pll_inst1_CLKOUT0                          inpad        0.000             0.000               0        (0,162) 
+pll_inst1_CLKOUT0                          inpad        0.070             0.070              37        (0,162) 
+pll_inst1_CLKOUT0                          net          1.119             1.189              37        (0,162) 
+   Routing elements:
+      Manhattan distance of X:213, Y:152
+u_led_water_display/led_state[2]~FF|CLK    ff           0.000             1.189              37        (213,10)
+
+Data Path
+                name                   model name   delay (ns)  cumulative delay (ns) pins on net    location
+===============================================================================================================
+u_led_water_display/led_state[2]~FF|Q     ff          0.072             0.072              13        (213,10)
+u_led_water_display/led_state[2]          net         0.059             0.131              13        (213,10)
+   Routing elements:
+      Manhattan distance of X:2, Y:0
+LUT__273|in[0]                            lut         0.034             0.165              13        (215,10)
+LUT__273|out                              lut         0.000             0.165               2        (215,10)
+u_led_water_display/led_state[1]~FF|D     ff          0.000             0.165               2        (215,10)
+
+Capture Clock Path
+                 name                    model name   delay (ns)  cumulative delay (ns) pins on net    location
+=================================================================================================================
+pll_inst1_CLKOUT0                          inpad        0.000             0.000               0        (0,162) 
+pll_inst1_CLKOUT0                          inpad        0.070             0.070              37        (0,162) 
+pll_inst1_CLKOUT0                          net          1.119             1.189              37        (0,162) 
+   Routing elements:
+      Manhattan distance of X:215, Y:152
+u_led_water_display/led_state[1]~FF|CLK    ff           0.000             1.189              37        (215,10)
+
+++++ Path 4 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : u_led_water_display/led_state[1]~FF|CLK
+Path End      : led_data_r[1]~FF|D                     
+Launch Clock  : pll_inst1_CLKOUT0 (RISE)               
+Capture Clock : pll_inst1_CLKOUT0 (RISE)               
+Slack         : 0.098 (arrival time - required time)   
+Delay         : 0.096                                  
+
+Logic Level             : 1
+Non-global nets on path : 1
+Global nets on path     : 0
+
+Launch Clock Path Delay        : 1.189
++ Clock To Q + Data Path Delay : 0.168
+--------------------------------------
+End-of-path arrival time       : 1.357
+
+Constraint                     : 0.000
++ Capture Clock Path Delay     : 1.189
++ Clock Uncertainty            : 0.070
+--------------------------------------
+End-of-path required time      : 1.259
+
+Launch Clock Path
+                 name                    model name   delay (ns)  cumulative delay (ns) pins on net    location
+=================================================================================================================
+pll_inst1_CLKOUT0                          inpad        0.000             0.000               0        (0,162) 
+pll_inst1_CLKOUT0                          inpad        0.070             0.070              37        (0,162) 
+pll_inst1_CLKOUT0                          net          1.119             1.189              37        (0,162) 
+   Routing elements:
+      Manhattan distance of X:215, Y:152
+u_led_water_display/led_state[1]~FF|CLK    ff           0.000             1.189              37        (215,10)
+
+Data Path
+                name                   model name   delay (ns)  cumulative delay (ns) pins on net    location
+===============================================================================================================
+u_led_water_display/led_state[1]~FF|Q     ff          0.072             0.072              13        (215,10)
+u_led_water_display/led_state[1]          net         0.062             0.134              13        (215,10)
+   Routing elements:
+      Manhattan distance of X:0, Y:2
+LUT__276|in[1]                            lut         0.034             0.168              13        (215,8) 
+LUT__276|out                              lut         0.000             0.168               2        (215,8) 
+led_data_r[1]~FF|D                        ff          0.000             0.168               2        (215,8) 
+
+Capture Clock Path
+        name          model name   delay (ns)  cumulative delay (ns) pins on net    location
+==============================================================================================
+pll_inst1_CLKOUT0       inpad        0.000             0.000               0        (0,162)
+pll_inst1_CLKOUT0       inpad        0.070             0.070              37        (0,162)
+pll_inst1_CLKOUT0       net          1.119             1.189              37        (0,162)
+   Routing elements:
+      Manhattan distance of X:215, Y:154
+led_data_r[1]~FF|CLK    ff           0.000             1.189              37        (215,8)
+
+++++ Path 5 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : u_led_water_display/led_state[2]~FF|CLK
+Path End      : led_data_r[0]~FF|D                     
+Launch Clock  : pll_inst1_CLKOUT0 (RISE)               
+Capture Clock : pll_inst1_CLKOUT0 (RISE)               
+Slack         : 0.101 (arrival time - required time)   
+Delay         : 0.099                                  
+
+Logic Level             : 1
+Non-global nets on path : 1
+Global nets on path     : 0
+
+Launch Clock Path Delay        : 1.189
++ Clock To Q + Data Path Delay : 0.171
+--------------------------------------
+End-of-path arrival time       : 1.360
+
+Constraint                     : 0.000
++ Capture Clock Path Delay     : 1.189
++ Clock Uncertainty            : 0.070
+--------------------------------------
+End-of-path required time      : 1.259
+
+Launch Clock Path
+                 name                    model name   delay (ns)  cumulative delay (ns) pins on net    location
+=================================================================================================================
+pll_inst1_CLKOUT0                          inpad        0.000             0.000               0        (0,162) 
+pll_inst1_CLKOUT0                          inpad        0.070             0.070              37        (0,162) 
+pll_inst1_CLKOUT0                          net          1.119             1.189              37        (0,162) 
+   Routing elements:
+      Manhattan distance of X:213, Y:152
+u_led_water_display/led_state[2]~FF|CLK    ff           0.000             1.189              37        (213,10)
+
+Data Path
+                name                   model name   delay (ns)  cumulative delay (ns) pins on net    location
+===============================================================================================================
+u_led_water_display/led_state[2]~FF|Q     ff          0.072             0.072              13        (213,10)
+u_led_water_display/led_state[2]          net         0.064             0.136              13        (213,10)
+   Routing elements:
+      Manhattan distance of X:0, Y:2
+LUT__272|in[2]                            lut         0.035             0.171              13        (213,8) 
+LUT__272|out                              lut         0.000             0.171               2        (213,8) 
+led_data_r[0]~FF|D                        ff          0.000             0.171               2        (213,8) 
+
+Capture Clock Path
+        name          model name   delay (ns)  cumulative delay (ns) pins on net    location
+==============================================================================================
+pll_inst1_CLKOUT0       inpad        0.000             0.000               0        (0,162)
+pll_inst1_CLKOUT0       inpad        0.070             0.070              37        (0,162)
+pll_inst1_CLKOUT0       net          1.119             1.189              37        (0,162)
+   Routing elements:
+      Manhattan distance of X:213, Y:154
+led_data_r[0]~FF|CLK    ff           0.000             1.189              37        (213,8)
+
+++++ Path 6 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : u_led_water_display/led_state[3]~FF|CLK
+Path End      : led_data_r[3]~FF|D                     
+Launch Clock  : pll_inst1_CLKOUT0 (RISE)               
+Capture Clock : pll_inst1_CLKOUT0 (RISE)               
+Slack         : 0.105 (arrival time - required time)   
+Delay         : 0.103                                  
+
+Logic Level             : 1
+Non-global nets on path : 1
+Global nets on path     : 0
+
+Launch Clock Path Delay        : 1.189
++ Clock To Q + Data Path Delay : 0.175
+--------------------------------------
+End-of-path arrival time       : 1.364
+
+Constraint                     : 0.000
++ Capture Clock Path Delay     : 1.189
++ Clock Uncertainty            : 0.070
+--------------------------------------
+End-of-path required time      : 1.259
+
+Launch Clock Path
+                 name                    model name   delay (ns)  cumulative delay (ns) pins on net    location
+=================================================================================================================
+pll_inst1_CLKOUT0                          inpad        0.000             0.000               0        (0,162)
+pll_inst1_CLKOUT0                          inpad        0.070             0.070              37        (0,162)
+pll_inst1_CLKOUT0                          net          1.119             1.189              37        (0,162)
+   Routing elements:
+      Manhattan distance of X:215, Y:153
+u_led_water_display/led_state[3]~FF|CLK    ff           0.000             1.189              37        (215,9)
+
+Data Path
+                name                   model name   delay (ns)  cumulative delay (ns) pins on net    location
+===============================================================================================================
+u_led_water_display/led_state[3]~FF|Q     ff          0.072             0.072              12        (215,9)
+u_led_water_display/led_state[3]          net         0.069             0.141              12        (215,9)
+   Routing elements:
+      Manhattan distance of X:0, Y:3
+LUT__278|in[2]                            lut         0.034             0.175              12        (215,6)
+LUT__278|out                              lut         0.000             0.175               2        (215,6)
+led_data_r[3]~FF|D                        ff          0.000             0.175               2        (215,6)
+
+Capture Clock Path
+        name          model name   delay (ns)  cumulative delay (ns) pins on net    location
+==============================================================================================
+pll_inst1_CLKOUT0       inpad        0.000             0.000               0        (0,162)
+pll_inst1_CLKOUT0       inpad        0.070             0.070              37        (0,162)
+pll_inst1_CLKOUT0       net          1.119             1.189              37        (0,162)
+   Routing elements:
+      Manhattan distance of X:215, Y:156
+led_data_r[3]~FF|CLK    ff           0.000             1.189              37        (215,6)
+
+++++ Path 7 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : u_led_water_display/led_state[0]~FF|CLK
+Path End      : led_data_r[4]~FF|D                     
+Launch Clock  : pll_inst1_CLKOUT0 (RISE)               
+Capture Clock : pll_inst1_CLKOUT0 (RISE)               
+Slack         : 0.108 (arrival time - required time)   
+Delay         : 0.106                                  
+
+Logic Level             : 1
+Non-global nets on path : 1
+Global nets on path     : 0
+
+Launch Clock Path Delay        : 1.189
++ Clock To Q + Data Path Delay : 0.178
+--------------------------------------
+End-of-path arrival time       : 1.367
+
+Constraint                     : 0.000
++ Capture Clock Path Delay     : 1.189
++ Clock Uncertainty            : 0.070
+--------------------------------------
+End-of-path required time      : 1.259
+
+Launch Clock Path
+                 name                    model name   delay (ns)  cumulative delay (ns) pins on net    location
+=================================================================================================================
+pll_inst1_CLKOUT0                          inpad        0.000             0.000               0        (0,162)
+pll_inst1_CLKOUT0                          inpad        0.070             0.070              37        (0,162)
+pll_inst1_CLKOUT0                          net          1.119             1.189              37        (0,162)
+   Routing elements:
+      Manhattan distance of X:213, Y:153
+u_led_water_display/led_state[0]~FF|CLK    ff           0.000             1.189              37        (213,9)
+
+Data Path
+                name                   model name   delay (ns)  cumulative delay (ns) pins on net    location
+===============================================================================================================
+u_led_water_display/led_state[0]~FF|Q     ff          0.072             0.072              13        (213,9)
+u_led_water_display/led_state[0]          net         0.071             0.143              13        (213,9)
+   Routing elements:
+      Manhattan distance of X:0, Y:3
+LUT__279|in[2]                            lut         0.035             0.178              13        (213,6)
+LUT__279|out                              lut         0.000             0.178               2        (213,6)
+led_data_r[4]~FF|D                        ff          0.000             0.178               2        (213,6)
+
+Capture Clock Path
+        name          model name   delay (ns)  cumulative delay (ns) pins on net    location
+==============================================================================================
+pll_inst1_CLKOUT0       inpad        0.000             0.000               0        (0,162)
+pll_inst1_CLKOUT0       inpad        0.070             0.070              37        (0,162)
+pll_inst1_CLKOUT0       net          1.119             1.189              37        (0,162)
+   Routing elements:
+      Manhattan distance of X:213, Y:156
+led_data_r[4]~FF|CLK    ff           0.000             1.189              37        (213,6)
+
+++++ Path 8 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : u_led_water_display/led_state[3]~FF|CLK
+Path End      : u_led_water_display/led_state[3]~FF|D  
+Launch Clock  : pll_inst1_CLKOUT0 (RISE)               
+Capture Clock : pll_inst1_CLKOUT0 (RISE)               
+Slack         : 0.110 (arrival time - required time)   
+Delay         : 0.108                                  
+
+Logic Level             : 1
+Non-global nets on path : 1
+Global nets on path     : 0
+
+Launch Clock Path Delay        : 1.189
++ Clock To Q + Data Path Delay : 0.180
+--------------------------------------
+End-of-path arrival time       : 1.369
+
+Constraint                     : 0.000
++ Capture Clock Path Delay     : 1.189
++ Clock Uncertainty            : 0.070
+--------------------------------------
+End-of-path required time      : 1.259
+
+Launch Clock Path
+                 name                    model name   delay (ns)  cumulative delay (ns) pins on net    location
+=================================================================================================================
+pll_inst1_CLKOUT0                          inpad        0.000             0.000               0        (0,162)
+pll_inst1_CLKOUT0                          inpad        0.070             0.070              37        (0,162)
+pll_inst1_CLKOUT0                          net          1.119             1.189              37        (0,162)
+   Routing elements:
+      Manhattan distance of X:215, Y:153
+u_led_water_display/led_state[3]~FF|CLK    ff           0.000             1.189              37        (215,9)
+
+Data Path
+                name                   model name   delay (ns)  cumulative delay (ns) pins on net    location
+===============================================================================================================
+u_led_water_display/led_state[3]~FF|Q     ff          0.072             0.072              12        (215,9)
+u_led_water_display/led_state[3]          net         0.074             0.146              12        (215,9)
+LUT__275|in[3]                            lut         0.034             0.180              12        (215,9)
+LUT__275|out                              lut         0.000             0.180               2        (215,9)
+u_led_water_display/led_state[3]~FF|D     ff          0.000             0.180               2        (215,9)
+
+Capture Clock Path
+                 name                    model name   delay (ns)  cumulative delay (ns) pins on net    location
+=================================================================================================================
+pll_inst1_CLKOUT0                          inpad        0.000             0.000               0        (0,162)
+pll_inst1_CLKOUT0                          inpad        0.070             0.070              37        (0,162)
+pll_inst1_CLKOUT0                          net          1.119             1.189              37        (0,162)
+   Routing elements:
+      Manhattan distance of X:215, Y:153
+u_led_water_display/led_state[3]~FF|CLK    ff           0.000             1.189              37        (215,9)
+
+++++ Path 9 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : u_led_water_display/led_state[3]~FF|CLK
+Path End      : u_led_water_display/led_state[1]~FF|D  
+Launch Clock  : pll_inst1_CLKOUT0 (RISE)               
+Capture Clock : pll_inst1_CLKOUT0 (RISE)               
+Slack         : 0.110 (arrival time - required time)   
+Delay         : 0.108                                  
+
+Logic Level             : 1
+Non-global nets on path : 1
+Global nets on path     : 0
+
+Launch Clock Path Delay        : 1.189
++ Clock To Q + Data Path Delay : 0.180
+--------------------------------------
+End-of-path arrival time       : 1.369
+
+Constraint                     : 0.000
++ Capture Clock Path Delay     : 1.189
++ Clock Uncertainty            : 0.070
+--------------------------------------
+End-of-path required time      : 1.259
+
+Launch Clock Path
+                 name                    model name   delay (ns)  cumulative delay (ns) pins on net    location
+=================================================================================================================
+pll_inst1_CLKOUT0                          inpad        0.000             0.000               0        (0,162)
+pll_inst1_CLKOUT0                          inpad        0.070             0.070              37        (0,162)
+pll_inst1_CLKOUT0                          net          1.119             1.189              37        (0,162)
+   Routing elements:
+      Manhattan distance of X:215, Y:153
+u_led_water_display/led_state[3]~FF|CLK    ff           0.000             1.189              37        (215,9)
+
+Data Path
+                name                   model name   delay (ns)  cumulative delay (ns) pins on net    location
+===============================================================================================================
+u_led_water_display/led_state[3]~FF|Q     ff          0.072             0.072              12        (215,9) 
+u_led_water_display/led_state[3]          net         0.074             0.146              12        (215,9) 
+   Routing elements:
+      Manhattan distance of X:0, Y:1
+LUT__273|in[1]                            lut         0.034             0.180              12        (215,10)
+LUT__273|out                              lut         0.000             0.180               2        (215,10)
+u_led_water_display/led_state[1]~FF|D     ff          0.000             0.180               2        (215,10)
+
+Capture Clock Path
+                 name                    model name   delay (ns)  cumulative delay (ns) pins on net    location
+=================================================================================================================
+pll_inst1_CLKOUT0                          inpad        0.000             0.000               0        (0,162) 
+pll_inst1_CLKOUT0                          inpad        0.070             0.070              37        (0,162) 
+pll_inst1_CLKOUT0                          net          1.119             1.189              37        (0,162) 
+   Routing elements:
+      Manhattan distance of X:215, Y:152
+u_led_water_display/led_state[1]~FF|CLK    ff           0.000             1.189              37        (215,10)
+
+++++ Path 10 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : u_led_water_display/led_state[0]~FF|CLK
+Path End      : u_led_water_display/led_state[2]~FF|D  
+Launch Clock  : pll_inst1_CLKOUT0 (RISE)               
+Capture Clock : pll_inst1_CLKOUT0 (RISE)               
+Slack         : 0.112 (arrival time - required time)   
+Delay         : 0.110                                  
+
+Logic Level             : 1
+Non-global nets on path : 1
+Global nets on path     : 0
+
+Launch Clock Path Delay        : 1.189
++ Clock To Q + Data Path Delay : 0.182
+--------------------------------------
+End-of-path arrival time       : 1.371
+
+Constraint                     : 0.000
++ Capture Clock Path Delay     : 1.189
++ Clock Uncertainty            : 0.070
+--------------------------------------
+End-of-path required time      : 1.259
+
+Launch Clock Path
+                 name                    model name   delay (ns)  cumulative delay (ns) pins on net    location
+=================================================================================================================
+pll_inst1_CLKOUT0                          inpad        0.000             0.000               0        (0,162)
+pll_inst1_CLKOUT0                          inpad        0.070             0.070              37        (0,162)
+pll_inst1_CLKOUT0                          net          1.119             1.189              37        (0,162)
+   Routing elements:
+      Manhattan distance of X:213, Y:153
+u_led_water_display/led_state[0]~FF|CLK    ff           0.000             1.189              37        (213,9)
+
+Data Path
+                name                   model name   delay (ns)  cumulative delay (ns) pins on net    location
+===============================================================================================================
+u_led_water_display/led_state[0]~FF|Q     ff          0.072             0.072              13        (213,9) 
+u_led_water_display/led_state[0]          net         0.075             0.147              13        (213,9) 
+   Routing elements:
+      Manhattan distance of X:0, Y:1
+LUT__274|in[1]                            lut         0.035             0.182              13        (213,10)
+LUT__274|out                              lut         0.000             0.182               2        (213,10)
+u_led_water_display/led_state[2]~FF|D     ff          0.000             0.182               2        (213,10)
+
+Capture Clock Path
+                 name                    model name   delay (ns)  cumulative delay (ns) pins on net    location
+=================================================================================================================
+pll_inst1_CLKOUT0                          inpad        0.000             0.000               0        (0,162) 
+pll_inst1_CLKOUT0                          inpad        0.070             0.070              37        (0,162) 
+pll_inst1_CLKOUT0                          net          1.119             1.189              37        (0,162) 
+   Routing elements:
+      Manhattan distance of X:213, Y:152
+u_led_water_display/led_state[2]~FF|CLK    ff           0.000             1.189              37        (213,10)
+
+---------- Path Details for Min Critical Paths (end) ---------------
+

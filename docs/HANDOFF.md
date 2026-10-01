@@ -1,60 +1,51 @@
 # 星眸项目交接单
 
 ## 1. 基本信息
-- 交接编号：H-20261001-04。
-- 当前里程碑：P0（进行中），本轮为首次 Git 提交与基线哈希记录。
-- 交出角色/模型：主会话／主调度者，本轮直接执行已确定的提交操作。
-- 接收角色/模型：后续工程会话；本轮未调用子代理或 Astra。
-- 初始 Git 基线提交：f7f0fa2753011a04744b4b2d8a5ffc0f24446dac；仓库 F:/Projects/stareye_fpga，分支 main，提交信息 chore: initialize StarEye project。
 
-## 2. 本轮目标
-- 要解决的问题：使用指定消息提交已验收的九份暂存文件，将初始提交哈希记录到 STATUS.md 和本文件，再单独提交这两份文档记录。
-- 完成标准：首次提交与文档记录提交成功；git status 显示工作区和暂存区为空；git log -1 --oneline 和分支检查符合预期；最终向用户展示两次提交哈希。
-- 本轮允许修改的范围：用户提供的当前仓库作者配置、两次 Git 提交、STATUS.md 和 HANDOFF.md 的基线记录及这两个文件的单独暂存。
-- 禁止修改/必须兼容的内容：其他工作区文件、原始资料与历史盘点保持原样；不进入 M0、不生成 RTL、不使用 git add .、不调用 Astra；提交后只做用户指定的 Git 状态、日志、分支和干净状态检查。
-- 安装介质处理：本轮全部保留在 document/，该目录整体暂时不进入 Git；以后只复制筛选后的必要资料到 reference/。
+- H-20261001-08，2026-10-01；任务：M0基础验收收尾、独立Git提交；提交后再只读视频参考核查。
+- 仓库F:/Projects/stareye_fpga，main；PROJECT_BRIEF.md、STATUS.md、DECISIONS.md已读。
+- L2，顺序委派GPT-6.1 Sol / Medium；同一时间单一写入者，主会话最终验收与提交。
 
-## 3. 已完成并验证
-- 当前初始基线提交：f7f0fa2753011a04744b4b2d8a5ffc0f24446dac；首次提交后 git status 为 On branch main / nothing to commit, working tree clean；git log -1 --oneline --no-abbrev-commit 与分支检查均通过。
-- 本文件和 STATUS.md 记录的是首次基线哈希；这两份记录单独使用 docs: record initial Git baseline 保存，其提交哈希以 Git 日志及本轮最终输出为准，避免文档自引用自身提交哈希。
-- 以下范围收敛证据为上一轮的历史验收记录，其中无 HEAD、待确认提交、九文件暂存状态只描述首次提交前。
-- 完成功能：首次提交范围已收敛，等待用户确认提交；新增完整目录忽略规则，保留原有生成目录和缓存规则，分支改为 main，仅按九份允许文件的完整清单暂存。
-- 验证方式：分支、status、cached stat、完整暂存路径与 blob 大小、未跟踪且未忽略清单、无 HEAD、原文件哈希及空实现目录静态检查；主会话复核 document/ 元数据。无 RTL 或硬件验证。
-- 证据文件或日志：本轮工具输出；历史 reports/git_baseline_inventory/ 六份清单/摘要保持原样并忽略，历史 10,019 个未跟踪文件与暂存 0 只描述范围收敛前，详见 STATUS.md 的历史检查节。
-- 主会话验收结果：通过；精确九文件暂存、main 分支、无 HEAD、无未暂存或未忽略的未跟踪文件，最大 blob 11,093 字节；直接路径忽略探针和保留探针均通过，document/ 元数据与两个原文哈希未变。
-- 路径核对：README.md 和 docs/ 的项目内部引用使用相对路径；F:/Projects/stareye_fpga 是必要仓库操作记录。G:\Tools\Efinity 本轮检查不存在，只保留历史目标路径记录，不要求本轮移动安装介质。
-- 已知可工作的硬件配置：待确认。
+## 2. 目标与边界
 
-## 4. 当前工程状态
-- 顶层模块：待确认。
-- 相关源码：厂商资料位于 document/，主线 rtl/、tb/、constraints/ 为空。
-- 时钟与复位：待确认。
-- 输入/输出接口：待确认。
-- 关键参数、位宽和分辨率：待确认。
-- 安装介质：document/ 内两份 MSI 和 efinity-2025.1.110.5.9-windows-x64-patch/，不属于工程源码。
-- 统一交接路径（相对本文件）：PROJECT_BRIEF.md、STATUS.md、DECISIONS.md、HANDOFF.md。
+- M0基础验收通过：I3编译PASS，用户JTAG配置及流水灯功能定性PASS；断电启动来源未区分，不证明当前bit持久性。
+- 保存用户摘录、验收边界、忽略规则与逐文件提交范围；代理不暂存/提交，主会话完成独立M0提交。
+- M1实现未开始；视频资料仅在提交后定向只读核查。
 
-## 5. 当前问题
-- 现象：首次提交已成功；原先缺少作者信息的问题已由用户提供 dav / kqojp23@163.com 解决。
-- 稳定复现步骤：执行 git status、git log -1 --oneline 和分支检查，读取 STATUS.md 与本文件的初始基线哈希。
-- 预期结果：两次指定提交完成，分支 main，最终工作区和暂存区为空。
-- 实际结果：初始提交后工作区和暂存区为空；本轮文档记录使用独立提交保存，最终状态在第二次提交后检查。
-- 已尝试方案及结果：普通执行因 setup refresh 错误无法启动，经获批执行完成指定操作；作者配置仅写入当前仓库，Git 检查使用单次 safe.directory 参数，未改全局配置。
-- 关键报错/波形/报告路径：STATUS.md 和本轮工具输出；reports/git_baseline_inventory/ 只为历史证据，本轮不新增报告，无硬件验证。
+## 3. 已验证基线
 
-## 6. 已确定的设计决定
-- 决定：用户本轮授权 chore: initialize StarEye project 和 docs: record initial Git baseline 两次提交；只为当前仓库配置用户提供的作者信息；document/ 与历史盘点仍整体忽略，分支 main。
-- 原因：用户本轮明确授权。
-- 被否决方案及原因：不删除或越过写入权限移动安装介质。
+- 用户确认Ti60F225I3；Efinity2025.1.110.5.9；英文副本efinity/m0_led_i3。
+- 官方综合/接口/P&R/bitstream PASS，内部setup +8.395ns、hold +0.092ns，56 XLR；复位释放及外部延迟覆盖边界保持。
+- bit只读复核1,618,062字节，SHA256=46AC52D70DF7330864C7F2531361D9383E22475EDAC80FD3635EA2C2F43FF2B0；没有重编译或改动。
+- 用户JTAG下载成功，Device ID 0x10660A79、Device is in user mode；LED从一侧至另一侧依次点亮熄灭，定性PASS。
 
-## 7. 下一步
-1. 初始基线哈希已记录；单独保存两份文档记录后，展示两次提交的哈希和最终 git status。
-2. 后续工程工作等待用户指定；原始 document/ 和历史盘点保留本地，未来按指定范围筛选必要资料复制到 reference/。
-3. 保持 P0 进行中，M0～M7 未开始；需要真实配置的信息仍为待确认。
+## 4. 修改与提交范围
 
-## 8. 风险与待确认事项
-- 需要用户实测：实际硬件配置继续待确认，本轮无上板任务。
-- 缺少的资料：比赛要求、硬件清单、显示目标、安装版本和参考工程基线仍待确认。
-- 可能影响后续接口的事项：时钟、复位、管脚、分辨率、像素格式均待确认。
-- 文件盘点边界：疑似敏感检查只报告路径与判断，不打印密钥内容，不声称完成全部二进制内容审计。
-- 尚未纳入版本控制的目录：空目录不会出现在 Git 未跟踪列表；document/ 和 reports/git_baseline_inventory/ 整体忽略，其他实际报告未来可按任务范围纳入。
+- 文档：.gitignore、README、docs的STATUS/HANDOFF/MILESTONES/MINIMAL_REFERENCE_CHECK/DECISIONS/PROJECT_BRIEF/TOOLCHAIN，SOURCES作为来源依赖；M0报告。
+- 显式提交M0源码/配置、必要脚本与相关文本证据，清单见reports/m0_led_i3/COMMIT_SCOPE.md；逐文件字节清单在已忽略reports/git_baseline_inventory/m0_commit_scope.json。
+- 不纳入document、AGENTS、原方案、tools、reference PDF、outflow/work、锁、缓存及bit/hex/lbf/vdb；不用git add .。
+
+## 5. 验收标准
+
+- 编译/JTAG/LED/断电启动来源分别记录，不虚构日志、LED号/8颗计数/往返/速度。
+- 用户摘录不是原始导出日志；所选bit路径/下载文件哈希未独立核验。
+- 本轮无SPI Active/Flash；断电流水灯与历史官方固化来源未区分，不证明本轮bit持久性。
+- 提交清单按路径/字节数核查，忽略锁/生成缓存/bit，保留关键log/rpt；主会话最终提交。
+
+## 6. 禁止事项
+
+- 不新增业务RTL、不编译、不下载、不Flash、不安装；不改厂商资料或已验证顶层/时钟/管脚/源码配置。
+- 不把定性LED报告扩展为全8颗、特定方向/速度或长期稳定性；不要求为了归档重复JTAG。
+- 不提前读视频例程或进行M1实现。
+
+## 7. 当前进度
+
+- M0基础验收通过；文档、证据摘录及显式提交范围已核查，实际提交哈希以git log为准。
+- 代理准备完成后停写交回；主会话复核后负责独立M0提交。
+
+## 8. 待确认与后续
+
+- LED编号/逐颗数量/速度、长期稳定性、当前bit持久性未验证，不阻塞本轮基础验收。
+- 原始Programmer日志及下载路径/哈希未提供；不要求重测。
+- 用户摄像头AR0135，具体接口/适配板/实际连接待确认，不由型号推断DVP；有HDMI显示器但缺HDMI连接线，待补齐。
+- M0提交后只读核查AR0135与HDMI参考，优先评估HDMI彩条链路；视频参考仅候选，不外推兼容或冻结选择。
