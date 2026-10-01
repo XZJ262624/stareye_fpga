@@ -1,20 +1,23 @@
 # 星眸项目交接单
 
 ## 1. 基本信息
-- 交接编号：H-20261001-03。
-- 当前里程碑：P0（进行中），本轮为首次提交范围收敛。
-- 交出角色/模型：GPT-6.1 Sol，Medium；完成限定范围写入后停止写入。
-- 接收角色/模型：主会话／主调度者，负责最终复核。
-- 当前 Git 提交或工程版本：仓库 F:/Projects/stareye_fpga，分支 main，无提交；首次暂存范围为根三份文件与 docs/ 六份 Markdown，共 9 份。
+- 交接编号：H-20261001-04。
+- 当前里程碑：P0（进行中），本轮为首次 Git 提交与基线哈希记录。
+- 交出角色/模型：主会话／主调度者，本轮直接执行已确定的提交操作。
+- 接收角色/模型：后续工程会话；本轮未调用子代理或 Astra。
+- 初始 Git 基线提交：f7f0fa2753011a04744b4b2d8a5ffc0f24446dac；仓库 F:/Projects/stareye_fpga，分支 main，提交信息 chore: initialize StarEye project。
 
 ## 2. 本轮目标
-- 要解决的问题：忽略完整 document/ 和 reports/git_baseline_inventory/，将 master 改为 main，核对内部引用并只暂存允许的 Markdown 项目文档和根文件。
-- 完成标准：分支 main，忽略规则保留；暂存列表严格等于 .gitignore、AGENTS.md、README.md 与 docs/ 中六份 Markdown 文档；无大型文件、无提交、无未暂存文档修改；主会话验收。
-- 本轮允许修改的范围：.gitignore、README.md、docs/ 项目文档中的当前状态和内部引用、分支名称与暂存区；必要时更新 DECISIONS 记录用户已确定的资料排除策略。
-- 禁止修改/必须兼容的内容：AGENTS.md 和完整原协作方案保持原样；document/ 不移动、不删除、不修改；reports/git_baseline_inventory/ 历史证据保留原样；不进入 M0、不生成 RTL、不使用 git add .、不 commit。
+- 要解决的问题：使用指定消息提交已验收的九份暂存文件，将初始提交哈希记录到 STATUS.md 和本文件，再单独提交这两份文档记录。
+- 完成标准：首次提交与文档记录提交成功；git status 显示工作区和暂存区为空；git log -1 --oneline 和分支检查符合预期；最终向用户展示两次提交哈希。
+- 本轮允许修改的范围：用户提供的当前仓库作者配置、两次 Git 提交、STATUS.md 和 HANDOFF.md 的基线记录及这两个文件的单独暂存。
+- 禁止修改/必须兼容的内容：其他工作区文件、原始资料与历史盘点保持原样；不进入 M0、不生成 RTL、不使用 git add .、不调用 Astra；提交后只做用户指定的 Git 状态、日志、分支和干净状态检查。
 - 安装介质处理：本轮全部保留在 document/，该目录整体暂时不进入 Git；以后只复制筛选后的必要资料到 reference/。
 
 ## 3. 已完成并验证
+- 当前初始基线提交：f7f0fa2753011a04744b4b2d8a5ffc0f24446dac；首次提交后 git status 为 On branch main / nothing to commit, working tree clean；git log -1 --oneline --no-abbrev-commit 与分支检查均通过。
+- 本文件和 STATUS.md 记录的是首次基线哈希；这两份记录单独使用 docs: record initial Git baseline 保存，其提交哈希以 Git 日志及本轮最终输出为准，避免文档自引用自身提交哈希。
+- 以下范围收敛证据为上一轮的历史验收记录，其中无 HEAD、待确认提交、九文件暂存状态只描述首次提交前。
 - 完成功能：首次提交范围已收敛，等待用户确认提交；新增完整目录忽略规则，保留原有生成目录和缓存规则，分支改为 main，仅按九份允许文件的完整清单暂存。
 - 验证方式：分支、status、cached stat、完整暂存路径与 blob 大小、未跟踪且未忽略清单、无 HEAD、原文件哈希及空实现目录静态检查；主会话复核 document/ 元数据。无 RTL 或硬件验证。
 - 证据文件或日志：本轮工具输出；历史 reports/git_baseline_inventory/ 六份清单/摘要保持原样并忽略，历史 10,019 个未跟踪文件与暂存 0 只描述范围收敛前，详见 STATUS.md 的历史检查节。
@@ -32,21 +35,21 @@
 - 统一交接路径（相对本文件）：PROJECT_BRIEF.md、STATUS.md、DECISIONS.md、HANDOFF.md。
 
 ## 5. 当前问题
-- 现象：首次提交范围已经收敛；驱动、安装器、PDF 和视频所在的 document/ 整体忽略，提交仍待用户确认。
-- 稳定复现步骤：执行 git status --short、git diff --cached --stat、git diff --cached --name-only 和 git ls-files --others --exclude-standard，检查 main 分支及暂存 blob 大小。
-- 预期结果：本轮暂存范围仅为根三份文件和 docs/ Markdown，document/ 与管理盘点记录全部忽略，分支 main。
-- 实际结果：首次提交范围已收敛，等待用户确认提交；九份允许文件暂存，无提交，安装介质保留原位；Sol 完成静态检查后交回主会话复核。
-- 已尝试方案及结果：普通执行因 setup refresh 错误无法启动，经升级执行必要读检、分支改名和明确清单暂存；Git 只使用单次 safe.directory 参数，未改全局配置。
+- 现象：首次提交已成功；原先缺少作者信息的问题已由用户提供 dav / kqojp23@163.com 解决。
+- 稳定复现步骤：执行 git status、git log -1 --oneline 和分支检查，读取 STATUS.md 与本文件的初始基线哈希。
+- 预期结果：两次指定提交完成，分支 main，最终工作区和暂存区为空。
+- 实际结果：初始提交后工作区和暂存区为空；本轮文档记录使用独立提交保存，最终状态在第二次提交后检查。
+- 已尝试方案及结果：普通执行因 setup refresh 错误无法启动，经获批执行完成指定操作；作者配置仅写入当前仓库，Git 检查使用单次 safe.directory 参数，未改全局配置。
 - 关键报错/波形/报告路径：STATUS.md 和本轮工具输出；reports/git_baseline_inventory/ 只为历史证据，本轮不新增报告，无硬件验证。
 
 ## 6. 已确定的设计决定
-- 决定：用户授权本轮明确路径暂存，但禁止 commit；document/ 与 reports/git_baseline_inventory/ 整体暂时排除，其他关键 reports/ 保留；默认分支改为 main。
+- 决定：用户本轮授权 chore: initialize StarEye project 和 docs: record initial Git baseline 两次提交；只为当前仓库配置用户提供的作者信息；document/ 与历史盘点仍整体忽略，分支 main。
 - 原因：用户本轮明确授权。
 - 被否决方案及原因：不删除或越过写入权限移动安装介质。
 
 ## 7. 下一步
-1. 首次提交范围已收敛，等待用户确认提交；本轮不执行 commit。
-2. 原始 document/ 和历史盘点保留本地；后续按用户指定范围筛选必要资料复制到 reference/。
+1. 初始基线哈希已记录；单独保存两份文档记录后，展示两次提交的哈希和最终 git status。
+2. 后续工程工作等待用户指定；原始 document/ 和历史盘点保留本地，未来按指定范围筛选必要资料复制到 reference/。
 3. 保持 P0 进行中，M0～M7 未开始；需要真实配置的信息仍为待确认。
 
 ## 8. 风险与待确认事项

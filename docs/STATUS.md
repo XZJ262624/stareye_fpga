@@ -13,7 +13,7 @@
 ## 检测与文件状态
 
 - Git：仓库根目录 F:/Projects/stareye_fpga；首次提交范围收敛后，分支由 master 重命名为 main。
-- 当前 Git 提交：无；首次暂存限定 9 份文件：.gitignore、AGENTS.md、README.md 和 docs/ 中六份 Markdown 项目文档。未执行 git commit，首次基线提交尚未建立。
+- 初始 Git 基线提交：f7f0fa2753011a04744b4b2d8a5ffc0f24446dac，提交信息 chore: initialize StarEye project；提交包含已验收的九份文件。随后仅对 STATUS.md 和 HANDOFF.md 的哈希记录使用 docs: record initial Git baseline 单独提交；该记录提交的哈希以 git log 为准。
 - .gitignore：新增 /document/ 与 /reports/git_baseline_inventory/，保留原有 Efinity 生成目录、仿真缓存与波形、Python/编辑器/系统临时文件规则；未全局忽略 log、rpt、bin、hex，其他 reports/ 内容仍可进入版本控制。
 - 原方案完整迁移至 docs/AI_COLLABORATION_PLAN.md；AGENTS.md 与 document/ 原始资料保持原样。
 - rtl/、tb/、constraints/、efinity/、scripts/ 与 reference/ 分类目录仍为空，未创建 .gitkeep；Git 不跟踪空目录。reports/git_baseline_inventory/ 是上一轮生成的历史盘点证据，本轮保持原样并忽略。
@@ -44,7 +44,7 @@
 - 验证：git status、仓库根目录、空暂存区、无 HEAD、安装介质 check-ignore、虚拟生成文件忽略探针、reports/log/rpt/bin/hex/RTL/SDC/TCL 保留探针均通过；主会话已复核 AGENTS 与原协作方案 SHA256 不变。
 - 执行环境：沙箱身份曾触发 dubious ownership，仅用单次 git -c safe.directory=F:/Projects/stareye_fpga 检查，未改全局配置；沙箱工具连续 setup refresh 错误后，经获批沙箱外执行完成必要盘点。无额外文件移动、暂存或提交。
 
-## 首次提交范围收敛（2026-10-01）
+## 历史首次提交范围收敛（2026-10-01，首次提交前）
 
 - 首次提交范围已收敛，等待用户确认提交。
 - document/ 是完整厂商资料、驱动、安装器与视频集合，整体暂时不进入 Git；以后只将经过筛选的必要资料复制到 reference/。
@@ -53,6 +53,14 @@
 - 验收检查包含分支、git status --short、git diff --cached --stat、完整暂存文件列表和 blob 大小、未跟踪且未忽略文件列表、无 HEAD、原文件 SHA256 与空实现目录；本轮静态验证由 Sol 执行，主会话复核。
 - 主会话最终验收通过：main 分支、精确九文件暂存、无提交、无未暂存修改、无未忽略的未跟踪文件；所有暂存 blob 小于 1 MiB，最大为原协作方案 11,093 字节；忽略及保留探针通过，document/ 元数据与原文哈希不变。
 - 保持 P0 进行中，M0～M7 未开始；没有实现或硬件验证任务。
+
+## 首次 Git 提交记录（2026-10-01）
+
+- 用户已确认首次提交；主会话执行 chore: initialize StarEye project 成功，初始基线哈希为 f7f0fa2753011a04744b4b2d8a5ffc0f24446dac。
+- 作者姓名 dav、邮箱 kqojp23@163.com 由用户提供，仅配置当前仓库，没有修改全局 Git 配置。
+- 首次提交后的 git status：On branch main；nothing to commit, working tree clean；工作区和暂存区均为空。
+- git log -1 --oneline --no-abbrev-commit 返回上述完整哈希和指定提交信息；分支检查为 main。
+- 本轮仅更新本文件和 HANDOFF.md 记录初始基线哈希，使用 docs: record initial Git baseline 单独保存；不开展额外工程检查、不进入 M0、不生成 RTL、不调用 Astra。
 
 ## 待确认实际配置
 
@@ -70,4 +78,4 @@
 | 已验证可工作的配置 | 待确认 |
 
 资料中的安装包与补丁不能代表实际安装版本，参考工程文件不能代表主线基线或已上板验证。
-下一步等待用户确认首次提交；确认前不 commit、不进入 M0，继续保留 P0 待确认信息。
+初始 Git 基线已建立；保持 P0 进行中，M0～M7 未开始。后续工作等待用户指定，已有真实配置待确认信息继续保留。
