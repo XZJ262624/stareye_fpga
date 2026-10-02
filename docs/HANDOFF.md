@@ -1,41 +1,39 @@
 # 星眸项目交接单
 
 ## 1. 基本信息
-- H-20261002-10；任务：M1独立HDMI实物验收收尾、自动验收整改和最终实现证据绑定。
-- main；M0基线a8c39c93a06eeb0686cbb5c13fd44717d49195fa。L3，顺序委派GPT-6 Astra / Medium，主会话最终复核及独立Git提交。
-- 已读PROJECT_BRIEF、STATUS、DECISIONS；本交接优先于上一轮离线限制。
 
-## 2. 目标与允许范围
-- 子代理唯一写入范围：scripts/m1_hdmi_i3_*、reports/m1_hdmi_i3/；必要临时STA副本放在已忽略的efinity/m1_hdmi_i3/work/内。
-- 主会话在代理停写后维护项目文档、审查与Git提交。
-- 整改archive硬编码PASS、内部setup/hold未检查、最终实现与30路TMDS审计未绑定的问题。
+H-20261003-13；2026-10-03；M2实物验收归档与独立Git提交。L2，GPT-6.1 Sol / Medium顺序文档委派；子代理期间唯一文档写入，主会话只读核查。主会话负责最终验收与Git操作。
 
-## 3. 已确认环境
-- Ti60F225I3；E:/Efinity/2025.1；2025.1.110.5.9；顶层Ti60_HDMI_1080P_Test。
-- 可用Python：C:/Users/kqojp/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/python.exe -B。
-- 用户确认JTAG临时下载后图案循环正常；约几分钟无闪烁、花屏、黑屏、撕裂或其他异常。显示器报告分辨率/刷新率待确认。
+## 2. 已确认基线与最新实物事实
 
-## 4. 已知问题与边界
-- 验收脚本必须从真实状态/报告得出结果，拒绝缺失、失败、负裕量和陈旧绑定；不得编造历史单阶段数值退出码。
-- STA入口默认C4可能覆盖报告；只能隔离审计最终实现，显式选择I3。不得重新P&R或pgm、不得改变已上板bit。
-- 当前bit大小1626948字节，SHA256 D96068C5D88EE861FD70F1FF4C82221DAE5582E5C1642366A631B053EA7B3E89。
-- PLL LOCKED异步复位风险保留；用户未提供所选下载文件路径/哈希或原始Programmer日志，不补造证据。
+Ti60F225I3；Efinity2025.1.110.5.9；核心VF-Ti60F225 V1.5、底板VF-Ti60/125F225 V1.5、AR0135 PCB V5.0；DDR Samsung K4B4G1646E-BYMA/512MiB；用户确认实物和相机针脚一致性，相机当前连接。
+用户本轮明确确认新I3 bit通过JTAG临时下载，实时取图、显示器识别1280×720@60Hz，连续10～15分钟无黑屏/闪屏/花屏/冻结/明显撕裂，移动镜头/运动物体持续更新；未SPI Active/Flash。此前厂商bit出图为历史事实，新报告独立签收新I3镜像。
 
-## 5. 验收标准
-- 实际内部setup/hold与30路TMDS报告均解析检查；覆盖无时钟/未约束内部端点；已知复位/静态I/O例外明确。
-- 对最终实现DB、审计副本、SDC、报告、bit绑定路径/大小/SHA256，审计前后实现与bit不变；明确历史构建证据的限制。
-- 真实正向验收与失败状态、负setup/hold、缺TMDS端点、过期hash等负向用例通过。
-- 子代理停止写入后主会话独立复核；M1独立HDMI状态PASS，摄像头直通未验收。
+## 3. 本轮结果与证据
 
-## 6. 子代理禁止事项（主会话另有本轮Git提交授权）
-- 不改原厂、M0、AR0135、六份M1 RTL、PLL、管脚、SDC、工程配置、AGENTS或原计划。
-- 不Programmer、下载、SPI Active/Flash、不安装、不新增算法RTL、不Git暂存/提交；不修改reference/tools。
-- 委派期间仅子代理写入指定范围；已停写交回主会话，当前由主会话维护文档与提交。
+M2基础链路PASS；离线编译/STA与用户配置/功能/有限稳定性分开记录。详见[ACCEPTANCE_REPORT](../reports/m2_ar0135_ddr_hdmi_i3/ACCEPTANCE_REPORT.md)及[jtag_user_report.txt](../reports/m2_ar0135_ddr_hdmi_i3/jtag_user_report.txt)（用户文字整理，不是Programmer日志）。现有bit：F:/Projects/stareye_fpga/efinity/m2_ar0135_ddr_hdmi_i3/outflow/Ti60_Demo.bit，2,137,974字节，SHA256 524213AA27C5797074E9BD71D0761EB31F9D09AEFAC825FA7201CAA6DD33940A。用户未提供下载时哈希/所选文件完整路径/Programmer原始日志，不能宣称密码学绑定下载过程。
 
-## 7. 当前进度
-- M1实物定性验收通过；Astra / Medium完成整改并停写，46个负向用例全部拒绝，隔离最终DB的I3 STA退出0；主会话独立复核通过。原实现/bit未变，内部+1.656/+0.098ns、30路TMDS+4.029/+0.245ns。实物结果见reports/m1_hdmi_i3/ACCEPTANCE_REPORT.md。
-- M1独立HDMI基线PASS；摄像头直通未验收。显式提交范围见reports/m1_hdmi_i3/COMMIT_SCOPE.md；创建独立提交`chore: complete M1 HDMI baseline validation`，实际哈希以git log和本轮最终回复为准。reference/tools仍不提交。.gitattributes仅保留M1工程/脚本/报告原始字节，避免Git换行转换破坏SHA256绑定。
+## 4. 写入与委派复核
 
-## 8. 待确认与后续
-- 显示器识别分辨率、刷新率待用户确认；启动/失锁恢复和长期运行未专项验证。
-- AR0135接口/供电/复位/共享管脚/历史Flash启动已完成资料预核查，见AR0135_PRECONNECT_CHECK.md；实物模块及安全隔离方案待确认，暂不放行接线。下一阶段先关闭这些安全门槛。
+子代理仅更新README、docs下状态/交接/里程碑/背景/决定/接线核查、新增验收报告及用户反馈；在BUILD_REPORT、CHECK_REPORT、CHANGE_SCOPE与preboard RELEASE_REVIEW开头增加历史定位和最新链接，不改历史证据。无Git、工程、RTL/IP/约束、脚本、编译/STA或硬件操作。主会话检查文档链接/状态口径和提交范围后独立执行Git。
+
+## 5. 仍需关闭的条件
+
+PASS仅是相机→DDR→HDMI基础链路及10～15分钟定性稳定性。校准信号、DDR压力/全容量/温度/刷新、复位/失锁恢复、CDC、电气合规未专项验证；既有303条告警记录及网表汇总、接口提示、主动高I2C/CTL控制/加密DDR问题仍保留。
+旧Flash官方流水灯未改/读回，冷启动R3/R4共享线争用和配置前隔离仍未关闭；短时成功不消除风险。
+当前XML有GUI格式/时间戳/design_ood及IP .v→.sv、ooc=false差异；csi_rx/dsi_tx和多FIFO settings/HDL有再生成差异、部分旧.v/.vh缺失。不得声称当前工作区所有输入等于最终构建；当前再生成版本无新编译证据。编译源快照、业务RTL及DdrCtrl/W0_FIFO_8逐项复核完成；提交范围见COMMIT_SCOPE.md，不覆盖用户工程、不推测修改者。
+
+主会话新增只读核查：22业务设计源、peri/SDC、DdrCtrl v5.14及W0_FIFO_8 v8.0与最终构建哈希一致；再生成差异位于附带CSI/DSI及其他FIFO，当前bit未变。已归档独立final_build/source_snapshot，共69文件/2,689,858字节，逐项哈希匹配最终构建输入清单；主会话检查完成，不覆盖当前工程。源基线说明[SOURCE_BASELINE.md](../reports/m2_ar0135_ddr_hdmi_i3/SOURCE_BASELINE.md)已由主会话完成，当前再生成附带IP无新编译证据。
+
+## 6. 禁止事项
+
+不Programmer/JTAG/Flash读写擦除、bridge加载、断电/相机插拔；不修改业务RTL/IP/约束或用户工程，不编译/STA，不自动实施安全启动bit，不灰度化/Sobel，不自动推进下一阶段。子代理不得Git；主会话Git独立提交是用户已授权范围。
+
+## 7. Git与阶段状态
+
+main父基线M1提交d2f48c6e8befa16c9eedea9c07aca82ff16b9879。用户已授权独立M2提交，完成状态/真实hash以git log及主会话最终回复为准，不写占位值或承诺额外提交。现有用户工程差异须与编译源快照明确区分后由主会话显式选择提交范围。
+P0其余需求待冻结，M0/M1 PASS；M2基础链路PASS；灰度化延期；M3～M7未开始。
+
+## 8. 下一步
+
+主会话接回唯一写入权，复核文档与编译源快照/当前工程差异，完成授权的独立M2提交并报告真实hash。向用户解释基础链路已通过及未覆盖项，不安排重复上板或断电；等待用户后续任务，不自动进入算法或Flash阶段。

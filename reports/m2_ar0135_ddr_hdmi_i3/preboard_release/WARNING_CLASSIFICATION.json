@@ -1,0 +1,2451 @@
+{
+  "source": "reports/m2_ar0135_ddr_hdmi_i3/final_build/Ti60_Demo.warn.log",
+  "source_sha256": "F7D6AFD1AC3CA0913608F665551C0EBDFAF8311F33F486D5D292CE66E70F2564",
+  "batch_start_line": 623,
+  "records": 303,
+  "category_counts": {
+    "需要实物验证": 28,
+    "与当前设计无关": 197,
+    "已知IP噪声": 44,
+    "必须修复": 34
+  },
+  "code_counts": {
+    "EFX-0011": 126,
+    "EFX-0256": 147,
+    "EFX-0200": 20,
+    "EFX-0201": 10
+  },
+  "post_synthesis_summary": [
+    {
+      "log_line": 930,
+      "text": "[EFX-0011 VERI-WARNING] Found 100 warnings in the post-synthesis netlist. "
+    }
+  ],
+  "interpretation": "100是网表阶段汇总，不作为额外100条独立问题；303是warning记录数而非根因数。必须修复包括必须澄清项。",
+  "warnings": [
+    {
+      "id": "W001",
+      "log_line": 627,
+      "code": "EFX-0011",
+      "category": "需要实物验证",
+      "reason": "校准移位观测口未接；不影响输出连接本身，需另验cal_pass、lane及重复校准",
+      "raw": "[EFX-0011 VERI-WARNING] port 'cal_shift_val' remains unconnected for this instance (VERI-1927) (F:\\Projects\\stareye_fpga\\efinity\\m2_ar0135_ddr_hdmi_i3\\example_top.v:598)"
+    },
+    {
+      "id": "W002",
+      "log_line": 628,
+      "code": "EFX-0011",
+      "category": "与当前设计无关",
+      "reason": "SC130GS/CSI控制器的读回口；非AR0135控制器，CSI外设未启用",
+      "raw": "[EFX-0011 VERI-WARNING] port 'i2c_rdata' remains unconnected for this instance (VERI-1927) (F:\\Projects\\stareye_fpga\\efinity\\m2_ar0135_ddr_hdmi_i3\\example_top.v:671)"
+    },
+    {
+      "id": "W003",
+      "log_line": 629,
+      "code": "EFX-0011",
+      "category": "已知IP噪声",
+      "reason": "未消费的AWID输出；该发生器固定ID=0，低宽ID风险另列",
+      "raw": "[EFX-0011 VERI-WARNING] port 'axi_awid' remains unconnected for this instance (VERI-1927) (F:\\Projects\\stareye_fpga\\efinity\\m2_ar0135_ddr_hdmi_i3\\example_top.v:996)"
+    },
+    {
+      "id": "W004",
+      "log_line": 630,
+      "code": "EFX-0011",
+      "category": "已知IP噪声",
+      "reason": "LCD坐标诊断口未消费；实际视频走lcd_rgb",
+      "raw": "[EFX-0011 VERI-WARNING] port 'lcd_xpos' remains unconnected for this instance (VERI-1927) (F:\\Projects\\stareye_fpga\\efinity\\m2_ar0135_ddr_hdmi_i3\\example_top.v:1023)"
+    },
+    {
+      "id": "W005",
+      "log_line": 631,
+      "code": "EFX-0011",
+      "category": "已知IP噪声",
+      "reason": "ENABLE_OSERDES=0，原生LVDS接口产生时钟，不使用旧TMDS_Clk_p",
+      "raw": "[EFX-0011 VERI-WARNING] port 'TMDS_Clk_p' remains unconnected for this instance (VERI-1927) (F:\\Projects\\stareye_fpga\\efinity\\m2_ar0135_ddr_hdmi_i3\\example_top.v:1069)"
+    },
+    {
+      "id": "W006",
+      "log_line": 632,
+      "code": "EFX-0011",
+      "category": "与当前设计无关",
+      "reason": "遗留Flash/外设控制变量的1位赋值；不是配置Flash操作证据",
+      "raw": "[EFX-0011 VERI-WARNING] expression size 32 truncated to fit in target size 1 (VERI-1209) (F:\\Projects\\stareye_fpga\\efinity\\m2_ar0135_ddr_hdmi_i3\\example_top.v:429)"
+    },
+    {
+      "id": "W007",
+      "log_line": 633,
+      "code": "EFX-0011",
+      "category": "必须修复",
+      "reason": "必须澄清：当前DDR v5.14加密内部未连接/位宽/无驱动/接地告警，不能由旧厂商bit跑通推定新IP已安全；需厂商解释有效分支或修复",
+      "raw": "[EFX-0011 VERI-WARNING] port 'wr_busy' remains unconnected for this instance (VERI-1927) (F:\\Projects\\stareye_fpga\\efinity\\m2_ar0135_ddr_hdmi_i3\\ip/DdrCtrl\\DdrCtrl.sv:184)"
+    },
+    {
+      "id": "W008",
+      "log_line": 634,
+      "code": "EFX-0011",
+      "category": "必须修复",
+      "reason": "必须澄清：当前DDR v5.14加密内部未连接/位宽/无驱动/接地告警，不能由旧厂商bit跑通推定新IP已安全；需厂商解释有效分支或修复",
+      "raw": "[EFX-0011 VERI-WARNING] port 'wr_data' is not connected on this instance (VERI-2435) (F:\\Projects\\stareye_fpga\\efinity\\m2_ar0135_ddr_hdmi_i3\\ip/DdrCtrl\\DdrCtrl.sv:184)"
+    },
+    {
+      "id": "W009",
+      "log_line": 635,
+      "code": "EFX-0011",
+      "category": "必须修复",
+      "reason": "必须澄清：当前DDR v5.14加密内部未连接/位宽/无驱动/接地告警，不能由旧厂商bit跑通推定新IP已安全；需厂商解释有效分支或修复",
+      "raw": "[EFX-0011 VERI-WARNING] port '**' is not connected on this instance (VERI-2435) (F:\\Projects\\stareye_fpga\\efinity\\m2_ar0135_ddr_hdmi_i3\\ip/DdrCtrl\\DdrCtrl.sv:2496)"
+    },
+    {
+      "id": "W010",
+      "log_line": 636,
+      "code": "EFX-0011",
+      "category": "必须修复",
+      "reason": "必须澄清：当前DDR v5.14加密内部未连接/位宽/无驱动/接地告警，不能由旧厂商bit跑通推定新IP已安全；需厂商解释有效分支或修复",
+      "raw": "[EFX-0011 VERI-WARNING] expression size ** truncated to fit in target size ** (VERI-1209) (F:\\Projects\\stareye_fpga\\efinity\\m2_ar0135_ddr_hdmi_i3\\ip/DdrCtrl\\DdrCtrl.sv:2611)"
+    },
+    {
+      "id": "W011",
+      "log_line": 637,
+      "code": "EFX-0011",
+      "category": "必须修复",
+      "reason": "必须澄清：当前DDR v5.14加密内部未连接/位宽/无驱动/接地告警，不能由旧厂商bit跑通推定新IP已安全；需厂商解释有效分支或修复",
+      "raw": "[EFX-0011 VERI-WARNING] actual bit length ** differs from formal bit length *** for port '**' (VERI-1330) (F:\\Projects\\stareye_fpga\\efinity\\m2_ar0135_ddr_hdmi_i3\\ip/DdrCtrl\\DdrCtrl.sv:2496)"
+    },
+    {
+      "id": "W012",
+      "log_line": 638,
+      "code": "EFX-0011",
+      "category": "必须修复",
+      "reason": "必须澄清：当前DDR v5.14加密内部未连接/位宽/无驱动/接地告警，不能由旧厂商bit跑通推定新IP已安全；需厂商解释有效分支或修复",
+      "raw": "[EFX-0011 VERI-WARNING] expression size ** truncated to fit in target size ** (VERI-1209) (F:\\Projects\\stareye_fpga\\efinity\\m2_ar0135_ddr_hdmi_i3\\ip/DdrCtrl\\DdrCtrl.sv:2611)"
+    },
+    {
+      "id": "W013",
+      "log_line": 639,
+      "code": "EFX-0011",
+      "category": "必须修复",
+      "reason": "必须澄清：当前DDR v5.14加密内部未连接/位宽/无驱动/接地告警，不能由旧厂商bit跑通推定新IP已安全；需厂商解释有效分支或修复",
+      "raw": "[EFX-0011 VERI-WARNING] expression size ** truncated to fit in target size ** (VERI-1209) (F:\\Projects\\stareye_fpga\\efinity\\m2_ar0135_ddr_hdmi_i3\\ip/DdrCtrl\\DdrCtrl.sv:2611)"
+    },
+    {
+      "id": "W014",
+      "log_line": 640,
+      "code": "EFX-0011",
+      "category": "必须修复",
+      "reason": "必须澄清：当前DDR v5.14加密内部未连接/位宽/无驱动/接地告警，不能由旧厂商bit跑通推定新IP已安全；需厂商解释有效分支或修复",
+      "raw": "[EFX-0011 VERI-WARNING] actual bit length ** differs from formal bit length *** for port '**' (VERI-1330) (F:\\Projects\\stareye_fpga\\efinity\\m2_ar0135_ddr_hdmi_i3\\ip/DdrCtrl\\DdrCtrl.sv:2496)"
+    },
+    {
+      "id": "W015",
+      "log_line": 641,
+      "code": "EFX-0011",
+      "category": "必须修复",
+      "reason": "必须澄清：当前DDR v5.14加密内部未连接/位宽/无驱动/接地告警，不能由旧厂商bit跑通推定新IP已安全；需厂商解释有效分支或修复",
+      "raw": "[EFX-0011 VERI-WARNING] port '**' remains unconnected for this instance (VERI-1927) (F:\\Projects\\stareye_fpga\\efinity\\m2_ar0135_ddr_hdmi_i3\\ip/DdrCtrl\\DdrCtrl.sv:590)"
+    },
+    {
+      "id": "W016",
+      "log_line": 642,
+      "code": "EFX-0011",
+      "category": "必须修复",
+      "reason": "必须澄清：当前DDR v5.14加密内部未连接/位宽/无驱动/接地告警，不能由旧厂商bit跑通推定新IP已安全；需厂商解释有效分支或修复",
+      "raw": "[EFX-0011 VERI-WARNING] actual bit length ** differs from formal bit length *** for port '**' (VERI-1330) (F:\\Projects\\stareye_fpga\\efinity\\m2_ar0135_ddr_hdmi_i3\\ip/DdrCtrl\\DdrCtrl.sv:590)"
+    },
+    {
+      "id": "W017",
+      "log_line": 643,
+      "code": "EFX-0011",
+      "category": "必须修复",
+      "reason": "必须澄清：当前DDR v5.14加密内部未连接/位宽/无驱动/接地告警，不能由旧厂商bit跑通推定新IP已安全；需厂商解释有效分支或修复",
+      "raw": "[EFX-0011 VERI-WARNING] port '**' remains unconnected for this instance (VERI-1927) (F:\\Projects\\stareye_fpga\\efinity\\m2_ar0135_ddr_hdmi_i3\\ip/DdrCtrl\\DdrCtrl.sv:1460)"
+    },
+    {
+      "id": "W018",
+      "log_line": 644,
+      "code": "EFX-0011",
+      "category": "必须修复",
+      "reason": "必须澄清：当前DDR v5.14加密内部未连接/位宽/无驱动/接地告警，不能由旧厂商bit跑通推定新IP已安全；需厂商解释有效分支或修复",
+      "raw": "[EFX-0011 VERI-WARNING] port '**' remains unconnected for this instance (VERI-1927) (F:\\Projects\\stareye_fpga\\efinity\\m2_ar0135_ddr_hdmi_i3\\ip/DdrCtrl\\DdrCtrl.sv:4817)"
+    },
+    {
+      "id": "W019",
+      "log_line": 645,
+      "code": "EFX-0011",
+      "category": "必须修复",
+      "reason": "必须澄清：当前DDR v5.14加密内部未连接/位宽/无驱动/接地告警，不能由旧厂商bit跑通推定新IP已安全；需厂商解释有效分支或修复",
+      "raw": "[EFX-0011 VERI-WARNING] actual bit length ** differs from formal bit length *** for port '**' (VERI-1330) (F:\\Projects\\stareye_fpga\\efinity\\m2_ar0135_ddr_hdmi_i3\\ip/DdrCtrl\\DdrCtrl.sv:4817)"
+    },
+    {
+      "id": "W020",
+      "log_line": 646,
+      "code": "EFX-0011",
+      "category": "必须修复",
+      "reason": "必须澄清：当前DDR v5.14加密内部未连接/位宽/无驱动/接地告警，不能由旧厂商bit跑通推定新IP已安全；需厂商解释有效分支或修复",
+      "raw": "[EFX-0011 VERI-WARNING] input port '**' is not connected on this instance (VDB-1013) (F:\\Projects\\stareye_fpga\\efinity\\m2_ar0135_ddr_hdmi_i3\\ip/DdrCtrl\\DdrCtrl.sv:4817)"
+    },
+    {
+      "id": "W021",
+      "log_line": 647,
+      "code": "EFX-0011",
+      "category": "必须修复",
+      "reason": "必须澄清：当前DDR v5.14加密内部未连接/位宽/无驱动/接地告警，不能由旧厂商bit跑通推定新IP已安全；需厂商解释有效分支或修复",
+      "raw": "[EFX-0011 VERI-WARNING] expression size ** truncated to fit in target size ** (VERI-1209) (F:\\Projects\\stareye_fpga\\efinity\\m2_ar0135_ddr_hdmi_i3\\ip/DdrCtrl\\DdrCtrl.sv:1460)"
+    },
+    {
+      "id": "W022",
+      "log_line": 648,
+      "code": "EFX-0011",
+      "category": "必须修复",
+      "reason": "必须澄清：当前DDR v5.14加密内部未连接/位宽/无驱动/接地告警，不能由旧厂商bit跑通推定新IP已安全；需厂商解释有效分支或修复",
+      "raw": "[EFX-0011 VERI-WARNING] net '**' does not have a driver (VDB-1002) (F:\\Projects\\stareye_fpga\\efinity\\m2_ar0135_ddr_hdmi_i3\\ip/DdrCtrl\\DdrCtrl.sv:1460)"
+    },
+    {
+      "id": "W023",
+      "log_line": 649,
+      "code": "EFX-0011",
+      "category": "必须修复",
+      "reason": "必须澄清：当前DDR v5.14加密内部未连接/位宽/无驱动/接地告警，不能由旧厂商bit跑通推定新IP已安全；需厂商解释有效分支或修复",
+      "raw": "[EFX-0011 VERI-WARNING] net '**' does not have a driver (VDB-1002) (F:\\Projects\\stareye_fpga\\efinity\\m2_ar0135_ddr_hdmi_i3\\ip/DdrCtrl\\DdrCtrl.sv:590)"
+    },
+    {
+      "id": "W024",
+      "log_line": 650,
+      "code": "EFX-0011",
+      "category": "必须修复",
+      "reason": "必须澄清：当前DDR v5.14加密内部未连接/位宽/无驱动/接地告警，不能由旧厂商bit跑通推定新IP已安全；需厂商解释有效分支或修复",
+      "raw": "[EFX-0011 VERI-WARNING] input port '**' is not connected on this instance (VDB-1013) (F:\\Projects\\stareye_fpga\\efinity\\m2_ar0135_ddr_hdmi_i3\\ip/DdrCtrl\\DdrCtrl.sv:590)"
+    },
+    {
+      "id": "W025",
+      "log_line": 651,
+      "code": "EFX-0011",
+      "category": "必须修复",
+      "reason": "必须澄清：当前DDR v5.14加密内部未连接/位宽/无驱动/接地告警，不能由旧厂商bit跑通推定新IP已安全；需厂商解释有效分支或修复",
+      "raw": "[EFX-0011 VERI-WARNING] input port '**' is not connected on this instance (VDB-1013) (F:\\Projects\\stareye_fpga\\efinity\\m2_ar0135_ddr_hdmi_i3\\ip/DdrCtrl\\DdrCtrl.sv:2496)"
+    },
+    {
+      "id": "W026",
+      "log_line": 652,
+      "code": "EFX-0011",
+      "category": "必须修复",
+      "reason": "必须澄清：当前DDR v5.14加密内部未连接/位宽/无驱动/接地告警，不能由旧厂商bit跑通推定新IP已安全；需厂商解释有效分支或修复",
+      "raw": "[EFX-0011 VERI-WARNING] input port 'wr_data[127]' is not connected on this instance (VDB-1013) (F:\\Projects\\stareye_fpga\\efinity\\m2_ar0135_ddr_hdmi_i3\\ip/DdrCtrl\\DdrCtrl.sv:117)"
+    },
+    {
+      "id": "W027",
+      "log_line": 653,
+      "code": "EFX-0011",
+      "category": "需要实物验证",
+      "reason": "4/8位AXI ID适配；当前发送ID固定0，但多事务/响应归属需验证",
+      "raw": "[EFX-0011 VERI-WARNING] actual bit length 4 differs from formal bit length 8 for port 'axi_aid' (VERI-1330) (F:\\Projects\\stareye_fpga\\efinity\\m2_ar0135_ddr_hdmi_i3\\example_top.v:565)"
+    },
+    {
+      "id": "W028",
+      "log_line": 654,
+      "code": "EFX-0011",
+      "category": "需要实物验证",
+      "reason": "4/8位AXI ID适配；当前发送ID固定0，但多事务/响应归属需验证",
+      "raw": "[EFX-0011 VERI-WARNING] actual bit length 4 differs from formal bit length 8 for port 'axi_wid' (VERI-1330) (F:\\Projects\\stareye_fpga\\efinity\\m2_ar0135_ddr_hdmi_i3\\example_top.v:572)"
+    },
+    {
+      "id": "W029",
+      "log_line": 655,
+      "code": "EFX-0011",
+      "category": "需要实物验证",
+      "reason": "响应ID窄化；不得扩展为多ID设计而不复核",
+      "raw": "[EFX-0011 VERI-WARNING] actual bit length 4 differs from formal bit length 8 for port 'axi_bid' (VERI-1330) (F:\\Projects\\stareye_fpga\\efinity\\m2_ar0135_ddr_hdmi_i3\\example_top.v:581)"
+    },
+    {
+      "id": "W030",
+      "log_line": 656,
+      "code": "EFX-0011",
+      "category": "需要实物验证",
+      "reason": "响应ID窄化；不得扩展为多ID设计而不复核",
+      "raw": "[EFX-0011 VERI-WARNING] actual bit length 4 differs from formal bit length 8 for port 'axi_rid' (VERI-1330) (F:\\Projects\\stareye_fpga\\efinity\\m2_ar0135_ddr_hdmi_i3\\example_top.v:587)"
+    },
+    {
+      "id": "W031",
+      "log_line": 657,
+      "code": "EFX-0011",
+      "category": "已知IP噪声",
+      "reason": "1位r_reqtype加1实现轮换，按模2截断",
+      "raw": "[EFX-0011 VERI-WARNING] expression size 2 truncated to fit in target size 1 (VERI-1209) (F:\\Projects\\stareye_fpga\\efinity\\m2_ar0135_ddr_hdmi_i3\\src\\axi\\AXI4_AWARMux.v:90)"
+    },
+    {
+      "id": "W032",
+      "log_line": 658,
+      "code": "EFX-0011",
+      "category": "已知IP噪声",
+      "reason": "同步移位寄存器保留低2位；不能据此签收CDC",
+      "raw": "[EFX-0011 VERI-WARNING] expression size 3 truncated to fit in target size 2 (VERI-1209) (F:\\Projects\\stareye_fpga\\efinity\\m2_ar0135_ddr_hdmi_i3\\example_top.v:745)"
+    },
+    {
+      "id": "W033",
+      "log_line": 659,
+      "code": "EFX-0011",
+      "category": "已知IP噪声",
+      "reason": "同步移位寄存器保留低4位；不能据此签收CDC",
+      "raw": "[EFX-0011 VERI-WARNING] expression size 5 truncated to fit in target size 4 (VERI-1209) (F:\\Projects\\stareye_fpga\\efinity\\m2_ar0135_ddr_hdmi_i3\\example_top.v:746)"
+    },
+    {
+      "id": "W034",
+      "log_line": 660,
+      "code": "EFX-0011",
+      "category": "与当前设计无关",
+      "reason": "DSI PWM宽度，当前AR0135/HDMI链路不消费该外设",
+      "raw": "[EFX-0011 VERI-WARNING] expression size 8 truncated to fit in target size 7 (VERI-1209) (F:\\Projects\\stareye_fpga\\efinity\\m2_ar0135_ddr_hdmi_i3\\src\\PWMLite.v:22)"
+    },
+    {
+      "id": "W035",
+      "log_line": 661,
+      "code": "EFX-0011",
+      "category": "已知IP噪声",
+      "reason": "C_W_WIDTH=8，crop输出连接宽64但写FIFO只消费低8位",
+      "raw": "[EFX-0011 VERI-WARNING] actual bit length 64 differs from formal bit length 8 for port 'image_out_data' (VERI-1330) (F:\\Projects\\stareye_fpga\\efinity\\m2_ar0135_ddr_hdmi_i3\\example_top.v:898)"
+    },
+    {
+      "id": "W036",
+      "log_line": 662,
+      "code": "EFX-0011",
+      "category": "已知IP噪声",
+      "reason": "axi_wstrb常量全1，128位总线只需16位字节使能",
+      "raw": "[EFX-0011 VERI-WARNING] expression size 32 truncated to fit in target size 16 (VERI-1209) (F:\\Projects\\stareye_fpga\\efinity\\m2_ar0135_ddr_hdmi_i3\\src\\axi\\axi4_ctrl.v:91)"
+    },
+    {
+      "id": "W037",
+      "log_line": 663,
+      "code": "EFX-0011",
+      "category": "已知IP噪声",
+      "reason": "4帧索引2位，模4递增",
+      "raw": "[EFX-0011 VERI-WARNING] expression size 3 truncated to fit in target size 2 (VERI-1209) (F:\\Projects\\stareye_fpga\\efinity\\m2_ar0135_ddr_hdmi_i3\\src\\axi\\axi4_ctrl.v:113)"
+    },
+    {
+      "id": "W038",
+      "log_line": 664,
+      "code": "EFX-0011",
+      "category": "已知IP噪声",
+      "reason": "4帧索引2位，模4递增/避开读帧",
+      "raw": "[EFX-0011 VERI-WARNING] expression size 3 truncated to fit in target size 2 (VERI-1209) (F:\\Projects\\stareye_fpga\\efinity\\m2_ar0135_ddr_hdmi_i3\\src\\axi\\axi4_ctrl.v:114)"
+    },
+    {
+      "id": "W039",
+      "log_line": 665,
+      "code": "EFX-0011",
+      "category": "已知IP噪声",
+      "reason": "4帧索引2位，模4递增",
+      "raw": "[EFX-0011 VERI-WARNING] expression size 3 truncated to fit in target size 2 (VERI-1209) (F:\\Projects\\stareye_fpga\\efinity\\m2_ar0135_ddr_hdmi_i3\\src\\axi\\axi4_ctrl.v:196)"
+    },
+    {
+      "id": "W040",
+      "log_line": 666,
+      "code": "EFX-0011",
+      "category": "需要实物验证",
+      "reason": "AXI写状态/突发计数截断；结合背压与连续帧实际验证",
+      "raw": "[EFX-0011 VERI-WARNING] expression size 2 truncated to fit in target size 1 (VERI-1209) (F:\\Projects\\stareye_fpga\\efinity\\m2_ar0135_ddr_hdmi_i3\\src\\axi\\axi4_ctrl.v:238)"
+    },
+    {
+      "id": "W041",
+      "log_line": 667,
+      "code": "EFX-0011",
+      "category": "需要实物验证",
+      "reason": "22位帧内写地址按模2^22回绕；需证实帧长/地址边界，不扩大容量证明",
+      "raw": "[EFX-0011 VERI-WARNING] expression size 23 truncated to fit in target size 22 (VERI-1209) (F:\\Projects\\stareye_fpga\\efinity\\m2_ar0135_ddr_hdmi_i3\\src\\axi\\axi4_ctrl.v:257)"
+    },
+    {
+      "id": "W042",
+      "log_line": 668,
+      "code": "EFX-0011",
+      "category": "已知IP噪声",
+      "reason": "W0: BYPASS_RESET_SYNC=0；有效分支从a_rst_i同步，a_wr_rst_i仅用于关闭的旁路分支",
+      "raw": "[EFX-0011 VERI-WARNING] port 'a_wr_rst_i' remains unconnected for this instance (VERI-1927) (F:\\Projects\\stareye_fpga\\efinity\\m2_ar0135_ddr_hdmi_i3\\ip/W0_FIFO_8\\W0_FIFO_8.sv:116)"
+    },
+    {
+      "id": "W043",
+      "log_line": 669,
+      "code": "EFX-0011",
+      "category": "已知IP噪声",
+      "reason": "W0幂次FIFO计数算术按目标计数位数取模，非数据总线截断",
+      "raw": "[EFX-0011 VERI-WARNING] expression size 32 truncated to fit in target size 14 (VERI-1209) (F:\\Projects\\stareye_fpga\\efinity\\m2_ar0135_ddr_hdmi_i3\\ip/W0_FIFO_8\\W0_FIFO_8.sv:1251)"
+    },
+    {
+      "id": "W044",
+      "log_line": 670,
+      "code": "EFX-0011",
+      "category": "已知IP噪声",
+      "reason": "W0幂次FIFO计数算术按目标计数位数取模，非数据总线截断",
+      "raw": "[EFX-0011 VERI-WARNING] expression size 32 truncated to fit in target size 10 (VERI-1209) (F:\\Projects\\stareye_fpga\\efinity\\m2_ar0135_ddr_hdmi_i3\\ip/W0_FIFO_8\\W0_FIFO_8.sv:1252)"
+    },
+    {
+      "id": "W045",
+      "log_line": 671,
+      "code": "EFX-0011",
+      "category": "已知IP噪声",
+      "reason": "与668同一未启用复位旁路端口，预/后综合重复",
+      "raw": "[EFX-0011 VERI-WARNING] input port 'a_wr_rst_i' is not connected on this instance (VDB-1013) (F:\\Projects\\stareye_fpga\\efinity\\m2_ar0135_ddr_hdmi_i3\\ip/W0_FIFO_8\\W0_FIFO_8.sv:95)"
+    },
+    {
+      "id": "W046",
+      "log_line": 672,
+      "code": "EFX-0011",
+      "category": "已知IP噪声",
+      "reason": "R0: BYPASS_RESET_SYNC=0；有效复位由a_rst_i同步",
+      "raw": "[EFX-0011 VERI-WARNING] port 'a_wr_rst_i' remains unconnected for this instance (VERI-1927) (F:\\Projects\\stareye_fpga\\efinity\\m2_ar0135_ddr_hdmi_i3\\ip/R0_FIFO_8\\R0_FIFO_8.v:109)"
+    },
+    {
+      "id": "W047",
+      "log_line": 673,
+      "code": "EFX-0011",
+      "category": "已知IP噪声",
+      "reason": "R0计数表达式截断；本设计不连接count输出，实际消费empty/prog_full",
+      "raw": "[EFX-0011 VERI-WARNING] expression size 32 truncated to fit in target size 10 (VERI-1209) (F:\\Projects\\stareye_fpga\\efinity\\m2_ar0135_ddr_hdmi_i3\\ip/R0_FIFO_8\\R0_FIFO_8.v:1270)"
+    },
+    {
+      "id": "W048",
+      "log_line": 674,
+      "code": "EFX-0011",
+      "category": "已知IP噪声",
+      "reason": "R0计数表达式截断；本设计不连接count输出，实际消费empty/prog_full",
+      "raw": "[EFX-0011 VERI-WARNING] expression size 32 truncated to fit in target size 14 (VERI-1209) (F:\\Projects\\stareye_fpga\\efinity\\m2_ar0135_ddr_hdmi_i3\\ip/R0_FIFO_8\\R0_FIFO_8.v:1271)"
+    },
+    {
+      "id": "W049",
+      "log_line": 675,
+      "code": "EFX-0011",
+      "category": "已知IP噪声",
+      "reason": "R0 wrapper计数宽度少1位，但当前axi4_ctrl不连接wr_datacount_o；未来使用必须修正",
+      "raw": "[EFX-0011 VERI-WARNING] actual bit length 9 differs from formal bit length 10 for port 'wr_datacount_o' (VERI-1330) (F:\\Projects\\stareye_fpga\\efinity\\m2_ar0135_ddr_hdmi_i3\\ip/R0_FIFO_8\\R0_FIFO_8.v:104)"
+    },
+    {
+      "id": "W050",
+      "log_line": 676,
+      "code": "EFX-0011",
+      "category": "已知IP噪声",
+      "reason": "R0 wrapper计数宽度少1位，但当前axi4_ctrl不连接rd_datacount_o；未来使用必须修正",
+      "raw": "[EFX-0011 VERI-WARNING] actual bit length 13 differs from formal bit length 14 for port 'rd_datacount_o' (VERI-1330) (F:\\Projects\\stareye_fpga\\efinity\\m2_ar0135_ddr_hdmi_i3\\ip/R0_FIFO_8\\R0_FIFO_8.v:107)"
+    },
+    {
+      "id": "W051",
+      "log_line": 677,
+      "code": "EFX-0011",
+      "category": "已知IP噪声",
+      "reason": "与672同一关闭的旁路分支端口",
+      "raw": "[EFX-0011 VERI-WARNING] input port 'a_wr_rst_i' is not connected on this instance (VDB-1013) (F:\\Projects\\stareye_fpga\\efinity\\m2_ar0135_ddr_hdmi_i3\\ip/R0_FIFO_8\\R0_FIFO_8.v:89)"
+    },
+    {
+      "id": "W052",
+      "log_line": 678,
+      "code": "EFX-0011",
+      "category": "已知IP噪声",
+      "reason": "16级复位忙移位寄存器保留低16位；复位跨域风险另列",
+      "raw": "[EFX-0011 VERI-WARNING] expression size 17 truncated to fit in target size 16 (VERI-1209) (F:\\Projects\\stareye_fpga\\efinity\\m2_ar0135_ddr_hdmi_i3\\src\\axi\\axi4_ctrl.v:449)"
+    },
+    {
+      "id": "W053",
+      "log_line": 679,
+      "code": "EFX-0011",
+      "category": "需要实物验证",
+      "reason": "22位帧内读地址回绕；需要帧长、缓冲区和背压验证",
+      "raw": "[EFX-0011 VERI-WARNING] expression size 23 truncated to fit in target size 22 (VERI-1209) (F:\\Projects\\stareye_fpga\\efinity\\m2_ar0135_ddr_hdmi_i3\\src\\axi\\axi4_ctrl.v:559)"
+    },
+    {
+      "id": "W054",
+      "log_line": 680,
+      "code": "EFX-0011",
+      "category": "已知IP噪声",
+      "reason": "常量0的位宽告警；不代表响应握手已经被验证",
+      "raw": "[EFX-0011 VERI-WARNING] actual bit length 32 differs from formal bit length 4 for port 'axi_bid' (VERI-1330) (F:\\Projects\\stareye_fpga\\efinity\\m2_ar0135_ddr_hdmi_i3\\example_top.v:968)"
+    },
+    {
+      "id": "W055",
+      "log_line": 681,
+      "code": "EFX-0011",
+      "category": "已知IP噪声",
+      "reason": "常量0的位宽告警；BRESP硬接0的错误可见性另列",
+      "raw": "[EFX-0011 VERI-WARNING] actual bit length 32 differs from formal bit length 2 for port 'axi_bresp' (VERI-1330) (F:\\Projects\\stareye_fpga\\efinity\\m2_ar0135_ddr_hdmi_i3\\example_top.v:969)"
+    },
+    {
+      "id": "W056",
+      "log_line": 682,
+      "code": "EFX-0011",
+      "category": "已知IP噪声",
+      "reason": "常量1的位宽告警；BVALID硬接1的握手假设另列",
+      "raw": "[EFX-0011 VERI-WARNING] actual bit length 32 differs from formal bit length 1 for port 'axi_bvalid' (VERI-1330) (F:\\Projects\\stareye_fpga\\efinity\\m2_ar0135_ddr_hdmi_i3\\example_top.v:970)"
+    },
+    {
+      "id": "W057",
+      "log_line": 683,
+      "code": "EFX-0011",
+      "category": "已知IP噪声",
+      "reason": "常量0的位宽告警；RRESP硬接0的错误可见性另列",
+      "raw": "[EFX-0011 VERI-WARNING] actual bit length 32 differs from formal bit length 2 for port 'axi_rresp' (VERI-1330) (F:\\Projects\\stareye_fpga\\efinity\\m2_ar0135_ddr_hdmi_i3\\example_top.v:980)"
+    },
+    {
+      "id": "W058",
+      "log_line": 684,
+      "code": "EFX-0011",
+      "category": "已知IP噪声",
+      "reason": "8位灰度写流取64位crop连接的低8位",
+      "raw": "[EFX-0011 VERI-WARNING] actual bit length 64 differs from formal bit length 8 for port 'wframe_data' (VERI-1330) (F:\\Projects\\stareye_fpga\\efinity\\m2_ar0135_ddr_hdmi_i3\\example_top.v:988)"
+    },
+    {
+      "id": "W059",
+      "log_line": 685,
+      "code": "EFX-0011",
+      "category": "已知IP噪声",
+      "reason": "读流8位接16位lcd_data，但HDMI只取lcd_rgb低24位，来自lcd_data低8位；高半像素不用于HDMI",
+      "raw": "[EFX-0011 VERI-WARNING] actual bit length 16 differs from formal bit length 8 for port 'rframe_data' (VERI-1330) (F:\\Projects\\stareye_fpga\\efinity\\m2_ar0135_ddr_hdmi_i3\\example_top.v:993)"
+    },
+    {
+      "id": "W060",
+      "log_line": 686,
+      "code": "EFX-0011",
+      "category": "已知IP噪声",
+      "reason": "tp_o诊断32位，仅低4位有定义并被LED[3:0]消费；不是相机数据截断",
+      "raw": "[EFX-0011 VERI-WARNING] actual bit length 8 differs from formal bit length 32 for port 'tp_o' (VERI-1330) (F:\\Projects\\stareye_fpga\\efinity\\m2_ar0135_ddr_hdmi_i3\\example_top.v:995)"
+    },
+    {
+      "id": "W061",
+      "log_line": 687,
+      "code": "EFX-0011",
+      "category": "已知IP噪声",
+      "reason": "LED仅使用tp_o低4位，其他诊断位未消费",
+      "raw": "[EFX-0011 VERI-WARNING] expression size 8 truncated to fit in target size 4 (VERI-1209) (F:\\Projects\\stareye_fpga\\efinity\\m2_ar0135_ddr_hdmi_i3\\example_top.v:997)"
+    },
+    {
+      "id": "W062",
+      "log_line": 688,
+      "code": "EFX-0011",
+      "category": "已知IP噪声",
+      "reason": "hcnt14位转12位坐标；720p总行1650/有效1280均小于4096，坐标未消费",
+      "raw": "[EFX-0011 VERI-WARNING] expression size 14 truncated to fit in target size 12 (VERI-1209) (F:\\Projects\\stareye_fpga\\efinity\\m2_ar0135_ddr_hdmi_i3\\src\\lcd_driver.v:145)"
+    },
+    {
+      "id": "W063",
+      "log_line": 689,
+      "code": "EFX-0011",
+      "category": "已知IP噪声",
+      "reason": "HDMI常量0/模式0或1，窄化不改变当前有效值；不代表视频协议全部验证",
+      "raw": "[EFX-0011 VERI-WARNING] actual bit length 32 differs from formal bit length 4 for port 'data_island_data' (VERI-1330) (F:\\Projects\\stareye_fpga\\efinity\\m2_ar0135_ddr_hdmi_i3\\src\\hdmi_ip\\rgb2dvi.v:50)"
+    },
+    {
+      "id": "W064",
+      "log_line": 690,
+      "code": "EFX-0011",
+      "category": "已知IP噪声",
+      "reason": "HDMI常量0/模式0或1，窄化不改变当前有效值；不代表视频协议全部验证",
+      "raw": "[EFX-0011 VERI-WARNING] actual bit length 4 differs from formal bit length 3 for port 'mode' (VERI-1330) (F:\\Projects\\stareye_fpga\\efinity\\m2_ar0135_ddr_hdmi_i3\\src\\hdmi_ip\\rgb2dvi.v:52)"
+    },
+    {
+      "id": "W065",
+      "log_line": 691,
+      "code": "EFX-0011",
+      "category": "已知IP噪声",
+      "reason": "HDMI常量0/模式0或1，窄化不改变当前有效值；不代表视频协议全部验证",
+      "raw": "[EFX-0011 VERI-WARNING] actual bit length 32 differs from formal bit length 4 for port 'data_island_data' (VERI-1330) (F:\\Projects\\stareye_fpga\\efinity\\m2_ar0135_ddr_hdmi_i3\\src\\hdmi_ip\\rgb2dvi.v:58)"
+    },
+    {
+      "id": "W066",
+      "log_line": 692,
+      "code": "EFX-0011",
+      "category": "已知IP噪声",
+      "reason": "HDMI常量0/模式0或1，窄化不改变当前有效值；不代表视频协议全部验证",
+      "raw": "[EFX-0011 VERI-WARNING] actual bit length 4 differs from formal bit length 3 for port 'mode' (VERI-1330) (F:\\Projects\\stareye_fpga\\efinity\\m2_ar0135_ddr_hdmi_i3\\src\\hdmi_ip\\rgb2dvi.v:60)"
+    },
+    {
+      "id": "W067",
+      "log_line": 693,
+      "code": "EFX-0011",
+      "category": "已知IP噪声",
+      "reason": "HDMI常量0/模式0或1，窄化不改变当前有效值；不代表视频协议全部验证",
+      "raw": "[EFX-0011 VERI-WARNING] actual bit length 32 differs from formal bit length 4 for port 'data_island_data' (VERI-1330) (F:\\Projects\\stareye_fpga\\efinity\\m2_ar0135_ddr_hdmi_i3\\src\\hdmi_ip\\rgb2dvi.v:66)"
+    },
+    {
+      "id": "W068",
+      "log_line": 694,
+      "code": "EFX-0011",
+      "category": "已知IP噪声",
+      "reason": "HDMI常量0/模式0或1，窄化不改变当前有效值；不代表视频协议全部验证",
+      "raw": "[EFX-0011 VERI-WARNING] actual bit length 4 differs from formal bit length 3 for port 'mode' (VERI-1330) (F:\\Projects\\stareye_fpga\\efinity\\m2_ar0135_ddr_hdmi_i3\\src\\hdmi_ip\\rgb2dvi.v:68)"
+    },
+    {
+      "id": "W069",
+      "log_line": 695,
+      "code": "EFX-0011",
+      "category": "已知IP噪声",
+      "reason": "oe_i常量1，截断后仍为1",
+      "raw": "[EFX-0011 VERI-WARNING] actual bit length 32 differs from formal bit length 1 for port 'oe_i' (VERI-1330) (F:\\Projects\\stareye_fpga\\efinity\\m2_ar0135_ddr_hdmi_i3\\example_top.v:1051)"
+    },
+    {
+      "id": "W070",
+      "log_line": 696,
+      "code": "EFX-0011",
+      "category": "与当前设计无关",
+      "reason": "厂商多接口模板遗留未驱动信号；当前AR0135到DDR到HDMI不消费对应外设",
+      "raw": "[EFX-0011 VERI-WARNING] net 'w_dev_index_o[7]' does not have a driver (VDB-1002) (F:\\Projects\\stareye_fpga\\efinity\\m2_ar0135_ddr_hdmi_i3\\example_top.v:414)"
+    },
+    {
+      "id": "W071",
+      "log_line": 697,
+      "code": "EFX-0011",
+      "category": "与当前设计无关",
+      "reason": "厂商多接口模板遗留未驱动信号；当前AR0135到DDR到HDMI不消费对应外设",
+      "raw": "[EFX-0011 VERI-WARNING] net 'w_dev_cmd_o[7]' does not have a driver (VDB-1002) (F:\\Projects\\stareye_fpga\\efinity\\m2_ar0135_ddr_hdmi_i3\\example_top.v:415)"
+    },
+    {
+      "id": "W072",
+      "log_line": 698,
+      "code": "EFX-0011",
+      "category": "与当前设计无关",
+      "reason": "厂商多接口模板遗留未驱动信号；当前AR0135到DDR到HDMI不消费对应外设",
+      "raw": "[EFX-0011 VERI-WARNING] net 'w_dev_wdata_o[31]' does not have a driver (VDB-1002) (F:\\Projects\\stareye_fpga\\efinity\\m2_ar0135_ddr_hdmi_i3\\example_top.v:416)"
+    },
+    {
+      "id": "W073",
+      "log_line": 699,
+      "code": "EFX-0011",
+      "category": "与当前设计无关",
+      "reason": "厂商多接口模板遗留未驱动信号；当前AR0135到DDR到HDMI不消费对应外设",
+      "raw": "[EFX-0011 VERI-WARNING] net 'w_dev_wvalid_o' does not have a driver (VDB-1002) (F:\\Projects\\stareye_fpga\\efinity\\m2_ar0135_ddr_hdmi_i3\\example_top.v:417)"
+    },
+    {
+      "id": "W074",
+      "log_line": 700,
+      "code": "EFX-0011",
+      "category": "与当前设计无关",
+      "reason": "厂商多接口模板遗留未驱动信号；当前AR0135到DDR到HDMI不消费对应外设",
+      "raw": "[EFX-0011 VERI-WARNING] net 'w_spi_ssn_o' does not have a driver (VDB-1002) (F:\\Projects\\stareye_fpga\\efinity\\m2_ar0135_ddr_hdmi_i3\\example_top.v:421)"
+    },
+    {
+      "id": "W075",
+      "log_line": 701,
+      "code": "EFX-0011",
+      "category": "与当前设计无关",
+      "reason": "厂商多接口模板遗留未驱动信号；当前AR0135到DDR到HDMI不消费对应外设",
+      "raw": "[EFX-0011 VERI-WARNING] net 'w_spi_data_o[3]' does not have a driver (VDB-1002) (F:\\Projects\\stareye_fpga\\efinity\\m2_ar0135_ddr_hdmi_i3\\example_top.v:422)"
+    },
+    {
+      "id": "W076",
+      "log_line": 702,
+      "code": "EFX-0011",
+      "category": "与当前设计无关",
+      "reason": "厂商多接口模板遗留未驱动信号；当前AR0135到DDR到HDMI不消费对应外设",
+      "raw": "[EFX-0011 VERI-WARNING] net 'w_lcd_b_o[7]' does not have a driver (VDB-1002) (F:\\Projects\\stareye_fpga\\efinity\\m2_ar0135_ddr_hdmi_i3\\example_top.v:439)"
+    },
+    {
+      "id": "W077",
+      "log_line": 703,
+      "code": "EFX-0011",
+      "category": "已知IP噪声",
+      "reason": "ENABLE_OSERDES=0，SerialClk未接；实际原生LVDS使用PLL pixel_10x",
+      "raw": "[EFX-0011 VERI-WARNING] input port 'SerialClk' is not connected on this instance (VDB-1013) (F:\\Projects\\stareye_fpga\\efinity\\m2_ar0135_ddr_hdmi_i3\\example_top.v:1044)"
+    },
+    {
+      "id": "W078",
+      "log_line": 704,
+      "code": "EFX-0256",
+      "category": "与当前设计无关",
+      "reason": "未启用的DSI/LVDS/CSI/LCD/UART或未消费LED输出；仅在这些外设保持不接入且不依赖其输出时与当前链路无关，不能跨用途豁免",
+      "raw": "[EFX-0256 WARNING] The primary output port 'csi_ctl0_o' wire 'csi_ctl0_o' is not driven."
+    },
+    {
+      "id": "W079",
+      "log_line": 705,
+      "code": "EFX-0256",
+      "category": "与当前设计无关",
+      "reason": "未启用的DSI/LVDS/CSI/LCD/UART或未消费LED输出；仅在这些外设保持不接入且不依赖其输出时与当前链路无关，不能跨用途豁免",
+      "raw": "[EFX-0256 WARNING] The primary output port 'csi_ctl1_o' wire 'csi_ctl1_o' is not driven."
+    },
+    {
+      "id": "W080",
+      "log_line": 706,
+      "code": "EFX-0256",
+      "category": "与当前设计无关",
+      "reason": "未启用的DSI/LVDS/CSI/LCD/UART或未消费LED输出；仅在这些外设保持不接入且不依赖其输出时与当前链路无关，不能跨用途豁免",
+      "raw": "[EFX-0256 WARNING] The primary output port 'csi_rxc_hs_en_o' wire 'csi_rxc_hs_en_o' is not driven."
+    },
+    {
+      "id": "W081",
+      "log_line": 707,
+      "code": "EFX-0256",
+      "category": "与当前设计无关",
+      "reason": "未启用的DSI/LVDS/CSI/LCD/UART或未消费LED输出；仅在这些外设保持不接入且不依赖其输出时与当前链路无关，不能跨用途豁免",
+      "raw": "[EFX-0256 WARNING] The primary output port 'csi_rxc_hs_term_en_o' wire 'csi_rxc_hs_term_en_o' is not driven."
+    },
+    {
+      "id": "W082",
+      "log_line": 708,
+      "code": "EFX-0256",
+      "category": "与当前设计无关",
+      "reason": "未启用的DSI/LVDS/CSI/LCD/UART或未消费LED输出；仅在这些外设保持不接入且不依赖其输出时与当前链路无关，不能跨用途豁免",
+      "raw": "[EFX-0256 WARNING] The primary output port 'csi_rxd0_rst_o' wire 'csi_rxd0_rst_o' is not driven."
+    },
+    {
+      "id": "W083",
+      "log_line": 709,
+      "code": "EFX-0256",
+      "category": "与当前设计无关",
+      "reason": "未启用的DSI/LVDS/CSI/LCD/UART或未消费LED输出；仅在这些外设保持不接入且不依赖其输出时与当前链路无关，不能跨用途豁免",
+      "raw": "[EFX-0256 WARNING] The primary output port 'csi_rxd0_hs_en_o' wire 'csi_rxd0_hs_en_o' is not driven."
+    },
+    {
+      "id": "W084",
+      "log_line": 710,
+      "code": "EFX-0256",
+      "category": "与当前设计无关",
+      "reason": "未启用的DSI/LVDS/CSI/LCD/UART或未消费LED输出；仅在这些外设保持不接入且不依赖其输出时与当前链路无关，不能跨用途豁免",
+      "raw": "[EFX-0256 WARNING] The primary output port 'csi_rxd0_hs_term_en_o' wire 'csi_rxd0_hs_term_en_o' is not driven."
+    },
+    {
+      "id": "W085",
+      "log_line": 711,
+      "code": "EFX-0256",
+      "category": "与当前设计无关",
+      "reason": "未启用的DSI/LVDS/CSI/LCD/UART或未消费LED输出；仅在这些外设保持不接入且不依赖其输出时与当前链路无关，不能跨用途豁免",
+      "raw": "[EFX-0256 WARNING] The primary output port 'csi_rxd1_rst_o' wire 'csi_rxd1_rst_o' is not driven."
+    },
+    {
+      "id": "W086",
+      "log_line": 712,
+      "code": "EFX-0256",
+      "category": "与当前设计无关",
+      "reason": "未启用的DSI/LVDS/CSI/LCD/UART或未消费LED输出；仅在这些外设保持不接入且不依赖其输出时与当前链路无关，不能跨用途豁免",
+      "raw": "[EFX-0256 WARNING] The primary output port 'csi_rxd1_hs_en_o' wire 'csi_rxd1_hs_en_o' is not driven."
+    },
+    {
+      "id": "W087",
+      "log_line": 713,
+      "code": "EFX-0256",
+      "category": "与当前设计无关",
+      "reason": "未启用的DSI/LVDS/CSI/LCD/UART或未消费LED输出；仅在这些外设保持不接入且不依赖其输出时与当前链路无关，不能跨用途豁免",
+      "raw": "[EFX-0256 WARNING] The primary output port 'csi_rxd1_hs_term_en_o' wire 'csi_rxd1_hs_term_en_o' is not driven."
+    },
+    {
+      "id": "W088",
+      "log_line": 714,
+      "code": "EFX-0256",
+      "category": "与当前设计无关",
+      "reason": "未启用的DSI/LVDS/CSI/LCD/UART或未消费LED输出；仅在这些外设保持不接入且不依赖其输出时与当前链路无关，不能跨用途豁免",
+      "raw": "[EFX-0256 WARNING] The primary output port 'csi_rxd2_rst_o' wire 'csi_rxd2_rst_o' is not driven."
+    },
+    {
+      "id": "W089",
+      "log_line": 715,
+      "code": "EFX-0256",
+      "category": "与当前设计无关",
+      "reason": "未启用的DSI/LVDS/CSI/LCD/UART或未消费LED输出；仅在这些外设保持不接入且不依赖其输出时与当前链路无关，不能跨用途豁免",
+      "raw": "[EFX-0256 WARNING] The primary output port 'csi_rxd2_hs_en_o' wire 'csi_rxd2_hs_en_o' is not driven."
+    },
+    {
+      "id": "W090",
+      "log_line": 716,
+      "code": "EFX-0256",
+      "category": "与当前设计无关",
+      "reason": "未启用的DSI/LVDS/CSI/LCD/UART或未消费LED输出；仅在这些外设保持不接入且不依赖其输出时与当前链路无关，不能跨用途豁免",
+      "raw": "[EFX-0256 WARNING] The primary output port 'csi_rxd2_hs_term_en_o' wire 'csi_rxd2_hs_term_en_o' is not driven."
+    },
+    {
+      "id": "W091",
+      "log_line": 717,
+      "code": "EFX-0256",
+      "category": "与当前设计无关",
+      "reason": "未启用的DSI/LVDS/CSI/LCD/UART或未消费LED输出；仅在这些外设保持不接入且不依赖其输出时与当前链路无关，不能跨用途豁免",
+      "raw": "[EFX-0256 WARNING] The primary output port 'csi_rxd3_rst_o' wire 'csi_rxd3_rst_o' is not driven."
+    },
+    {
+      "id": "W092",
+      "log_line": 718,
+      "code": "EFX-0256",
+      "category": "与当前设计无关",
+      "reason": "未启用的DSI/LVDS/CSI/LCD/UART或未消费LED输出；仅在这些外设保持不接入且不依赖其输出时与当前链路无关，不能跨用途豁免",
+      "raw": "[EFX-0256 WARNING] The primary output port 'csi_rxd3_hs_en_o' wire 'csi_rxd3_hs_en_o' is not driven."
+    },
+    {
+      "id": "W093",
+      "log_line": 719,
+      "code": "EFX-0256",
+      "category": "与当前设计无关",
+      "reason": "未启用的DSI/LVDS/CSI/LCD/UART或未消费LED输出；仅在这些外设保持不接入且不依赖其输出时与当前链路无关，不能跨用途豁免",
+      "raw": "[EFX-0256 WARNING] The primary output port 'csi_rxd3_hs_term_en_o' wire 'csi_rxd3_hs_term_en_o' is not driven."
+    },
+    {
+      "id": "W094",
+      "log_line": 720,
+      "code": "EFX-0256",
+      "category": "与当前设计无关",
+      "reason": "未启用的DSI/LVDS/CSI/LCD/UART或未消费LED输出；仅在这些外设保持不接入且不依赖其输出时与当前链路无关，不能跨用途豁免",
+      "raw": "[EFX-0256 WARNING] The primary output port 'dsi_txc_rst_o' wire 'dsi_txc_rst_o' is not driven."
+    },
+    {
+      "id": "W095",
+      "log_line": 721,
+      "code": "EFX-0256",
+      "category": "与当前设计无关",
+      "reason": "未启用的DSI/LVDS/CSI/LCD/UART或未消费LED输出；仅在这些外设保持不接入且不依赖其输出时与当前链路无关，不能跨用途豁免",
+      "raw": "[EFX-0256 WARNING] The primary output port 'dsi_txc_lp_p_oe' wire 'dsi_txc_lp_p_oe' is not driven."
+    },
+    {
+      "id": "W096",
+      "log_line": 722,
+      "code": "EFX-0256",
+      "category": "与当前设计无关",
+      "reason": "未启用的DSI/LVDS/CSI/LCD/UART或未消费LED输出；仅在这些外设保持不接入且不依赖其输出时与当前链路无关，不能跨用途豁免",
+      "raw": "[EFX-0256 WARNING] The primary output port 'dsi_txc_lp_p_o' wire 'dsi_txc_lp_p_o' is not driven."
+    },
+    {
+      "id": "W097",
+      "log_line": 723,
+      "code": "EFX-0256",
+      "category": "与当前设计无关",
+      "reason": "未启用的DSI/LVDS/CSI/LCD/UART或未消费LED输出；仅在这些外设保持不接入且不依赖其输出时与当前链路无关，不能跨用途豁免",
+      "raw": "[EFX-0256 WARNING] The primary output port 'dsi_txc_lp_n_oe' wire 'dsi_txc_lp_n_oe' is not driven."
+    },
+    {
+      "id": "W098",
+      "log_line": 724,
+      "code": "EFX-0256",
+      "category": "与当前设计无关",
+      "reason": "未启用的DSI/LVDS/CSI/LCD/UART或未消费LED输出；仅在这些外设保持不接入且不依赖其输出时与当前链路无关，不能跨用途豁免",
+      "raw": "[EFX-0256 WARNING] The primary output port 'dsi_txc_lp_n_o' wire 'dsi_txc_lp_n_o' is not driven."
+    },
+    {
+      "id": "W099",
+      "log_line": 725,
+      "code": "EFX-0256",
+      "category": "与当前设计无关",
+      "reason": "未启用的DSI/LVDS/CSI/LCD/UART或未消费LED输出；仅在这些外设保持不接入且不依赖其输出时与当前链路无关，不能跨用途豁免",
+      "raw": "[EFX-0256 WARNING] The primary output port 'dsi_txc_hs_oe' wire 'dsi_txc_hs_oe' is not driven."
+    },
+    {
+      "id": "W100",
+      "log_line": 726,
+      "code": "EFX-0256",
+      "category": "与当前设计无关",
+      "reason": "未启用的DSI/LVDS/CSI/LCD/UART或未消费LED输出；仅在这些外设保持不接入且不依赖其输出时与当前链路无关，不能跨用途豁免",
+      "raw": "[EFX-0256 WARNING] The primary output port 'dsi_txc_hs_o[7]' wire 'dsi_txc_hs_o[7]' is not driven."
+    },
+    {
+      "id": "W101",
+      "log_line": 727,
+      "code": "EFX-0256",
+      "category": "与当前设计无关",
+      "reason": "未启用的DSI/LVDS/CSI/LCD/UART或未消费LED输出；仅在这些外设保持不接入且不依赖其输出时与当前链路无关，不能跨用途豁免",
+      "raw": "[EFX-0256 WARNING] The primary output port 'dsi_txc_hs_o[6]' wire 'dsi_txc_hs_o[6]' is not driven."
+    },
+    {
+      "id": "W102",
+      "log_line": 728,
+      "code": "EFX-0256",
+      "category": "与当前设计无关",
+      "reason": "未启用的DSI/LVDS/CSI/LCD/UART或未消费LED输出；仅在这些外设保持不接入且不依赖其输出时与当前链路无关，不能跨用途豁免",
+      "raw": "[EFX-0256 WARNING] The primary output port 'dsi_txc_hs_o[5]' wire 'dsi_txc_hs_o[5]' is not driven."
+    },
+    {
+      "id": "W103",
+      "log_line": 729,
+      "code": "EFX-0256",
+      "category": "与当前设计无关",
+      "reason": "未启用的DSI/LVDS/CSI/LCD/UART或未消费LED输出；仅在这些外设保持不接入且不依赖其输出时与当前链路无关，不能跨用途豁免",
+      "raw": "[EFX-0256 WARNING] The primary output port 'dsi_txc_hs_o[4]' wire 'dsi_txc_hs_o[4]' is not driven."
+    },
+    {
+      "id": "W104",
+      "log_line": 730,
+      "code": "EFX-0256",
+      "category": "与当前设计无关",
+      "reason": "未启用的DSI/LVDS/CSI/LCD/UART或未消费LED输出；仅在这些外设保持不接入且不依赖其输出时与当前链路无关，不能跨用途豁免",
+      "raw": "[EFX-0256 WARNING] The primary output port 'dsi_txc_hs_o[3]' wire 'dsi_txc_hs_o[3]' is not driven."
+    },
+    {
+      "id": "W105",
+      "log_line": 731,
+      "code": "EFX-0256",
+      "category": "与当前设计无关",
+      "reason": "未启用的DSI/LVDS/CSI/LCD/UART或未消费LED输出；仅在这些外设保持不接入且不依赖其输出时与当前链路无关，不能跨用途豁免",
+      "raw": "[EFX-0256 WARNING] The primary output port 'dsi_txc_hs_o[2]' wire 'dsi_txc_hs_o[2]' is not driven."
+    },
+    {
+      "id": "W106",
+      "log_line": 732,
+      "code": "EFX-0256",
+      "category": "与当前设计无关",
+      "reason": "未启用的DSI/LVDS/CSI/LCD/UART或未消费LED输出；仅在这些外设保持不接入且不依赖其输出时与当前链路无关，不能跨用途豁免",
+      "raw": "[EFX-0256 WARNING] The primary output port 'dsi_txc_hs_o[1]' wire 'dsi_txc_hs_o[1]' is not driven."
+    },
+    {
+      "id": "W107",
+      "log_line": 733,
+      "code": "EFX-0256",
+      "category": "与当前设计无关",
+      "reason": "未启用的DSI/LVDS/CSI/LCD/UART或未消费LED输出；仅在这些外设保持不接入且不依赖其输出时与当前链路无关，不能跨用途豁免",
+      "raw": "[EFX-0256 WARNING] The primary output port 'dsi_txc_hs_o[0]' wire 'dsi_txc_hs_o[0]' is not driven."
+    },
+    {
+      "id": "W108",
+      "log_line": 734,
+      "code": "EFX-0256",
+      "category": "与当前设计无关",
+      "reason": "未启用的DSI/LVDS/CSI/LCD/UART或未消费LED输出；仅在这些外设保持不接入且不依赖其输出时与当前链路无关，不能跨用途豁免",
+      "raw": "[EFX-0256 WARNING] The primary output port 'dsi_txd0_rst_o' wire 'dsi_txd0_rst_o' is not driven."
+    },
+    {
+      "id": "W109",
+      "log_line": 735,
+      "code": "EFX-0256",
+      "category": "与当前设计无关",
+      "reason": "未启用的DSI/LVDS/CSI/LCD/UART或未消费LED输出；仅在这些外设保持不接入且不依赖其输出时与当前链路无关，不能跨用途豁免",
+      "raw": "[EFX-0256 WARNING] The primary output port 'dsi_txd0_hs_oe' wire 'dsi_txd0_hs_oe' is not driven."
+    },
+    {
+      "id": "W110",
+      "log_line": 736,
+      "code": "EFX-0256",
+      "category": "与当前设计无关",
+      "reason": "未启用的DSI/LVDS/CSI/LCD/UART或未消费LED输出；仅在这些外设保持不接入且不依赖其输出时与当前链路无关，不能跨用途豁免",
+      "raw": "[EFX-0256 WARNING] The primary output port 'dsi_txd0_hs_o[7]' wire 'dsi_txd0_hs_o[7]' is not driven."
+    },
+    {
+      "id": "W111",
+      "log_line": 737,
+      "code": "EFX-0256",
+      "category": "与当前设计无关",
+      "reason": "未启用的DSI/LVDS/CSI/LCD/UART或未消费LED输出；仅在这些外设保持不接入且不依赖其输出时与当前链路无关，不能跨用途豁免",
+      "raw": "[EFX-0256 WARNING] The primary output port 'dsi_txd0_hs_o[6]' wire 'dsi_txd0_hs_o[6]' is not driven."
+    },
+    {
+      "id": "W112",
+      "log_line": 738,
+      "code": "EFX-0256",
+      "category": "与当前设计无关",
+      "reason": "未启用的DSI/LVDS/CSI/LCD/UART或未消费LED输出；仅在这些外设保持不接入且不依赖其输出时与当前链路无关，不能跨用途豁免",
+      "raw": "[EFX-0256 WARNING] The primary output port 'dsi_txd0_hs_o[5]' wire 'dsi_txd0_hs_o[5]' is not driven."
+    },
+    {
+      "id": "W113",
+      "log_line": 739,
+      "code": "EFX-0256",
+      "category": "与当前设计无关",
+      "reason": "未启用的DSI/LVDS/CSI/LCD/UART或未消费LED输出；仅在这些外设保持不接入且不依赖其输出时与当前链路无关，不能跨用途豁免",
+      "raw": "[EFX-0256 WARNING] The primary output port 'dsi_txd0_hs_o[4]' wire 'dsi_txd0_hs_o[4]' is not driven."
+    },
+    {
+      "id": "W114",
+      "log_line": 740,
+      "code": "EFX-0256",
+      "category": "与当前设计无关",
+      "reason": "未启用的DSI/LVDS/CSI/LCD/UART或未消费LED输出；仅在这些外设保持不接入且不依赖其输出时与当前链路无关，不能跨用途豁免",
+      "raw": "[EFX-0256 WARNING] The primary output port 'dsi_txd0_hs_o[3]' wire 'dsi_txd0_hs_o[3]' is not driven."
+    },
+    {
+      "id": "W115",
+      "log_line": 741,
+      "code": "EFX-0256",
+      "category": "与当前设计无关",
+      "reason": "未启用的DSI/LVDS/CSI/LCD/UART或未消费LED输出；仅在这些外设保持不接入且不依赖其输出时与当前链路无关，不能跨用途豁免",
+      "raw": "[EFX-0256 WARNING] The primary output port 'dsi_txd0_hs_o[2]' wire 'dsi_txd0_hs_o[2]' is not driven."
+    },
+    {
+      "id": "W116",
+      "log_line": 742,
+      "code": "EFX-0256",
+      "category": "与当前设计无关",
+      "reason": "未启用的DSI/LVDS/CSI/LCD/UART或未消费LED输出；仅在这些外设保持不接入且不依赖其输出时与当前链路无关，不能跨用途豁免",
+      "raw": "[EFX-0256 WARNING] The primary output port 'dsi_txd0_hs_o[1]' wire 'dsi_txd0_hs_o[1]' is not driven."
+    },
+    {
+      "id": "W117",
+      "log_line": 743,
+      "code": "EFX-0256",
+      "category": "与当前设计无关",
+      "reason": "未启用的DSI/LVDS/CSI/LCD/UART或未消费LED输出；仅在这些外设保持不接入且不依赖其输出时与当前链路无关，不能跨用途豁免",
+      "raw": "[EFX-0256 WARNING] The primary output port 'dsi_txd0_hs_o[0]' wire 'dsi_txd0_hs_o[0]' is not driven."
+    },
+    {
+      "id": "W118",
+      "log_line": 744,
+      "code": "EFX-0256",
+      "category": "与当前设计无关",
+      "reason": "未启用的DSI/LVDS/CSI/LCD/UART或未消费LED输出；仅在这些外设保持不接入且不依赖其输出时与当前链路无关，不能跨用途豁免",
+      "raw": "[EFX-0256 WARNING] The primary output port 'dsi_txd0_lp_p_oe' wire 'dsi_txd0_lp_p_oe' is not driven."
+    },
+    {
+      "id": "W119",
+      "log_line": 745,
+      "code": "EFX-0256",
+      "category": "与当前设计无关",
+      "reason": "未启用的DSI/LVDS/CSI/LCD/UART或未消费LED输出；仅在这些外设保持不接入且不依赖其输出时与当前链路无关，不能跨用途豁免",
+      "raw": "[EFX-0256 WARNING] The primary output port 'dsi_txd0_lp_p_o' wire 'dsi_txd0_lp_p_o' is not driven."
+    },
+    {
+      "id": "W120",
+      "log_line": 746,
+      "code": "EFX-0256",
+      "category": "与当前设计无关",
+      "reason": "未启用的DSI/LVDS/CSI/LCD/UART或未消费LED输出；仅在这些外设保持不接入且不依赖其输出时与当前链路无关，不能跨用途豁免",
+      "raw": "[EFX-0256 WARNING] The primary output port 'dsi_txd0_lp_n_oe' wire 'dsi_txd0_lp_n_oe' is not driven."
+    },
+    {
+      "id": "W121",
+      "log_line": 747,
+      "code": "EFX-0256",
+      "category": "与当前设计无关",
+      "reason": "未启用的DSI/LVDS/CSI/LCD/UART或未消费LED输出；仅在这些外设保持不接入且不依赖其输出时与当前链路无关，不能跨用途豁免",
+      "raw": "[EFX-0256 WARNING] The primary output port 'dsi_txd0_lp_n_o' wire 'dsi_txd0_lp_n_o' is not driven."
+    },
+    {
+      "id": "W122",
+      "log_line": 748,
+      "code": "EFX-0256",
+      "category": "与当前设计无关",
+      "reason": "未启用的DSI/LVDS/CSI/LCD/UART或未消费LED输出；仅在这些外设保持不接入且不依赖其输出时与当前链路无关，不能跨用途豁免",
+      "raw": "[EFX-0256 WARNING] The primary output port 'dsi_txd1_rst_o' wire 'dsi_txd1_rst_o' is not driven."
+    },
+    {
+      "id": "W123",
+      "log_line": 749,
+      "code": "EFX-0256",
+      "category": "与当前设计无关",
+      "reason": "未启用的DSI/LVDS/CSI/LCD/UART或未消费LED输出；仅在这些外设保持不接入且不依赖其输出时与当前链路无关，不能跨用途豁免",
+      "raw": "[EFX-0256 WARNING] The primary output port 'dsi_txd1_lp_p_oe' wire 'dsi_txd1_lp_p_oe' is not driven."
+    },
+    {
+      "id": "W124",
+      "log_line": 750,
+      "code": "EFX-0256",
+      "category": "与当前设计无关",
+      "reason": "未启用的DSI/LVDS/CSI/LCD/UART或未消费LED输出；仅在这些外设保持不接入且不依赖其输出时与当前链路无关，不能跨用途豁免",
+      "raw": "[EFX-0256 WARNING] The primary output port 'dsi_txd1_lp_p_o' wire 'dsi_txd1_lp_p_o' is not driven."
+    },
+    {
+      "id": "W125",
+      "log_line": 751,
+      "code": "EFX-0256",
+      "category": "与当前设计无关",
+      "reason": "未启用的DSI/LVDS/CSI/LCD/UART或未消费LED输出；仅在这些外设保持不接入且不依赖其输出时与当前链路无关，不能跨用途豁免",
+      "raw": "[EFX-0256 WARNING] The primary output port 'dsi_txd1_lp_n_oe' wire 'dsi_txd1_lp_n_oe' is not driven."
+    },
+    {
+      "id": "W126",
+      "log_line": 752,
+      "code": "EFX-0256",
+      "category": "与当前设计无关",
+      "reason": "未启用的DSI/LVDS/CSI/LCD/UART或未消费LED输出；仅在这些外设保持不接入且不依赖其输出时与当前链路无关，不能跨用途豁免",
+      "raw": "[EFX-0256 WARNING] The primary output port 'dsi_txd1_lp_n_o' wire 'dsi_txd1_lp_n_o' is not driven."
+    },
+    {
+      "id": "W127",
+      "log_line": 753,
+      "code": "EFX-0256",
+      "category": "与当前设计无关",
+      "reason": "未启用的DSI/LVDS/CSI/LCD/UART或未消费LED输出；仅在这些外设保持不接入且不依赖其输出时与当前链路无关，不能跨用途豁免",
+      "raw": "[EFX-0256 WARNING] The primary output port 'dsi_txd1_hs_oe' wire 'dsi_txd1_hs_oe' is not driven."
+    },
+    {
+      "id": "W128",
+      "log_line": 754,
+      "code": "EFX-0256",
+      "category": "与当前设计无关",
+      "reason": "未启用的DSI/LVDS/CSI/LCD/UART或未消费LED输出；仅在这些外设保持不接入且不依赖其输出时与当前链路无关，不能跨用途豁免",
+      "raw": "[EFX-0256 WARNING] The primary output port 'dsi_txd1_hs_o[7]' wire 'dsi_txd1_hs_o[7]' is not driven."
+    },
+    {
+      "id": "W129",
+      "log_line": 755,
+      "code": "EFX-0256",
+      "category": "与当前设计无关",
+      "reason": "未启用的DSI/LVDS/CSI/LCD/UART或未消费LED输出；仅在这些外设保持不接入且不依赖其输出时与当前链路无关，不能跨用途豁免",
+      "raw": "[EFX-0256 WARNING] The primary output port 'dsi_txd1_hs_o[6]' wire 'dsi_txd1_hs_o[6]' is not driven."
+    },
+    {
+      "id": "W130",
+      "log_line": 756,
+      "code": "EFX-0256",
+      "category": "与当前设计无关",
+      "reason": "未启用的DSI/LVDS/CSI/LCD/UART或未消费LED输出；仅在这些外设保持不接入且不依赖其输出时与当前链路无关，不能跨用途豁免",
+      "raw": "[EFX-0256 WARNING] The primary output port 'dsi_txd1_hs_o[5]' wire 'dsi_txd1_hs_o[5]' is not driven."
+    },
+    {
+      "id": "W131",
+      "log_line": 757,
+      "code": "EFX-0256",
+      "category": "与当前设计无关",
+      "reason": "未启用的DSI/LVDS/CSI/LCD/UART或未消费LED输出；仅在这些外设保持不接入且不依赖其输出时与当前链路无关，不能跨用途豁免",
+      "raw": "[EFX-0256 WARNING] The primary output port 'dsi_txd1_hs_o[4]' wire 'dsi_txd1_hs_o[4]' is not driven."
+    },
+    {
+      "id": "W132",
+      "log_line": 758,
+      "code": "EFX-0256",
+      "category": "与当前设计无关",
+      "reason": "未启用的DSI/LVDS/CSI/LCD/UART或未消费LED输出；仅在这些外设保持不接入且不依赖其输出时与当前链路无关，不能跨用途豁免",
+      "raw": "[EFX-0256 WARNING] The primary output port 'dsi_txd1_hs_o[3]' wire 'dsi_txd1_hs_o[3]' is not driven."
+    },
+    {
+      "id": "W133",
+      "log_line": 759,
+      "code": "EFX-0256",
+      "category": "与当前设计无关",
+      "reason": "未启用的DSI/LVDS/CSI/LCD/UART或未消费LED输出；仅在这些外设保持不接入且不依赖其输出时与当前链路无关，不能跨用途豁免",
+      "raw": "[EFX-0256 WARNING] The primary output port 'dsi_txd1_hs_o[2]' wire 'dsi_txd1_hs_o[2]' is not driven."
+    },
+    {
+      "id": "W134",
+      "log_line": 760,
+      "code": "EFX-0256",
+      "category": "与当前设计无关",
+      "reason": "未启用的DSI/LVDS/CSI/LCD/UART或未消费LED输出；仅在这些外设保持不接入且不依赖其输出时与当前链路无关，不能跨用途豁免",
+      "raw": "[EFX-0256 WARNING] The primary output port 'dsi_txd1_hs_o[1]' wire 'dsi_txd1_hs_o[1]' is not driven."
+    },
+    {
+      "id": "W135",
+      "log_line": 761,
+      "code": "EFX-0256",
+      "category": "与当前设计无关",
+      "reason": "未启用的DSI/LVDS/CSI/LCD/UART或未消费LED输出；仅在这些外设保持不接入且不依赖其输出时与当前链路无关，不能跨用途豁免",
+      "raw": "[EFX-0256 WARNING] The primary output port 'dsi_txd1_hs_o[0]' wire 'dsi_txd1_hs_o[0]' is not driven."
+    },
+    {
+      "id": "W136",
+      "log_line": 762,
+      "code": "EFX-0256",
+      "category": "与当前设计无关",
+      "reason": "未启用的DSI/LVDS/CSI/LCD/UART或未消费LED输出；仅在这些外设保持不接入且不依赖其输出时与当前链路无关，不能跨用途豁免",
+      "raw": "[EFX-0256 WARNING] The primary output port 'dsi_txd2_rst_o' wire 'dsi_txd2_rst_o' is not driven."
+    },
+    {
+      "id": "W137",
+      "log_line": 763,
+      "code": "EFX-0256",
+      "category": "与当前设计无关",
+      "reason": "未启用的DSI/LVDS/CSI/LCD/UART或未消费LED输出；仅在这些外设保持不接入且不依赖其输出时与当前链路无关，不能跨用途豁免",
+      "raw": "[EFX-0256 WARNING] The primary output port 'dsi_txd2_lp_p_oe' wire 'dsi_txd2_lp_p_oe' is not driven."
+    },
+    {
+      "id": "W138",
+      "log_line": 764,
+      "code": "EFX-0256",
+      "category": "与当前设计无关",
+      "reason": "未启用的DSI/LVDS/CSI/LCD/UART或未消费LED输出；仅在这些外设保持不接入且不依赖其输出时与当前链路无关，不能跨用途豁免",
+      "raw": "[EFX-0256 WARNING] The primary output port 'dsi_txd2_lp_p_o' wire 'dsi_txd2_lp_p_o' is not driven."
+    },
+    {
+      "id": "W139",
+      "log_line": 765,
+      "code": "EFX-0256",
+      "category": "与当前设计无关",
+      "reason": "未启用的DSI/LVDS/CSI/LCD/UART或未消费LED输出；仅在这些外设保持不接入且不依赖其输出时与当前链路无关，不能跨用途豁免",
+      "raw": "[EFX-0256 WARNING] The primary output port 'dsi_txd2_lp_n_oe' wire 'dsi_txd2_lp_n_oe' is not driven."
+    },
+    {
+      "id": "W140",
+      "log_line": 766,
+      "code": "EFX-0256",
+      "category": "与当前设计无关",
+      "reason": "未启用的DSI/LVDS/CSI/LCD/UART或未消费LED输出；仅在这些外设保持不接入且不依赖其输出时与当前链路无关，不能跨用途豁免",
+      "raw": "[EFX-0256 WARNING] The primary output port 'dsi_txd2_lp_n_o' wire 'dsi_txd2_lp_n_o' is not driven."
+    },
+    {
+      "id": "W141",
+      "log_line": 767,
+      "code": "EFX-0256",
+      "category": "与当前设计无关",
+      "reason": "未启用的DSI/LVDS/CSI/LCD/UART或未消费LED输出；仅在这些外设保持不接入且不依赖其输出时与当前链路无关，不能跨用途豁免",
+      "raw": "[EFX-0256 WARNING] The primary output port 'dsi_txd2_hs_oe' wire 'dsi_txd2_hs_oe' is not driven."
+    },
+    {
+      "id": "W142",
+      "log_line": 768,
+      "code": "EFX-0256",
+      "category": "与当前设计无关",
+      "reason": "未启用的DSI/LVDS/CSI/LCD/UART或未消费LED输出；仅在这些外设保持不接入且不依赖其输出时与当前链路无关，不能跨用途豁免",
+      "raw": "[EFX-0256 WARNING] The primary output port 'dsi_txd2_hs_o[7]' wire 'dsi_txd2_hs_o[7]' is not driven."
+    },
+    {
+      "id": "W143",
+      "log_line": 769,
+      "code": "EFX-0256",
+      "category": "与当前设计无关",
+      "reason": "未启用的DSI/LVDS/CSI/LCD/UART或未消费LED输出；仅在这些外设保持不接入且不依赖其输出时与当前链路无关，不能跨用途豁免",
+      "raw": "[EFX-0256 WARNING] The primary output port 'dsi_txd2_hs_o[6]' wire 'dsi_txd2_hs_o[6]' is not driven."
+    },
+    {
+      "id": "W144",
+      "log_line": 770,
+      "code": "EFX-0256",
+      "category": "与当前设计无关",
+      "reason": "未启用的DSI/LVDS/CSI/LCD/UART或未消费LED输出；仅在这些外设保持不接入且不依赖其输出时与当前链路无关，不能跨用途豁免",
+      "raw": "[EFX-0256 WARNING] The primary output port 'dsi_txd2_hs_o[5]' wire 'dsi_txd2_hs_o[5]' is not driven."
+    },
+    {
+      "id": "W145",
+      "log_line": 771,
+      "code": "EFX-0256",
+      "category": "与当前设计无关",
+      "reason": "未启用的DSI/LVDS/CSI/LCD/UART或未消费LED输出；仅在这些外设保持不接入且不依赖其输出时与当前链路无关，不能跨用途豁免",
+      "raw": "[EFX-0256 WARNING] The primary output port 'dsi_txd2_hs_o[4]' wire 'dsi_txd2_hs_o[4]' is not driven."
+    },
+    {
+      "id": "W146",
+      "log_line": 772,
+      "code": "EFX-0256",
+      "category": "与当前设计无关",
+      "reason": "未启用的DSI/LVDS/CSI/LCD/UART或未消费LED输出；仅在这些外设保持不接入且不依赖其输出时与当前链路无关，不能跨用途豁免",
+      "raw": "[EFX-0256 WARNING] The primary output port 'dsi_txd2_hs_o[3]' wire 'dsi_txd2_hs_o[3]' is not driven."
+    },
+    {
+      "id": "W147",
+      "log_line": 773,
+      "code": "EFX-0256",
+      "category": "与当前设计无关",
+      "reason": "未启用的DSI/LVDS/CSI/LCD/UART或未消费LED输出；仅在这些外设保持不接入且不依赖其输出时与当前链路无关，不能跨用途豁免",
+      "raw": "[EFX-0256 WARNING] The primary output port 'dsi_txd2_hs_o[2]' wire 'dsi_txd2_hs_o[2]' is not driven."
+    },
+    {
+      "id": "W148",
+      "log_line": 774,
+      "code": "EFX-0256",
+      "category": "与当前设计无关",
+      "reason": "未启用的DSI/LVDS/CSI/LCD/UART或未消费LED输出；仅在这些外设保持不接入且不依赖其输出时与当前链路无关，不能跨用途豁免",
+      "raw": "[EFX-0256 WARNING] The primary output port 'dsi_txd2_hs_o[1]' wire 'dsi_txd2_hs_o[1]' is not driven."
+    },
+    {
+      "id": "W149",
+      "log_line": 775,
+      "code": "EFX-0256",
+      "category": "与当前设计无关",
+      "reason": "未启用的DSI/LVDS/CSI/LCD/UART或未消费LED输出；仅在这些外设保持不接入且不依赖其输出时与当前链路无关，不能跨用途豁免",
+      "raw": "[EFX-0256 WARNING] The primary output port 'dsi_txd2_hs_o[0]' wire 'dsi_txd2_hs_o[0]' is not driven."
+    },
+    {
+      "id": "W150",
+      "log_line": 776,
+      "code": "EFX-0256",
+      "category": "与当前设计无关",
+      "reason": "未启用的DSI/LVDS/CSI/LCD/UART或未消费LED输出；仅在这些外设保持不接入且不依赖其输出时与当前链路无关，不能跨用途豁免",
+      "raw": "[EFX-0256 WARNING] The primary output port 'dsi_txd3_rst_o' wire 'dsi_txd3_rst_o' is not driven."
+    },
+    {
+      "id": "W151",
+      "log_line": 777,
+      "code": "EFX-0256",
+      "category": "与当前设计无关",
+      "reason": "未启用的DSI/LVDS/CSI/LCD/UART或未消费LED输出；仅在这些外设保持不接入且不依赖其输出时与当前链路无关，不能跨用途豁免",
+      "raw": "[EFX-0256 WARNING] The primary output port 'dsi_txd3_lp_p_oe' wire 'dsi_txd3_lp_p_oe' is not driven."
+    },
+    {
+      "id": "W152",
+      "log_line": 778,
+      "code": "EFX-0256",
+      "category": "与当前设计无关",
+      "reason": "未启用的DSI/LVDS/CSI/LCD/UART或未消费LED输出；仅在这些外设保持不接入且不依赖其输出时与当前链路无关，不能跨用途豁免",
+      "raw": "[EFX-0256 WARNING] The primary output port 'dsi_txd3_lp_p_o' wire 'dsi_txd3_lp_p_o' is not driven."
+    },
+    {
+      "id": "W153",
+      "log_line": 779,
+      "code": "EFX-0256",
+      "category": "与当前设计无关",
+      "reason": "未启用的DSI/LVDS/CSI/LCD/UART或未消费LED输出；仅在这些外设保持不接入且不依赖其输出时与当前链路无关，不能跨用途豁免",
+      "raw": "[EFX-0256 WARNING] The primary output port 'dsi_txd3_lp_n_oe' wire 'dsi_txd3_lp_n_oe' is not driven."
+    },
+    {
+      "id": "W154",
+      "log_line": 780,
+      "code": "EFX-0256",
+      "category": "与当前设计无关",
+      "reason": "未启用的DSI/LVDS/CSI/LCD/UART或未消费LED输出；仅在这些外设保持不接入且不依赖其输出时与当前链路无关，不能跨用途豁免",
+      "raw": "[EFX-0256 WARNING] The primary output port 'dsi_txd3_lp_n_o' wire 'dsi_txd3_lp_n_o' is not driven."
+    },
+    {
+      "id": "W155",
+      "log_line": 781,
+      "code": "EFX-0256",
+      "category": "与当前设计无关",
+      "reason": "未启用的DSI/LVDS/CSI/LCD/UART或未消费LED输出；仅在这些外设保持不接入且不依赖其输出时与当前链路无关，不能跨用途豁免",
+      "raw": "[EFX-0256 WARNING] The primary output port 'dsi_txd3_hs_oe' wire 'dsi_txd3_hs_oe' is not driven."
+    },
+    {
+      "id": "W156",
+      "log_line": 782,
+      "code": "EFX-0256",
+      "category": "与当前设计无关",
+      "reason": "未启用的DSI/LVDS/CSI/LCD/UART或未消费LED输出；仅在这些外设保持不接入且不依赖其输出时与当前链路无关，不能跨用途豁免",
+      "raw": "[EFX-0256 WARNING] The primary output port 'dsi_txd3_hs_o[7]' wire 'dsi_txd3_hs_o[7]' is not driven."
+    },
+    {
+      "id": "W157",
+      "log_line": 783,
+      "code": "EFX-0256",
+      "category": "与当前设计无关",
+      "reason": "未启用的DSI/LVDS/CSI/LCD/UART或未消费LED输出；仅在这些外设保持不接入且不依赖其输出时与当前链路无关，不能跨用途豁免",
+      "raw": "[EFX-0256 WARNING] The primary output port 'dsi_txd3_hs_o[6]' wire 'dsi_txd3_hs_o[6]' is not driven."
+    },
+    {
+      "id": "W158",
+      "log_line": 784,
+      "code": "EFX-0256",
+      "category": "与当前设计无关",
+      "reason": "未启用的DSI/LVDS/CSI/LCD/UART或未消费LED输出；仅在这些外设保持不接入且不依赖其输出时与当前链路无关，不能跨用途豁免",
+      "raw": "[EFX-0256 WARNING] The primary output port 'dsi_txd3_hs_o[5]' wire 'dsi_txd3_hs_o[5]' is not driven."
+    },
+    {
+      "id": "W159",
+      "log_line": 785,
+      "code": "EFX-0256",
+      "category": "与当前设计无关",
+      "reason": "未启用的DSI/LVDS/CSI/LCD/UART或未消费LED输出；仅在这些外设保持不接入且不依赖其输出时与当前链路无关，不能跨用途豁免",
+      "raw": "[EFX-0256 WARNING] The primary output port 'dsi_txd3_hs_o[4]' wire 'dsi_txd3_hs_o[4]' is not driven."
+    },
+    {
+      "id": "W160",
+      "log_line": 786,
+      "code": "EFX-0256",
+      "category": "与当前设计无关",
+      "reason": "未启用的DSI/LVDS/CSI/LCD/UART或未消费LED输出；仅在这些外设保持不接入且不依赖其输出时与当前链路无关，不能跨用途豁免",
+      "raw": "[EFX-0256 WARNING] The primary output port 'dsi_txd3_hs_o[3]' wire 'dsi_txd3_hs_o[3]' is not driven."
+    },
+    {
+      "id": "W161",
+      "log_line": 787,
+      "code": "EFX-0256",
+      "category": "与当前设计无关",
+      "reason": "未启用的DSI/LVDS/CSI/LCD/UART或未消费LED输出；仅在这些外设保持不接入且不依赖其输出时与当前链路无关，不能跨用途豁免",
+      "raw": "[EFX-0256 WARNING] The primary output port 'dsi_txd3_hs_o[2]' wire 'dsi_txd3_hs_o[2]' is not driven."
+    },
+    {
+      "id": "W162",
+      "log_line": 788,
+      "code": "EFX-0256",
+      "category": "与当前设计无关",
+      "reason": "未启用的DSI/LVDS/CSI/LCD/UART或未消费LED输出；仅在这些外设保持不接入且不依赖其输出时与当前链路无关，不能跨用途豁免",
+      "raw": "[EFX-0256 WARNING] The primary output port 'dsi_txd3_hs_o[1]' wire 'dsi_txd3_hs_o[1]' is not driven."
+    },
+    {
+      "id": "W163",
+      "log_line": 789,
+      "code": "EFX-0256",
+      "category": "与当前设计无关",
+      "reason": "未启用的DSI/LVDS/CSI/LCD/UART或未消费LED输出；仅在这些外设保持不接入且不依赖其输出时与当前链路无关，不能跨用途豁免",
+      "raw": "[EFX-0256 WARNING] The primary output port 'dsi_txd3_hs_o[0]' wire 'dsi_txd3_hs_o[0]' is not driven."
+    },
+    {
+      "id": "W164",
+      "log_line": 790,
+      "code": "EFX-0256",
+      "category": "与当前设计无关",
+      "reason": "未启用的DSI/LVDS/CSI/LCD/UART或未消费LED输出；仅在这些外设保持不接入且不依赖其输出时与当前链路无关，不能跨用途豁免",
+      "raw": "[EFX-0256 WARNING] The primary output port 'uart_tx_o' wire 'uart_tx_o' is not driven."
+    },
+    {
+      "id": "W165",
+      "log_line": 791,
+      "code": "EFX-0256",
+      "category": "与当前设计无关",
+      "reason": "未启用的DSI/LVDS/CSI/LCD/UART或未消费LED输出；仅在这些外设保持不接入且不依赖其输出时与当前链路无关，不能跨用途豁免",
+      "raw": "[EFX-0256 WARNING] The primary output port 'led_o[4]' wire 'led_o[4]' is not driven."
+    },
+    {
+      "id": "W166",
+      "log_line": 792,
+      "code": "EFX-0256",
+      "category": "必须修复",
+      "reason": "必须修复控制定义：RTL输出无驱动，最终网表固定0；TRIGGER低、OE_BAR低为使能，不满足专用安全启动要求",
+      "raw": "[EFX-0256 WARNING] The primary output port 'cmos_ctl2' wire 'cmos_ctl2' is not driven."
+    },
+    {
+      "id": "W167",
+      "log_line": 793,
+      "code": "EFX-0256",
+      "category": "必须修复",
+      "reason": "必须修复控制定义：RTL输出无驱动，最终网表固定0；TRIGGER低、OE_BAR低为使能，不满足专用安全启动要求",
+      "raw": "[EFX-0256 WARNING] The primary output port 'cmos_ctl3' wire 'cmos_ctl3' is not driven."
+    },
+    {
+      "id": "W168",
+      "log_line": 794,
+      "code": "EFX-0256",
+      "category": "与当前设计无关",
+      "reason": "未启用的DSI/LVDS/CSI/LCD/UART或未消费LED输出；仅在这些外设保持不接入且不依赖其输出时与当前链路无关，不能跨用途豁免",
+      "raw": "[EFX-0256 WARNING] The primary output port 'lvds_txc_oe' wire 'lvds_txc_oe' is not driven."
+    },
+    {
+      "id": "W169",
+      "log_line": 795,
+      "code": "EFX-0256",
+      "category": "与当前设计无关",
+      "reason": "未启用的DSI/LVDS/CSI/LCD/UART或未消费LED输出；仅在这些外设保持不接入且不依赖其输出时与当前链路无关，不能跨用途豁免",
+      "raw": "[EFX-0256 WARNING] The primary output port 'lvds_txc_o[6]' wire 'lvds_txc_o[6]' is not driven."
+    },
+    {
+      "id": "W170",
+      "log_line": 796,
+      "code": "EFX-0256",
+      "category": "与当前设计无关",
+      "reason": "未启用的DSI/LVDS/CSI/LCD/UART或未消费LED输出；仅在这些外设保持不接入且不依赖其输出时与当前链路无关，不能跨用途豁免",
+      "raw": "[EFX-0256 WARNING] The primary output port 'lvds_txc_o[5]' wire 'lvds_txc_o[5]' is not driven."
+    },
+    {
+      "id": "W171",
+      "log_line": 797,
+      "code": "EFX-0256",
+      "category": "与当前设计无关",
+      "reason": "未启用的DSI/LVDS/CSI/LCD/UART或未消费LED输出；仅在这些外设保持不接入且不依赖其输出时与当前链路无关，不能跨用途豁免",
+      "raw": "[EFX-0256 WARNING] The primary output port 'lvds_txc_o[4]' wire 'lvds_txc_o[4]' is not driven."
+    },
+    {
+      "id": "W172",
+      "log_line": 798,
+      "code": "EFX-0256",
+      "category": "与当前设计无关",
+      "reason": "未启用的DSI/LVDS/CSI/LCD/UART或未消费LED输出；仅在这些外设保持不接入且不依赖其输出时与当前链路无关，不能跨用途豁免",
+      "raw": "[EFX-0256 WARNING] The primary output port 'lvds_txc_o[3]' wire 'lvds_txc_o[3]' is not driven."
+    },
+    {
+      "id": "W173",
+      "log_line": 799,
+      "code": "EFX-0256",
+      "category": "与当前设计无关",
+      "reason": "未启用的DSI/LVDS/CSI/LCD/UART或未消费LED输出；仅在这些外设保持不接入且不依赖其输出时与当前链路无关，不能跨用途豁免",
+      "raw": "[EFX-0256 WARNING] The primary output port 'lvds_txc_o[2]' wire 'lvds_txc_o[2]' is not driven."
+    },
+    {
+      "id": "W174",
+      "log_line": 800,
+      "code": "EFX-0256",
+      "category": "与当前设计无关",
+      "reason": "未启用的DSI/LVDS/CSI/LCD/UART或未消费LED输出；仅在这些外设保持不接入且不依赖其输出时与当前链路无关，不能跨用途豁免",
+      "raw": "[EFX-0256 WARNING] The primary output port 'lvds_txc_o[1]' wire 'lvds_txc_o[1]' is not driven."
+    },
+    {
+      "id": "W175",
+      "log_line": 801,
+      "code": "EFX-0256",
+      "category": "与当前设计无关",
+      "reason": "未启用的DSI/LVDS/CSI/LCD/UART或未消费LED输出；仅在这些外设保持不接入且不依赖其输出时与当前链路无关，不能跨用途豁免",
+      "raw": "[EFX-0256 WARNING] The primary output port 'lvds_txc_o[0]' wire 'lvds_txc_o[0]' is not driven."
+    },
+    {
+      "id": "W176",
+      "log_line": 802,
+      "code": "EFX-0256",
+      "category": "与当前设计无关",
+      "reason": "未启用的DSI/LVDS/CSI/LCD/UART或未消费LED输出；仅在这些外设保持不接入且不依赖其输出时与当前链路无关，不能跨用途豁免",
+      "raw": "[EFX-0256 WARNING] The primary output port 'lvds_txc_rst_o' wire 'lvds_txc_rst_o' is not driven."
+    },
+    {
+      "id": "W177",
+      "log_line": 803,
+      "code": "EFX-0256",
+      "category": "与当前设计无关",
+      "reason": "未启用的DSI/LVDS/CSI/LCD/UART或未消费LED输出；仅在这些外设保持不接入且不依赖其输出时与当前链路无关，不能跨用途豁免",
+      "raw": "[EFX-0256 WARNING] The primary output port 'lvds_txd0_oe' wire 'lvds_txd0_oe' is not driven."
+    },
+    {
+      "id": "W178",
+      "log_line": 804,
+      "code": "EFX-0256",
+      "category": "与当前设计无关",
+      "reason": "未启用的DSI/LVDS/CSI/LCD/UART或未消费LED输出；仅在这些外设保持不接入且不依赖其输出时与当前链路无关，不能跨用途豁免",
+      "raw": "[EFX-0256 WARNING] The primary output port 'lvds_txd0_o[6]' wire 'lvds_txd0_o[6]' is not driven."
+    },
+    {
+      "id": "W179",
+      "log_line": 805,
+      "code": "EFX-0256",
+      "category": "与当前设计无关",
+      "reason": "未启用的DSI/LVDS/CSI/LCD/UART或未消费LED输出；仅在这些外设保持不接入且不依赖其输出时与当前链路无关，不能跨用途豁免",
+      "raw": "[EFX-0256 WARNING] The primary output port 'lvds_txd0_o[5]' wire 'lvds_txd0_o[5]' is not driven."
+    },
+    {
+      "id": "W180",
+      "log_line": 806,
+      "code": "EFX-0256",
+      "category": "与当前设计无关",
+      "reason": "未启用的DSI/LVDS/CSI/LCD/UART或未消费LED输出；仅在这些外设保持不接入且不依赖其输出时与当前链路无关，不能跨用途豁免",
+      "raw": "[EFX-0256 WARNING] The primary output port 'lvds_txd0_o[4]' wire 'lvds_txd0_o[4]' is not driven."
+    },
+    {
+      "id": "W181",
+      "log_line": 807,
+      "code": "EFX-0256",
+      "category": "与当前设计无关",
+      "reason": "未启用的DSI/LVDS/CSI/LCD/UART或未消费LED输出；仅在这些外设保持不接入且不依赖其输出时与当前链路无关，不能跨用途豁免",
+      "raw": "[EFX-0256 WARNING] The primary output port 'lvds_txd0_o[3]' wire 'lvds_txd0_o[3]' is not driven."
+    },
+    {
+      "id": "W182",
+      "log_line": 808,
+      "code": "EFX-0256",
+      "category": "与当前设计无关",
+      "reason": "未启用的DSI/LVDS/CSI/LCD/UART或未消费LED输出；仅在这些外设保持不接入且不依赖其输出时与当前链路无关，不能跨用途豁免",
+      "raw": "[EFX-0256 WARNING] The primary output port 'lvds_txd0_o[2]' wire 'lvds_txd0_o[2]' is not driven."
+    },
+    {
+      "id": "W183",
+      "log_line": 809,
+      "code": "EFX-0256",
+      "category": "与当前设计无关",
+      "reason": "未启用的DSI/LVDS/CSI/LCD/UART或未消费LED输出；仅在这些外设保持不接入且不依赖其输出时与当前链路无关，不能跨用途豁免",
+      "raw": "[EFX-0256 WARNING] The primary output port 'lvds_txd0_o[1]' wire 'lvds_txd0_o[1]' is not driven."
+    },
+    {
+      "id": "W184",
+      "log_line": 810,
+      "code": "EFX-0256",
+      "category": "与当前设计无关",
+      "reason": "未启用的DSI/LVDS/CSI/LCD/UART或未消费LED输出；仅在这些外设保持不接入且不依赖其输出时与当前链路无关，不能跨用途豁免",
+      "raw": "[EFX-0256 WARNING] The primary output port 'lvds_txd0_o[0]' wire 'lvds_txd0_o[0]' is not driven."
+    },
+    {
+      "id": "W185",
+      "log_line": 811,
+      "code": "EFX-0256",
+      "category": "与当前设计无关",
+      "reason": "未启用的DSI/LVDS/CSI/LCD/UART或未消费LED输出；仅在这些外设保持不接入且不依赖其输出时与当前链路无关，不能跨用途豁免",
+      "raw": "[EFX-0256 WARNING] The primary output port 'lvds_txd0_rst_o' wire 'lvds_txd0_rst_o' is not driven."
+    },
+    {
+      "id": "W186",
+      "log_line": 812,
+      "code": "EFX-0256",
+      "category": "与当前设计无关",
+      "reason": "未启用的DSI/LVDS/CSI/LCD/UART或未消费LED输出；仅在这些外设保持不接入且不依赖其输出时与当前链路无关，不能跨用途豁免",
+      "raw": "[EFX-0256 WARNING] The primary output port 'lvds_txd1_oe' wire 'lvds_txd1_oe' is not driven."
+    },
+    {
+      "id": "W187",
+      "log_line": 813,
+      "code": "EFX-0256",
+      "category": "与当前设计无关",
+      "reason": "未启用的DSI/LVDS/CSI/LCD/UART或未消费LED输出；仅在这些外设保持不接入且不依赖其输出时与当前链路无关，不能跨用途豁免",
+      "raw": "[EFX-0256 WARNING] The primary output port 'lvds_txd1_o[6]' wire 'lvds_txd1_o[6]' is not driven."
+    },
+    {
+      "id": "W188",
+      "log_line": 814,
+      "code": "EFX-0256",
+      "category": "与当前设计无关",
+      "reason": "未启用的DSI/LVDS/CSI/LCD/UART或未消费LED输出；仅在这些外设保持不接入且不依赖其输出时与当前链路无关，不能跨用途豁免",
+      "raw": "[EFX-0256 WARNING] The primary output port 'lvds_txd1_o[5]' wire 'lvds_txd1_o[5]' is not driven."
+    },
+    {
+      "id": "W189",
+      "log_line": 815,
+      "code": "EFX-0256",
+      "category": "与当前设计无关",
+      "reason": "未启用的DSI/LVDS/CSI/LCD/UART或未消费LED输出；仅在这些外设保持不接入且不依赖其输出时与当前链路无关，不能跨用途豁免",
+      "raw": "[EFX-0256 WARNING] The primary output port 'lvds_txd1_o[4]' wire 'lvds_txd1_o[4]' is not driven."
+    },
+    {
+      "id": "W190",
+      "log_line": 816,
+      "code": "EFX-0256",
+      "category": "与当前设计无关",
+      "reason": "未启用的DSI/LVDS/CSI/LCD/UART或未消费LED输出；仅在这些外设保持不接入且不依赖其输出时与当前链路无关，不能跨用途豁免",
+      "raw": "[EFX-0256 WARNING] The primary output port 'lvds_txd1_o[3]' wire 'lvds_txd1_o[3]' is not driven."
+    },
+    {
+      "id": "W191",
+      "log_line": 817,
+      "code": "EFX-0256",
+      "category": "与当前设计无关",
+      "reason": "未启用的DSI/LVDS/CSI/LCD/UART或未消费LED输出；仅在这些外设保持不接入且不依赖其输出时与当前链路无关，不能跨用途豁免",
+      "raw": "[EFX-0256 WARNING] The primary output port 'lvds_txd1_o[2]' wire 'lvds_txd1_o[2]' is not driven."
+    },
+    {
+      "id": "W192",
+      "log_line": 818,
+      "code": "EFX-0256",
+      "category": "与当前设计无关",
+      "reason": "未启用的DSI/LVDS/CSI/LCD/UART或未消费LED输出；仅在这些外设保持不接入且不依赖其输出时与当前链路无关，不能跨用途豁免",
+      "raw": "[EFX-0256 WARNING] The primary output port 'lvds_txd1_o[1]' wire 'lvds_txd1_o[1]' is not driven."
+    },
+    {
+      "id": "W193",
+      "log_line": 819,
+      "code": "EFX-0256",
+      "category": "与当前设计无关",
+      "reason": "未启用的DSI/LVDS/CSI/LCD/UART或未消费LED输出；仅在这些外设保持不接入且不依赖其输出时与当前链路无关，不能跨用途豁免",
+      "raw": "[EFX-0256 WARNING] The primary output port 'lvds_txd1_o[0]' wire 'lvds_txd1_o[0]' is not driven."
+    },
+    {
+      "id": "W194",
+      "log_line": 820,
+      "code": "EFX-0256",
+      "category": "与当前设计无关",
+      "reason": "未启用的DSI/LVDS/CSI/LCD/UART或未消费LED输出；仅在这些外设保持不接入且不依赖其输出时与当前链路无关，不能跨用途豁免",
+      "raw": "[EFX-0256 WARNING] The primary output port 'lvds_txd1_rst_o' wire 'lvds_txd1_rst_o' is not driven."
+    },
+    {
+      "id": "W195",
+      "log_line": 821,
+      "code": "EFX-0256",
+      "category": "与当前设计无关",
+      "reason": "未启用的DSI/LVDS/CSI/LCD/UART或未消费LED输出；仅在这些外设保持不接入且不依赖其输出时与当前链路无关，不能跨用途豁免",
+      "raw": "[EFX-0256 WARNING] The primary output port 'lvds_txd2_oe' wire 'lvds_txd2_oe' is not driven."
+    },
+    {
+      "id": "W196",
+      "log_line": 822,
+      "code": "EFX-0256",
+      "category": "与当前设计无关",
+      "reason": "未启用的DSI/LVDS/CSI/LCD/UART或未消费LED输出；仅在这些外设保持不接入且不依赖其输出时与当前链路无关，不能跨用途豁免",
+      "raw": "[EFX-0256 WARNING] The primary output port 'lvds_txd2_o[6]' wire 'lvds_txd2_o[6]' is not driven."
+    },
+    {
+      "id": "W197",
+      "log_line": 823,
+      "code": "EFX-0256",
+      "category": "与当前设计无关",
+      "reason": "未启用的DSI/LVDS/CSI/LCD/UART或未消费LED输出；仅在这些外设保持不接入且不依赖其输出时与当前链路无关，不能跨用途豁免",
+      "raw": "[EFX-0256 WARNING] The primary output port 'lvds_txd2_o[5]' wire 'lvds_txd2_o[5]' is not driven."
+    },
+    {
+      "id": "W198",
+      "log_line": 824,
+      "code": "EFX-0256",
+      "category": "与当前设计无关",
+      "reason": "未启用的DSI/LVDS/CSI/LCD/UART或未消费LED输出；仅在这些外设保持不接入且不依赖其输出时与当前链路无关，不能跨用途豁免",
+      "raw": "[EFX-0256 WARNING] The primary output port 'lvds_txd2_o[4]' wire 'lvds_txd2_o[4]' is not driven."
+    },
+    {
+      "id": "W199",
+      "log_line": 825,
+      "code": "EFX-0256",
+      "category": "与当前设计无关",
+      "reason": "未启用的DSI/LVDS/CSI/LCD/UART或未消费LED输出；仅在这些外设保持不接入且不依赖其输出时与当前链路无关，不能跨用途豁免",
+      "raw": "[EFX-0256 WARNING] The primary output port 'lvds_txd2_o[3]' wire 'lvds_txd2_o[3]' is not driven."
+    },
+    {
+      "id": "W200",
+      "log_line": 826,
+      "code": "EFX-0256",
+      "category": "与当前设计无关",
+      "reason": "未启用的DSI/LVDS/CSI/LCD/UART或未消费LED输出；仅在这些外设保持不接入且不依赖其输出时与当前链路无关，不能跨用途豁免",
+      "raw": "[EFX-0256 WARNING] The primary output port 'lvds_txd2_o[2]' wire 'lvds_txd2_o[2]' is not driven."
+    },
+    {
+      "id": "W201",
+      "log_line": 827,
+      "code": "EFX-0256",
+      "category": "与当前设计无关",
+      "reason": "未启用的DSI/LVDS/CSI/LCD/UART或未消费LED输出；仅在这些外设保持不接入且不依赖其输出时与当前链路无关，不能跨用途豁免",
+      "raw": "[EFX-0256 WARNING] The primary output port 'lvds_txd2_o[1]' wire 'lvds_txd2_o[1]' is not driven."
+    },
+    {
+      "id": "W202",
+      "log_line": 828,
+      "code": "EFX-0256",
+      "category": "与当前设计无关",
+      "reason": "未启用的DSI/LVDS/CSI/LCD/UART或未消费LED输出；仅在这些外设保持不接入且不依赖其输出时与当前链路无关，不能跨用途豁免",
+      "raw": "[EFX-0256 WARNING] The primary output port 'lvds_txd2_o[0]' wire 'lvds_txd2_o[0]' is not driven."
+    },
+    {
+      "id": "W203",
+      "log_line": 829,
+      "code": "EFX-0256",
+      "category": "与当前设计无关",
+      "reason": "未启用的DSI/LVDS/CSI/LCD/UART或未消费LED输出；仅在这些外设保持不接入且不依赖其输出时与当前链路无关，不能跨用途豁免",
+      "raw": "[EFX-0256 WARNING] The primary output port 'lvds_txd2_rst_o' wire 'lvds_txd2_rst_o' is not driven."
+    },
+    {
+      "id": "W204",
+      "log_line": 830,
+      "code": "EFX-0256",
+      "category": "与当前设计无关",
+      "reason": "未启用的DSI/LVDS/CSI/LCD/UART或未消费LED输出；仅在这些外设保持不接入且不依赖其输出时与当前链路无关，不能跨用途豁免",
+      "raw": "[EFX-0256 WARNING] The primary output port 'lvds_txd3_oe' wire 'lvds_txd3_oe' is not driven."
+    },
+    {
+      "id": "W205",
+      "log_line": 831,
+      "code": "EFX-0256",
+      "category": "与当前设计无关",
+      "reason": "未启用的DSI/LVDS/CSI/LCD/UART或未消费LED输出；仅在这些外设保持不接入且不依赖其输出时与当前链路无关，不能跨用途豁免",
+      "raw": "[EFX-0256 WARNING] The primary output port 'lvds_txd3_o[6]' wire 'lvds_txd3_o[6]' is not driven."
+    },
+    {
+      "id": "W206",
+      "log_line": 832,
+      "code": "EFX-0256",
+      "category": "与当前设计无关",
+      "reason": "未启用的DSI/LVDS/CSI/LCD/UART或未消费LED输出；仅在这些外设保持不接入且不依赖其输出时与当前链路无关，不能跨用途豁免",
+      "raw": "[EFX-0256 WARNING] The primary output port 'lvds_txd3_o[5]' wire 'lvds_txd3_o[5]' is not driven."
+    },
+    {
+      "id": "W207",
+      "log_line": 833,
+      "code": "EFX-0256",
+      "category": "与当前设计无关",
+      "reason": "未启用的DSI/LVDS/CSI/LCD/UART或未消费LED输出；仅在这些外设保持不接入且不依赖其输出时与当前链路无关，不能跨用途豁免",
+      "raw": "[EFX-0256 WARNING] The primary output port 'lvds_txd3_o[4]' wire 'lvds_txd3_o[4]' is not driven."
+    },
+    {
+      "id": "W208",
+      "log_line": 834,
+      "code": "EFX-0256",
+      "category": "与当前设计无关",
+      "reason": "未启用的DSI/LVDS/CSI/LCD/UART或未消费LED输出；仅在这些外设保持不接入且不依赖其输出时与当前链路无关，不能跨用途豁免",
+      "raw": "[EFX-0256 WARNING] The primary output port 'lvds_txd3_o[3]' wire 'lvds_txd3_o[3]' is not driven."
+    },
+    {
+      "id": "W209",
+      "log_line": 835,
+      "code": "EFX-0256",
+      "category": "与当前设计无关",
+      "reason": "未启用的DSI/LVDS/CSI/LCD/UART或未消费LED输出；仅在这些外设保持不接入且不依赖其输出时与当前链路无关，不能跨用途豁免",
+      "raw": "[EFX-0256 WARNING] The primary output port 'lvds_txd3_o[2]' wire 'lvds_txd3_o[2]' is not driven."
+    },
+    {
+      "id": "W210",
+      "log_line": 836,
+      "code": "EFX-0256",
+      "category": "与当前设计无关",
+      "reason": "未启用的DSI/LVDS/CSI/LCD/UART或未消费LED输出；仅在这些外设保持不接入且不依赖其输出时与当前链路无关，不能跨用途豁免",
+      "raw": "[EFX-0256 WARNING] The primary output port 'lvds_txd3_o[1]' wire 'lvds_txd3_o[1]' is not driven."
+    },
+    {
+      "id": "W211",
+      "log_line": 837,
+      "code": "EFX-0256",
+      "category": "与当前设计无关",
+      "reason": "未启用的DSI/LVDS/CSI/LCD/UART或未消费LED输出；仅在这些外设保持不接入且不依赖其输出时与当前链路无关，不能跨用途豁免",
+      "raw": "[EFX-0256 WARNING] The primary output port 'lvds_txd3_o[0]' wire 'lvds_txd3_o[0]' is not driven."
+    },
+    {
+      "id": "W212",
+      "log_line": 838,
+      "code": "EFX-0256",
+      "category": "与当前设计无关",
+      "reason": "未启用的DSI/LVDS/CSI/LCD/UART或未消费LED输出；仅在这些外设保持不接入且不依赖其输出时与当前链路无关，不能跨用途豁免",
+      "raw": "[EFX-0256 WARNING] The primary output port 'lvds_txd3_rst_o' wire 'lvds_txd3_rst_o' is not driven."
+    },
+    {
+      "id": "W213",
+      "log_line": 839,
+      "code": "EFX-0256",
+      "category": "与当前设计无关",
+      "reason": "未启用的DSI/LVDS/CSI/LCD/UART或未消费LED输出；仅在这些外设保持不接入且不依赖其输出时与当前链路无关，不能跨用途豁免",
+      "raw": "[EFX-0256 WARNING] The primary output port 'lcd_tp_sda_o' wire 'lcd_tp_sda_o' is not driven."
+    },
+    {
+      "id": "W214",
+      "log_line": 840,
+      "code": "EFX-0256",
+      "category": "与当前设计无关",
+      "reason": "未启用的DSI/LVDS/CSI/LCD/UART或未消费LED输出；仅在这些外设保持不接入且不依赖其输出时与当前链路无关，不能跨用途豁免",
+      "raw": "[EFX-0256 WARNING] The primary output port 'lcd_tp_sda_oe' wire 'lcd_tp_sda_oe' is not driven."
+    },
+    {
+      "id": "W215",
+      "log_line": 841,
+      "code": "EFX-0256",
+      "category": "与当前设计无关",
+      "reason": "未启用的DSI/LVDS/CSI/LCD/UART或未消费LED输出；仅在这些外设保持不接入且不依赖其输出时与当前链路无关，不能跨用途豁免",
+      "raw": "[EFX-0256 WARNING] The primary output port 'lcd_tp_scl_o' wire 'lcd_tp_scl_o' is not driven."
+    },
+    {
+      "id": "W216",
+      "log_line": 842,
+      "code": "EFX-0256",
+      "category": "与当前设计无关",
+      "reason": "未启用的DSI/LVDS/CSI/LCD/UART或未消费LED输出；仅在这些外设保持不接入且不依赖其输出时与当前链路无关，不能跨用途豁免",
+      "raw": "[EFX-0256 WARNING] The primary output port 'lcd_tp_scl_oe' wire 'lcd_tp_scl_oe' is not driven."
+    },
+    {
+      "id": "W217",
+      "log_line": 843,
+      "code": "EFX-0256",
+      "category": "与当前设计无关",
+      "reason": "未启用的DSI/LVDS/CSI/LCD/UART或未消费LED输出；仅在这些外设保持不接入且不依赖其输出时与当前链路无关，不能跨用途豁免",
+      "raw": "[EFX-0256 WARNING] The primary output port 'lcd_tp_int_o' wire 'lcd_tp_int_o' is not driven."
+    },
+    {
+      "id": "W218",
+      "log_line": 844,
+      "code": "EFX-0256",
+      "category": "与当前设计无关",
+      "reason": "未启用的DSI/LVDS/CSI/LCD/UART或未消费LED输出；仅在这些外设保持不接入且不依赖其输出时与当前链路无关，不能跨用途豁免",
+      "raw": "[EFX-0256 WARNING] The primary output port 'lcd_tp_int_oe' wire 'lcd_tp_int_oe' is not driven."
+    },
+    {
+      "id": "W219",
+      "log_line": 845,
+      "code": "EFX-0256",
+      "category": "与当前设计无关",
+      "reason": "未启用的DSI/LVDS/CSI/LCD/UART或未消费LED输出；仅在这些外设保持不接入且不依赖其输出时与当前链路无关，不能跨用途豁免",
+      "raw": "[EFX-0256 WARNING] The primary output port 'lcd_tp_rst_o' wire 'lcd_tp_rst_o' is not driven."
+    },
+    {
+      "id": "W220",
+      "log_line": 846,
+      "code": "EFX-0256",
+      "category": "与当前设计无关",
+      "reason": "未启用的DSI/LVDS/CSI/LCD/UART或未消费LED输出；仅在这些外设保持不接入且不依赖其输出时与当前链路无关，不能跨用途豁免",
+      "raw": "[EFX-0256 WARNING] The primary output port 'lcd_pwm_o' wire 'lcd_pwm_o' is not driven."
+    },
+    {
+      "id": "W221",
+      "log_line": 847,
+      "code": "EFX-0256",
+      "category": "与当前设计无关",
+      "reason": "未启用的DSI/LVDS/CSI/LCD/UART或未消费LED输出；仅在这些外设保持不接入且不依赖其输出时与当前链路无关，不能跨用途豁免",
+      "raw": "[EFX-0256 WARNING] The primary output port 'lcd_blen_o' wire 'lcd_blen_o' is not driven."
+    },
+    {
+      "id": "W222",
+      "log_line": 848,
+      "code": "EFX-0256",
+      "category": "与当前设计无关",
+      "reason": "未启用的DSI/LVDS/CSI/LCD/UART或未消费LED输出；仅在这些外设保持不接入且不依赖其输出时与当前链路无关，不能跨用途豁免",
+      "raw": "[EFX-0256 WARNING] The primary output port 'lcd_vs_o' wire 'lcd_vs_o' is not driven."
+    },
+    {
+      "id": "W223",
+      "log_line": 849,
+      "code": "EFX-0256",
+      "category": "与当前设计无关",
+      "reason": "未启用的DSI/LVDS/CSI/LCD/UART或未消费LED输出；仅在这些外设保持不接入且不依赖其输出时与当前链路无关，不能跨用途豁免",
+      "raw": "[EFX-0256 WARNING] The primary output port 'lcd_hs_o' wire 'lcd_hs_o' is not driven."
+    },
+    {
+      "id": "W224",
+      "log_line": 850,
+      "code": "EFX-0256",
+      "category": "与当前设计无关",
+      "reason": "未启用的DSI/LVDS/CSI/LCD/UART或未消费LED输出；仅在这些外设保持不接入且不依赖其输出时与当前链路无关，不能跨用途豁免",
+      "raw": "[EFX-0256 WARNING] The primary output port 'lcd_de_o' wire 'lcd_de_o' is not driven."
+    },
+    {
+      "id": "W225",
+      "log_line": 851,
+      "code": "EFX-0200",
+      "category": "需要实物验证",
+      "reason": "DDR校准移位信号冗余删除：不是已证实故障，也未证明为无害；需当前IP校准说明和I3实测lane/重启/压力证据",
+      "raw": "[EFX-0200 WARNING] Removing redundant signal : Shift_Q7_Out[4][7]. (F:\\Projects\\stareye_fpga\\efinity\\m2_ar0135_ddr_hdmi_i3\\ip/DdrCtrl\\DdrCtrl.sv:2611)"
+    },
+    {
+      "id": "W226",
+      "log_line": 852,
+      "code": "EFX-0200",
+      "category": "需要实物验证",
+      "reason": "DDR校准移位信号冗余删除：不是已证实故障，也未证明为无害；需当前IP校准说明和I3实测lane/重启/压力证据",
+      "raw": "[EFX-0200 WARNING] Removing redundant signal : Shift_Q7_Out[4][6]. (F:\\Projects\\stareye_fpga\\efinity\\m2_ar0135_ddr_hdmi_i3\\ip/DdrCtrl\\DdrCtrl.sv:2611)"
+    },
+    {
+      "id": "W227",
+      "log_line": 853,
+      "code": "EFX-0200",
+      "category": "需要实物验证",
+      "reason": "DDR校准移位信号冗余删除：不是已证实故障，也未证明为无害；需当前IP校准说明和I3实测lane/重启/压力证据",
+      "raw": "[EFX-0200 WARNING] Removing redundant signal : Shift_Q7_Out[4][5]. (F:\\Projects\\stareye_fpga\\efinity\\m2_ar0135_ddr_hdmi_i3\\ip/DdrCtrl\\DdrCtrl.sv:2611)"
+    },
+    {
+      "id": "W228",
+      "log_line": 854,
+      "code": "EFX-0200",
+      "category": "需要实物验证",
+      "reason": "DDR校准移位信号冗余删除：不是已证实故障，也未证明为无害；需当前IP校准说明和I3实测lane/重启/压力证据",
+      "raw": "[EFX-0200 WARNING] Removing redundant signal : Shift_Q7_Out[4][4]. (F:\\Projects\\stareye_fpga\\efinity\\m2_ar0135_ddr_hdmi_i3\\ip/DdrCtrl\\DdrCtrl.sv:2611)"
+    },
+    {
+      "id": "W229",
+      "log_line": 855,
+      "code": "EFX-0200",
+      "category": "需要实物验证",
+      "reason": "DDR校准移位信号冗余删除：不是已证实故障，也未证明为无害；需当前IP校准说明和I3实测lane/重启/压力证据",
+      "raw": "[EFX-0200 WARNING] Removing redundant signal : Shift_Q7_Out[4][3]. (F:\\Projects\\stareye_fpga\\efinity\\m2_ar0135_ddr_hdmi_i3\\ip/DdrCtrl\\DdrCtrl.sv:2611)"
+    },
+    {
+      "id": "W230",
+      "log_line": 856,
+      "code": "EFX-0200",
+      "category": "需要实物验证",
+      "reason": "DDR校准移位信号冗余删除：不是已证实故障，也未证明为无害；需当前IP校准说明和I3实测lane/重启/压力证据",
+      "raw": "[EFX-0200 WARNING] Removing redundant signal : Shift_Q7_Out[4][2]. (F:\\Projects\\stareye_fpga\\efinity\\m2_ar0135_ddr_hdmi_i3\\ip/DdrCtrl\\DdrCtrl.sv:2611)"
+    },
+    {
+      "id": "W231",
+      "log_line": 857,
+      "code": "EFX-0200",
+      "category": "需要实物验证",
+      "reason": "DDR校准移位信号冗余删除：不是已证实故障，也未证明为无害；需当前IP校准说明和I3实测lane/重启/压力证据",
+      "raw": "[EFX-0200 WARNING] Removing redundant signal : Shift_Q7_Out[4][1]. (F:\\Projects\\stareye_fpga\\efinity\\m2_ar0135_ddr_hdmi_i3\\ip/DdrCtrl\\DdrCtrl.sv:2611)"
+    },
+    {
+      "id": "W232",
+      "log_line": 858,
+      "code": "EFX-0200",
+      "category": "需要实物验证",
+      "reason": "DDR校准移位信号冗余删除：不是已证实故障，也未证明为无害；需当前IP校准说明和I3实测lane/重启/压力证据",
+      "raw": "[EFX-0200 WARNING] Removing redundant signal : Shift_Q7_Out[4][0]. (F:\\Projects\\stareye_fpga\\efinity\\m2_ar0135_ddr_hdmi_i3\\ip/DdrCtrl\\DdrCtrl.sv:2611)"
+    },
+    {
+      "id": "W233",
+      "log_line": 859,
+      "code": "EFX-0200",
+      "category": "需要实物验证",
+      "reason": "DDR校准移位信号冗余删除：不是已证实故障，也未证明为无害；需当前IP校准说明和I3实测lane/重启/压力证据",
+      "raw": "[EFX-0200 WARNING] Removing redundant signal : Shift_Out[7]. (F:\\Projects\\stareye_fpga\\efinity\\m2_ar0135_ddr_hdmi_i3\\ip/DdrCtrl\\DdrCtrl.sv:2611)"
+    },
+    {
+      "id": "W234",
+      "log_line": 860,
+      "code": "EFX-0200",
+      "category": "需要实物验证",
+      "reason": "DDR校准移位信号冗余删除：不是已证实故障，也未证明为无害；需当前IP校准说明和I3实测lane/重启/压力证据",
+      "raw": "[EFX-0200 WARNING] Removing redundant signal : Shift_Out[6]. (F:\\Projects\\stareye_fpga\\efinity\\m2_ar0135_ddr_hdmi_i3\\ip/DdrCtrl\\DdrCtrl.sv:2611)"
+    },
+    {
+      "id": "W235",
+      "log_line": 861,
+      "code": "EFX-0200",
+      "category": "需要实物验证",
+      "reason": "DDR校准移位信号冗余删除：不是已证实故障，也未证明为无害；需当前IP校准说明和I3实测lane/重启/压力证据",
+      "raw": "[EFX-0200 WARNING] Removing redundant signal : Shift_Out[5]. (F:\\Projects\\stareye_fpga\\efinity\\m2_ar0135_ddr_hdmi_i3\\ip/DdrCtrl\\DdrCtrl.sv:2611)"
+    },
+    {
+      "id": "W236",
+      "log_line": 862,
+      "code": "EFX-0200",
+      "category": "需要实物验证",
+      "reason": "DDR校准移位信号冗余删除：不是已证实故障，也未证明为无害；需当前IP校准说明和I3实测lane/重启/压力证据",
+      "raw": "[EFX-0200 WARNING] Removing redundant signal : Shift_Out[4]. (F:\\Projects\\stareye_fpga\\efinity\\m2_ar0135_ddr_hdmi_i3\\ip/DdrCtrl\\DdrCtrl.sv:2611)"
+    },
+    {
+      "id": "W237",
+      "log_line": 863,
+      "code": "EFX-0200",
+      "category": "需要实物验证",
+      "reason": "DDR校准移位信号冗余删除：不是已证实故障，也未证明为无害；需当前IP校准说明和I3实测lane/重启/压力证据",
+      "raw": "[EFX-0200 WARNING] Removing redundant signal : Shift_Out[3]. (F:\\Projects\\stareye_fpga\\efinity\\m2_ar0135_ddr_hdmi_i3\\ip/DdrCtrl\\DdrCtrl.sv:2611)"
+    },
+    {
+      "id": "W238",
+      "log_line": 864,
+      "code": "EFX-0200",
+      "category": "需要实物验证",
+      "reason": "DDR校准移位信号冗余删除：不是已证实故障，也未证明为无害；需当前IP校准说明和I3实测lane/重启/压力证据",
+      "raw": "[EFX-0200 WARNING] Removing redundant signal : Shift_Out[2]. (F:\\Projects\\stareye_fpga\\efinity\\m2_ar0135_ddr_hdmi_i3\\ip/DdrCtrl\\DdrCtrl.sv:2611)"
+    },
+    {
+      "id": "W239",
+      "log_line": 865,
+      "code": "EFX-0200",
+      "category": "需要实物验证",
+      "reason": "DDR校准移位信号冗余删除：不是已证实故障，也未证明为无害；需当前IP校准说明和I3实测lane/重启/压力证据",
+      "raw": "[EFX-0200 WARNING] Removing redundant signal : Shift_Out[1]. (F:\\Projects\\stareye_fpga\\efinity\\m2_ar0135_ddr_hdmi_i3\\ip/DdrCtrl\\DdrCtrl.sv:2611)"
+    },
+    {
+      "id": "W240",
+      "log_line": 866,
+      "code": "EFX-0200",
+      "category": "需要实物验证",
+      "reason": "DDR校准移位信号冗余删除：不是已证实故障，也未证明为无害；需当前IP校准说明和I3实测lane/重启/压力证据",
+      "raw": "[EFX-0200 WARNING] Removing redundant signal : Shift_Out[0]. (F:\\Projects\\stareye_fpga\\efinity\\m2_ar0135_ddr_hdmi_i3\\ip/DdrCtrl\\DdrCtrl.sv:2611)"
+    },
+    {
+      "id": "W241",
+      "log_line": 867,
+      "code": "EFX-0200",
+      "category": "需要实物验证",
+      "reason": "DDR校准移位信号冗余删除：不是已证实故障，也未证明为无害；需当前IP校准说明和I3实测lane/重启/压力证据",
+      "raw": "[EFX-0200 WARNING] Removing redundant signal : Shift_Q7_Out[4][31]. (F:\\Projects\\stareye_fpga\\efinity\\m2_ar0135_ddr_hdmi_i3\\ip/DdrCtrl\\DdrCtrl.sv:2611)"
+    },
+    {
+      "id": "W242",
+      "log_line": 868,
+      "code": "EFX-0200",
+      "category": "需要实物验证",
+      "reason": "DDR校准移位信号冗余删除：不是已证实故障，也未证明为无害；需当前IP校准说明和I3实测lane/重启/压力证据",
+      "raw": "[EFX-0200 WARNING] Removing redundant signal : Shift_Q7_Out[4][30]. (F:\\Projects\\stareye_fpga\\efinity\\m2_ar0135_ddr_hdmi_i3\\ip/DdrCtrl\\DdrCtrl.sv:2611)"
+    },
+    {
+      "id": "W243",
+      "log_line": 869,
+      "code": "EFX-0200",
+      "category": "需要实物验证",
+      "reason": "DDR校准移位信号冗余删除：不是已证实故障，也未证明为无害；需当前IP校准说明和I3实测lane/重启/压力证据",
+      "raw": "[EFX-0200 WARNING] Removing redundant signal : Shift_Q7_Out[4][29]. (F:\\Projects\\stareye_fpga\\efinity\\m2_ar0135_ddr_hdmi_i3\\ip/DdrCtrl\\DdrCtrl.sv:2611)"
+    },
+    {
+      "id": "W244",
+      "log_line": 870,
+      "code": "EFX-0200",
+      "category": "需要实物验证",
+      "reason": "DDR校准移位信号冗余删除：不是已证实故障，也未证明为无害；需当前IP校准说明和I3实测lane/重启/压力证据",
+      "raw": "[EFX-0200 WARNING] Removing redundant signal : Shift_Q7_Out[4][28]. (F:\\Projects\\stareye_fpga\\efinity\\m2_ar0135_ddr_hdmi_i3\\ip/DdrCtrl\\DdrCtrl.sv:2611)"
+    },
+    {
+      "id": "W245",
+      "log_line": 871,
+      "code": "EFX-0201",
+      "category": "必须修复",
+      "reason": "必须澄清：当前DDR v5.14加密内部未连接/位宽/无驱动/接地告警，不能由旧厂商bit跑通推定新IP已安全；需厂商解释有效分支或修复",
+      "raw": "[EFX-0201 WARNING] Re-wiring to GND non-driven net 'u_efx_fifo_top.a_rst_i'. (F:\\Projects\\stareye_fpga\\efinity\\m2_ar0135_ddr_hdmi_i3\\ip/DdrCtrl\\DdrCtrl.sv:4817)"
+    },
+    {
+      "id": "W246",
+      "log_line": 872,
+      "code": "EFX-0201",
+      "category": "必须修复",
+      "reason": "必须澄清：当前DDR v5.14加密内部未连接/位宽/无驱动/接地告警，不能由旧厂商bit跑通推定新IP已安全；需厂商解释有效分支或修复",
+      "raw": "[EFX-0201 WARNING] Re-wiring to GND non-driven net 'u_efx_fifo_top.clk_i'. (F:\\Projects\\stareye_fpga\\efinity\\m2_ar0135_ddr_hdmi_i3\\ip/DdrCtrl\\DdrCtrl.sv:4817)"
+    },
+    {
+      "id": "W247",
+      "log_line": 873,
+      "code": "EFX-0201",
+      "category": "必须修复",
+      "reason": "必须澄清：当前DDR v5.14加密内部未连接/位宽/无驱动/接地告警，不能由旧厂商bit跑通推定新IP已安全；需厂商解释有效分支或修复",
+      "raw": "[EFX-0201 WARNING] Re-wiring to GND non-driven net 'r_rd_fifo_wr_en_p[31]'. (F:\\Projects\\stareye_fpga\\efinity\\m2_ar0135_ddr_hdmi_i3\\ip/DdrCtrl\\DdrCtrl.sv:1460)"
+    },
+    {
+      "id": "W248",
+      "log_line": 874,
+      "code": "EFX-0201",
+      "category": "必须修复",
+      "reason": "必须澄清：当前DDR v5.14加密内部未连接/位宽/无驱动/接地告警，不能由旧厂商bit跑通推定新IP已安全；需厂商解释有效分支或修复",
+      "raw": "[EFX-0201 WARNING] Re-wiring to GND non-driven net 'r_rd_fifo_wr_en_p[30]'. (F:\\Projects\\stareye_fpga\\efinity\\m2_ar0135_ddr_hdmi_i3\\ip/DdrCtrl\\DdrCtrl.sv:1460)"
+    },
+    {
+      "id": "W249",
+      "log_line": 875,
+      "code": "EFX-0201",
+      "category": "必须修复",
+      "reason": "必须澄清：当前DDR v5.14加密内部未连接/位宽/无驱动/接地告警，不能由旧厂商bit跑通推定新IP已安全；需厂商解释有效分支或修复",
+      "raw": "[EFX-0201 WARNING] Re-wiring to GND non-driven net 'r_rd_fifo_wr_en_p[29]'. (F:\\Projects\\stareye_fpga\\efinity\\m2_ar0135_ddr_hdmi_i3\\ip/DdrCtrl\\DdrCtrl.sv:1460)"
+    },
+    {
+      "id": "W250",
+      "log_line": 876,
+      "code": "EFX-0201",
+      "category": "必须修复",
+      "reason": "必须澄清：当前DDR v5.14加密内部未连接/位宽/无驱动/接地告警，不能由旧厂商bit跑通推定新IP已安全；需厂商解释有效分支或修复",
+      "raw": "[EFX-0201 WARNING] Re-wiring to GND non-driven net 'r_rd_fifo_wr_en_p[28]'. (F:\\Projects\\stareye_fpga\\efinity\\m2_ar0135_ddr_hdmi_i3\\ip/DdrCtrl\\DdrCtrl.sv:1460)"
+    },
+    {
+      "id": "W251",
+      "log_line": 877,
+      "code": "EFX-0201",
+      "category": "必须修复",
+      "reason": "必须澄清：当前DDR v5.14加密内部未连接/位宽/无驱动/接地告警，不能由旧厂商bit跑通推定新IP已安全；需厂商解释有效分支或修复",
+      "raw": "[EFX-0201 WARNING] Re-wiring to GND non-driven net 'r_rd_fifo_wr_en_p[27]'. (F:\\Projects\\stareye_fpga\\efinity\\m2_ar0135_ddr_hdmi_i3\\ip/DdrCtrl\\DdrCtrl.sv:1460)"
+    },
+    {
+      "id": "W252",
+      "log_line": 878,
+      "code": "EFX-0201",
+      "category": "必须修复",
+      "reason": "必须澄清：当前DDR v5.14加密内部未连接/位宽/无驱动/接地告警，不能由旧厂商bit跑通推定新IP已安全；需厂商解释有效分支或修复",
+      "raw": "[EFX-0201 WARNING] Re-wiring to GND non-driven net 'r_rd_fifo_wr_en_p[26]'. (F:\\Projects\\stareye_fpga\\efinity\\m2_ar0135_ddr_hdmi_i3\\ip/DdrCtrl\\DdrCtrl.sv:1460)"
+    },
+    {
+      "id": "W253",
+      "log_line": 879,
+      "code": "EFX-0201",
+      "category": "必须修复",
+      "reason": "必须澄清：当前DDR v5.14加密内部未连接/位宽/无驱动/接地告警，不能由旧厂商bit跑通推定新IP已安全；需厂商解释有效分支或修复",
+      "raw": "[EFX-0201 WARNING] Re-wiring to GND non-driven net 'r_rd_fifo_wr_en_p[25]'. (F:\\Projects\\stareye_fpga\\efinity\\m2_ar0135_ddr_hdmi_i3\\ip/DdrCtrl\\DdrCtrl.sv:1460)"
+    },
+    {
+      "id": "W254",
+      "log_line": 880,
+      "code": "EFX-0201",
+      "category": "必须修复",
+      "reason": "必须澄清：当前DDR v5.14加密内部未连接/位宽/无驱动/接地告警，不能由旧厂商bit跑通推定新IP已安全；需厂商解释有效分支或修复",
+      "raw": "[EFX-0201 WARNING] Re-wiring to GND non-driven net 'r_rd_fifo_wr_en_p[24]'. (F:\\Projects\\stareye_fpga\\efinity\\m2_ar0135_ddr_hdmi_i3\\ip/DdrCtrl\\DdrCtrl.sv:1460)"
+    },
+    {
+      "id": "W255",
+      "log_line": 881,
+      "code": "EFX-0011",
+      "category": "已知IP噪声",
+      "reason": "clk_24m在接口层直达PLL，RTL端口移除不等于板卡输入时钟消失",
+      "raw": "[EFX-0011 VERI-WARNING] Input/inout port clk_24m is unconnected and will be removed. (VDB-8003) (F:\\Projects\\stareye_fpga\\efinity\\m2_ar0135_ddr_hdmi_i3\\example_top.v:11)"
+    },
+    {
+      "id": "W256",
+      "log_line": 882,
+      "code": "EFX-0011",
+      "category": "与当前设计无关",
+      "reason": "当前未启用的25MHz/DSI/LVDS/CSI/UART/触摸或LCD输入端口被优化；当前相机数据PCLK/HREF/VSYNC未被删除",
+      "raw": "[EFX-0011 VERI-WARNING] Input/inout port clk_25m is unconnected and will be removed. (VDB-8003) (F:\\Projects\\stareye_fpga\\efinity\\m2_ar0135_ddr_hdmi_i3\\example_top.v:12)"
+    },
+    {
+      "id": "W257",
+      "log_line": 883,
+      "code": "EFX-0011",
+      "category": "已知IP噪声",
+      "reason": "pixel_2x由接口/PLL使用，RTL未消费；核对接口时钟而非新增虚假RTL负载",
+      "raw": "[EFX-0011 VERI-WARNING] Input/inout port clk_pixel_2x is unconnected and will be removed. (VDB-8003) (F:\\Projects\\stareye_fpga\\efinity\\m2_ar0135_ddr_hdmi_i3\\example_top.v:21)"
+    },
+    {
+      "id": "W258",
+      "log_line": 884,
+      "code": "EFX-0011",
+      "category": "已知IP噪声",
+      "reason": "pixel_10x直达原生LVDS串行器，RTL端口删除不等于串行时钟缺失",
+      "raw": "[EFX-0011 VERI-WARNING] Input/inout port clk_pixel_10x is unconnected and will be removed. (VDB-8003) (F:\\Projects\\stareye_fpga\\efinity\\m2_ar0135_ddr_hdmi_i3\\example_top.v:22)"
+    },
+    {
+      "id": "W259",
+      "log_line": 885,
+      "code": "EFX-0011",
+      "category": "与当前设计无关",
+      "reason": "当前未启用的25MHz/DSI/LVDS/CSI/UART/触摸或LCD输入端口被优化；当前相机数据PCLK/HREF/VSYNC未被删除",
+      "raw": "[EFX-0011 VERI-WARNING] Input/inout port dsi_refclk_i is unconnected and will be removed. (VDB-8003) (F:\\Projects\\stareye_fpga\\efinity\\m2_ar0135_ddr_hdmi_i3\\example_top.v:30)"
+    },
+    {
+      "id": "W260",
+      "log_line": 886,
+      "code": "EFX-0011",
+      "category": "与当前设计无关",
+      "reason": "当前未启用的25MHz/DSI/LVDS/CSI/UART/触摸或LCD输入端口被优化；当前相机数据PCLK/HREF/VSYNC未被删除",
+      "raw": "[EFX-0011 VERI-WARNING] Input/inout port dsi_byteclk_i is unconnected and will be removed. (VDB-8003) (F:\\Projects\\stareye_fpga\\efinity\\m2_ar0135_ddr_hdmi_i3\\example_top.v:31)"
+    },
+    {
+      "id": "W261",
+      "log_line": 887,
+      "code": "EFX-0011",
+      "category": "与当前设计无关",
+      "reason": "当前未启用的25MHz/DSI/LVDS/CSI/UART/触摸或LCD输入端口被优化；当前相机数据PCLK/HREF/VSYNC未被删除",
+      "raw": "[EFX-0011 VERI-WARNING] Input/inout port dsi_serclk_i is unconnected and will be removed. (VDB-8003) (F:\\Projects\\stareye_fpga\\efinity\\m2_ar0135_ddr_hdmi_i3\\example_top.v:32)"
+    },
+    {
+      "id": "W262",
+      "log_line": 888,
+      "code": "EFX-0011",
+      "category": "与当前设计无关",
+      "reason": "当前未启用的25MHz/DSI/LVDS/CSI/UART/触摸或LCD输入端口被优化；当前相机数据PCLK/HREF/VSYNC未被删除",
+      "raw": "[EFX-0011 VERI-WARNING] Input/inout port dsi_txcclk_i is unconnected and will be removed. (VDB-8003) (F:\\Projects\\stareye_fpga\\efinity\\m2_ar0135_ddr_hdmi_i3\\example_top.v:33)"
+    },
+    {
+      "id": "W263",
+      "log_line": 889,
+      "code": "EFX-0011",
+      "category": "与当前设计无关",
+      "reason": "当前未启用的25MHz/DSI/LVDS/CSI/UART/触摸或LCD输入端口被优化；当前相机数据PCLK/HREF/VSYNC未被删除",
+      "raw": "[EFX-0011 VERI-WARNING] Input/inout port clk_lvds_1x is unconnected and will be removed. (VDB-8003) (F:\\Projects\\stareye_fpga\\efinity\\m2_ar0135_ddr_hdmi_i3\\example_top.v:60)"
+    },
+    {
+      "id": "W264",
+      "log_line": 890,
+      "code": "EFX-0011",
+      "category": "与当前设计无关",
+      "reason": "当前未启用的25MHz/DSI/LVDS/CSI/UART/触摸或LCD输入端口被优化；当前相机数据PCLK/HREF/VSYNC未被删除",
+      "raw": "[EFX-0011 VERI-WARNING] Input/inout port clk_lvds_7x is unconnected and will be removed. (VDB-8003) (F:\\Projects\\stareye_fpga\\efinity\\m2_ar0135_ddr_hdmi_i3\\example_top.v:61)"
+    },
+    {
+      "id": "W265",
+      "log_line": 891,
+      "code": "EFX-0011",
+      "category": "已知IP噪声",
+      "reason": "clk_27m为历史命名，实际16MHz；接口clkout驱动XCLK",
+      "raw": "[EFX-0011 VERI-WARNING] Input/inout port clk_27m is unconnected and will be removed. (VDB-8003) (F:\\Projects\\stareye_fpga\\efinity\\m2_ar0135_ddr_hdmi_i3\\example_top.v:62)"
+    },
+    {
+      "id": "W266",
+      "log_line": 892,
+      "code": "EFX-0011",
+      "category": "已知IP噪声",
+      "reason": "clk_54m为历史命名，实际32MHz，未被业务RTL消费",
+      "raw": "[EFX-0011 VERI-WARNING] Input/inout port clk_54m is unconnected and will be removed. (VDB-8003) (F:\\Projects\\stareye_fpga\\efinity\\m2_ar0135_ddr_hdmi_i3\\example_top.v:63)"
+    },
+    {
+      "id": "W267",
+      "log_line": 893,
+      "code": "EFX-0011",
+      "category": "必须修复",
+      "reason": "必须澄清：DQS负相位hi[1]在top连接控制器却被移除，不能仅因加密IP就豁免",
+      "raw": "[EFX-0011 VERI-WARNING] Input/inout port i_dqs_n_hi[1] is unconnected and will be removed. (VDB-8003) (F:\\Projects\\stareye_fpga\\efinity\\m2_ar0135_ddr_hdmi_i3\\example_top.v:97)"
+    },
+    {
+      "id": "W268",
+      "log_line": 894,
+      "code": "EFX-0011",
+      "category": "必须修复",
+      "reason": "必须澄清：DQS负相位lo[1]在top连接控制器却被移除，需IP采样结构依据",
+      "raw": "[EFX-0011 VERI-WARNING] Input/inout port i_dqs_n_lo[1] is unconnected and will be removed. (VDB-8003) (F:\\Projects\\stareye_fpga\\efinity\\m2_ar0135_ddr_hdmi_i3\\example_top.v:98)"
+    },
+    {
+      "id": "W269",
+      "log_line": 895,
+      "code": "EFX-0011",
+      "category": "与当前设计无关",
+      "reason": "当前未启用的25MHz/DSI/LVDS/CSI/UART/触摸或LCD输入端口被优化；当前相机数据PCLK/HREF/VSYNC未被删除",
+      "raw": "[EFX-0011 VERI-WARNING] Input/inout port csi_ctl0_i is unconnected and will be removed. (VDB-8003) (F:\\Projects\\stareye_fpga\\efinity\\m2_ar0135_ddr_hdmi_i3\\example_top.v:121)"
+    },
+    {
+      "id": "W270",
+      "log_line": 896,
+      "code": "EFX-0011",
+      "category": "与当前设计无关",
+      "reason": "当前未启用的25MHz/DSI/LVDS/CSI/UART/触摸或LCD输入端口被优化；当前相机数据PCLK/HREF/VSYNC未被删除",
+      "raw": "[EFX-0011 VERI-WARNING] Input/inout port csi_ctl1_i is unconnected and will be removed. (VDB-8003) (F:\\Projects\\stareye_fpga\\efinity\\m2_ar0135_ddr_hdmi_i3\\example_top.v:125)"
+    },
+    {
+      "id": "W271",
+      "log_line": 897,
+      "code": "EFX-0011",
+      "category": "与当前设计无关",
+      "reason": "当前未启用的25MHz/DSI/LVDS/CSI/UART/触摸或LCD输入端口被优化；当前相机数据PCLK/HREF/VSYNC未被删除",
+      "raw": "[EFX-0011 VERI-WARNING] Input/inout port csi_scl_i is unconnected and will be removed. (VDB-8003) (F:\\Projects\\stareye_fpga\\efinity\\m2_ar0135_ddr_hdmi_i3\\example_top.v:129)"
+    },
+    {
+      "id": "W272",
+      "log_line": 898,
+      "code": "EFX-0011",
+      "category": "与当前设计无关",
+      "reason": "当前未启用的25MHz/DSI/LVDS/CSI/UART/触摸或LCD输入端口被优化；当前相机数据PCLK/HREF/VSYNC未被删除",
+      "raw": "[EFX-0011 VERI-WARNING] Input/inout port csi_sda_i is unconnected and will be removed. (VDB-8003) (F:\\Projects\\stareye_fpga\\efinity\\m2_ar0135_ddr_hdmi_i3\\example_top.v:133)"
+    },
+    {
+      "id": "W273",
+      "log_line": 899,
+      "code": "EFX-0011",
+      "category": "与当前设计无关",
+      "reason": "当前未启用的25MHz/DSI/LVDS/CSI/UART/触摸或LCD输入端口被优化；当前相机数据PCLK/HREF/VSYNC未被删除",
+      "raw": "[EFX-0011 VERI-WARNING] Input/inout port csi_rxc_lp_p_i is unconnected and will be removed. (VDB-8003) (F:\\Projects\\stareye_fpga\\efinity\\m2_ar0135_ddr_hdmi_i3\\example_top.v:136)"
+    },
+    {
+      "id": "W274",
+      "log_line": 900,
+      "code": "EFX-0011",
+      "category": "与当前设计无关",
+      "reason": "当前未启用的25MHz/DSI/LVDS/CSI/UART/触摸或LCD输入端口被优化；当前相机数据PCLK/HREF/VSYNC未被删除",
+      "raw": "[EFX-0011 VERI-WARNING] Input/inout port csi_rxc_lp_n_i is unconnected and will be removed. (VDB-8003) (F:\\Projects\\stareye_fpga\\efinity\\m2_ar0135_ddr_hdmi_i3\\example_top.v:137)"
+    },
+    {
+      "id": "W275",
+      "log_line": 901,
+      "code": "EFX-0011",
+      "category": "与当前设计无关",
+      "reason": "当前未启用的25MHz/DSI/LVDS/CSI/UART/触摸或LCD输入端口被优化；当前相机数据PCLK/HREF/VSYNC未被删除",
+      "raw": "[EFX-0011 VERI-WARNING] Input/inout port csi_rxc_i is unconnected and will be removed. (VDB-8003) (F:\\Projects\\stareye_fpga\\efinity\\m2_ar0135_ddr_hdmi_i3\\example_top.v:140)"
+    },
+    {
+      "id": "W276",
+      "log_line": 902,
+      "code": "EFX-0011",
+      "category": "与当前设计无关",
+      "reason": "当前未启用的25MHz/DSI/LVDS/CSI/UART/触摸或LCD输入端口被优化；当前相机数据PCLK/HREF/VSYNC未被删除",
+      "raw": "[EFX-0011 VERI-WARNING] Input/inout port csi_rxd0_lp_p_i is unconnected and will be removed. (VDB-8003) (F:\\Projects\\stareye_fpga\\efinity\\m2_ar0135_ddr_hdmi_i3\\example_top.v:147)"
+    },
+    {
+      "id": "W277",
+      "log_line": 903,
+      "code": "EFX-0011",
+      "category": "与当前设计无关",
+      "reason": "当前未启用的25MHz/DSI/LVDS/CSI/UART/触摸或LCD输入端口被优化；当前相机数据PCLK/HREF/VSYNC未被删除",
+      "raw": "[EFX-0011 VERI-WARNING] Input/inout port csi_rxd0_lp_n_i is unconnected and will be removed. (VDB-8003) (F:\\Projects\\stareye_fpga\\efinity\\m2_ar0135_ddr_hdmi_i3\\example_top.v:148)"
+    },
+    {
+      "id": "W278",
+      "log_line": 904,
+      "code": "EFX-0011",
+      "category": "与当前设计无关",
+      "reason": "当前未启用的25MHz/DSI/LVDS/CSI/UART/触摸或LCD输入端口被优化；当前相机数据PCLK/HREF/VSYNC未被删除",
+      "raw": "[EFX-0011 VERI-WARNING] Input/inout port csi_rxd0_hs_i[7] is unconnected and will be removed. (VDB-8003) (F:\\Projects\\stareye_fpga\\efinity\\m2_ar0135_ddr_hdmi_i3\\example_top.v:149)"
+    },
+    {
+      "id": "W279",
+      "log_line": 905,
+      "code": "EFX-0011",
+      "category": "与当前设计无关",
+      "reason": "当前未启用的25MHz/DSI/LVDS/CSI/UART/触摸或LCD输入端口被优化；当前相机数据PCLK/HREF/VSYNC未被删除",
+      "raw": "[EFX-0011 VERI-WARNING] Input/inout port csi_rxd1_lp_n_i is unconnected and will be removed. (VDB-8003) (F:\\Projects\\stareye_fpga\\efinity\\m2_ar0135_ddr_hdmi_i3\\example_top.v:156)"
+    },
+    {
+      "id": "W280",
+      "log_line": 906,
+      "code": "EFX-0011",
+      "category": "与当前设计无关",
+      "reason": "当前未启用的25MHz/DSI/LVDS/CSI/UART/触摸或LCD输入端口被优化；当前相机数据PCLK/HREF/VSYNC未被删除",
+      "raw": "[EFX-0011 VERI-WARNING] Input/inout port csi_rxd1_lp_p_i is unconnected and will be removed. (VDB-8003) (F:\\Projects\\stareye_fpga\\efinity\\m2_ar0135_ddr_hdmi_i3\\example_top.v:157)"
+    },
+    {
+      "id": "W281",
+      "log_line": 907,
+      "code": "EFX-0011",
+      "category": "与当前设计无关",
+      "reason": "当前未启用的25MHz/DSI/LVDS/CSI/UART/触摸或LCD输入端口被优化；当前相机数据PCLK/HREF/VSYNC未被删除",
+      "raw": "[EFX-0011 VERI-WARNING] Input/inout port csi_rxd1_hs_i[7] is unconnected and will be removed. (VDB-8003) (F:\\Projects\\stareye_fpga\\efinity\\m2_ar0135_ddr_hdmi_i3\\example_top.v:158)"
+    },
+    {
+      "id": "W282",
+      "log_line": 908,
+      "code": "EFX-0011",
+      "category": "与当前设计无关",
+      "reason": "当前未启用的25MHz/DSI/LVDS/CSI/UART/触摸或LCD输入端口被优化；当前相机数据PCLK/HREF/VSYNC未被删除",
+      "raw": "[EFX-0011 VERI-WARNING] Input/inout port csi_rxd2_lp_p_i is unconnected and will be removed. (VDB-8003) (F:\\Projects\\stareye_fpga\\efinity\\m2_ar0135_ddr_hdmi_i3\\example_top.v:165)"
+    },
+    {
+      "id": "W283",
+      "log_line": 909,
+      "code": "EFX-0011",
+      "category": "与当前设计无关",
+      "reason": "当前未启用的25MHz/DSI/LVDS/CSI/UART/触摸或LCD输入端口被优化；当前相机数据PCLK/HREF/VSYNC未被删除",
+      "raw": "[EFX-0011 VERI-WARNING] Input/inout port csi_rxd2_lp_n_i is unconnected and will be removed. (VDB-8003) (F:\\Projects\\stareye_fpga\\efinity\\m2_ar0135_ddr_hdmi_i3\\example_top.v:166)"
+    },
+    {
+      "id": "W284",
+      "log_line": 910,
+      "code": "EFX-0011",
+      "category": "与当前设计无关",
+      "reason": "当前未启用的25MHz/DSI/LVDS/CSI/UART/触摸或LCD输入端口被优化；当前相机数据PCLK/HREF/VSYNC未被删除",
+      "raw": "[EFX-0011 VERI-WARNING] Input/inout port csi_rxd2_hs_i[7] is unconnected and will be removed. (VDB-8003) (F:\\Projects\\stareye_fpga\\efinity\\m2_ar0135_ddr_hdmi_i3\\example_top.v:167)"
+    },
+    {
+      "id": "W285",
+      "log_line": 911,
+      "code": "EFX-0011",
+      "category": "与当前设计无关",
+      "reason": "当前未启用的25MHz/DSI/LVDS/CSI/UART/触摸或LCD输入端口被优化；当前相机数据PCLK/HREF/VSYNC未被删除",
+      "raw": "[EFX-0011 VERI-WARNING] Input/inout port csi_rxd3_lp_p_i is unconnected and will be removed. (VDB-8003) (F:\\Projects\\stareye_fpga\\efinity\\m2_ar0135_ddr_hdmi_i3\\example_top.v:174)"
+    },
+    {
+      "id": "W286",
+      "log_line": 912,
+      "code": "EFX-0011",
+      "category": "与当前设计无关",
+      "reason": "当前未启用的25MHz/DSI/LVDS/CSI/UART/触摸或LCD输入端口被优化；当前相机数据PCLK/HREF/VSYNC未被删除",
+      "raw": "[EFX-0011 VERI-WARNING] Input/inout port csi_rxd3_lp_n_i is unconnected and will be removed. (VDB-8003) (F:\\Projects\\stareye_fpga\\efinity\\m2_ar0135_ddr_hdmi_i3\\example_top.v:175)"
+    },
+    {
+      "id": "W287",
+      "log_line": 913,
+      "code": "EFX-0011",
+      "category": "与当前设计无关",
+      "reason": "当前未启用的25MHz/DSI/LVDS/CSI/UART/触摸或LCD输入端口被优化；当前相机数据PCLK/HREF/VSYNC未被删除",
+      "raw": "[EFX-0011 VERI-WARNING] Input/inout port csi_rxd3_hs_i[7] is unconnected and will be removed. (VDB-8003) (F:\\Projects\\stareye_fpga\\efinity\\m2_ar0135_ddr_hdmi_i3\\example_top.v:176)"
+    },
+    {
+      "id": "W288",
+      "log_line": 914,
+      "code": "EFX-0011",
+      "category": "与当前设计无关",
+      "reason": "当前未启用的25MHz/DSI/LVDS/CSI/UART/触摸或LCD输入端口被优化；当前相机数据PCLK/HREF/VSYNC未被删除",
+      "raw": "[EFX-0011 VERI-WARNING] Input/inout port dsi_txd0_lp_p_i is unconnected and will be removed. (VDB-8003) (F:\\Projects\\stareye_fpga\\efinity\\m2_ar0135_ddr_hdmi_i3\\example_top.v:235)"
+    },
+    {
+      "id": "W289",
+      "log_line": 915,
+      "code": "EFX-0011",
+      "category": "与当前设计无关",
+      "reason": "当前未启用的25MHz/DSI/LVDS/CSI/UART/触摸或LCD输入端口被优化；当前相机数据PCLK/HREF/VSYNC未被删除",
+      "raw": "[EFX-0011 VERI-WARNING] Input/inout port dsi_txd0_lp_n_i is unconnected and will be removed. (VDB-8003) (F:\\Projects\\stareye_fpga\\efinity\\m2_ar0135_ddr_hdmi_i3\\example_top.v:236)"
+    },
+    {
+      "id": "W290",
+      "log_line": 916,
+      "code": "EFX-0011",
+      "category": "与当前设计无关",
+      "reason": "当前未启用的25MHz/DSI/LVDS/CSI/UART/触摸或LCD输入端口被优化；当前相机数据PCLK/HREF/VSYNC未被删除",
+      "raw": "[EFX-0011 VERI-WARNING] Input/inout port dsi_txd1_lp_p_i is unconnected and will be removed. (VDB-8003) (F:\\Projects\\stareye_fpga\\efinity\\m2_ar0135_ddr_hdmi_i3\\example_top.v:237)"
+    },
+    {
+      "id": "W291",
+      "log_line": 917,
+      "code": "EFX-0011",
+      "category": "与当前设计无关",
+      "reason": "当前未启用的25MHz/DSI/LVDS/CSI/UART/触摸或LCD输入端口被优化；当前相机数据PCLK/HREF/VSYNC未被删除",
+      "raw": "[EFX-0011 VERI-WARNING] Input/inout port dsi_txd1_lp_n_i is unconnected and will be removed. (VDB-8003) (F:\\Projects\\stareye_fpga\\efinity\\m2_ar0135_ddr_hdmi_i3\\example_top.v:238)"
+    },
+    {
+      "id": "W292",
+      "log_line": 918,
+      "code": "EFX-0011",
+      "category": "与当前设计无关",
+      "reason": "当前未启用的25MHz/DSI/LVDS/CSI/UART/触摸或LCD输入端口被优化；当前相机数据PCLK/HREF/VSYNC未被删除",
+      "raw": "[EFX-0011 VERI-WARNING] Input/inout port dsi_txd2_lp_p_i is unconnected and will be removed. (VDB-8003) (F:\\Projects\\stareye_fpga\\efinity\\m2_ar0135_ddr_hdmi_i3\\example_top.v:239)"
+    },
+    {
+      "id": "W293",
+      "log_line": 919,
+      "code": "EFX-0011",
+      "category": "与当前设计无关",
+      "reason": "当前未启用的25MHz/DSI/LVDS/CSI/UART/触摸或LCD输入端口被优化；当前相机数据PCLK/HREF/VSYNC未被删除",
+      "raw": "[EFX-0011 VERI-WARNING] Input/inout port dsi_txd2_lp_n_i is unconnected and will be removed. (VDB-8003) (F:\\Projects\\stareye_fpga\\efinity\\m2_ar0135_ddr_hdmi_i3\\example_top.v:240)"
+    },
+    {
+      "id": "W294",
+      "log_line": 920,
+      "code": "EFX-0011",
+      "category": "与当前设计无关",
+      "reason": "当前未启用的25MHz/DSI/LVDS/CSI/UART/触摸或LCD输入端口被优化；当前相机数据PCLK/HREF/VSYNC未被删除",
+      "raw": "[EFX-0011 VERI-WARNING] Input/inout port dsi_txd3_lp_p_i is unconnected and will be removed. (VDB-8003) (F:\\Projects\\stareye_fpga\\efinity\\m2_ar0135_ddr_hdmi_i3\\example_top.v:241)"
+    },
+    {
+      "id": "W295",
+      "log_line": 921,
+      "code": "EFX-0011",
+      "category": "与当前设计无关",
+      "reason": "当前未启用的25MHz/DSI/LVDS/CSI/UART/触摸或LCD输入端口被优化；当前相机数据PCLK/HREF/VSYNC未被删除",
+      "raw": "[EFX-0011 VERI-WARNING] Input/inout port dsi_txd3_lp_n_i is unconnected and will be removed. (VDB-8003) (F:\\Projects\\stareye_fpga\\efinity\\m2_ar0135_ddr_hdmi_i3\\example_top.v:242)"
+    },
+    {
+      "id": "W296",
+      "log_line": 922,
+      "code": "EFX-0011",
+      "category": "与当前设计无关",
+      "reason": "当前未启用的25MHz/DSI/LVDS/CSI/UART/触摸或LCD输入端口被优化；当前相机数据PCLK/HREF/VSYNC未被删除",
+      "raw": "[EFX-0011 VERI-WARNING] Input/inout port uart_rx_i is unconnected and will be removed. (VDB-8003) (F:\\Projects\\stareye_fpga\\efinity\\m2_ar0135_ddr_hdmi_i3\\example_top.v:247)"
+    },
+    {
+      "id": "W297",
+      "log_line": 923,
+      "code": "EFX-0011",
+      "category": "与当前设计无关",
+      "reason": "模块FLASH strobe输入未使用；它不是SPI Flash，也不是相机RESET",
+      "raw": "[EFX-0011 VERI-WARNING] Input/inout port cmos_ctl1 is unconnected and will be removed. (VDB-8003) (F:\\Projects\\stareye_fpga\\efinity\\m2_ar0135_ddr_hdmi_i3\\example_top.v:266)"
+    },
+    {
+      "id": "W298",
+      "log_line": 924,
+      "code": "EFX-0011",
+      "category": "与当前设计无关",
+      "reason": "当前未启用的25MHz/DSI/LVDS/CSI/UART/触摸或LCD输入端口被优化；当前相机数据PCLK/HREF/VSYNC未被删除",
+      "raw": "[EFX-0011 VERI-WARNING] Input/inout port lcd_tp_sda_i is unconnected and will be removed. (VDB-8003) (F:\\Projects\\stareye_fpga\\efinity\\m2_ar0135_ddr_hdmi_i3\\example_top.v:316)"
+    },
+    {
+      "id": "W299",
+      "log_line": 925,
+      "code": "EFX-0011",
+      "category": "与当前设计无关",
+      "reason": "当前未启用的25MHz/DSI/LVDS/CSI/UART/触摸或LCD输入端口被优化；当前相机数据PCLK/HREF/VSYNC未被删除",
+      "raw": "[EFX-0011 VERI-WARNING] Input/inout port lcd_tp_scl_i is unconnected and will be removed. (VDB-8003) (F:\\Projects\\stareye_fpga\\efinity\\m2_ar0135_ddr_hdmi_i3\\example_top.v:320)"
+    },
+    {
+      "id": "W300",
+      "log_line": 926,
+      "code": "EFX-0011",
+      "category": "与当前设计无关",
+      "reason": "当前未启用的25MHz/DSI/LVDS/CSI/UART/触摸或LCD输入端口被优化；当前相机数据PCLK/HREF/VSYNC未被删除",
+      "raw": "[EFX-0011 VERI-WARNING] Input/inout port lcd_tp_int_i is unconnected and will be removed. (VDB-8003) (F:\\Projects\\stareye_fpga\\efinity\\m2_ar0135_ddr_hdmi_i3\\example_top.v:324)"
+    },
+    {
+      "id": "W301",
+      "log_line": 927,
+      "code": "EFX-0011",
+      "category": "与当前设计无关",
+      "reason": "当前未启用的25MHz/DSI/LVDS/CSI/UART/触摸或LCD输入端口被优化；当前相机数据PCLK/HREF/VSYNC未被删除",
+      "raw": "[EFX-0011 VERI-WARNING] Input/inout port lcd_b7_0_i[7] is unconnected and will be removed. (VDB-8003) (F:\\Projects\\stareye_fpga\\efinity\\m2_ar0135_ddr_hdmi_i3\\example_top.v:344)"
+    },
+    {
+      "id": "W302",
+      "log_line": 928,
+      "code": "EFX-0011",
+      "category": "与当前设计无关",
+      "reason": "当前未启用的25MHz/DSI/LVDS/CSI/UART/触摸或LCD输入端口被优化；当前相机数据PCLK/HREF/VSYNC未被删除",
+      "raw": "[EFX-0011 VERI-WARNING] Input/inout port lcd_g7_0_i[7] is unconnected and will be removed. (VDB-8003) (F:\\Projects\\stareye_fpga\\efinity\\m2_ar0135_ddr_hdmi_i3\\example_top.v:345)"
+    },
+    {
+      "id": "W303",
+      "log_line": 929,
+      "code": "EFX-0011",
+      "category": "与当前设计无关",
+      "reason": "当前未启用的25MHz/DSI/LVDS/CSI/UART/触摸或LCD输入端口被优化；当前相机数据PCLK/HREF/VSYNC未被删除",
+      "raw": "[EFX-0011 VERI-WARNING] Input/inout port lcd_r7_0_i[7] is unconnected and will be removed. (VDB-8003) (F:\\Projects\\stareye_fpga\\efinity\\m2_ar0135_ddr_hdmi_i3\\example_top.v:346)"
+    }
+  ]
+}

@@ -1,13 +1,13 @@
 # 星眸项目状态
 
-更新日期：2026-10-02。
+更新日期：2026-10-03。
 
 ## 当前阶段与交接
 
-- P0：背景与其余外设需求仍待冻结；M0：基础验收通过（I3编译、用户报告JTAG配置与流水灯定性PASS）；M1：PASS（独立HDMI编译/时序、用户JTAG临时下载及图案定性验收；摄像头直通未验收）；M2～M7：未开始。
+- P0：背景与其余外设需求仍待冻结；M0：基础验收通过（I3编译、用户报告JTAG配置与流水灯定性PASS）；M1：PASS（独立HDMI编译/时序、用户JTAG临时下载及图案定性验收；摄像头直通未验收）；M2：PASS（新I3相机→DDR→HDMI基础链路；用户JTAG临时下载，1280×720@60Hz、10～15分钟定性正常）；M3～M7：未开始。
 - AGENTS.md 已经识别；已有自动模型调度原则保持不变。
-- 自动委派能力已经具备；历史骨架/Git初始化顺序委派Sol/Medium，本轮M1按L3顺序委派Astra/Medium；同一时间只有一个主线写入者，主会话负责最终验收。
-- 文件化交接初始化已完成；M0最小LED副本基础验收通过并提交，本轮M1实物验收与证据整改见文末及H-20261002-10。其余外设/需求仍不冻结。
+- 自动委派能力已经具备；历史骨架/Git初始化顺序委派Sol/Medium，M1与本轮M2按L3顺序委派Astra/Medium；同一时间只有一个主线写入者，主会话负责最终验收。
+- 文件化交接初始化已完成；M0最小LED副本基础验收通过并提交，M1实物验收见历史记录，本轮M2离线迁移收尾见文末及H-20261003-12。其余外设/需求仍不冻结。
 - 历史P0资料核查曾委派Sol/Medium但pending_init，取消后由主会话接手；历史最小LED工程选择由Sol/Medium只读核查。当前M1的Astra委派与验收见文末。
 - M0仅复制厂商LED示例；配置/完整编译及用户JTAG、流水灯定性结果已验收，不新增算法RTL。M0 bit持久性和长期稳定性未验证；M1独立HDMI已由用户定性验收；显示参数和复位鲁棒性边界见文末。
 
@@ -94,7 +94,7 @@
 - 没有编译、仿真、综合、下载或 Flash 操作；用户验收仅为 JTAG 识别，不标记点灯通过。P0 尚未整体冻结，本轮授权到参考工程选择/编译前核查。
 - 主会话最终静态验收：六份相关文档链接无缺失、六项用户 JTAG 事实齐全；AGENTS/原协作方案与七份厂商候选源配置/RTL/调试文件 SHA256 保持不变；实现目录为空，git diff --check 通过，main 分支/暂存区为空。用户已有 tools/ 与 reference/ 文件保留，未暂存或提交。
 
-## P0 历史待确认清单（最新状态以文末M1验收为准）
+## P0 历史待确认清单（历史清单，最新状态以文末M2记录为准）
 
 | 事项 | 状态 |
 | --- | --- |
@@ -175,7 +175,7 @@
 - Git保持main，HEAD仍为M0提交；暂存区为空，本轮未git add/commit。变更范围和大小见[CHANGE_SCOPE.md](../reports/m1_hdmi_i3/CHANGE_SCOPE.md)，生成物排除证据见root_review.json。关键结果见[BUILD_REPORT.md](../reports/m1_hdmi_i3/BUILD_REPORT.md)、[PIN_CLOCK_CHECK.md](../reports/m1_hdmi_i3/PIN_CLOCK_CHECK.md)及[CDC_RESET_REVIEW.md](../reports/m1_hdmi_i3/CDC_RESET_REVIEW.md)。
 - Astra完成后停写，主会话独立读取最终报告、核对SHA/源文件/约束与原理图，并接回文档维护；M2～M7未开始。
 
-## M1独立HDMI实物验收与收尾（2026-10-02，当前）
+## M1独立HDMI实物验收与收尾（2026-10-02，历史基线）
 
 - **M1独立HDMI基线：PASS**。完整编译/时序PASS、用户报告JTAG临时下载PASS、测试图定性显示PASS分开记录；不是摄像头直通验收，也不是复位鲁棒性或HDMI电气合规认证。
 - 用户确认画面循环显示黑白灰矩形、彩色曲线、横向及竖向多色矩形条纹；持续观察约几分钟，无闪烁、花屏、黑屏、撕裂或其他异常。显示器识别分辨率和刷新率待用户确认；源工程目标1920×1080@60Hz不冒充显示器读数。
@@ -186,3 +186,50 @@
 - **保留风险**：PLL LOCKED异步释放复位/短脉冲、启动和失锁恢复未经专项验证；用户数分钟正常显示不消除该结构风险。33条综合告警及未使用25MHz输入原样保留，详见构建报告。
 - Git main；以M0提交a8c39c93a06eeb0686cbb5c13fd44717d49195fa为父基线，独立提交消息`chore: complete M1 HDMI baseline validation`，提交完成与哈希以git log及本轮最终回复为准。显式文件清单见COMMIT_SCOPE.md；.gitattributes仅对M1工程/脚本/报告禁用换行规范化，使暂存blob与证据SHA256逐字对应；排除bit/outflow/work/cache/lock/reference/tools/document，不使用git add .。
 - [实物验收](../reports/m1_hdmi_i3/ACCEPTANCE_REPORT.md)、[最终实现绑定](../reports/m1_hdmi_i3/FINAL_IMPLEMENTATION_AUDIT.md)、[下一阶段接线前核查](AR0135_PRECONNECT_CHECK.md)。AR0135尚未连接，摄像头接口/供电/复位、LED6/7共享管脚与旧Flash冷启动必须先核查；M2～M7未开始。
+
+## M2本轮实物确认（2026-10-02）
+
+用户文字确认：AR0135相机PCB V5.0；核心板VF-Ti60F225 V1.5；底板VF-Ti60/125F225 V1.5；DDR丝印SEC 307 / K4B4G1646 / 46E BYMA，用户确认Samsung K4B4G1646E-BYMA，4Gbit、256M×16、512MiB。FPGA为Ti60F225I3，Efinity位于E:/Efinity/2025.1，实际版本2025.1.110.5.9。依据是用户实物文字确认，代理未独立检查实物。原理图MT41J128M16与实物不同，DDR参数按实物重新核查。
+
+相机仍断开，旧Flash官方流水灯仍可能驱动共享R3/R4。V5.0针脚、朝向、供电、电平及冷启动隔离未经确认，禁止接入或上电相机。AR0135CS数据手册p17 Table12规定VIN/VOUT绝对最大VDD_IO+0.3V；旧2019模块图VDDIO=2.8V对应3.1V。若V5.0仍使用该供电且无转换，当前3.3V XCLK/SCL/主动SDA可能超过该上限；这是条件性资料风险，不是实物超压或损坏证据。必须确认V5.0电平转换后才能接线。
+
+本轮授权M2完整离线迁移/编译，不授权Programmer、JTAG下载、SPI Active、Flash、摄像头连接、灰度化或Sobel。离线结果见reports/m2_ar0135_ddr_hdmi_i3/BUILD_REPORT.md；不把编译等同DDR校准或相机直通验收。
+
+## M2离线迁移与主会话验收（2026-10-03，历史离线记录）
+
+- 项目：**m2_ar0135_ddr_hdmi_i3**；阶段：**M2进行中**；实物型号核查主要完成；DDR型号阻塞解除；I3离线迁移/完整编译/已约束路径STA通过；相机接线仍禁止。未标记M2整体PASS。
+- 用户实物版本/DDR丝印文字确认见上一节；Samsung K4B4G1646E-BYMA取代旧MT41J128M16原理图作为配置依据，row15/col10/bank3、x16、512MiB；频率192/384MHz保持，CL6/CWL5、额外READ_ENABLE_PIPELINE7显式审查。
+- 官方projectdb、IPM与DesignAPI设置Titanium/Ti60F225/I3并再生成接口/SDC；DdrCtrl v5.14、W0_FIFO_8 v8.0/TITANIUM；其他IP和原厂业务RTL保持，不新增算法RTL。
+- Efinity2025.1.110.5.9最终第三轮完整构建2026-10-02 20:43:53～20:45:03（北京时间），退出0，map/interface/pnr/离线pgm均PASS。第一轮setup−0.832ns未签收；sys约束统一保守精度10.416ns、CMOS时钟先定义再约束、DDR宽泛时钟组不复制；硬件PLL不变，未放宽DDR路径。
+- 主会话独立复核最终数据库/源清单/器件、逐路DDR、出口集合及SHA：全局setup/hold **+0.188/+0.026ns**，DDR输入+0.662/+0.404ns、81路输出+0.635/+0.036ns、30路HDMI数据出口+11.264/+0.070ns。no_clock/内部无约束/多时钟均0；仍有5输入、136输出未定延时，不宣称全部I/O或CDC完成验收。
+- 最终bit路径 `F:/Projects/stareye_fpga/efinity/m2_ar0135_ddr_hdmi_i3/outflow/Ti60_Demo.bit`，**2,137,974字节**；SHA256 **524213AA27C5797074E9BD71D0761EB31F9D09AEFAC825FA7201CAA6DD33940A**。不暂存bit；隔离STA前后原DB/bit/生成物SHA及mtime均不变。
+- 最新综合批次303条告警记录及1条post-synthesis 100 warnings汇总，非303个独立根因；另三条相邻GPIO噪声提示及IV查找告警。加密DDR内部告警未获完整澄清，复位/CDC/校准/刷新与温度仍须验证。
+- 原厂457项、M0 71项内容/大小/mtime不变；M1 142项不变，历史临时.lock移除单独记录，不宣称全部143路径保留。
+- Astra/Medium完成受控迁移/编译后因用量限制停止；主会话接回唯一写入权，补齐最终验收与文档。无并发主线写入。
+- Git当前main；HEAD仍为M1提交 **d2f48c6e8befa16c9eedea9c07aca82ff16b9879**；本轮未git add/commit，暂存区为空。M2 IPM缓存单独忽略，字节完整性规则扩展至M2；document/reference/tools未修改。
+- 尚未确认：V5.0 20针/朝向/电平转换、V1.5实际电源与VREF、旧Flash精确输出与可靠隔离；DDR校准成功、内存读写/容量/温度刷新、相机PCLK/帧率/像素格式实测及M2 HDMI实物结果。相机继续断开，不Programmer、不下载、不SPI Active/Flash、不灰度化/Sobel。
+- [构建报告](../reports/m2_ar0135_ddr_hdmi_i3/BUILD_REPORT.md)、[DDR/IP对照](../reports/m2_ar0135_ddr_hdmi_i3/DDR_IP_MIGRATION.md)、[最终证据绑定](../reports/m2_ar0135_ddr_hdmi_i3/FINAL_IMPLEMENTATION_BINDING.md)、[接线/迁移核查](../reports/m2_ar0135_ddr_hdmi_i3/CHECK_REPORT.md)。
+
+
+## M2最终审查与用户新增实测（2026-10-03，历史上板前记录）
+
+- 用户确认AR0135 V5.0实际引脚与官方demo配置一致；不再将针号一致性作为阻塞。
+- 用户确认已下载厂商目录自带.bit，正常获取图像，相机当前仍连接。目录：document/VF-Ti60F225_HDK_V2.1_20251009/07-FPGA_HDL_Image-2023.2/01-1_Ti60_AR0135_HDMI_1280720。厂商参考链路功能通过；此次文件完整路径/hash、下载模式/原始日志、观察时间/显示参数未提供。
+- 新m2_ar0135_ddr_hdmi_i3仍为离线编译/已约束STA通过；厂商旧bit实測不等同新I3验收，M2整体进行中。旧文档“相机仍断开/针脚未确认”是此前历史，已被本节用户新事实取代。
+- Astra / Medium只读审查，主会话独立复核并写报告。303告警记录：34必须修复或澄清、44已知IP噪声、28实物验证、197当前链路无关；另100网表告警汇总不相加，3接口提示与IV告警单列。
+- 已确认实现：SCL/SDA空闲主动高、并非完整开漏；CTL2/3无驱动→最终常0，OE低使能；无CTL0/RESET控制端口。旧图2.8V/3.3V及PCLK分压为条件风险，不证明当前实物不兼容。实际电平/转换、配置前隔离、旧Flash R3/R4争用仍需核实。
+- 专用安全启动A＋硬件隔离为候选建议，完整M2固化B需新I3实测后再评估；均未实施。Flash读回支持但会先加载bridge改变FPGA配置；备份/恢复方案已记录，未操作。
+- 389项当前构建输入/bit/DB哈希匹配；bit 2,137,974字节，SHA256 524213AA27C5797074E9BD71D0761EB31F9D09AEFAC825FA7201CAA6DD33940A。原厂457项历史清单现仅Ti60_Demo.xml变化，仍C4/保存版本2025.1.110.5.9；不推断原因或覆盖。
+- 审查报告：[RELEASE_REVIEW](../reports/m2_ar0135_ddr_hdmi_i3/preboard_release/RELEASE_REVIEW.md)、[20针](../reports/m2_ar0135_ddr_hdmi_i3/preboard_release/CAMERA_PIN_AUDIT.md)、[安全启动/Flash](../reports/m2_ar0135_ddr_hdmi_i3/preboard_release/COLD_BOOT_AND_FLASH_PLAN.md)。
+- 本轮不Programmer/下载/Flash、不接拔相机、不编译/STA、不改RTL/IP/工程、不git add/commit；main HEAD仍d2f48c6e8befa16c9eedea9c07aca82ff16b9879，暂存区空。新I3下载/Flash/冷启动测试不自动放行。
+
+## M2新I3实物验收与归档（2026-10-03，当前权威状态）
+
+- **M2基础链路PASS**：用户确认新Ti60F225I3 bitstream经JTAG临时下载；AR0135实时图像；显示器识别1280×720@60Hz；连续10～15分钟正常，移动镜头/运动物体时持续更新，无黑屏/闪屏/花屏/冻结/明显撕裂。不是此前厂商旧bit验收。
+- 离线I3完整编译/已约束STA、用户JTAG配置、相机功能、HDMI显示及有限时段稳定性分别签收；没有全面DDR压力/全容量/温度/校准信号、CDC/电气/复位/冷启动认证。灰度化延期，M3～M7未开始。
+- 本轮用户未SPI Active/Flash，代理未操作Programmer/板卡，未重编译或STA。旧Flash流水灯及R3/R4共享线风险、既有告警/加密IP/复位问题保留。
+- 当前构建bit为2,137,974字节，SHA256 524213AA27C5797074E9BD71D0761EB31F9D09AEFAC825FA7201CAA6DD33940A；用户未提供Programmer原始日志/下载时哈希，现有文件身份不冒充下载过程绑定。
+- 当前XML及csi_rx/dsi_tx/多FIFO settings/HDL有GUI保存/再生成差异，部分旧.v/.vh缺失；不能宣称全部当前输入与最终已编译构建一致，再生成版本未重新编译。历史389项哈希匹配仅描述当时；主会话另核编译源快照和提交范围，不覆盖用户工程。
+- [实物验收报告](../reports/m2_ar0135_ddr_hdmi_i3/ACCEPTANCE_REPORT.md)、[用户反馈整理](../reports/m2_ar0135_ddr_hdmi_i3/jtag_user_report.txt)、[本轮交接](HANDOFF.md)。用户已授权独立M2提交，main父基线d2f48c6e8befa16c9eedea9c07aca82ff16b9879；由主会话最终复核后执行，提交状态/哈希以git log为准，不自动进入后续阶段。
+
+主会话新增只读核查：22业务设计源、peri/SDC、DdrCtrl v5.14及W0_FIFO_8 v8.0与最终构建哈希一致；再生成差异位于附带CSI/DSI及其他FIFO，当前bit未变。已归档独立final_build/source_snapshot，共69文件/2,689,858字节，逐项哈希匹配最终构建输入清单；主会话检查完成，不覆盖当前工程。源基线说明[SOURCE_BASELINE.md](../reports/m2_ar0135_ddr_hdmi_i3/SOURCE_BASELINE.md)已由主会话完成，当前再生成附带IP无新编译证据。
