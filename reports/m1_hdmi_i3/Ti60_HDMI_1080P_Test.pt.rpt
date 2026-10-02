@@ -1,0 +1,450 @@
+
+Efinity Interface Designer Report
+Version: 2025.1.110.5.9
+Date: 2026-10-01 21:28
+
+Copyright (C) 2013 - 2025 Efinix Inc. All rights reserved.
+
+Device: Ti60F225
+Project: Ti60_HDMI_1080P_Test
+
+Package: 225-ball FBGA (final)
+Timing Model: I3 (final)
+Configuration Mode: active (x1)
+
+---------- Table of Contents (begin) ----------
+   1. Periphery Usage Summary
+   2. Generated Output Files
+   3. I/O Banks Summary
+   4. Global Connection Summary
+   5. Clock Region Usage Summary
+   6. Dual-Function Configuration Pin Usage
+   7. GPIO Usage Summary
+   8. PLL Usage Summary
+   9. Oscillator Usage Summary
+   10. Clock Mux Usage Summary
+   11. Configuration Control Usage Summary
+   12. Configuration SEU Detection Usage Summary
+   13. JTAG Usage Summary
+   14. LVDS Rx Usage Summary
+   15. LVDS Tx Usage Summary
+   16. Bidirectional LVDS Usage Summary
+   17. MIPI RX Lane Usage Summary
+   18. MIPI TX Lane Usage Summary
+   19. Design Issues
+---------- Table of Contents (end) ------------
+
+---------- 1. Periphery Usage Summary (begin) ----------
+clkmux: 4 / 4 (100.0%)
+control: 0 / 1 (0.0%)
+gpio: 8 / 23 (34.78%)
+hsio: 4 / 70 (5.71%)
+	lvds or mipi lane: 4
+hsio_bg: 0 / 8 (0.0%)
+hvio_poc: 0 / 4 (0.0%)
+jtag: 0 / 4 (0.0%)
+osc: 0 / 1 (0.0%)
+pll: 2 / 4 (50.0%)
+seu: 0 / 1 (0.0%)
+---------- Periphery Usage Summary (end) ----------
+
+---------- 2. Generated Output Files (begin) ----------
+Interface Configuration: Ti60_HDMI_1080P_Test.interface.csv
+Peripheral Block Configuration: Ti60_HDMI_1080P_Test.lpf
+Pinout Report: Ti60_HDMI_1080P_Test.pinout.rpt
+Pinout CSV: Ti60_HDMI_1080P_Test.pinout.csv
+Timing Report: Ti60_HDMI_1080P_Test.pt_timing.rpt
+Timing SDC Template: Ti60_HDMI_1080P_Test.pt.sdc
+Verilog Template: Ti60_HDMI_1080P_Test_template.v
+Option Register File: Ti60_HDMI_1080P_Test_or.ini
+---------- Generated Output Files (end) ----------
+
+---------- 3. I/O Banks Summary (begin) ----------
+
++----------+-------------+
+| I/O Bank | I/O Voltage |
++----------+-------------+
+|    1A    |    1.8 V    |
+|    1B    |    1.8 V    |
+|    2A    |    1.8 V    |
+|    2B    |    1.8 V    |
+|    3A    |    1.8 V    |
+|    3B    |    1.8 V    |
+|    4A    |    1.8 V    |
+|    4B    |    1.8 V    |
+|    BL    |    3.3 V    |
+|    BR    |    3.3 V    |
+|    TL    |    3.3 V    |
+|    TR    |    3.3 V    |
++----------+-------------+
+
+---------- I/O Banks Summary (end) ----------
+
+---------- 4. Global Connection Summary (begin) ----------
+
++-------------------+-----------------+------+
+|      Pin Name     |     Resource    | Type |
++-------------------+-----------------+------+
+|       clk27m      | PLL_TL0.CLKOUT1 | GCLK |
+|     clk_pixel     | PLL_TR0.CLKOUT1 | GCLK |
+|    clk_pixel_5x   | PLL_TR0.CLKOUT2 | GCLK |
+|      clk_ref      | PLL_TR0.CLKOUT0 | GCLK |
+| pll_inst2_CLKOUT0 | PLL_TL0.CLKOUT0 | GCLK |
++-------------------+-----------------+------+
+
+---------- Global Connection Summary (end) ----------
+
+---------- 5. Clock Region Usage Summary (begin) ----------
+
++--------------+----------------+
+| Clock Region | Used/Available |
++--------------+----------------+
+|      B0      |      0/14      |
+|      B1      |      0/14      |
+|      L0      |      0/4       |
+|      L1      |      0/4       |
+|      L2      |      0/4       |
+|      L3      |      0/4       |
+|      L4      |      0/4       |
+|      L5      |      0/4       |
+|      L6      |      0/4       |
+|      L7      |      0/4       |
+|      R0      |      0/4       |
+|      R1      |      0/4       |
+|      R2      |      0/4       |
+|      R3      |      0/4       |
+|      R4      |      0/4       |
+|      R5      |      0/4       |
+|      R6      |      0/4       |
+|      R7      |      0/4       |
+|      T0      |      2/14      |
+|      T1      |      3/14      |
++--------------+----------------+
+
+---------- Clock Region Usage Summary (end) ----------
+
+---------- 6. Dual-Function Configuration Pin Usage (begin) ----------
+
+No instance using dual-function configuration pin.
+
+---------- Dual-Function Configuration Pin Usage (end) ----------
+
+---------- 7. GPIO Usage Summary (begin) ----------
+
+Global Unused Setting: input with weak pullup
+
++---------------+----------+--------+----------+--------------+----------+--------------+-----------------+-------------+
+| Instance Name | Resource |  Mode  | Register | Clock Region | I/O Bank | I/O Standard |     Pad Name    | Package Pin |
++---------------+----------+--------+----------+--------------+----------+--------------+-----------------+-------------+
+|    clk_24M    | GPIOL_11 | input  |          |              |    TL    | 3.3 V LVCMOS | GPIOL_11_PLLIN2 |      C5     |
+|    clk_25M    | GPIOR_29 | input  |          |              |    BR    | 3.3 V LVCMOS | GPIOR_29_PLLIN2 |     R13     |
+|    led_o[0]   | GPIOR_25 | output |          |              |    BR    | 3.3 V LVCMOS |     GPIOR_25    |     P15     |
+|    led_o[1]   | GPIOR_22 | output |          |              |    BR    | 3.3 V LVCMOS |     GPIOR_22    |     P14     |
+|    led_o[2]   | GPIOR_28 | output |          |              |    BR    | 3.3 V LVCMOS |     GPIOR_28    |     R14     |
+|    led_o[3]   | GPIOR_21 | output |          |              |    BR    | 3.3 V LVCMOS |     GPIOR_21    |     N14     |
+|    led_o[4]   | GPIOR_24 | output |          |              |    BR    | 3.3 V LVCMOS |     GPIOR_24    |     N13     |
+|    led_o[5]   | GPIOR_27 | output |          |              |    BR    | 3.3 V LVCMOS |     GPIOR_27    |     P13     |
++---------------+----------+--------+----------+--------------+----------+--------------+-----------------+-------------+
+
+
+Input GPIO Configuration:
+=========================
+
++---------------+-----------+---------------------+-----------------+------+-----------------+--------------+---------------------+-----------------+----------+------------+-------+
+| Instance Name | Input Pin | Alternate Input Pin | Input Clock Pin | DDIO | Deserialization | Pull Up/Down | Dynamic Pull Up Pin | Schmitt Trigger | Bus Hold | Delay Mode | Delay |
++---------------+-----------+---------------------+-----------------+------+-----------------+--------------+---------------------+-----------------+----------+------------+-------+
+|    clk_24M    |           |       clk_24M       |                 |      |     Disable     |     none     |                     |     Disable     | Disable  |  Disable   |   0   |
+|    clk_25M    |           |       clk_25M       |                 |      |     Disable     |     none     |                     |     Disable     | Disable  |  Disable   |   0   |
++---------------+-----------+---------------------+-----------------+------+-----------------+--------------+---------------------+-----------------+----------+------------+-------+
+
+Output GPIO Configuration:
+==========================
+
++---------------+------------+------------------+------+---------------+----------------+-----------+-------+
+| Instance Name | Output Pin | Output Clock Pin | DDIO | Serialization | Drive Strength | Slew Rate | Delay |
++---------------+------------+------------------+------+---------------+----------------+-----------+-------+
+|    led_o[0]   |  led_o[0]  |                  |      |    Disable    |       4        |  Disable  |   0   |
+|    led_o[1]   |  led_o[1]  |                  |      |    Disable    |       4        |  Disable  |   0   |
+|    led_o[2]   |  led_o[2]  |                  |      |    Disable    |       4        |  Disable  |   0   |
+|    led_o[3]   |  led_o[3]  |                  |      |    Disable    |       4        |  Disable  |   0   |
+|    led_o[4]   |  led_o[4]  |                  |      |    Disable    |       4        |  Disable  |   0   |
+|    led_o[5]   |  led_o[5]  |                  |      |    Disable    |       4        |  Disable  |   0   |
++---------------+------------+------------------+------+---------------+----------------+-----------+-------+
+
+---------- GPIO Usage Summary (end) ----------
+
+---------- 8. PLL Usage Summary (begin) ----------
+
++---------------+----------+--------------+--------------+-----------------+---------------+-------------------+-------------------+-----------+--------------+---------+---------+
+| Instance Name | Resource | Clock Region | Clock Source | Reference Clock | Feedback Mode |   Feedback Clock  |      Clkout0      |  Clkout1  |   Clkout2    | Clkout3 | Clkout4 |
++---------------+----------+--------------+--------------+-----------------+---------------+-------------------+-------------------+-----------+--------------+---------+---------+
+|    pll_27m    | PLL_TL0  |              |   external   |     clk_24M     |     local     | pll_inst2_CLKOUT0 | pll_inst2_CLKOUT0 |   clk27m  |              |         |         |
+|    sys_pll    | PLL_TR0  |    R7,T1     |     core     |      clk27m     |     local     |      clk_ref      |      clk_ref      | clk_pixel | clk_pixel_5x |         |         |
++---------------+----------+--------------+--------------+-----------------+---------------+-------------------+-------------------+-----------+--------------+---------+---------+
+
+***** PLL 0 *****
+
+Instance Name                 : pll_27m
+Resource                      : PLL_TL0
+Locked Pin Name               : pll_27m_LOCKED
+Clock Source                  : external
+Reference Clock Resource      : GPIOL_11
+Reference Clock               : clk_24M
+Feedback Mode                 : local
+Feedback Clock                : pll_inst2_CLKOUT0
+
+Reference Clock Frequency     : 24.0000 MHz
+Reference Clock Period        : 41.6667 ns
+Multiplier (M)                : 1
+Pre-Divider (N)               : 1
+VCO Frequency                 : 5184.0000 MHz
+Post-Divider (O)              : 2
+PLL Frequency                 : 2592.0000 MHz
+
+Output Clock 0
+Clock Pin Name                : pll_inst2_CLKOUT0
+Output Divider                : 108
+Dynamic Phase Shift           : Disable
+Phase Setting                 : 0
+Phase Degree                  : 0.0000
+Invert Output                 : false
+Output Frequency              : 24.0000 MHz
+Output Period                 : 41.667 ns
+
+Output Clock 1
+Clock Pin Name                : clk27m
+Output Divider                : 96
+Dynamic Phase Shift           : Disable
+Phase Setting                 : 0
+Phase Degree                  : 0.0000
+Invert Output                 : false
+Output Frequency              : 27.0000 MHz
+Output Period                 : 37.037 ns
+
+Frequency calculations:
+	VCO = REFCLK * ((M * FBK) /N)
+	    = 24.0000 MHz * ((1*216) /1)
+	    = 5184.0000 MHz
+	PLL = VCO / O
+	    = 5184.0000 MHz / 2
+	    = 2592.0000 MHz
+
+	CLKOUT0 = PLL / CLKOUT0_DIV
+	        = 2592.0000 MHz / 108
+	        = 24.0000 MHz
+	CLKOUT1 = PLL / CLKOUT1_DIV
+	        = 2592.0000 MHz / 96
+	        = 27.0000 MHz
+
+SDC Constraints:
+	create_clock -period 41.667 -name pll_inst2_CLKOUT0 [get_ports {pll_inst2_CLKOUT0}]
+	create_clock -period 37.037 -name clk27m [get_ports {clk27m}]
+
+***** PLL 1 *****
+
+Instance Name                 : sys_pll
+Resource                      : PLL_TR0
+Reset Pin Name                : sys_pll_RSTN
+Locked Pin Name               : sys_pll_LOCKED
+Clock Source                  : core
+Reference Clock               : clk27m
+Feedback Mode                 : local
+Feedback Clock                : clk_ref
+
+Reference Clock Frequency     : 27.0000 MHz
+Reference Clock Period        : 37.0370 ns
+Multiplier (M)                : 1
+Pre-Divider (N)               : 1
+VCO Frequency                 : 2970.0000 MHz
+Post-Divider (O)              : 1
+PLL Frequency                 : 2970.0000 MHz
+
+Output Clock 0
+Clock Pin Name                : clk_ref
+Output Divider                : 110
+Dynamic Phase Shift           : Disable
+Phase Setting                 : 0
+Phase Degree                  : 0.0000
+Invert Output                 : false
+Output Frequency              : 27.0000 MHz
+Output Period                 : 37.037 ns
+
+Output Clock 1
+Clock Pin Name                : clk_pixel
+Output Divider                : 20
+Dynamic Phase Shift           : Disable
+Phase Setting                 : 0
+Phase Degree                  : 0.0000
+Invert Output                 : false
+Output Frequency              : 148.5000 MHz
+Output Period                 : 6.734 ns
+
+Output Clock 2
+Clock Pin Name                : clk_pixel_5x
+Output Divider                : 4
+Dynamic Phase Shift           : Disable
+Phase Setting                 : 2
+Phase Degree                  : 90.0000
+Invert Output                 : false
+Output Frequency              : 742.5000 MHz
+Output Period                 : 1.347 ns
+
+Frequency calculations:
+	VCO = REFCLK * ((M * FBK) /N)
+	    = 27.0000 MHz * ((1*110) /1)
+	    = 2970.0000 MHz
+	PLL = VCO / O
+	    = 2970.0000 MHz / 1
+	    = 2970.0000 MHz
+
+	CLKOUT0 = PLL / CLKOUT0_DIV
+	        = 2970.0000 MHz / 110
+	        = 27.0000 MHz
+	CLKOUT1 = PLL / CLKOUT1_DIV
+	        = 2970.0000 MHz / 20
+	        = 148.5000 MHz
+	CLKOUT2 = PLL / CLKOUT2_DIV
+	        = 2970.0000 MHz / 4
+	        = 742.5000 MHz
+
+SDC Constraints:
+	create_clock -period 37.037 -name clk_ref [get_ports {clk_ref}]
+	create_clock -period 6.734 -name clk_pixel [get_ports {clk_pixel}]
+	create_clock -waveform {0.337 1.010} -period 1.347 -name clk_pixel_5x [get_ports {clk_pixel_5x}]
+
+---------- PLL Usage Summary (end) ----------
+
+---------- 9. Oscillator Usage Summary (begin) ----------
+
+No Oscillator was configured
+
+---------- Oscillator Usage Summary (end) ----------
+
+---------- 10. Clock Mux Usage Summary (begin) ----------
+
++----------+-----------------+
+| Resource | Output Assigned |
++----------+-----------------+
+| CLKMUX_B |        0        |
+| CLKMUX_L |        2        |
+| CLKMUX_R |        3        |
+| CLKMUX_T |        0        |
++----------+-----------------+
+
+***** CLOCKMUX 0 *****
+
+Resource: CLKMUX_B
+
+Dynamic Muxes
+Dynamic Mux 0                       : Disable
+Dynamic Mux 7                       : Disable
+
+***** CLOCKMUX 1 *****
+
+Resource: CLKMUX_L
+
+Clock mux assignment:
+
++-------------------+---------+--------------+-----------------+--------+
+|       Input       | Mux Pin | Top Mux: Sel | Bottom Mux: Sel | Output |
++-------------------+---------+--------------+-----------------+--------+
+|       clk27m      | PLL1[1] |              |     BOT_1: 2    | OUT[1] |
+| pll_inst2_CLKOUT0 | PLL1[0] |              |     BOT_4: 2    | OUT[4] |
++-------------------+---------+--------------+-----------------+--------+
+
+Dynamic Muxes
+Dynamic Mux 0                       : Disable
+Dynamic Mux 7                       : Disable
+
+***** CLOCKMUX 2 *****
+
+Resource: CLKMUX_R
+
+Clock mux assignment:
+
++--------------+---------+--------------+-----------------+--------+
+|    Input     | Mux Pin | Top Mux: Sel | Bottom Mux: Sel | Output |
++--------------+---------+--------------+-----------------+--------+
+|  clk_pixel   | PLL1[1] |              |     BOT_1: 2    | OUT[1] |
+|   clk_ref    | PLL1[0] |              |     BOT_4: 2    | OUT[4] |
+| clk_pixel_5x | PLL1[2] |              |     BOT_5: 2    | OUT[5] |
++--------------+---------+--------------+-----------------+--------+
+
+Dynamic Muxes
+Dynamic Mux 0                       : Disable
+Dynamic Mux 7                       : Disable
+
+***** CLOCKMUX 3 *****
+
+Resource: CLKMUX_T
+
+Dynamic Muxes
+Dynamic Mux 0                       : Disable
+Dynamic Mux 7                       : Disable
+
+---------- Clock Mux Usage Summary (end) ----------
+
+---------- 11. Configuration Control Usage Summary (begin) ----------
+
+No Configuration Control was configured
+
+---------- Configuration Control Usage Summary (end) ----------
+
+---------- 12. Configuration SEU Detection Usage Summary (begin) ----------
+
+No Configuration SEU Detection was configured
+
+---------- Configuration SEU Detection Usage Summary (end) ----------
+
+---------- 13. JTAG Usage Summary (begin) ----------
+
+No JTAG was configured
+
+---------- JTAG Usage Summary (end) ----------
+
+---------- 14. LVDS Rx Usage Summary (begin) ----------
+
+No LVDS Rx was configured
+
+---------- LVDS Rx Usage Summary (end) ----------
+
+---------- 15. LVDS Tx Usage Summary (begin) ----------
+
++--------------------+-------------+------------------------------+--------------+--------------+------+--------------------+-----------------------+---------------+-----------+--------------+----------------+------------------------+-------------------+-------------------+--------------+-------+
+|   Instance Name    |   Resource  |          Pad Names           | Package Pins | Clock Region | Mode |       Output       |           OE          | Serialization | Half Rate | Serial Clock | Parallel Clock |         Reset          | Differential Type | Differential, VOD | Pre-Emphasis | Delay |
++--------------------+-------------+------------------------------+--------------+--------------+------+--------------------+-----------------------+---------------+-----------+--------------+----------------+------------------------+-------------------+-------------------+--------------+-------+
+|  tmds_lvds_tx_clk  | GPIOT_PN_04 |    GPIOT_N_04,GPIOT_P_04     |    F8,F7     |      T0      | out  | tmds_lvds_tx_clk_o |  tmds_lvds_tx_clk_oe  |       10      |   Enable  | clk_pixel_5x |   clk_pixel    |  tmds_lvds_tx_clk_rst  |        lvds       |      typical      |  medium low  |   0   |
+| tmds_lvds_tx_data0 | GPIOT_PN_17 | GPIOT_N_17,GPIOT_P_17_PLLIN1 |   B11,A11    |      T1      | out  | tmds_lvds_tx_data0 | tmds_lvds_tx_data0_oe |       10      |   Enable  | clk_pixel_5x |   clk_pixel    | tmds_lvds_tx_data0_rst |        lvds       |      typical      |  medium low  |   0   |
+| tmds_lvds_tx_data1 | GPIOT_PN_00 | GPIOT_N_00,GPIOT_P_00_PLLIN1 |    D5,E6     |      T0      | out  | tmds_lvds_tx_data1 | tmds_lvds_tx_data1_oe |       10      |   Enable  | clk_pixel_5x |   clk_pixel    | tmds_lvds_tx_data1_rst |        lvds       |      typical      |  medium low  |   0   |
+| tmds_lvds_tx_data2 | GPIOT_PN_03 |    GPIOT_N_03,GPIOT_P_03     |    A6,A5     |      T0      | out  | tmds_lvds_tx_data2 | tmds_lvds_tx_data2_oe |       10      |   Enable  | clk_pixel_5x |   clk_pixel    | tmds_lvds_tx_data2_rst |        lvds       |      typical      |  medium low  |   0   |
++--------------------+-------------+------------------------------+--------------+--------------+------+--------------------+-----------------------+---------------+-----------+--------------+----------------+------------------------+-------------------+-------------------+--------------+-------+
+
+---------- LVDS Tx Usage Summary (end) ----------
+
+---------- 16. Bidirectional LVDS Usage Summary (begin) ----------
+
+No Bidirectional LVDS was configured
+
+---------- Bidirectional LVDS Usage Summary (end) ----------
+
+---------- 17. MIPI RX Lane Usage Summary (begin) ----------
+
+No MIPI RX Lane was configured
+
+---------- MIPI RX Lane Usage Summary (end) ----------
+
+---------- 18. MIPI TX Lane Usage Summary (begin) ----------
+
+No MIPI TX Lane was configured
+
+---------- MIPI TX Lane Usage Summary (end) ----------
+
+---------- 19. Design Issues (begin) ----------
+
++---------------+---------------+----------+--------------------+-----------------------------------------------------+
+| Instance Name | Instance Type | Severity |        Rule        |                     Description                     |
++---------------+---------------+----------+--------------------+-----------------------------------------------------+
+|    clk_25M    |      gpio     | warning  | gpio_rule_alt_conn | Connection type pll_clkin must be used by valid PLL |
++---------------+---------------+----------+--------------------+-----------------------------------------------------+
+
+---------- Design Issues (end) ----------

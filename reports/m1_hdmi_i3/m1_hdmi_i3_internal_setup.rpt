@@ -1,0 +1,779 @@
+
+Efinix Timing Path Constraint Report
+Version: 2025.1.110.5.9
+Date: Fri Oct  2 13:12:15 2026
+
+Copyright (C) 2013 - 2025 Efinix, Inc. All rights reserved.
+
+User command: report_timing -npaths 10 -nworst 1 -setup -detail full_path -file {m1_hdmi_i3_internal_setup.rpt}
+
+Timing Model: I3
+	process : typical
+	temperature : -40C to 100C
+	voltage : 0.95 +/-30mV
+	speedgrade : 3
+	technology : t16ff
+	status : final
+
+Summary:
+
+ Path #  | Slack (ns) | Delay (ns) |          Start Pin          |                        End Pin                         |  Launch Clk   |  Capture Clk
+=========================================================================================================================================================
+  1      |  1.656     |  4.114     | u_lcd_display/mult_66|O[1]  | u_rgb2dvi/enc_0/acc[1]~FF_brt_45_brt_47_brt_136|D      | clk_pixel (R) | clk_pixel (R)
+  2      |  1.744     |  4.026     | u_lcd_display/mult_66|O[1]  | u_rgb2dvi/enc_0/acc[1]~FF_brt_44_brt_49_brt_137|D      | clk_pixel (R) | clk_pixel (R)
+  3      |  1.791     |  3.979     | u_lcd_display/mult_66|O[18] | u_rgb2dvi/enc_2/acc[1]~FF_brt_5_brt_11_brt_27_brt_74|D | clk_pixel (R) | clk_pixel (R)
+  4      |  1.824     |  3.946     | u_lcd_display/mult_66|O[18] | tmds_lvds_tx_data2[0]~FF_brt_101|D                     | clk_pixel (R) | clk_pixel (R)
+  5      |  1.841     |  3.929     | u_lcd_display/mult_66|O[8]  | tmds_lvds_tx_data1[9]~FF|D                             | clk_pixel (R) | clk_pixel (R)
+  6      |  1.873     |  3.897     | u_lcd_display/mult_66|O[18] | tmds_lvds_tx_data2[5]~FF_brt_129|D                     | clk_pixel (R) | clk_pixel (R)
+  7      |  1.961     |  3.809     | u_lcd_display/mult_66|O[1]  | u_rgb2dvi/enc_0/acc[1]~FF_brt_44_brt_50_brt_149|D      | clk_pixel (R) | clk_pixel (R)
+  8      |  2.000     |  3.770     | u_lcd_display/mult_66|O[1]  | u_rgb2dvi/enc_0/acc[1]~FF_brt_45_brt_46|D              | clk_pixel (R) | clk_pixel (R)
+  9      |  2.008     |  3.762     | u_lcd_display/mult_66|O[8]  | u_rgb2dvi/enc_1/acc[1]~FF_brt_19_brt_30_brt_69|D       | clk_pixel (R) | clk_pixel (R)
+ 10      |  2.072     |  3.698     | u_lcd_display/mult_66|O[18] | u_rgb2dvi/enc_2/acc[1]~FF_brt_6_brt_25|D               | clk_pixel (R) | clk_pixel (R)
+
+++++ Path 1 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : u_lcd_display/mult_66|CLK                        
+Path End      : u_rgb2dvi/enc_0/acc[1]~FF_brt_45_brt_47_brt_136|D
+Launch Clock  : clk_pixel (RISE)                                 
+Capture Clock : clk_pixel (RISE)                                 
+Slack         : 1.656 (required time - arrival time)             
+Delay         : 4.114                                            
+
+Logic Level             : 11
+Non-global nets on path : 11
+Global nets on path     :  0
+
+Launch Clock Path Delay        : 2.136
++ Clock To Q + Data Path Delay : 4.952
+--------------------------------------
+End-of-path arrival time       : 7.088
+
+Constraint                     : 6.734
++ Capture Clock Path Delay     : 2.136
+- Clock Uncertainty            : 0.126
+--------------------------------------
+End-of-path required time      : 8.744
+
+Launch Clock Path
+          name             model name   delay (ns)  cumulative delay (ns) pins on net    location
+===================================================================================================
+clk_pixel                  inpad          0.000             0.000               0       (219,159)
+clk_pixel                  inpad          0.126             0.126             178       (219,159)
+clk_pixel                  net            2.010             2.136             178       (219,159)
+u_lcd_display/mult_66|CLK  dsp48_prim     0.000             2.136             178       (54,282) 
+
+Data Path
+                      name                         model name   delay (ns)  cumulative delay (ns) pins on net    location
+===========================================================================================================================
+u_lcd_display/mult_66|O[1]                         dsp48_prim     0.835             0.835               2        (54,282)
+u_lcd_display/lcd_data2[1]                         net            0.565             1.400               2        (54,282)
+LUT__1089|in[1]                                    lut            0.063             1.463               2        (60,299)
+LUT__1089|out                                      lut            0.000             1.463               8        (60,299)
+n561                                               net            0.629             2.092               8        (60,299)
+LUT__1098|in[0]                                    lut            0.061             2.153               8        (83,300)
+LUT__1098|out                                      lut            0.000             2.153               8        (83,300)
+n569                                               net            0.396             2.549               7        (83,300)
+LUT__1101|in[2]                                    lut            0.061             2.610               8        (77,298)
+LUT__1101|out                                      lut            0.000             2.610               3        (77,298)
+n572                                               net            0.220             2.830               3        (77,298)
+LUT__1111|in[0]                                    lut            0.063             2.893               3        (78,293)
+LUT__1111|out                                      lut            0.000             2.893               2        (78,293)
+n582                                               net            0.143             3.036               2        (78,293)
+LUT__1112|in[0]                                    lut            0.061             3.097               2        (83,293)
+LUT__1112|out                                      lut            0.000             3.097              14        (83,293)
+u_rgb2dvi/enc_0/n818                               net            0.412             3.509              13        (83,293)
+LUT__1329|in[0]                                    lut            0.061             3.570              14        (85,297)
+LUT__1329|out                                      lut            0.000             3.570               6        (85,297)
+n737                                               net            0.399             3.969               6        (85,297)
+LUT__1336|in[2]                                    lut            0.061             4.030               6        (89,295)
+LUT__1336|out                                      lut            0.000             4.030               6        (89,295)
+u_rgb2dvi/enc_0/LessThan_69/n8                     net            0.306             4.336               6        (89,295)
+LUT__1343|in[0]                                    lut            0.063             4.399               6        (93,293)
+LUT__1343|out                                      lut            0.000             4.399               2        (93,293)
+u_rgb2dvi/enc_0/n622                               net            0.182             4.581               2        (93,293)
+u_rgb2dvi/enc_0/sub_52/add_2/i4|I0                 adder          0.063             4.644               2        (90,293)
+u_rgb2dvi/enc_0/sub_52/add_2/i4|O                  adder          0.000             4.644               3        (90,293)
+u_rgb2dvi/enc_0/n138                               net            0.156             4.800               2        (90,293)
+u_rgb2dvi/enc_0/add_75/i4|I0                       adder          0.052             4.852               3        (94,293)
+u_rgb2dvi/enc_0/add_75/i4|CO                       adder          0.000             4.852               2        (94,293)
+u_rgb2dvi/enc_0/add_75/n8                          net            0.000             4.852               2        (94,293)
+u_rgb2dvi/enc_0/add_75/i5|CI                       adder          0.097             4.949               2        (94,294)
+u_rgb2dvi/enc_0/add_75/i5|O                        adder          0.000             4.949               2        (94,294)
+u_rgb2dvi/enc_0/acc[1]~FF_brt_45_brt_47_brt_136|D  ff             0.003             4.952               2        (94,294)
+
+Capture Clock Path
+                       name                          model name   delay (ns)  cumulative delay (ns) pins on net    location
+=============================================================================================================================
+clk_pixel                                              inpad        0.000             0.000               0       (219,159)
+clk_pixel                                              inpad        0.126             0.126             178       (219,159)
+clk_pixel                                              net          2.010             2.136             178       (219,159)
+u_rgb2dvi/enc_0/acc[1]~FF_brt_45_brt_47_brt_136|CLK    ff           0.000             2.136             178       (94,294) 
+
+++++ Path 2 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : u_lcd_display/mult_66|CLK                        
+Path End      : u_rgb2dvi/enc_0/acc[1]~FF_brt_44_brt_49_brt_137|D
+Launch Clock  : clk_pixel (RISE)                                 
+Capture Clock : clk_pixel (RISE)                                 
+Slack         : 1.744 (required time - arrival time)             
+Delay         : 4.026                                            
+
+Logic Level             : 10
+Non-global nets on path : 10
+Global nets on path     :  0
+
+Launch Clock Path Delay        : 2.136
++ Clock To Q + Data Path Delay : 4.864
+--------------------------------------
+End-of-path arrival time       : 7.000
+
+Constraint                     : 6.734
++ Capture Clock Path Delay     : 2.136
+- Clock Uncertainty            : 0.126
+--------------------------------------
+End-of-path required time      : 8.744
+
+Launch Clock Path
+          name             model name   delay (ns)  cumulative delay (ns) pins on net    location
+===================================================================================================
+clk_pixel                  inpad          0.000             0.000               0       (219,159)
+clk_pixel                  inpad          0.126             0.126             178       (219,159)
+clk_pixel                  net            2.010             2.136             178       (219,159)
+u_lcd_display/mult_66|CLK  dsp48_prim     0.000             2.136             178       (54,282) 
+
+Data Path
+                      name                         model name   delay (ns)  cumulative delay (ns) pins on net    location
+===========================================================================================================================
+u_lcd_display/mult_66|O[1]                         dsp48_prim     0.835             0.835               2        (54,282)
+u_lcd_display/lcd_data2[1]                         net            0.565             1.400               2        (54,282)
+LUT__1089|in[1]                                    lut            0.063             1.463               2        (60,299)
+LUT__1089|out                                      lut            0.000             1.463               8        (60,299)
+n561                                               net            0.629             2.092               8        (60,299)
+LUT__1098|in[0]                                    lut            0.061             2.153               8        (83,300)
+LUT__1098|out                                      lut            0.000             2.153               8        (83,300)
+n569                                               net            0.396             2.549               7        (83,300)
+LUT__1101|in[2]                                    lut            0.061             2.610               8        (77,298)
+LUT__1101|out                                      lut            0.000             2.610               3        (77,298)
+n572                                               net            0.220             2.830               3        (77,298)
+LUT__1111|in[0]                                    lut            0.063             2.893               3        (78,293)
+LUT__1111|out                                      lut            0.000             2.893               2        (78,293)
+n582                                               net            0.143             3.036               2        (78,293)
+LUT__1112|in[0]                                    lut            0.061             3.097               2        (83,293)
+LUT__1112|out                                      lut            0.000             3.097              14        (83,293)
+u_rgb2dvi/enc_0/n818                               net            0.412             3.509              13        (83,293)
+LUT__1329|in[0]                                    lut            0.061             3.570              14        (85,297)
+LUT__1329|out                                      lut            0.000             3.570               6        (85,297)
+n737                                               net            0.399             3.969               6        (85,297)
+LUT__1336|in[2]                                    lut            0.061             4.030               6        (89,295)
+LUT__1336|out                                      lut            0.000             4.030               6        (89,295)
+u_rgb2dvi/enc_0/LessThan_69/n8                     net            0.306             4.336               6        (89,295)
+LUT__1343|in[0]                                    lut            0.063             4.399               6        (93,293)
+LUT__1343|out                                      lut            0.000             4.399               2        (93,293)
+u_rgb2dvi/enc_0/n622                               net            0.182             4.581               2        (93,293)
+u_rgb2dvi/enc_0/sub_52/add_2/i4|I0                 adder          0.063             4.644               2        (90,293)
+u_rgb2dvi/enc_0/sub_52/add_2/i4|O                  adder          0.000             4.644               3        (90,293)
+u_rgb2dvi/enc_0/n138                               net            0.156             4.800               2        (90,293)
+u_rgb2dvi/enc_0/add_75/i4|I0                       adder          0.061             4.861               3        (94,293)
+u_rgb2dvi/enc_0/add_75/i4|O                        adder          0.000             4.861               2        (94,293)
+u_rgb2dvi/enc_0/acc[1]~FF_brt_44_brt_49_brt_137|D  ff             0.003             4.864               2        (94,293)
+
+Capture Clock Path
+                       name                          model name   delay (ns)  cumulative delay (ns) pins on net    location
+=============================================================================================================================
+clk_pixel                                              inpad        0.000             0.000               0       (219,159)
+clk_pixel                                              inpad        0.126             0.126             178       (219,159)
+clk_pixel                                              net          2.010             2.136             178       (219,159)
+u_rgb2dvi/enc_0/acc[1]~FF_brt_44_brt_49_brt_137|CLK    ff           0.000             2.136             178       (94,293) 
+
+++++ Path 3 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : u_lcd_display/mult_66|CLK                             
+Path End      : u_rgb2dvi/enc_2/acc[1]~FF_brt_5_brt_11_brt_27_brt_74|D
+Launch Clock  : clk_pixel (RISE)                                      
+Capture Clock : clk_pixel (RISE)                                      
+Slack         : 1.791 (required time - arrival time)                  
+Delay         : 3.979                                                 
+
+Logic Level             : 10
+Non-global nets on path : 10
+Global nets on path     :  0
+
+Launch Clock Path Delay        : 2.136
++ Clock To Q + Data Path Delay : 4.817
+--------------------------------------
+End-of-path arrival time       : 6.953
+
+Constraint                     : 6.734
++ Capture Clock Path Delay     : 2.136
+- Clock Uncertainty            : 0.126
+--------------------------------------
+End-of-path required time      : 8.744
+
+Launch Clock Path
+          name             model name   delay (ns)  cumulative delay (ns) pins on net    location
+===================================================================================================
+clk_pixel                  inpad          0.000             0.000               0       (219,159)
+clk_pixel                  inpad          0.126             0.126             178       (219,159)
+clk_pixel                  net            2.010             2.136             178       (219,159)
+u_lcd_display/mult_66|CLK  dsp48_prim     0.000             2.136             178       (54,282) 
+
+Data Path
+                         name                           model name   delay (ns)  cumulative delay (ns) pins on net    location
+================================================================================================================================
+u_lcd_display/mult_66|O[18]                             dsp48_prim     0.835             0.835               2        (54,282)
+u_lcd_display/lcd_data2[18]                             net            0.560             1.395               2        (54,282)
+LUT__1151|in[1]                                         lut            0.061             1.456               2        (52,306)
+LUT__1151|out                                           lut            0.000             1.456               7        (52,306)
+n611                                                    net            0.332             1.788               7        (52,306)
+LUT__1159|in[3]                                         lut            0.061             1.849               7        (56,309)
+LUT__1159|out                                           lut            0.000             1.849               4        (56,309)
+n619                                                    net            0.371             2.220               4        (56,309)
+LUT__1162|in[2]                                         lut            0.063             2.283               4        (60,307)
+LUT__1162|out                                           lut            0.000             2.283               3        (60,307)
+n622                                                    net            0.221             2.504               3        (60,307)
+LUT__1164|in[2]                                         lut            0.061             2.565               3        (55,310)
+LUT__1164|out                                           lut            0.000             2.565               2        (55,310)
+n624                                                    net            0.358             2.923               2        (55,310)
+LUT__1169|in[1]                                         lut            0.063             2.986               2        (57,317)
+LUT__1169|out                                           lut            0.000             2.986              11        (57,317)
+u_rgb2dvi/enc_2/n103                                    net            0.400             3.386              10        (57,317)
+LUT__1175|in[1]                                         lut            0.063             3.449              11        (60,315)
+LUT__1175|out                                           lut            0.000             3.449               6        (60,315)
+n634                                                    net            0.374             3.823               6        (60,315)
+LUT__1184|in[3]                                         lut            0.061             3.884               6        (62,316)
+LUT__1184|out                                           lut            0.000             3.884               6        (62,316)
+u_rgb2dvi/enc_2/N1q_m07[1]                              net            0.288             4.172               6        (62,316)
+LUT__1187|in[1]                                         lut            0.061             4.233               6        (65,313)
+LUT__1187|out                                           lut            0.000             4.233               3        (65,313)
+n641                                                    net            0.136             4.369               3        (65,313)
+LUT__1188|in[0]                                         lut            0.061             4.430               3        (67,313)
+LUT__1188|out                                           lut            0.000             4.430               3        (67,313)
+u_rgb2dvi/enc_2/sub_50/n4                               net            0.321             4.751               2        (67,313)
+u_rgb2dvi/enc_2/sub_50/add_2/i3|I1                      adder          0.063             4.814               3        (66,313)
+u_rgb2dvi/enc_2/sub_50/add_2/i3|O                       adder          0.000             4.814               2        (66,313)
+u_rgb2dvi/enc_2/acc[1]~FF_brt_5_brt_11_brt_27_brt_74|D  ff             0.003             4.817               2        (66,313)
+
+Capture Clock Path
+                          name                            model name   delay (ns)  cumulative delay (ns) pins on net    location
+==================================================================================================================================
+clk_pixel                                                   inpad        0.000             0.000               0       (219,159)
+clk_pixel                                                   inpad        0.126             0.126             178       (219,159)
+clk_pixel                                                   net          2.010             2.136             178       (219,159)
+u_rgb2dvi/enc_2/acc[1]~FF_brt_5_brt_11_brt_27_brt_74|CLK    ff           0.000             2.136             178       (66,313) 
+
+++++ Path 4 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : u_lcd_display/mult_66|CLK           
+Path End      : tmds_lvds_tx_data2[0]~FF_brt_101|D  
+Launch Clock  : clk_pixel (RISE)                    
+Capture Clock : clk_pixel (RISE)                    
+Slack         : 1.824 (required time - arrival time)
+Delay         : 3.946                               
+
+Logic Level             :  9
+Non-global nets on path : 10
+Global nets on path     :  0
+
+Launch Clock Path Delay        : 2.136
++ Clock To Q + Data Path Delay : 4.784
+--------------------------------------
+End-of-path arrival time       : 6.920
+
+Constraint                     : 6.734
++ Capture Clock Path Delay     : 2.136
+- Clock Uncertainty            : 0.126
+--------------------------------------
+End-of-path required time      : 8.744
+
+Launch Clock Path
+          name             model name   delay (ns)  cumulative delay (ns) pins on net    location
+===================================================================================================
+clk_pixel                  inpad          0.000             0.000               0       (219,159)
+clk_pixel                  inpad          0.126             0.126             178       (219,159)
+clk_pixel                  net            2.010             2.136             178       (219,159)
+u_lcd_display/mult_66|CLK  dsp48_prim     0.000             2.136             178       (54,282) 
+
+Data Path
+               name                 model name   delay (ns)  cumulative delay (ns) pins on net    location
+============================================================================================================
+u_lcd_display/mult_66|O[18]         dsp48_prim     0.835             0.835               2        (54,282)
+u_lcd_display/lcd_data2[18]         net            0.560             1.395               2        (54,282)
+LUT__1151|in[1]                     lut            0.061             1.456               2        (52,306)
+LUT__1151|out                       lut            0.000             1.456               7        (52,306)
+n611                                net            0.332             1.788               7        (52,306)
+LUT__1159|in[3]                     lut            0.061             1.849               7        (56,309)
+LUT__1159|out                       lut            0.000             1.849               4        (56,309)
+n619                                net            0.371             2.220               4        (56,309)
+LUT__1162|in[2]                     lut            0.063             2.283               4        (60,307)
+LUT__1162|out                       lut            0.000             2.283               3        (60,307)
+n622                                net            0.221             2.504               3        (60,307)
+LUT__1164|in[2]                     lut            0.061             2.565               3        (55,310)
+LUT__1164|out                       lut            0.000             2.565               2        (55,310)
+n624                                net            0.358             2.923               2        (55,310)
+LUT__1169|in[1]                     lut            0.063             2.986               2        (57,317)
+LUT__1169|out                       lut            0.000             2.986              11        (57,317)
+u_rgb2dvi/enc_2/n103                net            0.372             3.358              10        (57,317)
+LUT__1181|in[2]                     lut            0.061             3.419              11        (62,315)
+LUT__1181|out                       lut            0.000             3.419               6        (62,315)
+n640                                net            0.415             3.834               6        (62,315)
+LUT__1192|in[1]                     lut            0.061             3.895               6        (61,316)
+LUT__1192|out                       lut            0.000             3.895               3        (61,316)
+n645                                net            0.189             4.084               3        (61,316)
+LUT__1195|in[1]                     lut            0.061             4.145               3        (67,316)
+LUT__1195|out                       lut            0.000             4.145               3        (67,316)
+n647                                net            0.259             4.404               2        (67,316)
+LUT__1205|in[0]                     lut            0.061             4.465               3        (67,320)
+LUT__1205|out                       lut            0.000             4.465               3        (67,320)
+n655                                net            0.316             4.781               2        (67,320)
+tmds_lvds_tx_data2[0]~FF_brt_101|D  ff             0.003             4.784               3        (57,320)
+
+Capture Clock Path
+                name                  model name   delay (ns)  cumulative delay (ns) pins on net    location
+==============================================================================================================
+clk_pixel                               inpad        0.000             0.000               0       (219,159)
+clk_pixel                               inpad        0.126             0.126             178       (219,159)
+clk_pixel                               net          2.010             2.136             178       (219,159)
+tmds_lvds_tx_data2[0]~FF_brt_101|CLK    ff           0.000             2.136             178       (57,320) 
+
+++++ Path 5 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : u_lcd_display/mult_66|CLK           
+Path End      : tmds_lvds_tx_data1[9]~FF|D          
+Launch Clock  : clk_pixel (RISE)                    
+Capture Clock : clk_pixel (RISE)                    
+Slack         : 1.841 (required time - arrival time)
+Delay         : 3.929                               
+
+Logic Level             :  9
+Non-global nets on path : 10
+Global nets on path     :  0
+
+Launch Clock Path Delay        : 2.136
++ Clock To Q + Data Path Delay : 4.767
+--------------------------------------
+End-of-path arrival time       : 6.903
+
+Constraint                     : 6.734
++ Capture Clock Path Delay     : 2.136
+- Clock Uncertainty            : 0.126
+--------------------------------------
+End-of-path required time      : 8.744
+
+Launch Clock Path
+          name             model name   delay (ns)  cumulative delay (ns) pins on net    location
+===================================================================================================
+clk_pixel                  inpad          0.000             0.000               0       (219,159)
+clk_pixel                  inpad          0.126             0.126             178       (219,159)
+clk_pixel                  net            2.010             2.136             178       (219,159)
+u_lcd_display/mult_66|CLK  dsp48_prim     0.000             2.136             178       (54,282) 
+
+Data Path
+           name             model name   delay (ns)  cumulative delay (ns) pins on net    location
+====================================================================================================
+u_lcd_display/mult_66|O[8]  dsp48_prim     0.835             0.835               2        (54,282)
+u_lcd_display/lcd_data2[8]  net            0.570             1.405               2        (54,282)
+LUT__1220|in[1]             lut            0.061             1.466               2        (47,303)
+LUT__1220|out               lut            0.000             1.466               4        (47,303)
+n668                        net            0.248             1.714               4        (47,303)
+LUT__1222|in[2]             lut            0.061             1.775               4        (41,308)
+LUT__1222|out               lut            0.000             1.775               9        (41,308)
+n670                        net            0.458             2.233               8        (41,308)
+LUT__1232|in[1]             lut            0.061             2.294               9        (44,310)
+LUT__1232|out               lut            0.000             2.294               3        (44,310)
+n680                        net            0.351             2.645               3        (44,310)
+LUT__1233|in[2]             lut            0.063             2.708               3        (42,311)
+LUT__1233|out               lut            0.000             2.708               2        (42,311)
+n681                        net            0.201             2.909               2        (42,311)
+LUT__1242|in[0]             lut            0.061             2.970               2        (41,311)
+LUT__1242|out               lut            0.000             2.970              16        (41,311)
+u_rgb2dvi/enc_1/n103        net            0.365             3.335              15        (41,311)
+LUT__1266|in[3]             lut            0.061             3.396              16        (40,309)
+LUT__1266|out               lut            0.000             3.396               3        (40,309)
+n711                        net            0.229             3.625               3        (40,309)
+LUT__1302|in[3]             lut            0.061             3.686               3        (35,305)
+LUT__1302|out               lut            0.000             3.686               4        (35,305)
+n716                        net            0.376             4.062               4        (35,305)
+LUT__1303|in[1]             lut            0.061             4.123               4        (32,301)
+LUT__1303|out               lut            0.000             4.123               5        (32,301)
+n717                        net            0.328             4.451               4        (32,301)
+LUT__1392|in[2]             lut            0.061             4.512               5        (32,311)
+LUT__1392|out               lut            0.000             4.512               3        (32,311)
+u_rgb2dvi/enc_1/q_out[9]    net            0.252             4.764               2        (32,311)
+tmds_lvds_tx_data1[9]~FF|D  ff             0.003             4.767               3        (32,316)
+
+Capture Clock Path
+            name              model name   delay (ns)  cumulative delay (ns) pins on net    location
+======================================================================================================
+clk_pixel                       inpad        0.000             0.000               0       (219,159)
+clk_pixel                       inpad        0.126             0.126             178       (219,159)
+clk_pixel                       net          2.010             2.136             178       (219,159)
+tmds_lvds_tx_data1[9]~FF|CLK    ff           0.000             2.136             178       (32,316) 
+
+++++ Path 6 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : u_lcd_display/mult_66|CLK           
+Path End      : tmds_lvds_tx_data2[5]~FF_brt_129|D  
+Launch Clock  : clk_pixel (RISE)                    
+Capture Clock : clk_pixel (RISE)                    
+Slack         : 1.873 (required time - arrival time)
+Delay         : 3.897                               
+
+Logic Level             : 9
+Non-global nets on path : 9
+Global nets on path     : 0
+
+Launch Clock Path Delay        : 2.136
++ Clock To Q + Data Path Delay : 4.735
+--------------------------------------
+End-of-path arrival time       : 6.871
+
+Constraint                     : 6.734
++ Capture Clock Path Delay     : 2.136
+- Clock Uncertainty            : 0.126
+--------------------------------------
+End-of-path required time      : 8.744
+
+Launch Clock Path
+          name             model name   delay (ns)  cumulative delay (ns) pins on net    location
+===================================================================================================
+clk_pixel                  inpad          0.000             0.000               0       (219,159)
+clk_pixel                  inpad          0.126             0.126             178       (219,159)
+clk_pixel                  net            2.010             2.136             178       (219,159)
+u_lcd_display/mult_66|CLK  dsp48_prim     0.000             2.136             178       (54,282) 
+
+Data Path
+               name                 model name   delay (ns)  cumulative delay (ns) pins on net    location
+============================================================================================================
+u_lcd_display/mult_66|O[18]         dsp48_prim     0.835             0.835               2        (54,282)
+u_lcd_display/lcd_data2[18]         net            0.560             1.395               2        (54,282)
+LUT__1151|in[1]                     lut            0.061             1.456               2        (52,306)
+LUT__1151|out                       lut            0.000             1.456               7        (52,306)
+n611                                net            0.332             1.788               7        (52,306)
+LUT__1159|in[3]                     lut            0.061             1.849               7        (56,309)
+LUT__1159|out                       lut            0.000             1.849               4        (56,309)
+n619                                net            0.371             2.220               4        (56,309)
+LUT__1162|in[2]                     lut            0.063             2.283               4        (60,307)
+LUT__1162|out                       lut            0.000             2.283               3        (60,307)
+n622                                net            0.221             2.504               3        (60,307)
+LUT__1164|in[2]                     lut            0.061             2.565               3        (55,310)
+LUT__1164|out                       lut            0.000             2.565               2        (55,310)
+n624                                net            0.358             2.923               2        (55,310)
+LUT__1169|in[1]                     lut            0.063             2.986               2        (57,317)
+LUT__1169|out                       lut            0.000             2.986              11        (57,317)
+u_rgb2dvi/enc_2/n103                net            0.400             3.386              10        (57,317)
+LUT__1175|in[1]                     lut            0.063             3.449              11        (60,315)
+LUT__1175|out                       lut            0.000             3.449               6        (60,315)
+n634                                net            0.437             3.886               6        (60,315)
+LUT__1183|in[1]                     lut            0.061             3.947               6        (65,319)
+LUT__1183|out                       lut            0.000             3.947               6        (65,319)
+u_rgb2dvi/enc_2/n552                net            0.321             4.268               6        (65,319)
+LUT__1200|in[2]                     lut            0.061             4.329               6        (67,315)
+LUT__1200|out                       lut            0.000             4.329               3        (67,315)
+n652                                net            0.340             4.669               2        (67,315)
+LUT__1403|in[3]                     lut            0.063             4.732               3        (66,315)
+LUT__1403|out                       lut            0.000             4.732               2        (66,315)
+tmds_lvds_tx_data2[5]~FF_brt_129|D  ff             0.003             4.735               2        (66,315)
+
+Capture Clock Path
+                name                  model name   delay (ns)  cumulative delay (ns) pins on net    location
+==============================================================================================================
+clk_pixel                               inpad        0.000             0.000               0       (219,159)
+clk_pixel                               inpad        0.126             0.126             178       (219,159)
+clk_pixel                               net          2.010             2.136             178       (219,159)
+tmds_lvds_tx_data2[5]~FF_brt_129|CLK    ff           0.000             2.136             178       (66,315) 
+
+++++ Path 7 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : u_lcd_display/mult_66|CLK                        
+Path End      : u_rgb2dvi/enc_0/acc[1]~FF_brt_44_brt_50_brt_149|D
+Launch Clock  : clk_pixel (RISE)                                 
+Capture Clock : clk_pixel (RISE)                                 
+Slack         : 1.961 (required time - arrival time)             
+Delay         : 3.809                                            
+
+Logic Level             : 9
+Non-global nets on path : 9
+Global nets on path     : 0
+
+Launch Clock Path Delay        : 2.136
++ Clock To Q + Data Path Delay : 4.647
+--------------------------------------
+End-of-path arrival time       : 6.783
+
+Constraint                     : 6.734
++ Capture Clock Path Delay     : 2.136
+- Clock Uncertainty            : 0.126
+--------------------------------------
+End-of-path required time      : 8.744
+
+Launch Clock Path
+          name             model name   delay (ns)  cumulative delay (ns) pins on net    location
+===================================================================================================
+clk_pixel                  inpad          0.000             0.000               0       (219,159)
+clk_pixel                  inpad          0.126             0.126             178       (219,159)
+clk_pixel                  net            2.010             2.136             178       (219,159)
+u_lcd_display/mult_66|CLK  dsp48_prim     0.000             2.136             178       (54,282) 
+
+Data Path
+                      name                         model name   delay (ns)  cumulative delay (ns) pins on net    location
+===========================================================================================================================
+u_lcd_display/mult_66|O[1]                         dsp48_prim     0.835             0.835               2        (54,282)
+u_lcd_display/lcd_data2[1]                         net            0.565             1.400               2        (54,282)
+LUT__1089|in[1]                                    lut            0.063             1.463               2        (60,299)
+LUT__1089|out                                      lut            0.000             1.463               8        (60,299)
+n561                                               net            0.629             2.092               8        (60,299)
+LUT__1098|in[0]                                    lut            0.061             2.153               8        (83,300)
+LUT__1098|out                                      lut            0.000             2.153               8        (83,300)
+n569                                               net            0.396             2.549               7        (83,300)
+LUT__1101|in[2]                                    lut            0.061             2.610               8        (77,298)
+LUT__1101|out                                      lut            0.000             2.610               3        (77,298)
+n572                                               net            0.220             2.830               3        (77,298)
+LUT__1111|in[0]                                    lut            0.063             2.893               3        (78,293)
+LUT__1111|out                                      lut            0.000             2.893               2        (78,293)
+n582                                               net            0.143             3.036               2        (78,293)
+LUT__1112|in[0]                                    lut            0.061             3.097               2        (83,293)
+LUT__1112|out                                      lut            0.000             3.097              14        (83,293)
+u_rgb2dvi/enc_0/n818                               net            0.412             3.509              13        (83,293)
+LUT__1329|in[0]                                    lut            0.061             3.570              14        (85,297)
+LUT__1329|out                                      lut            0.000             3.570               6        (85,297)
+n737                                               net            0.399             3.969               6        (85,297)
+LUT__1336|in[2]                                    lut            0.061             4.030               6        (89,295)
+LUT__1336|out                                      lut            0.000             4.030               6        (89,295)
+u_rgb2dvi/enc_0/LessThan_69/n8                     net            0.306             4.336               6        (89,295)
+LUT__1343|in[0]                                    lut            0.063             4.399               6        (93,293)
+LUT__1343|out                                      lut            0.000             4.399               2        (93,293)
+u_rgb2dvi/enc_0/n622                               net            0.182             4.581               2        (93,293)
+u_rgb2dvi/enc_0/sub_52/add_2/i4|I0                 adder          0.063             4.644               2        (90,293)
+u_rgb2dvi/enc_0/sub_52/add_2/i4|O                  adder          0.000             4.644               3        (90,293)
+u_rgb2dvi/enc_0/acc[1]~FF_brt_44_brt_50_brt_149|D  ff             0.003             4.647               3        (90,293)
+
+Capture Clock Path
+                       name                          model name   delay (ns)  cumulative delay (ns) pins on net    location
+=============================================================================================================================
+clk_pixel                                              inpad        0.000             0.000               0       (219,159)
+clk_pixel                                              inpad        0.126             0.126             178       (219,159)
+clk_pixel                                              net          2.010             2.136             178       (219,159)
+u_rgb2dvi/enc_0/acc[1]~FF_brt_44_brt_50_brt_149|CLK    ff           0.000             2.136             178       (90,293) 
+
+++++ Path 8 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : u_lcd_display/mult_66|CLK                
+Path End      : u_rgb2dvi/enc_0/acc[1]~FF_brt_45_brt_46|D
+Launch Clock  : clk_pixel (RISE)                         
+Capture Clock : clk_pixel (RISE)                         
+Slack         : 2.000 (required time - arrival time)     
+Delay         : 3.770                                    
+
+Logic Level             : 9
+Non-global nets on path : 9
+Global nets on path     : 0
+
+Launch Clock Path Delay        : 2.136
++ Clock To Q + Data Path Delay : 4.608
+--------------------------------------
+End-of-path arrival time       : 6.744
+
+Constraint                     : 6.734
++ Capture Clock Path Delay     : 2.136
+- Clock Uncertainty            : 0.126
+--------------------------------------
+End-of-path required time      : 8.744
+
+Launch Clock Path
+          name             model name   delay (ns)  cumulative delay (ns) pins on net    location
+===================================================================================================
+clk_pixel                  inpad          0.000             0.000               0       (219,159)
+clk_pixel                  inpad          0.126             0.126             178       (219,159)
+clk_pixel                  net            2.010             2.136             178       (219,159)
+u_lcd_display/mult_66|CLK  dsp48_prim     0.000             2.136             178       (54,282) 
+
+Data Path
+                  name                     model name   delay (ns)  cumulative delay (ns) pins on net    location
+===================================================================================================================
+u_lcd_display/mult_66|O[1]                 dsp48_prim     0.835             0.835               2        (54,282)
+u_lcd_display/lcd_data2[1]                 net            0.565             1.400               2        (54,282)
+LUT__1089|in[1]                            lut            0.063             1.463               2        (60,299)
+LUT__1089|out                              lut            0.000             1.463               8        (60,299)
+n561                                       net            0.629             2.092               8        (60,299)
+LUT__1098|in[0]                            lut            0.061             2.153               8        (83,300)
+LUT__1098|out                              lut            0.000             2.153               8        (83,300)
+n569                                       net            0.396             2.549               7        (83,300)
+LUT__1101|in[2]                            lut            0.061             2.610               8        (77,298)
+LUT__1101|out                              lut            0.000             2.610               3        (77,298)
+n572                                       net            0.220             2.830               3        (77,298)
+LUT__1111|in[0]                            lut            0.063             2.893               3        (78,293)
+LUT__1111|out                              lut            0.000             2.893               2        (78,293)
+n582                                       net            0.143             3.036               2        (78,293)
+LUT__1112|in[0]                            lut            0.061             3.097               2        (83,293)
+LUT__1112|out                              lut            0.000             3.097              14        (83,293)
+u_rgb2dvi/enc_0/n818                       net            0.412             3.509              13        (83,293)
+LUT__1329|in[0]                            lut            0.061             3.570              14        (85,297)
+LUT__1329|out                              lut            0.000             3.570               6        (85,297)
+n737                                       net            0.399             3.969               6        (85,297)
+LUT__1336|in[2]                            lut            0.061             4.030               6        (89,295)
+LUT__1336|out                              lut            0.000             4.030               6        (89,295)
+u_rgb2dvi/enc_0/LessThan_69/n8             net            0.267             4.297               6        (89,295)
+LUT__1365|in[0]                            lut            0.063             4.360               6        (93,294)
+LUT__1365|out                              lut            0.000             4.360               3        (93,294)
+u_rgb2dvi/enc_0/LessThan_66/n8             net            0.182             4.542               3        (93,294)
+LUT__1366|in[1]                            lut            0.063             4.605               3        (90,294)
+LUT__1366|out                              lut            0.000             4.605               2        (90,294)
+u_rgb2dvi/enc_0/acc[1]~FF_brt_45_brt_46|D  ff             0.003             4.608               2        (90,294)
+
+Capture Clock Path
+                   name                      model name   delay (ns)  cumulative delay (ns) pins on net    location
+=====================================================================================================================
+clk_pixel                                      inpad        0.000             0.000               0       (219,159)
+clk_pixel                                      inpad        0.126             0.126             178       (219,159)
+clk_pixel                                      net          2.010             2.136             178       (219,159)
+u_rgb2dvi/enc_0/acc[1]~FF_brt_45_brt_46|CLK    ff           0.000             2.136             178       (90,294) 
+
+++++ Path 9 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : u_lcd_display/mult_66|CLK                       
+Path End      : u_rgb2dvi/enc_1/acc[1]~FF_brt_19_brt_30_brt_69|D
+Launch Clock  : clk_pixel (RISE)                                
+Capture Clock : clk_pixel (RISE)                                
+Slack         : 2.008 (required time - arrival time)            
+Delay         : 3.762                                           
+
+Logic Level             : 10
+Non-global nets on path : 10
+Global nets on path     :  0
+
+Launch Clock Path Delay        : 2.136
++ Clock To Q + Data Path Delay : 4.600
+--------------------------------------
+End-of-path arrival time       : 6.736
+
+Constraint                     : 6.734
++ Capture Clock Path Delay     : 2.136
+- Clock Uncertainty            : 0.126
+--------------------------------------
+End-of-path required time      : 8.744
+
+Launch Clock Path
+          name             model name   delay (ns)  cumulative delay (ns) pins on net    location
+===================================================================================================
+clk_pixel                  inpad          0.000             0.000               0       (219,159)
+clk_pixel                  inpad          0.126             0.126             178       (219,159)
+clk_pixel                  net            2.010             2.136             178       (219,159)
+u_lcd_display/mult_66|CLK  dsp48_prim     0.000             2.136             178       (54,282) 
+
+Data Path
+                      name                        model name   delay (ns)  cumulative delay (ns) pins on net    location
+==========================================================================================================================
+u_lcd_display/mult_66|O[8]                        dsp48_prim     0.835             0.835               2        (54,282)
+u_lcd_display/lcd_data2[8]                        net            0.570             1.405               2        (54,282)
+LUT__1220|in[1]                                   lut            0.061             1.466               2        (47,303)
+LUT__1220|out                                     lut            0.000             1.466               4        (47,303)
+n668                                              net            0.248             1.714               4        (47,303)
+LUT__1222|in[2]                                   lut            0.061             1.775               4        (41,308)
+LUT__1222|out                                     lut            0.000             1.775               9        (41,308)
+n670                                              net            0.458             2.233               8        (41,308)
+LUT__1232|in[1]                                   lut            0.061             2.294               9        (44,310)
+LUT__1232|out                                     lut            0.000             2.294               3        (44,310)
+n680                                              net            0.351             2.645               3        (44,310)
+LUT__1233|in[2]                                   lut            0.063             2.708               3        (42,311)
+LUT__1233|out                                     lut            0.000             2.708               2        (42,311)
+n681                                              net            0.201             2.909               2        (42,311)
+LUT__1242|in[0]                                   lut            0.061             2.970               2        (41,311)
+LUT__1242|out                                     lut            0.000             2.970              16        (41,311)
+u_rgb2dvi/enc_1/n103                              net            0.216             3.186              15        (41,311)
+LUT__1251|in[0]                                   lut            0.063             3.249              16        (36,312)
+LUT__1251|out                                     lut            0.000             3.249               5        (36,312)
+n698                                              net            0.333             3.582               5        (36,312)
+LUT__1262|in[2]                                   lut            0.061             3.643               5        (35,307)
+LUT__1262|out                                     lut            0.000             3.643               3        (35,307)
+n708                                              net            0.369             4.012               3        (35,307)
+LUT__1263|in[2]                                   lut            0.061             4.073               3        (34,306)
+LUT__1263|out                                     lut            0.000             4.073               4        (34,306)
+~u_rgb2dvi/enc_1/n552                             net            0.375             4.448               4        (34,306)
+u_rgb2dvi/enc_1/sub_79/add_2/i4|I0                adder          0.052             4.500               4        (32,307)
+u_rgb2dvi/enc_1/sub_79/add_2/i4|CO                adder          0.000             4.500               2        (32,307)
+u_rgb2dvi/enc_1/sub_79/add_2/n8                   net            0.000             4.500               2        (32,307)
+u_rgb2dvi/enc_1/sub_79/add_2/i5|CI                adder          0.097             4.597               2        (32,308)
+u_rgb2dvi/enc_1/sub_79/add_2/i5|O                 adder          0.000             4.597               2        (32,308)
+u_rgb2dvi/enc_1/acc[1]~FF_brt_19_brt_30_brt_69|D  ff             0.003             4.600               2        (32,308)
+
+Capture Clock Path
+                       name                         model name   delay (ns)  cumulative delay (ns) pins on net    location
+============================================================================================================================
+clk_pixel                                             inpad        0.000             0.000               0       (219,159)
+clk_pixel                                             inpad        0.126             0.126             178       (219,159)
+clk_pixel                                             net          2.010             2.136             178       (219,159)
+u_rgb2dvi/enc_1/acc[1]~FF_brt_19_brt_30_brt_69|CLK    ff           0.000             2.136             178       (32,308) 
+
+++++ Path 10 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : u_lcd_display/mult_66|CLK               
+Path End      : u_rgb2dvi/enc_2/acc[1]~FF_brt_6_brt_25|D
+Launch Clock  : clk_pixel (RISE)                        
+Capture Clock : clk_pixel (RISE)                        
+Slack         : 2.072 (required time - arrival time)    
+Delay         : 3.698                                   
+
+Logic Level             : 9
+Non-global nets on path : 9
+Global nets on path     : 0
+
+Launch Clock Path Delay        : 2.136
++ Clock To Q + Data Path Delay : 4.536
+--------------------------------------
+End-of-path arrival time       : 6.672
+
+Constraint                     : 6.734
++ Capture Clock Path Delay     : 2.136
+- Clock Uncertainty            : 0.126
+--------------------------------------
+End-of-path required time      : 8.744
+
+Launch Clock Path
+          name             model name   delay (ns)  cumulative delay (ns) pins on net    location
+===================================================================================================
+clk_pixel                  inpad          0.000             0.000               0       (219,159)
+clk_pixel                  inpad          0.126             0.126             178       (219,159)
+clk_pixel                  net            2.010             2.136             178       (219,159)
+u_lcd_display/mult_66|CLK  dsp48_prim     0.000             2.136             178       (54,282) 
+
+Data Path
+                  name                    model name   delay (ns)  cumulative delay (ns) pins on net    location
+==================================================================================================================
+u_lcd_display/mult_66|O[18]               dsp48_prim     0.835             0.835               2        (54,282)
+u_lcd_display/lcd_data2[18]               net            0.560             1.395               2        (54,282)
+LUT__1151|in[1]                           lut            0.061             1.456               2        (52,306)
+LUT__1151|out                             lut            0.000             1.456               7        (52,306)
+n611                                      net            0.332             1.788               7        (52,306)
+LUT__1159|in[3]                           lut            0.061             1.849               7        (56,309)
+LUT__1159|out                             lut            0.000             1.849               4        (56,309)
+n619                                      net            0.371             2.220               4        (56,309)
+LUT__1162|in[2]                           lut            0.063             2.283               4        (60,307)
+LUT__1162|out                             lut            0.000             2.283               3        (60,307)
+n622                                      net            0.221             2.504               3        (60,307)
+LUT__1164|in[2]                           lut            0.061             2.565               3        (55,310)
+LUT__1164|out                             lut            0.000             2.565               2        (55,310)
+n624                                      net            0.358             2.923               2        (55,310)
+LUT__1169|in[1]                           lut            0.063             2.986               2        (57,317)
+LUT__1169|out                             lut            0.000             2.986              11        (57,317)
+u_rgb2dvi/enc_2/n103                      net            0.400             3.386              10        (57,317)
+LUT__1175|in[1]                           lut            0.063             3.449              11        (60,315)
+LUT__1175|out                             lut            0.000             3.449               6        (60,315)
+n634                                      net            0.374             3.823               6        (60,315)
+LUT__1184|in[3]                           lut            0.061             3.884               6        (62,316)
+LUT__1184|out                             lut            0.000             3.884               6        (62,316)
+u_rgb2dvi/enc_2/N1q_m07[1]                net            0.288             4.172               6        (62,316)
+LUT__1187|in[1]                           lut            0.061             4.233               6        (65,313)
+LUT__1187|out                             lut            0.000             4.233               3        (65,313)
+n641                                      net            0.239             4.472               3        (65,313)
+LUT__1203|in[0]                           lut            0.061             4.533               3        (67,317)
+LUT__1203|out                             lut            0.000             4.533               2        (67,317)
+u_rgb2dvi/enc_2/acc[1]~FF_brt_6_brt_25|D  ff             0.003             4.536               2        (67,317)
+
+Capture Clock Path
+                   name                     model name   delay (ns)  cumulative delay (ns) pins on net    location
+====================================================================================================================
+clk_pixel                                     inpad        0.000             0.000               0       (219,159)
+clk_pixel                                     inpad        0.126             0.126             178       (219,159)
+clk_pixel                                     net          2.010             2.136             178       (219,159)
+u_rgb2dvi/enc_2/acc[1]~FF_brt_6_brt_25|CLK    ff           0.000             2.136             178       (67,317) 
+

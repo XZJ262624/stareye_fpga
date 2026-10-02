@@ -3,7 +3,7 @@
 面向2026全国大学生嵌入式芯片与系统设计竞赛FPGA赛道，目标平台为易灵思VF-Ti60F225。
 技术路线：摄像头采集→灰度化→滤波→边缘检测→HDMI显示；扩展多算子切换、自适应阈值、彩色叠加、OSD、延迟与资源测试。
 
-M0基础验收通过：I3完整编译PASS、用户报告JTAG配置PASS及流水灯功能定性PASS。断电后仍有流水灯，但用户此前已固化官方例程，不能证明本轮I3 bitstream的持久性；本轮未SPI Active/Flash固化。 P0其余需求待冻结，M1～M7未开始。
+M0流水灯基础验收PASS，提交为a8c39c93a06eeb0686cbb5c13fd44717d49195fa。M1独立HDMI基线PASS：I3完整编译与时序通过，用户确认JTAG临时下载后测试图循环正常，观察约几分钟无异常。显示器识别的分辨率/刷新率待确认；PLL LOCKED异步复位、失锁恢复及长期稳定性仍有验证边界。摄像头直通未验收，P0其余需求待冻结，M2～M7未开始。
 
 | 路径 | 用途 |
 | --- | --- |
@@ -24,3 +24,5 @@ M0基础验收通过：I3完整编译PASS、用户报告JTAG配置PASS及流水�
 [最小LED工作工程](efinity/m0_led_i3/LED_8bit_Test.xml)、[构建报告](reports/m0_led_i3/BUILD_REPORT.md)、[上板验收](reports/m0_led_i3/ACCEPTANCE_REPORT.md)和[器件/编译核查](docs/MINIMAL_REFERENCE_CHECK.md)记录本轮结果。厂商原始工程完全保留，未编写算法业务RTL，未自动下载或Flash固化。
 
 Git分支main；M0独立提交范围已核查，实际提交哈希以git log为准。根.gitignore排除document、历史盘点和工程生成目录，保留关键reports。指导先解释目的，一次只给1～3个操作；实际下载与硬件现象需要用户确认。
+
+[M1 HDMI工作工程](efinity/m1_hdmi_i3/Ti60_HDMI_1080P_Test.xml)、[离线构建报告](reports/m1_hdmi_i3/BUILD_REPORT.md)、[管脚与时钟核查](reports/m1_hdmi_i3/PIN_CLOCK_CHECK.md)、[复位与CDC边界](reports/m1_hdmi_i3/CDC_RESET_REVIEW.md)记录1080p60厂商例程迁移结果。原厂六份RTL保持不变；离线阶段未下载。本轮用户已完成JTAG临时下载，未SPI Active/Flash固化，代理未操作硬件、未接入AR0135。本轮验收收尾创建独立Git提交，哈希以git log为准。详见[M1实物验收报告](reports/m1_hdmi_i3/ACCEPTANCE_REPORT.md)与[最终实现审计](reports/m1_hdmi_i3/FINAL_IMPLEMENTATION_AUDIT.md)。

@@ -71,3 +71,11 @@ IDE 的官方用途依据：[Efinity RISC-V IDE 产品页](https://www.efinixinc
 实际安装目录E:/Efinity/2025.1，MANIFEST与本轮接口/综合/P&R/STA/bit生成报告均2025.1.110.5.9。用户确认实物Ti60F225I3；英文LED副本通过官方I3配置、接口再生成和完整编译；用户随后确认JTAG下载成功与流水灯定性功能通过。该验证不外推其他HDK工程全部兼容。本轮未安装或修改工具，未调用Programmer/Flash；详情见[构建报告](../reports/m0_led_i3/BUILD_REPORT.md)。上文旧安装/型号待确认记录仅为历史。
 
 M0基础验收通过，详见[验收报告](../reports/m0_led_i3/ACCEPTANCE_REPORT.md)。断电流水灯与用户历史官方例程固化来源未区分，不证明当前bit持久性。本轮未SPI Active/Flash，原始Programmer日志未提供。
+
+## M1独立HDMI工具验证（2026-10-01，当前）
+
+同一安装目录2025.1.110.5.9已完成独立HDMI Ti60F225I3副本的官方projectdb配置、DesignAPI接口生成与完整编译。源工程XML为2023.1.150.3.11/C4，不能直接使用其旧SDC/outflow；新工程明确选择官方生成的I3 SDC。无需重装工具或驱动。本轮未运行Programmer、未接摄像头、未下载。
+
+复现入口为scripts/m1_hdmi_i3_configure.bat、m1_hdmi_i3_compile.bat；历史定向STA入口曾显式选I3后恢复正式I3 P&R/bit；2026-10-02整改后m1_hdmi_i3_timing_audit.bat仅对隔离最终DB副本运行STA，不再P&R/pgm，不触及已上板bit；默认C4报告仅存在隔离目录且不参与验收。`--flow pgm`只生成离线文件，不能混同硬件编程。详见[构建报告](../reports/m1_hdmi_i3/BUILD_REPORT.md)。
+
+2026-10-02：用户确认M1独立HDMI JTAG实测PASS，主程序版本与工程基线沿用已验证配置；未重新安装。验收脚本、最终DB绑定和负向用例见[最终实现审计](../reports/m1_hdmi_i3/FINAL_IMPLEMENTATION_AUDIT.md)。

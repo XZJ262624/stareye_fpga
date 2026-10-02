@@ -1,0 +1,1645 @@
+
+Efinix Static Timing Analysis Report
+Version: 2025.1.110.5.9
+Date: Thu Oct  1 21:31:06 2026
+
+Copyright (C) 2013 - 2025 Efinix, Inc. All rights reserved.
+
+Top-level Entity Name: Ti60_HDMI_1080P_Test
+
+SDC Filename: Ti60_HDMI_1080P_Test_I3.sdc
+
+Timing Model: I3
+	process : typical
+	temperature : -40C to 100C
+	voltage : 0.95 +/-30mV
+	speedgrade : 3
+	technology : t16ff
+	status : final
+
+---------- Table of Contents (begin) ----------
+   1. Clock Frequency Summary
+   2. Clock Relationship Summary
+   3. Path Details for Max Critical Paths
+   4. Path Details for Min Critical Paths
+---------- Table of Contents (end) ------------
+
+---------- 1. Clock Frequency Summary (begin) ----------
+
+User target constrained clocks
+ Clock Name  Period (ns)  Frequency (MHz)    Waveform       Targets
+clk27m          37.037         27.000     {0.000 18.518} {clk27m}      
+clk_pixel        6.734        148.500     {0.000 3.367}  {clk_pixel}   
+clk_pixel_5x     1.347        742.390     {0.337 1.010}  {clk_pixel_5x}
+
+Maximum possible analyzed clocks frequency
+ Clock Name  Period (ns)  Frequency (MHz)     Edge
+ clk_pixel      5.078        196.928         (R-R)
+
+Geomean max period: 5.078
+
+---------- Clock Frequency Summary (end) ---------------
+
+---------- 2. Clock Relationship Summary (begin) ----------
+
+Setup (Max) Clock Relationship
+  Launch Clock    Capture Clock   Constraint (ns)     Slack (ns)          Edge
+   clk_pixel        clk_pixel          6.734            1.656            (R-R)
+
+Hold (Min) Clock Relationship
+  Launch Clock    Capture Clock   Constraint (ns)     Slack (ns)          Edge
+   clk_pixel        clk_pixel          0.000            0.098            (R-R)
+
+NOTE: Values are in nanoseconds.
+
+---------- Clock Relationship Summary (end) ---------------
+
+---------- 3. Path Details for Max Critical Paths (begin) ----------
+
+################################################################################
+Path Detail Report (clk_pixel vs clk_pixel)
+################################################################################
+
+
+++++ Path 1 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : u_lcd_display/mult_66|CLK                        
+Path End      : u_rgb2dvi/enc_0/acc[1]~FF_brt_45_brt_47_brt_136|D
+Launch Clock  : clk_pixel (RISE)                                 
+Capture Clock : clk_pixel (RISE)                                 
+Slack         : 1.656 (required time - arrival time)             
+Delay         : 4.114                                            
+
+Logic Level             : 11
+Non-global nets on path : 11
+Global nets on path     :  0
+
+Launch Clock Path Delay        : 2.136
++ Clock To Q + Data Path Delay : 4.952
+--------------------------------------
+End-of-path arrival time       : 7.088
+
+Constraint                     : 6.734
++ Capture Clock Path Delay     : 2.136
+- Clock Uncertainty            : 0.126
+--------------------------------------
+End-of-path required time      : 8.744
+
+Launch Clock Path
+          name             model name   delay (ns)  cumulative delay (ns) pins on net    location
+===================================================================================================
+clk_pixel                  inpad          0.000             0.000               0       (219,159)
+clk_pixel                  inpad          0.126             0.126             178       (219,159)
+clk_pixel                  net            2.010             2.136             178       (219,159)
+   Routing elements:
+      Manhattan distance of X:165, Y:123
+u_lcd_display/mult_66|CLK  dsp48_prim     0.000             2.136             178       (54,282) 
+
+Data Path
+                      name                         model name   delay (ns)  cumulative delay (ns) pins on net    location
+===========================================================================================================================
+u_lcd_display/mult_66|O[1]                         dsp48_prim     0.835             0.835               2        (54,282)
+u_lcd_display/lcd_data2[1]                         net            0.565             1.400               2        (54,282)
+   Routing elements:
+      Manhattan distance of X:6, Y:17
+LUT__1089|in[1]                                    lut            0.063             1.463               2        (60,299)
+LUT__1089|out                                      lut            0.000             1.463               8        (60,299)
+n561                                               net            0.629             2.092               8        (60,299)
+   Routing elements:
+      Manhattan distance of X:23, Y:1
+LUT__1098|in[0]                                    lut            0.061             2.153               8        (83,300)
+LUT__1098|out                                      lut            0.000             2.153               8        (83,300)
+n569                                               net            0.396             2.549               7        (83,300)
+   Routing elements:
+      Manhattan distance of X:6, Y:2
+LUT__1101|in[2]                                    lut            0.061             2.610               8        (77,298)
+LUT__1101|out                                      lut            0.000             2.610               3        (77,298)
+n572                                               net            0.220             2.830               3        (77,298)
+   Routing elements:
+      Manhattan distance of X:1, Y:5
+LUT__1111|in[0]                                    lut            0.063             2.893               3        (78,293)
+LUT__1111|out                                      lut            0.000             2.893               2        (78,293)
+n582                                               net            0.143             3.036               2        (78,293)
+   Routing elements:
+      Manhattan distance of X:5, Y:0
+LUT__1112|in[0]                                    lut            0.061             3.097               2        (83,293)
+LUT__1112|out                                      lut            0.000             3.097              14        (83,293)
+u_rgb2dvi/enc_0/n818                               net            0.412             3.509              13        (83,293)
+   Routing elements:
+      Manhattan distance of X:2, Y:4
+LUT__1329|in[0]                                    lut            0.061             3.570              14        (85,297)
+LUT__1329|out                                      lut            0.000             3.570               6        (85,297)
+n737                                               net            0.399             3.969               6        (85,297)
+   Routing elements:
+      Manhattan distance of X:4, Y:2
+LUT__1336|in[2]                                    lut            0.061             4.030               6        (89,295)
+LUT__1336|out                                      lut            0.000             4.030               6        (89,295)
+u_rgb2dvi/enc_0/LessThan_69/n8                     net            0.306             4.336               6        (89,295)
+   Routing elements:
+      Manhattan distance of X:4, Y:2
+LUT__1343|in[0]                                    lut            0.063             4.399               6        (93,293)
+LUT__1343|out                                      lut            0.000             4.399               2        (93,293)
+u_rgb2dvi/enc_0/n622                               net            0.182             4.581               2        (93,293)
+   Routing elements:
+      Manhattan distance of X:3, Y:0
+u_rgb2dvi/enc_0/sub_52/add_2/i4|I0                 adder          0.063             4.644               2        (90,293)
+u_rgb2dvi/enc_0/sub_52/add_2/i4|O                  adder          0.000             4.644               3        (90,293)
+u_rgb2dvi/enc_0/n138                               net            0.156             4.800               2        (90,293)
+   Routing elements:
+      Manhattan distance of X:4, Y:0
+u_rgb2dvi/enc_0/add_75/i4|I0                       adder          0.052             4.852               3        (94,293)
+u_rgb2dvi/enc_0/add_75/i4|CO                       adder          0.000             4.852               2        (94,293)
+u_rgb2dvi/enc_0/add_75/n8                          net            0.000             4.852               2        (94,293)
+   Routing elements:
+      Manhattan distance of X:0, Y:1
+u_rgb2dvi/enc_0/add_75/i5|CI                       adder          0.097             4.949               2        (94,294)
+u_rgb2dvi/enc_0/add_75/i5|O                        adder          0.000             4.949               2        (94,294)
+u_rgb2dvi/enc_0/acc[1]~FF_brt_45_brt_47_brt_136|D  ff             0.003             4.952               2        (94,294)
+
+Capture Clock Path
+                       name                          model name   delay (ns)  cumulative delay (ns) pins on net    location
+=============================================================================================================================
+clk_pixel                                              inpad        0.000             0.000               0       (219,159)
+clk_pixel                                              inpad        0.126             0.126             178       (219,159)
+clk_pixel                                              net          2.010             2.136             178       (219,159)
+   Routing elements:
+      Manhattan distance of X:125, Y:135
+u_rgb2dvi/enc_0/acc[1]~FF_brt_45_brt_47_brt_136|CLK    ff           0.000             2.136             178       (94,294) 
+
+++++ Path 2 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : u_lcd_display/mult_66|CLK                        
+Path End      : u_rgb2dvi/enc_0/acc[1]~FF_brt_45_brt_47_brt_136|D
+Launch Clock  : clk_pixel (RISE)                                 
+Capture Clock : clk_pixel (RISE)                                 
+Slack         : 1.693 (required time - arrival time)             
+Delay         : 4.077                                            
+
+Logic Level             : 11
+Non-global nets on path : 11
+Global nets on path     :  0
+
+Launch Clock Path Delay        : 2.136
++ Clock To Q + Data Path Delay : 4.915
+--------------------------------------
+End-of-path arrival time       : 7.051
+
+Constraint                     : 6.734
++ Capture Clock Path Delay     : 2.136
+- Clock Uncertainty            : 0.126
+--------------------------------------
+End-of-path required time      : 8.744
+
+Launch Clock Path
+          name             model name   delay (ns)  cumulative delay (ns) pins on net    location
+===================================================================================================
+clk_pixel                  inpad          0.000             0.000               0       (219,159)
+clk_pixel                  inpad          0.126             0.126             178       (219,159)
+clk_pixel                  net            2.010             2.136             178       (219,159)
+   Routing elements:
+      Manhattan distance of X:165, Y:123
+u_lcd_display/mult_66|CLK  dsp48_prim     0.000             2.136             178       (54,282) 
+
+Data Path
+                      name                         model name   delay (ns)  cumulative delay (ns) pins on net    location
+===========================================================================================================================
+u_lcd_display/mult_66|O[1]                         dsp48_prim     0.835             0.835               2        (54,282)
+u_lcd_display/lcd_data2[1]                         net            0.565             1.400               2        (54,282)
+   Routing elements:
+      Manhattan distance of X:6, Y:17
+LUT__1089|in[1]                                    lut            0.063             1.463               2        (60,299)
+LUT__1089|out                                      lut            0.000             1.463               8        (60,299)
+n561                                               net            0.629             2.092               8        (60,299)
+   Routing elements:
+      Manhattan distance of X:23, Y:1
+LUT__1098|in[0]                                    lut            0.061             2.153               8        (83,300)
+LUT__1098|out                                      lut            0.000             2.153               8        (83,300)
+n569                                               net            0.465             2.618               7        (83,300)
+   Routing elements:
+      Manhattan distance of X:4, Y:6
+LUT__1108|in[2]                                    lut            0.061             2.679               8        (79,294)
+LUT__1108|out                                      lut            0.000             2.679               2        (79,294)
+n579                                               net            0.097             2.776               2        (79,294)
+   Routing elements:
+      Manhattan distance of X:0, Y:1
+LUT__1109|in[3]                                    lut            0.061             2.837               2        (79,293)
+LUT__1109|out                                      lut            0.000             2.837               2        (79,293)
+n580                                               net            0.162             2.999               2        (79,293)
+   Routing elements:
+      Manhattan distance of X:4, Y:0
+LUT__1112|in[2]                                    lut            0.061             3.060               2        (83,293)
+LUT__1112|out                                      lut            0.000             3.060              14        (83,293)
+u_rgb2dvi/enc_0/n818                               net            0.412             3.472              13        (83,293)
+   Routing elements:
+      Manhattan distance of X:2, Y:4
+LUT__1329|in[0]                                    lut            0.061             3.533              14        (85,297)
+LUT__1329|out                                      lut            0.000             3.533               6        (85,297)
+n737                                               net            0.399             3.932               6        (85,297)
+   Routing elements:
+      Manhattan distance of X:4, Y:2
+LUT__1336|in[2]                                    lut            0.061             3.993               6        (89,295)
+LUT__1336|out                                      lut            0.000             3.993               6        (89,295)
+u_rgb2dvi/enc_0/LessThan_69/n8                     net            0.306             4.299               6        (89,295)
+   Routing elements:
+      Manhattan distance of X:4, Y:2
+LUT__1343|in[0]                                    lut            0.063             4.362               6        (93,293)
+LUT__1343|out                                      lut            0.000             4.362               2        (93,293)
+u_rgb2dvi/enc_0/n622                               net            0.182             4.544               2        (93,293)
+   Routing elements:
+      Manhattan distance of X:3, Y:0
+u_rgb2dvi/enc_0/sub_52/add_2/i4|I0                 adder          0.063             4.607               2        (90,293)
+u_rgb2dvi/enc_0/sub_52/add_2/i4|O                  adder          0.000             4.607               3        (90,293)
+u_rgb2dvi/enc_0/n138                               net            0.156             4.763               2        (90,293)
+   Routing elements:
+      Manhattan distance of X:4, Y:0
+u_rgb2dvi/enc_0/add_75/i4|I0                       adder          0.052             4.815               3        (94,293)
+u_rgb2dvi/enc_0/add_75/i4|CO                       adder          0.000             4.815               2        (94,293)
+u_rgb2dvi/enc_0/add_75/n8                          net            0.000             4.815               2        (94,293)
+   Routing elements:
+      Manhattan distance of X:0, Y:1
+u_rgb2dvi/enc_0/add_75/i5|CI                       adder          0.097             4.912               2        (94,294)
+u_rgb2dvi/enc_0/add_75/i5|O                        adder          0.000             4.912               2        (94,294)
+u_rgb2dvi/enc_0/acc[1]~FF_brt_45_brt_47_brt_136|D  ff             0.003             4.915               2        (94,294)
+
+Capture Clock Path
+                       name                          model name   delay (ns)  cumulative delay (ns) pins on net    location
+=============================================================================================================================
+clk_pixel                                              inpad        0.000             0.000               0       (219,159)
+clk_pixel                                              inpad        0.126             0.126             178       (219,159)
+clk_pixel                                              net          2.010             2.136             178       (219,159)
+   Routing elements:
+      Manhattan distance of X:125, Y:135
+u_rgb2dvi/enc_0/acc[1]~FF_brt_45_brt_47_brt_136|CLK    ff           0.000             2.136             178       (94,294) 
+
+++++ Path 3 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : u_lcd_display/mult_66|CLK                        
+Path End      : u_rgb2dvi/enc_0/acc[1]~FF_brt_45_brt_47_brt_136|D
+Launch Clock  : clk_pixel (RISE)                                 
+Capture Clock : clk_pixel (RISE)                                 
+Slack         : 1.699 (required time - arrival time)             
+Delay         : 4.071                                            
+
+Logic Level             : 11
+Non-global nets on path : 11
+Global nets on path     :  0
+
+Launch Clock Path Delay        : 2.136
++ Clock To Q + Data Path Delay : 4.909
+--------------------------------------
+End-of-path arrival time       : 7.045
+
+Constraint                     : 6.734
++ Capture Clock Path Delay     : 2.136
+- Clock Uncertainty            : 0.126
+--------------------------------------
+End-of-path required time      : 8.744
+
+Launch Clock Path
+          name             model name   delay (ns)  cumulative delay (ns) pins on net    location
+===================================================================================================
+clk_pixel                  inpad          0.000             0.000               0       (219,159)
+clk_pixel                  inpad          0.126             0.126             178       (219,159)
+clk_pixel                  net            2.010             2.136             178       (219,159)
+   Routing elements:
+      Manhattan distance of X:165, Y:123
+u_lcd_display/mult_66|CLK  dsp48_prim     0.000             2.136             178       (54,282) 
+
+Data Path
+                      name                         model name   delay (ns)  cumulative delay (ns) pins on net    location
+===========================================================================================================================
+u_lcd_display/mult_66|O[1]                         dsp48_prim     0.835             0.835               2        (54,282)
+u_lcd_display/lcd_data2[1]                         net            0.565             1.400               2        (54,282)
+   Routing elements:
+      Manhattan distance of X:6, Y:17
+LUT__1089|in[1]                                    lut            0.063             1.463               2        (60,299)
+LUT__1089|out                                      lut            0.000             1.463               8        (60,299)
+n561                                               net            0.629             2.092               8        (60,299)
+   Routing elements:
+      Manhattan distance of X:23, Y:1
+LUT__1098|in[0]                                    lut            0.061             2.153               8        (83,300)
+LUT__1098|out                                      lut            0.000             2.153               8        (83,300)
+n569                                               net            0.396             2.549               7        (83,300)
+   Routing elements:
+      Manhattan distance of X:6, Y:2
+LUT__1101|in[2]                                    lut            0.061             2.610               8        (77,298)
+LUT__1101|out                                      lut            0.000             2.610               3        (77,298)
+n572                                               net            0.160             2.770               3        (77,298)
+   Routing elements:
+      Manhattan distance of X:2, Y:5
+LUT__1109|in[0]                                    lut            0.061             2.831               3        (79,293)
+LUT__1109|out                                      lut            0.000             2.831               2        (79,293)
+n580                                               net            0.162             2.993               2        (79,293)
+   Routing elements:
+      Manhattan distance of X:4, Y:0
+LUT__1112|in[2]                                    lut            0.061             3.054               2        (83,293)
+LUT__1112|out                                      lut            0.000             3.054              14        (83,293)
+u_rgb2dvi/enc_0/n818                               net            0.412             3.466              13        (83,293)
+   Routing elements:
+      Manhattan distance of X:2, Y:4
+LUT__1329|in[0]                                    lut            0.061             3.527              14        (85,297)
+LUT__1329|out                                      lut            0.000             3.527               6        (85,297)
+n737                                               net            0.399             3.926               6        (85,297)
+   Routing elements:
+      Manhattan distance of X:4, Y:2
+LUT__1336|in[2]                                    lut            0.061             3.987               6        (89,295)
+LUT__1336|out                                      lut            0.000             3.987               6        (89,295)
+u_rgb2dvi/enc_0/LessThan_69/n8                     net            0.306             4.293               6        (89,295)
+   Routing elements:
+      Manhattan distance of X:4, Y:2
+LUT__1343|in[0]                                    lut            0.063             4.356               6        (93,293)
+LUT__1343|out                                      lut            0.000             4.356               2        (93,293)
+u_rgb2dvi/enc_0/n622                               net            0.182             4.538               2        (93,293)
+   Routing elements:
+      Manhattan distance of X:3, Y:0
+u_rgb2dvi/enc_0/sub_52/add_2/i4|I0                 adder          0.063             4.601               2        (90,293)
+u_rgb2dvi/enc_0/sub_52/add_2/i4|O                  adder          0.000             4.601               3        (90,293)
+u_rgb2dvi/enc_0/n138                               net            0.156             4.757               2        (90,293)
+   Routing elements:
+      Manhattan distance of X:4, Y:0
+u_rgb2dvi/enc_0/add_75/i4|I0                       adder          0.052             4.809               3        (94,293)
+u_rgb2dvi/enc_0/add_75/i4|CO                       adder          0.000             4.809               2        (94,293)
+u_rgb2dvi/enc_0/add_75/n8                          net            0.000             4.809               2        (94,293)
+   Routing elements:
+      Manhattan distance of X:0, Y:1
+u_rgb2dvi/enc_0/add_75/i5|CI                       adder          0.097             4.906               2        (94,294)
+u_rgb2dvi/enc_0/add_75/i5|O                        adder          0.000             4.906               2        (94,294)
+u_rgb2dvi/enc_0/acc[1]~FF_brt_45_brt_47_brt_136|D  ff             0.003             4.909               2        (94,294)
+
+Capture Clock Path
+                       name                          model name   delay (ns)  cumulative delay (ns) pins on net    location
+=============================================================================================================================
+clk_pixel                                              inpad        0.000             0.000               0       (219,159)
+clk_pixel                                              inpad        0.126             0.126             178       (219,159)
+clk_pixel                                              net          2.010             2.136             178       (219,159)
+   Routing elements:
+      Manhattan distance of X:125, Y:135
+u_rgb2dvi/enc_0/acc[1]~FF_brt_45_brt_47_brt_136|CLK    ff           0.000             2.136             178       (94,294) 
+
+++++ Path 4 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : u_lcd_display/mult_66|CLK                        
+Path End      : u_rgb2dvi/enc_0/acc[1]~FF_brt_45_brt_47_brt_136|D
+Launch Clock  : clk_pixel (RISE)                                 
+Capture Clock : clk_pixel (RISE)                                 
+Slack         : 1.702 (required time - arrival time)             
+Delay         : 4.068                                            
+
+Logic Level             : 11
+Non-global nets on path : 11
+Global nets on path     :  0
+
+Launch Clock Path Delay        : 2.136
++ Clock To Q + Data Path Delay : 4.906
+--------------------------------------
+End-of-path arrival time       : 7.042
+
+Constraint                     : 6.734
++ Capture Clock Path Delay     : 2.136
+- Clock Uncertainty            : 0.126
+--------------------------------------
+End-of-path required time      : 8.744
+
+Launch Clock Path
+          name             model name   delay (ns)  cumulative delay (ns) pins on net    location
+===================================================================================================
+clk_pixel                  inpad          0.000             0.000               0       (219,159)
+clk_pixel                  inpad          0.126             0.126             178       (219,159)
+clk_pixel                  net            2.010             2.136             178       (219,159)
+   Routing elements:
+      Manhattan distance of X:165, Y:123
+u_lcd_display/mult_66|CLK  dsp48_prim     0.000             2.136             178       (54,282) 
+
+Data Path
+                      name                         model name   delay (ns)  cumulative delay (ns) pins on net    location
+===========================================================================================================================
+u_lcd_display/mult_66|O[0]                         dsp48_prim     0.835             0.835               2        (54,282)
+u_lcd_display/lcd_data2[0]                         net            0.647             1.482               2        (54,282)
+   Routing elements:
+      Manhattan distance of X:10, Y:17
+LUT__1096|in[1]                                    lut            0.061             1.543               2        (64,299)
+LUT__1096|out                                      lut            0.000             1.543              10        (64,299)
+n567                                               net            0.503             2.046              10        (64,299)
+   Routing elements:
+      Manhattan distance of X:19, Y:1
+LUT__1098|in[2]                                    lut            0.061             2.107              10        (83,300)
+LUT__1098|out                                      lut            0.000             2.107               8        (83,300)
+n569                                               net            0.396             2.503               7        (83,300)
+   Routing elements:
+      Manhattan distance of X:6, Y:2
+LUT__1101|in[2]                                    lut            0.061             2.564               8        (77,298)
+LUT__1101|out                                      lut            0.000             2.564               3        (77,298)
+n572                                               net            0.220             2.784               3        (77,298)
+   Routing elements:
+      Manhattan distance of X:1, Y:5
+LUT__1111|in[0]                                    lut            0.063             2.847               3        (78,293)
+LUT__1111|out                                      lut            0.000             2.847               2        (78,293)
+n582                                               net            0.143             2.990               2        (78,293)
+   Routing elements:
+      Manhattan distance of X:5, Y:0
+LUT__1112|in[0]                                    lut            0.061             3.051               2        (83,293)
+LUT__1112|out                                      lut            0.000             3.051              14        (83,293)
+u_rgb2dvi/enc_0/n818                               net            0.412             3.463              13        (83,293)
+   Routing elements:
+      Manhattan distance of X:2, Y:4
+LUT__1329|in[0]                                    lut            0.061             3.524              14        (85,297)
+LUT__1329|out                                      lut            0.000             3.524               6        (85,297)
+n737                                               net            0.399             3.923               6        (85,297)
+   Routing elements:
+      Manhattan distance of X:4, Y:2
+LUT__1336|in[2]                                    lut            0.061             3.984               6        (89,295)
+LUT__1336|out                                      lut            0.000             3.984               6        (89,295)
+u_rgb2dvi/enc_0/LessThan_69/n8                     net            0.306             4.290               6        (89,295)
+   Routing elements:
+      Manhattan distance of X:4, Y:2
+LUT__1343|in[0]                                    lut            0.063             4.353               6        (93,293)
+LUT__1343|out                                      lut            0.000             4.353               2        (93,293)
+u_rgb2dvi/enc_0/n622                               net            0.182             4.535               2        (93,293)
+   Routing elements:
+      Manhattan distance of X:3, Y:0
+u_rgb2dvi/enc_0/sub_52/add_2/i4|I0                 adder          0.063             4.598               2        (90,293)
+u_rgb2dvi/enc_0/sub_52/add_2/i4|O                  adder          0.000             4.598               3        (90,293)
+u_rgb2dvi/enc_0/n138                               net            0.156             4.754               2        (90,293)
+   Routing elements:
+      Manhattan distance of X:4, Y:0
+u_rgb2dvi/enc_0/add_75/i4|I0                       adder          0.052             4.806               3        (94,293)
+u_rgb2dvi/enc_0/add_75/i4|CO                       adder          0.000             4.806               2        (94,293)
+u_rgb2dvi/enc_0/add_75/n8                          net            0.000             4.806               2        (94,293)
+   Routing elements:
+      Manhattan distance of X:0, Y:1
+u_rgb2dvi/enc_0/add_75/i5|CI                       adder          0.097             4.903               2        (94,294)
+u_rgb2dvi/enc_0/add_75/i5|O                        adder          0.000             4.903               2        (94,294)
+u_rgb2dvi/enc_0/acc[1]~FF_brt_45_brt_47_brt_136|D  ff             0.003             4.906               2        (94,294)
+
+Capture Clock Path
+                       name                          model name   delay (ns)  cumulative delay (ns) pins on net    location
+=============================================================================================================================
+clk_pixel                                              inpad        0.000             0.000               0       (219,159)
+clk_pixel                                              inpad        0.126             0.126             178       (219,159)
+clk_pixel                                              net          2.010             2.136             178       (219,159)
+   Routing elements:
+      Manhattan distance of X:125, Y:135
+u_rgb2dvi/enc_0/acc[1]~FF_brt_45_brt_47_brt_136|CLK    ff           0.000             2.136             178       (94,294) 
+
+++++ Path 5 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : u_lcd_display/mult_66|CLK                        
+Path End      : u_rgb2dvi/enc_0/acc[1]~FF_brt_45_brt_47_brt_136|D
+Launch Clock  : clk_pixel (RISE)                                 
+Capture Clock : clk_pixel (RISE)                                 
+Slack         : 1.739 (required time - arrival time)             
+Delay         : 4.031                                            
+
+Logic Level             : 11
+Non-global nets on path : 11
+Global nets on path     :  0
+
+Launch Clock Path Delay        : 2.136
++ Clock To Q + Data Path Delay : 4.869
+--------------------------------------
+End-of-path arrival time       : 7.005
+
+Constraint                     : 6.734
++ Capture Clock Path Delay     : 2.136
+- Clock Uncertainty            : 0.126
+--------------------------------------
+End-of-path required time      : 8.744
+
+Launch Clock Path
+          name             model name   delay (ns)  cumulative delay (ns) pins on net    location
+===================================================================================================
+clk_pixel                  inpad          0.000             0.000               0       (219,159)
+clk_pixel                  inpad          0.126             0.126             178       (219,159)
+clk_pixel                  net            2.010             2.136             178       (219,159)
+   Routing elements:
+      Manhattan distance of X:165, Y:123
+u_lcd_display/mult_66|CLK  dsp48_prim     0.000             2.136             178       (54,282) 
+
+Data Path
+                      name                         model name   delay (ns)  cumulative delay (ns) pins on net    location
+===========================================================================================================================
+u_lcd_display/mult_66|O[0]                         dsp48_prim     0.835             0.835               2        (54,282)
+u_lcd_display/lcd_data2[0]                         net            0.647             1.482               2        (54,282)
+   Routing elements:
+      Manhattan distance of X:10, Y:17
+LUT__1096|in[1]                                    lut            0.061             1.543               2        (64,299)
+LUT__1096|out                                      lut            0.000             1.543              10        (64,299)
+n567                                               net            0.503             2.046              10        (64,299)
+   Routing elements:
+      Manhattan distance of X:19, Y:1
+LUT__1098|in[2]                                    lut            0.061             2.107              10        (83,300)
+LUT__1098|out                                      lut            0.000             2.107               8        (83,300)
+n569                                               net            0.465             2.572               7        (83,300)
+   Routing elements:
+      Manhattan distance of X:4, Y:6
+LUT__1108|in[2]                                    lut            0.061             2.633               8        (79,294)
+LUT__1108|out                                      lut            0.000             2.633               2        (79,294)
+n579                                               net            0.097             2.730               2        (79,294)
+   Routing elements:
+      Manhattan distance of X:0, Y:1
+LUT__1109|in[3]                                    lut            0.061             2.791               2        (79,293)
+LUT__1109|out                                      lut            0.000             2.791               2        (79,293)
+n580                                               net            0.162             2.953               2        (79,293)
+   Routing elements:
+      Manhattan distance of X:4, Y:0
+LUT__1112|in[2]                                    lut            0.061             3.014               2        (83,293)
+LUT__1112|out                                      lut            0.000             3.014              14        (83,293)
+u_rgb2dvi/enc_0/n818                               net            0.412             3.426              13        (83,293)
+   Routing elements:
+      Manhattan distance of X:2, Y:4
+LUT__1329|in[0]                                    lut            0.061             3.487              14        (85,297)
+LUT__1329|out                                      lut            0.000             3.487               6        (85,297)
+n737                                               net            0.399             3.886               6        (85,297)
+   Routing elements:
+      Manhattan distance of X:4, Y:2
+LUT__1336|in[2]                                    lut            0.061             3.947               6        (89,295)
+LUT__1336|out                                      lut            0.000             3.947               6        (89,295)
+u_rgb2dvi/enc_0/LessThan_69/n8                     net            0.306             4.253               6        (89,295)
+   Routing elements:
+      Manhattan distance of X:4, Y:2
+LUT__1343|in[0]                                    lut            0.063             4.316               6        (93,293)
+LUT__1343|out                                      lut            0.000             4.316               2        (93,293)
+u_rgb2dvi/enc_0/n622                               net            0.182             4.498               2        (93,293)
+   Routing elements:
+      Manhattan distance of X:3, Y:0
+u_rgb2dvi/enc_0/sub_52/add_2/i4|I0                 adder          0.063             4.561               2        (90,293)
+u_rgb2dvi/enc_0/sub_52/add_2/i4|O                  adder          0.000             4.561               3        (90,293)
+u_rgb2dvi/enc_0/n138                               net            0.156             4.717               2        (90,293)
+   Routing elements:
+      Manhattan distance of X:4, Y:0
+u_rgb2dvi/enc_0/add_75/i4|I0                       adder          0.052             4.769               3        (94,293)
+u_rgb2dvi/enc_0/add_75/i4|CO                       adder          0.000             4.769               2        (94,293)
+u_rgb2dvi/enc_0/add_75/n8                          net            0.000             4.769               2        (94,293)
+   Routing elements:
+      Manhattan distance of X:0, Y:1
+u_rgb2dvi/enc_0/add_75/i5|CI                       adder          0.097             4.866               2        (94,294)
+u_rgb2dvi/enc_0/add_75/i5|O                        adder          0.000             4.866               2        (94,294)
+u_rgb2dvi/enc_0/acc[1]~FF_brt_45_brt_47_brt_136|D  ff             0.003             4.869               2        (94,294)
+
+Capture Clock Path
+                       name                          model name   delay (ns)  cumulative delay (ns) pins on net    location
+=============================================================================================================================
+clk_pixel                                              inpad        0.000             0.000               0       (219,159)
+clk_pixel                                              inpad        0.126             0.126             178       (219,159)
+clk_pixel                                              net          2.010             2.136             178       (219,159)
+   Routing elements:
+      Manhattan distance of X:125, Y:135
+u_rgb2dvi/enc_0/acc[1]~FF_brt_45_brt_47_brt_136|CLK    ff           0.000             2.136             178       (94,294) 
+
+++++ Path 6 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : u_lcd_display/mult_66|CLK                        
+Path End      : u_rgb2dvi/enc_0/acc[1]~FF_brt_44_brt_49_brt_137|D
+Launch Clock  : clk_pixel (RISE)                                 
+Capture Clock : clk_pixel (RISE)                                 
+Slack         : 1.744 (required time - arrival time)             
+Delay         : 4.026                                            
+
+Logic Level             : 10
+Non-global nets on path : 10
+Global nets on path     :  0
+
+Launch Clock Path Delay        : 2.136
++ Clock To Q + Data Path Delay : 4.864
+--------------------------------------
+End-of-path arrival time       : 7.000
+
+Constraint                     : 6.734
++ Capture Clock Path Delay     : 2.136
+- Clock Uncertainty            : 0.126
+--------------------------------------
+End-of-path required time      : 8.744
+
+Launch Clock Path
+          name             model name   delay (ns)  cumulative delay (ns) pins on net    location
+===================================================================================================
+clk_pixel                  inpad          0.000             0.000               0       (219,159)
+clk_pixel                  inpad          0.126             0.126             178       (219,159)
+clk_pixel                  net            2.010             2.136             178       (219,159)
+   Routing elements:
+      Manhattan distance of X:165, Y:123
+u_lcd_display/mult_66|CLK  dsp48_prim     0.000             2.136             178       (54,282) 
+
+Data Path
+                      name                         model name   delay (ns)  cumulative delay (ns) pins on net    location
+===========================================================================================================================
+u_lcd_display/mult_66|O[1]                         dsp48_prim     0.835             0.835               2        (54,282)
+u_lcd_display/lcd_data2[1]                         net            0.565             1.400               2        (54,282)
+   Routing elements:
+      Manhattan distance of X:6, Y:17
+LUT__1089|in[1]                                    lut            0.063             1.463               2        (60,299)
+LUT__1089|out                                      lut            0.000             1.463               8        (60,299)
+n561                                               net            0.629             2.092               8        (60,299)
+   Routing elements:
+      Manhattan distance of X:23, Y:1
+LUT__1098|in[0]                                    lut            0.061             2.153               8        (83,300)
+LUT__1098|out                                      lut            0.000             2.153               8        (83,300)
+n569                                               net            0.396             2.549               7        (83,300)
+   Routing elements:
+      Manhattan distance of X:6, Y:2
+LUT__1101|in[2]                                    lut            0.061             2.610               8        (77,298)
+LUT__1101|out                                      lut            0.000             2.610               3        (77,298)
+n572                                               net            0.220             2.830               3        (77,298)
+   Routing elements:
+      Manhattan distance of X:1, Y:5
+LUT__1111|in[0]                                    lut            0.063             2.893               3        (78,293)
+LUT__1111|out                                      lut            0.000             2.893               2        (78,293)
+n582                                               net            0.143             3.036               2        (78,293)
+   Routing elements:
+      Manhattan distance of X:5, Y:0
+LUT__1112|in[0]                                    lut            0.061             3.097               2        (83,293)
+LUT__1112|out                                      lut            0.000             3.097              14        (83,293)
+u_rgb2dvi/enc_0/n818                               net            0.412             3.509              13        (83,293)
+   Routing elements:
+      Manhattan distance of X:2, Y:4
+LUT__1329|in[0]                                    lut            0.061             3.570              14        (85,297)
+LUT__1329|out                                      lut            0.000             3.570               6        (85,297)
+n737                                               net            0.399             3.969               6        (85,297)
+   Routing elements:
+      Manhattan distance of X:4, Y:2
+LUT__1336|in[2]                                    lut            0.061             4.030               6        (89,295)
+LUT__1336|out                                      lut            0.000             4.030               6        (89,295)
+u_rgb2dvi/enc_0/LessThan_69/n8                     net            0.306             4.336               6        (89,295)
+   Routing elements:
+      Manhattan distance of X:4, Y:2
+LUT__1343|in[0]                                    lut            0.063             4.399               6        (93,293)
+LUT__1343|out                                      lut            0.000             4.399               2        (93,293)
+u_rgb2dvi/enc_0/n622                               net            0.182             4.581               2        (93,293)
+   Routing elements:
+      Manhattan distance of X:3, Y:0
+u_rgb2dvi/enc_0/sub_52/add_2/i4|I0                 adder          0.063             4.644               2        (90,293)
+u_rgb2dvi/enc_0/sub_52/add_2/i4|O                  adder          0.000             4.644               3        (90,293)
+u_rgb2dvi/enc_0/n138                               net            0.156             4.800               2        (90,293)
+   Routing elements:
+      Manhattan distance of X:4, Y:0
+u_rgb2dvi/enc_0/add_75/i4|I0                       adder          0.061             4.861               3        (94,293)
+u_rgb2dvi/enc_0/add_75/i4|O                        adder          0.000             4.861               2        (94,293)
+u_rgb2dvi/enc_0/acc[1]~FF_brt_44_brt_49_brt_137|D  ff             0.003             4.864               2        (94,293)
+
+Capture Clock Path
+                       name                          model name   delay (ns)  cumulative delay (ns) pins on net    location
+=============================================================================================================================
+clk_pixel                                              inpad        0.000             0.000               0       (219,159)
+clk_pixel                                              inpad        0.126             0.126             178       (219,159)
+clk_pixel                                              net          2.010             2.136             178       (219,159)
+   Routing elements:
+      Manhattan distance of X:125, Y:134
+u_rgb2dvi/enc_0/acc[1]~FF_brt_44_brt_49_brt_137|CLK    ff           0.000             2.136             178       (94,293) 
+
+++++ Path 7 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : u_lcd_display/mult_66|CLK                        
+Path End      : u_rgb2dvi/enc_0/acc[1]~FF_brt_45_brt_47_brt_136|D
+Launch Clock  : clk_pixel (RISE)                                 
+Capture Clock : clk_pixel (RISE)                                 
+Slack         : 1.745 (required time - arrival time)             
+Delay         : 4.025                                            
+
+Logic Level             : 11
+Non-global nets on path : 11
+Global nets on path     :  0
+
+Launch Clock Path Delay        : 2.136
++ Clock To Q + Data Path Delay : 4.863
+--------------------------------------
+End-of-path arrival time       : 6.999
+
+Constraint                     : 6.734
++ Capture Clock Path Delay     : 2.136
+- Clock Uncertainty            : 0.126
+--------------------------------------
+End-of-path required time      : 8.744
+
+Launch Clock Path
+          name             model name   delay (ns)  cumulative delay (ns) pins on net    location
+===================================================================================================
+clk_pixel                  inpad          0.000             0.000               0       (219,159)
+clk_pixel                  inpad          0.126             0.126             178       (219,159)
+clk_pixel                  net            2.010             2.136             178       (219,159)
+   Routing elements:
+      Manhattan distance of X:165, Y:123
+u_lcd_display/mult_66|CLK  dsp48_prim     0.000             2.136             178       (54,282) 
+
+Data Path
+                      name                         model name   delay (ns)  cumulative delay (ns) pins on net    location
+===========================================================================================================================
+u_lcd_display/mult_66|O[0]                         dsp48_prim     0.835             0.835               2        (54,282)
+u_lcd_display/lcd_data2[0]                         net            0.647             1.482               2        (54,282)
+   Routing elements:
+      Manhattan distance of X:10, Y:17
+LUT__1096|in[1]                                    lut            0.061             1.543               2        (64,299)
+LUT__1096|out                                      lut            0.000             1.543              10        (64,299)
+n567                                               net            0.503             2.046              10        (64,299)
+   Routing elements:
+      Manhattan distance of X:19, Y:1
+LUT__1098|in[2]                                    lut            0.061             2.107              10        (83,300)
+LUT__1098|out                                      lut            0.000             2.107               8        (83,300)
+n569                                               net            0.396             2.503               7        (83,300)
+   Routing elements:
+      Manhattan distance of X:6, Y:2
+LUT__1101|in[2]                                    lut            0.061             2.564               8        (77,298)
+LUT__1101|out                                      lut            0.000             2.564               3        (77,298)
+n572                                               net            0.160             2.724               3        (77,298)
+   Routing elements:
+      Manhattan distance of X:2, Y:5
+LUT__1109|in[0]                                    lut            0.061             2.785               3        (79,293)
+LUT__1109|out                                      lut            0.000             2.785               2        (79,293)
+n580                                               net            0.162             2.947               2        (79,293)
+   Routing elements:
+      Manhattan distance of X:4, Y:0
+LUT__1112|in[2]                                    lut            0.061             3.008               2        (83,293)
+LUT__1112|out                                      lut            0.000             3.008              14        (83,293)
+u_rgb2dvi/enc_0/n818                               net            0.412             3.420              13        (83,293)
+   Routing elements:
+      Manhattan distance of X:2, Y:4
+LUT__1329|in[0]                                    lut            0.061             3.481              14        (85,297)
+LUT__1329|out                                      lut            0.000             3.481               6        (85,297)
+n737                                               net            0.399             3.880               6        (85,297)
+   Routing elements:
+      Manhattan distance of X:4, Y:2
+LUT__1336|in[2]                                    lut            0.061             3.941               6        (89,295)
+LUT__1336|out                                      lut            0.000             3.941               6        (89,295)
+u_rgb2dvi/enc_0/LessThan_69/n8                     net            0.306             4.247               6        (89,295)
+   Routing elements:
+      Manhattan distance of X:4, Y:2
+LUT__1343|in[0]                                    lut            0.063             4.310               6        (93,293)
+LUT__1343|out                                      lut            0.000             4.310               2        (93,293)
+u_rgb2dvi/enc_0/n622                               net            0.182             4.492               2        (93,293)
+   Routing elements:
+      Manhattan distance of X:3, Y:0
+u_rgb2dvi/enc_0/sub_52/add_2/i4|I0                 adder          0.063             4.555               2        (90,293)
+u_rgb2dvi/enc_0/sub_52/add_2/i4|O                  adder          0.000             4.555               3        (90,293)
+u_rgb2dvi/enc_0/n138                               net            0.156             4.711               2        (90,293)
+   Routing elements:
+      Manhattan distance of X:4, Y:0
+u_rgb2dvi/enc_0/add_75/i4|I0                       adder          0.052             4.763               3        (94,293)
+u_rgb2dvi/enc_0/add_75/i4|CO                       adder          0.000             4.763               2        (94,293)
+u_rgb2dvi/enc_0/add_75/n8                          net            0.000             4.763               2        (94,293)
+   Routing elements:
+      Manhattan distance of X:0, Y:1
+u_rgb2dvi/enc_0/add_75/i5|CI                       adder          0.097             4.860               2        (94,294)
+u_rgb2dvi/enc_0/add_75/i5|O                        adder          0.000             4.860               2        (94,294)
+u_rgb2dvi/enc_0/acc[1]~FF_brt_45_brt_47_brt_136|D  ff             0.003             4.863               2        (94,294)
+
+Capture Clock Path
+                       name                          model name   delay (ns)  cumulative delay (ns) pins on net    location
+=============================================================================================================================
+clk_pixel                                              inpad        0.000             0.000               0       (219,159)
+clk_pixel                                              inpad        0.126             0.126             178       (219,159)
+clk_pixel                                              net          2.010             2.136             178       (219,159)
+   Routing elements:
+      Manhattan distance of X:125, Y:135
+u_rgb2dvi/enc_0/acc[1]~FF_brt_45_brt_47_brt_136|CLK    ff           0.000             2.136             178       (94,294) 
+
+++++ Path 8 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : u_lcd_display/mult_66|CLK                        
+Path End      : u_rgb2dvi/enc_0/acc[1]~FF_brt_45_brt_47_brt_136|D
+Launch Clock  : clk_pixel (RISE)                                 
+Capture Clock : clk_pixel (RISE)                                 
+Slack         : 1.771 (required time - arrival time)             
+Delay         : 3.999                                            
+
+Logic Level             : 11
+Non-global nets on path : 11
+Global nets on path     :  0
+
+Launch Clock Path Delay        : 2.136
++ Clock To Q + Data Path Delay : 4.837
+--------------------------------------
+End-of-path arrival time       : 6.973
+
+Constraint                     : 6.734
++ Capture Clock Path Delay     : 2.136
+- Clock Uncertainty            : 0.126
+--------------------------------------
+End-of-path required time      : 8.744
+
+Launch Clock Path
+          name             model name   delay (ns)  cumulative delay (ns) pins on net    location
+===================================================================================================
+clk_pixel                  inpad          0.000             0.000               0       (219,159)
+clk_pixel                  inpad          0.126             0.126             178       (219,159)
+clk_pixel                  net            2.010             2.136             178       (219,159)
+   Routing elements:
+      Manhattan distance of X:165, Y:123
+u_lcd_display/mult_66|CLK  dsp48_prim     0.000             2.136             178       (54,282) 
+
+Data Path
+                      name                         model name   delay (ns)  cumulative delay (ns) pins on net    location
+===========================================================================================================================
+u_lcd_display/mult_66|O[1]                         dsp48_prim     0.835             0.835               2        (54,282)
+u_lcd_display/lcd_data2[1]                         net            0.565             1.400               2        (54,282)
+   Routing elements:
+      Manhattan distance of X:6, Y:17
+LUT__1089|in[1]                                    lut            0.063             1.463               2        (60,299)
+LUT__1089|out                                      lut            0.000             1.463               8        (60,299)
+n561                                               net            0.472             1.935               8        (60,299)
+   Routing elements:
+      Manhattan distance of X:7, Y:3
+LUT__1103|in[1]                                    lut            0.061             1.996               8        (67,302)
+LUT__1103|out                                      lut            0.000             1.996               3        (67,302)
+n574                                               net            0.315             2.311               2        (67,302)
+   Routing elements:
+      Manhattan distance of X:7, Y:6
+LUT__1104|in[2]                                    lut            0.061             2.372               3        (74,296)
+LUT__1104|out                                      lut            0.000             2.372               3        (74,296)
+n575                                               net            0.343             2.715               3        (74,296)
+   Routing elements:
+      Manhattan distance of X:4, Y:3
+LUT__1111|in[2]                                    lut            0.063             2.778               3        (78,293)
+LUT__1111|out                                      lut            0.000             2.778               2        (78,293)
+n582                                               net            0.143             2.921               2        (78,293)
+   Routing elements:
+      Manhattan distance of X:5, Y:0
+LUT__1112|in[0]                                    lut            0.061             2.982               2        (83,293)
+LUT__1112|out                                      lut            0.000             2.982              14        (83,293)
+u_rgb2dvi/enc_0/n818                               net            0.412             3.394              13        (83,293)
+   Routing elements:
+      Manhattan distance of X:2, Y:4
+LUT__1329|in[0]                                    lut            0.061             3.455              14        (85,297)
+LUT__1329|out                                      lut            0.000             3.455               6        (85,297)
+n737                                               net            0.399             3.854               6        (85,297)
+   Routing elements:
+      Manhattan distance of X:4, Y:2
+LUT__1336|in[2]                                    lut            0.061             3.915               6        (89,295)
+LUT__1336|out                                      lut            0.000             3.915               6        (89,295)
+u_rgb2dvi/enc_0/LessThan_69/n8                     net            0.306             4.221               6        (89,295)
+   Routing elements:
+      Manhattan distance of X:4, Y:2
+LUT__1343|in[0]                                    lut            0.063             4.284               6        (93,293)
+LUT__1343|out                                      lut            0.000             4.284               2        (93,293)
+u_rgb2dvi/enc_0/n622                               net            0.182             4.466               2        (93,293)
+   Routing elements:
+      Manhattan distance of X:3, Y:0
+u_rgb2dvi/enc_0/sub_52/add_2/i4|I0                 adder          0.063             4.529               2        (90,293)
+u_rgb2dvi/enc_0/sub_52/add_2/i4|O                  adder          0.000             4.529               3        (90,293)
+u_rgb2dvi/enc_0/n138                               net            0.156             4.685               2        (90,293)
+   Routing elements:
+      Manhattan distance of X:4, Y:0
+u_rgb2dvi/enc_0/add_75/i4|I0                       adder          0.052             4.737               3        (94,293)
+u_rgb2dvi/enc_0/add_75/i4|CO                       adder          0.000             4.737               2        (94,293)
+u_rgb2dvi/enc_0/add_75/n8                          net            0.000             4.737               2        (94,293)
+   Routing elements:
+      Manhattan distance of X:0, Y:1
+u_rgb2dvi/enc_0/add_75/i5|CI                       adder          0.097             4.834               2        (94,294)
+u_rgb2dvi/enc_0/add_75/i5|O                        adder          0.000             4.834               2        (94,294)
+u_rgb2dvi/enc_0/acc[1]~FF_brt_45_brt_47_brt_136|D  ff             0.003             4.837               2        (94,294)
+
+Capture Clock Path
+                       name                          model name   delay (ns)  cumulative delay (ns) pins on net    location
+=============================================================================================================================
+clk_pixel                                              inpad        0.000             0.000               0       (219,159)
+clk_pixel                                              inpad        0.126             0.126             178       (219,159)
+clk_pixel                                              net          2.010             2.136             178       (219,159)
+   Routing elements:
+      Manhattan distance of X:125, Y:135
+u_rgb2dvi/enc_0/acc[1]~FF_brt_45_brt_47_brt_136|CLK    ff           0.000             2.136             178       (94,294) 
+
+++++ Path 9 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : u_lcd_display/mult_66|CLK                        
+Path End      : u_rgb2dvi/enc_0/acc[1]~FF_brt_44_brt_49_brt_137|D
+Launch Clock  : clk_pixel (RISE)                                 
+Capture Clock : clk_pixel (RISE)                                 
+Slack         : 1.781 (required time - arrival time)             
+Delay         : 3.989                                            
+
+Logic Level             : 10
+Non-global nets on path : 10
+Global nets on path     :  0
+
+Launch Clock Path Delay        : 2.136
++ Clock To Q + Data Path Delay : 4.827
+--------------------------------------
+End-of-path arrival time       : 6.963
+
+Constraint                     : 6.734
++ Capture Clock Path Delay     : 2.136
+- Clock Uncertainty            : 0.126
+--------------------------------------
+End-of-path required time      : 8.744
+
+Launch Clock Path
+          name             model name   delay (ns)  cumulative delay (ns) pins on net    location
+===================================================================================================
+clk_pixel                  inpad          0.000             0.000               0       (219,159)
+clk_pixel                  inpad          0.126             0.126             178       (219,159)
+clk_pixel                  net            2.010             2.136             178       (219,159)
+   Routing elements:
+      Manhattan distance of X:165, Y:123
+u_lcd_display/mult_66|CLK  dsp48_prim     0.000             2.136             178       (54,282) 
+
+Data Path
+                      name                         model name   delay (ns)  cumulative delay (ns) pins on net    location
+===========================================================================================================================
+u_lcd_display/mult_66|O[1]                         dsp48_prim     0.835             0.835               2        (54,282)
+u_lcd_display/lcd_data2[1]                         net            0.565             1.400               2        (54,282)
+   Routing elements:
+      Manhattan distance of X:6, Y:17
+LUT__1089|in[1]                                    lut            0.063             1.463               2        (60,299)
+LUT__1089|out                                      lut            0.000             1.463               8        (60,299)
+n561                                               net            0.629             2.092               8        (60,299)
+   Routing elements:
+      Manhattan distance of X:23, Y:1
+LUT__1098|in[0]                                    lut            0.061             2.153               8        (83,300)
+LUT__1098|out                                      lut            0.000             2.153               8        (83,300)
+n569                                               net            0.465             2.618               7        (83,300)
+   Routing elements:
+      Manhattan distance of X:4, Y:6
+LUT__1108|in[2]                                    lut            0.061             2.679               8        (79,294)
+LUT__1108|out                                      lut            0.000             2.679               2        (79,294)
+n579                                               net            0.097             2.776               2        (79,294)
+   Routing elements:
+      Manhattan distance of X:0, Y:1
+LUT__1109|in[3]                                    lut            0.061             2.837               2        (79,293)
+LUT__1109|out                                      lut            0.000             2.837               2        (79,293)
+n580                                               net            0.162             2.999               2        (79,293)
+   Routing elements:
+      Manhattan distance of X:4, Y:0
+LUT__1112|in[2]                                    lut            0.061             3.060               2        (83,293)
+LUT__1112|out                                      lut            0.000             3.060              14        (83,293)
+u_rgb2dvi/enc_0/n818                               net            0.412             3.472              13        (83,293)
+   Routing elements:
+      Manhattan distance of X:2, Y:4
+LUT__1329|in[0]                                    lut            0.061             3.533              14        (85,297)
+LUT__1329|out                                      lut            0.000             3.533               6        (85,297)
+n737                                               net            0.399             3.932               6        (85,297)
+   Routing elements:
+      Manhattan distance of X:4, Y:2
+LUT__1336|in[2]                                    lut            0.061             3.993               6        (89,295)
+LUT__1336|out                                      lut            0.000             3.993               6        (89,295)
+u_rgb2dvi/enc_0/LessThan_69/n8                     net            0.306             4.299               6        (89,295)
+   Routing elements:
+      Manhattan distance of X:4, Y:2
+LUT__1343|in[0]                                    lut            0.063             4.362               6        (93,293)
+LUT__1343|out                                      lut            0.000             4.362               2        (93,293)
+u_rgb2dvi/enc_0/n622                               net            0.182             4.544               2        (93,293)
+   Routing elements:
+      Manhattan distance of X:3, Y:0
+u_rgb2dvi/enc_0/sub_52/add_2/i4|I0                 adder          0.063             4.607               2        (90,293)
+u_rgb2dvi/enc_0/sub_52/add_2/i4|O                  adder          0.000             4.607               3        (90,293)
+u_rgb2dvi/enc_0/n138                               net            0.156             4.763               2        (90,293)
+   Routing elements:
+      Manhattan distance of X:4, Y:0
+u_rgb2dvi/enc_0/add_75/i4|I0                       adder          0.061             4.824               3        (94,293)
+u_rgb2dvi/enc_0/add_75/i4|O                        adder          0.000             4.824               2        (94,293)
+u_rgb2dvi/enc_0/acc[1]~FF_brt_44_brt_49_brt_137|D  ff             0.003             4.827               2        (94,293)
+
+Capture Clock Path
+                       name                          model name   delay (ns)  cumulative delay (ns) pins on net    location
+=============================================================================================================================
+clk_pixel                                              inpad        0.000             0.000               0       (219,159)
+clk_pixel                                              inpad        0.126             0.126             178       (219,159)
+clk_pixel                                              net          2.010             2.136             178       (219,159)
+   Routing elements:
+      Manhattan distance of X:125, Y:134
+u_rgb2dvi/enc_0/acc[1]~FF_brt_44_brt_49_brt_137|CLK    ff           0.000             2.136             178       (94,293) 
+
+++++ Path 10 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : u_lcd_display/mult_66|CLK                        
+Path End      : u_rgb2dvi/enc_0/acc[1]~FF_brt_44_brt_49_brt_137|D
+Launch Clock  : clk_pixel (RISE)                                 
+Capture Clock : clk_pixel (RISE)                                 
+Slack         : 1.787 (required time - arrival time)             
+Delay         : 3.983                                            
+
+Logic Level             : 10
+Non-global nets on path : 10
+Global nets on path     :  0
+
+Launch Clock Path Delay        : 2.136
++ Clock To Q + Data Path Delay : 4.821
+--------------------------------------
+End-of-path arrival time       : 6.957
+
+Constraint                     : 6.734
++ Capture Clock Path Delay     : 2.136
+- Clock Uncertainty            : 0.126
+--------------------------------------
+End-of-path required time      : 8.744
+
+Launch Clock Path
+          name             model name   delay (ns)  cumulative delay (ns) pins on net    location
+===================================================================================================
+clk_pixel                  inpad          0.000             0.000               0       (219,159)
+clk_pixel                  inpad          0.126             0.126             178       (219,159)
+clk_pixel                  net            2.010             2.136             178       (219,159)
+   Routing elements:
+      Manhattan distance of X:165, Y:123
+u_lcd_display/mult_66|CLK  dsp48_prim     0.000             2.136             178       (54,282) 
+
+Data Path
+                      name                         model name   delay (ns)  cumulative delay (ns) pins on net    location
+===========================================================================================================================
+u_lcd_display/mult_66|O[1]                         dsp48_prim     0.835             0.835               2        (54,282)
+u_lcd_display/lcd_data2[1]                         net            0.565             1.400               2        (54,282)
+   Routing elements:
+      Manhattan distance of X:6, Y:17
+LUT__1089|in[1]                                    lut            0.063             1.463               2        (60,299)
+LUT__1089|out                                      lut            0.000             1.463               8        (60,299)
+n561                                               net            0.629             2.092               8        (60,299)
+   Routing elements:
+      Manhattan distance of X:23, Y:1
+LUT__1098|in[0]                                    lut            0.061             2.153               8        (83,300)
+LUT__1098|out                                      lut            0.000             2.153               8        (83,300)
+n569                                               net            0.396             2.549               7        (83,300)
+   Routing elements:
+      Manhattan distance of X:6, Y:2
+LUT__1101|in[2]                                    lut            0.061             2.610               8        (77,298)
+LUT__1101|out                                      lut            0.000             2.610               3        (77,298)
+n572                                               net            0.160             2.770               3        (77,298)
+   Routing elements:
+      Manhattan distance of X:2, Y:5
+LUT__1109|in[0]                                    lut            0.061             2.831               3        (79,293)
+LUT__1109|out                                      lut            0.000             2.831               2        (79,293)
+n580                                               net            0.162             2.993               2        (79,293)
+   Routing elements:
+      Manhattan distance of X:4, Y:0
+LUT__1112|in[2]                                    lut            0.061             3.054               2        (83,293)
+LUT__1112|out                                      lut            0.000             3.054              14        (83,293)
+u_rgb2dvi/enc_0/n818                               net            0.412             3.466              13        (83,293)
+   Routing elements:
+      Manhattan distance of X:2, Y:4
+LUT__1329|in[0]                                    lut            0.061             3.527              14        (85,297)
+LUT__1329|out                                      lut            0.000             3.527               6        (85,297)
+n737                                               net            0.399             3.926               6        (85,297)
+   Routing elements:
+      Manhattan distance of X:4, Y:2
+LUT__1336|in[2]                                    lut            0.061             3.987               6        (89,295)
+LUT__1336|out                                      lut            0.000             3.987               6        (89,295)
+u_rgb2dvi/enc_0/LessThan_69/n8                     net            0.306             4.293               6        (89,295)
+   Routing elements:
+      Manhattan distance of X:4, Y:2
+LUT__1343|in[0]                                    lut            0.063             4.356               6        (93,293)
+LUT__1343|out                                      lut            0.000             4.356               2        (93,293)
+u_rgb2dvi/enc_0/n622                               net            0.182             4.538               2        (93,293)
+   Routing elements:
+      Manhattan distance of X:3, Y:0
+u_rgb2dvi/enc_0/sub_52/add_2/i4|I0                 adder          0.063             4.601               2        (90,293)
+u_rgb2dvi/enc_0/sub_52/add_2/i4|O                  adder          0.000             4.601               3        (90,293)
+u_rgb2dvi/enc_0/n138                               net            0.156             4.757               2        (90,293)
+   Routing elements:
+      Manhattan distance of X:4, Y:0
+u_rgb2dvi/enc_0/add_75/i4|I0                       adder          0.061             4.818               3        (94,293)
+u_rgb2dvi/enc_0/add_75/i4|O                        adder          0.000             4.818               2        (94,293)
+u_rgb2dvi/enc_0/acc[1]~FF_brt_44_brt_49_brt_137|D  ff             0.003             4.821               2        (94,293)
+
+Capture Clock Path
+                       name                          model name   delay (ns)  cumulative delay (ns) pins on net    location
+=============================================================================================================================
+clk_pixel                                              inpad        0.000             0.000               0       (219,159)
+clk_pixel                                              inpad        0.126             0.126             178       (219,159)
+clk_pixel                                              net          2.010             2.136             178       (219,159)
+   Routing elements:
+      Manhattan distance of X:125, Y:134
+u_rgb2dvi/enc_0/acc[1]~FF_brt_44_brt_49_brt_137|CLK    ff           0.000             2.136             178       (94,293) 
+
+---------- Path Details for Max Critical Paths (end) ---------------
+
+---------- 4. Path Details for Min Critical Paths (begin) ----------
+
+################################################################################
+Path Detail Report (clk_pixel vs clk_pixel)
+################################################################################
+
+
+++++ Path 1 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : u_lcd_driver/hcnt[0]~FF|CLK         
+Path End      : u_lcd_driver/hcnt[1]~FF|D           
+Launch Clock  : clk_pixel (RISE)                    
+Capture Clock : clk_pixel (RISE)                    
+Slack         : 0.098 (arrival time - required time)
+Delay         : 0.096                               
+
+Logic Level             : 1
+Non-global nets on path : 1
+Global nets on path     : 0
+
+Launch Clock Path Delay        : 1.207
++ Clock To Q + Data Path Delay : 0.168
+--------------------------------------
+End-of-path arrival time       : 1.375
+
+Constraint                     : 0.000
++ Capture Clock Path Delay     : 1.207
++ Clock Uncertainty            : 0.070
+--------------------------------------
+End-of-path required time      : 1.277
+
+Launch Clock Path
+           name              model name   delay (ns)  cumulative delay (ns) pins on net    location
+=====================================================================================================
+clk_pixel                      inpad        0.000             0.000               0       (219,159)
+clk_pixel                      inpad        0.070             0.070             178       (219,159)
+clk_pixel                      net          1.137             1.207             178       (219,159)
+   Routing elements:
+      Manhattan distance of X:178, Y:125
+u_lcd_driver/hcnt[0]~FF|CLK    ff           0.000             1.207             178       (41,284) 
+
+Data Path
+          name             model name   delay (ns)  cumulative delay (ns) pins on net    location
+===================================================================================================
+u_lcd_driver/hcnt[0]~FF|Q     ff          0.072             0.072              9         (41,284)
+u_lcd_driver/hcnt[0]          net         0.062             0.134              9         (41,284)
+   Routing elements:
+      Manhattan distance of X:0, Y:2
+LUT__1050|in[1]               lut         0.034             0.168              9         (41,282)
+LUT__1050|out                 lut         0.000             0.168              2         (41,282)
+u_lcd_driver/hcnt[1]~FF|D     ff          0.000             0.168              2         (41,282)
+
+Capture Clock Path
+           name              model name   delay (ns)  cumulative delay (ns) pins on net    location
+=====================================================================================================
+clk_pixel                      inpad        0.000             0.000               0       (219,159)
+clk_pixel                      inpad        0.070             0.070             178       (219,159)
+clk_pixel                      net          1.137             1.207             178       (219,159)
+   Routing elements:
+      Manhattan distance of X:178, Y:123
+u_lcd_driver/hcnt[1]~FF|CLK    ff           0.000             1.207             178       (41,282) 
+
+++++ Path 2 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : u_lcd_driver/vcnt[2]~FF|CLK         
+Path End      : tmds_lvds_tx_data0[9]~FF_brt_87|D   
+Launch Clock  : clk_pixel (RISE)                    
+Capture Clock : clk_pixel (RISE)                    
+Slack         : 0.104 (arrival time - required time)
+Delay         : 0.102                               
+
+Logic Level             : 1
+Non-global nets on path : 1
+Global nets on path     : 0
+
+Launch Clock Path Delay        : 1.207
++ Clock To Q + Data Path Delay : 0.174
+--------------------------------------
+End-of-path arrival time       : 1.381
+
+Constraint                     : 0.000
++ Capture Clock Path Delay     : 1.207
++ Clock Uncertainty            : 0.070
+--------------------------------------
+End-of-path required time      : 1.277
+
+Launch Clock Path
+           name              model name   delay (ns)  cumulative delay (ns) pins on net    location
+=====================================================================================================
+clk_pixel                      inpad        0.000             0.000               0       (219,159)
+clk_pixel                      inpad        0.070             0.070             178       (219,159)
+clk_pixel                      net          1.137             1.207             178       (219,159)
+   Routing elements:
+      Manhattan distance of X:152, Y:122
+u_lcd_driver/vcnt[2]~FF|CLK    ff           0.000             1.207             178       (67,281) 
+
+Data Path
+              name                 model name   delay (ns)  cumulative delay (ns) pins on net    location
+===========================================================================================================
+u_lcd_driver/vcnt[2]~FF|Q             ff          0.072             0.072              13        (67,281)
+u_lcd_driver/vcnt[2]                  net         0.068             0.140              13        (67,281)
+   Routing elements:
+      Manhattan distance of X:0, Y:4
+LUT__995|in[0]                        lut         0.034             0.174              13        (67,285)
+LUT__995|out                          lut         0.000             0.174               3        (67,285)
+tmds_lvds_tx_data0[9]~FF_brt_87|D     ff          0.000             0.174               3        (67,285)
+
+Capture Clock Path
+               name                  model name   delay (ns)  cumulative delay (ns) pins on net    location
+=============================================================================================================
+clk_pixel                              inpad        0.000             0.000               0       (219,159)
+clk_pixel                              inpad        0.070             0.070             178       (219,159)
+clk_pixel                              net          1.137             1.207             178       (219,159)
+   Routing elements:
+      Manhattan distance of X:152, Y:126
+tmds_lvds_tx_data0[9]~FF_brt_87|CLK    ff           0.000             1.207             178       (67,285) 
+
+++++ Path 3 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : u_rgb2dvi/enc_0/acc[1]~FF_brt_39|CLK
+Path End      : u_rgb2dvi/enc_0/acc[1]~FF_brt_39|D  
+Launch Clock  : clk_pixel (RISE)                    
+Capture Clock : clk_pixel (RISE)                    
+Slack         : 0.109 (arrival time - required time)
+Delay         : 0.107                               
+
+Logic Level             : 1
+Non-global nets on path : 1
+Global nets on path     : 0
+
+Launch Clock Path Delay        : 1.207
++ Clock To Q + Data Path Delay : 0.179
+--------------------------------------
+End-of-path arrival time       : 1.386
+
+Constraint                     : 0.000
++ Capture Clock Path Delay     : 1.207
++ Clock Uncertainty            : 0.070
+--------------------------------------
+End-of-path required time      : 1.277
+
+Launch Clock Path
+                name                  model name   delay (ns)  cumulative delay (ns) pins on net    location
+==============================================================================================================
+clk_pixel                               inpad        0.000             0.000               0       (219,159)
+clk_pixel                               inpad        0.070             0.070             178       (219,159)
+clk_pixel                               net          1.137             1.207             178       (219,159)
+   Routing elements:
+      Manhattan distance of X:125, Y:142
+u_rgb2dvi/enc_0/acc[1]~FF_brt_39|CLK    ff           0.000             1.207             178       (94,301) 
+
+Data Path
+               name                 model name   delay (ns)  cumulative delay (ns) pins on net    location
+============================================================================================================
+u_rgb2dvi/enc_0/acc[1]~FF_brt_39|Q    ff           0.072             0.072              2         (94,301)
+u_rgb2dvi/enc_0/acc[2]_q              net          0.073             0.145              2         (94,301)
+u_rgb2dvi/enc_0/add_105/i3|I0         adder        0.034             0.179              2         (94,301)
+u_rgb2dvi/enc_0/add_105/i3|O          adder        0.000             0.179              3         (94,301)
+u_rgb2dvi/enc_0/acc[1]~FF_brt_39|D    ff           0.000             0.179              3         (94,301)
+
+Capture Clock Path
+                name                  model name   delay (ns)  cumulative delay (ns) pins on net    location
+==============================================================================================================
+clk_pixel                               inpad        0.000             0.000               0       (219,159)
+clk_pixel                               inpad        0.070             0.070             178       (219,159)
+clk_pixel                               net          1.137             1.207             178       (219,159)
+   Routing elements:
+      Manhattan distance of X:125, Y:142
+u_rgb2dvi/enc_0/acc[1]~FF_brt_39|CLK    ff           0.000             1.207             178       (94,301) 
+
+++++ Path 4 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : u_rgb2dvi/enc_1/acc[1]~FF_brt_13|CLK
+Path End      : u_rgb2dvi/enc_1/acc[1]~FF_brt_13|D  
+Launch Clock  : clk_pixel (RISE)                    
+Capture Clock : clk_pixel (RISE)                    
+Slack         : 0.109 (arrival time - required time)
+Delay         : 0.107                               
+
+Logic Level             : 1
+Non-global nets on path : 1
+Global nets on path     : 0
+
+Launch Clock Path Delay        : 1.207
++ Clock To Q + Data Path Delay : 0.179
+--------------------------------------
+End-of-path arrival time       : 1.386
+
+Constraint                     : 0.000
++ Capture Clock Path Delay     : 1.207
++ Clock Uncertainty            : 0.070
+--------------------------------------
+End-of-path required time      : 1.277
+
+Launch Clock Path
+                name                  model name   delay (ns)  cumulative delay (ns) pins on net    location
+==============================================================================================================
+clk_pixel                               inpad        0.000             0.000               0       (219,159)
+clk_pixel                               inpad        0.070             0.070             178       (219,159)
+clk_pixel                               net          1.137             1.207             178       (219,159)
+   Routing elements:
+      Manhattan distance of X:181, Y:141
+u_rgb2dvi/enc_1/acc[1]~FF_brt_13|CLK    ff           0.000             1.207             178       (38,300) 
+
+Data Path
+               name                 model name   delay (ns)  cumulative delay (ns) pins on net    location
+============================================================================================================
+u_rgb2dvi/enc_1/acc[1]~FF_brt_13|Q    ff           0.072             0.072              2         (38,300)
+u_rgb2dvi/enc_1/acc[2]_q              net          0.073             0.145              2         (38,300)
+u_rgb2dvi/enc_1/add_105/i3|I0         adder        0.034             0.179              2         (38,300)
+u_rgb2dvi/enc_1/add_105/i3|O          adder        0.000             0.179              3         (38,300)
+u_rgb2dvi/enc_1/acc[1]~FF_brt_13|D    ff           0.000             0.179              3         (38,300)
+
+Capture Clock Path
+                name                  model name   delay (ns)  cumulative delay (ns) pins on net    location
+==============================================================================================================
+clk_pixel                               inpad        0.000             0.000               0       (219,159)
+clk_pixel                               inpad        0.070             0.070             178       (219,159)
+clk_pixel                               net          1.137             1.207             178       (219,159)
+   Routing elements:
+      Manhattan distance of X:181, Y:141
+u_rgb2dvi/enc_1/acc[1]~FF_brt_13|CLK    ff           0.000             1.207             178       (38,300) 
+
+++++ Path 5 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : u_rgb2dvi/enc_0/acc[1]~FF_brt_38|CLK
+Path End      : u_rgb2dvi/enc_0/acc[1]~FF_brt_38|D  
+Launch Clock  : clk_pixel (RISE)                    
+Capture Clock : clk_pixel (RISE)                    
+Slack         : 0.109 (arrival time - required time)
+Delay         : 0.107                               
+
+Logic Level             : 1
+Non-global nets on path : 1
+Global nets on path     : 0
+
+Launch Clock Path Delay        : 1.207
++ Clock To Q + Data Path Delay : 0.179
+--------------------------------------
+End-of-path arrival time       : 1.386
+
+Constraint                     : 0.000
++ Capture Clock Path Delay     : 1.207
++ Clock Uncertainty            : 0.070
+--------------------------------------
+End-of-path required time      : 1.277
+
+Launch Clock Path
+                name                  model name   delay (ns)  cumulative delay (ns) pins on net    location
+==============================================================================================================
+clk_pixel                               inpad        0.000             0.000               0       (219,159)
+clk_pixel                               inpad        0.070             0.070             178       (219,159)
+clk_pixel                               net          1.137             1.207             178       (219,159)
+   Routing elements:
+      Manhattan distance of X:125, Y:141
+u_rgb2dvi/enc_0/acc[1]~FF_brt_38|CLK    ff           0.000             1.207             178       (94,300) 
+
+Data Path
+               name                 model name   delay (ns)  cumulative delay (ns) pins on net    location
+============================================================================================================
+u_rgb2dvi/enc_0/acc[1]~FF_brt_38|Q    ff           0.072             0.072              2         (94,300)
+u_rgb2dvi/enc_0/acc[1]_q              net          0.073             0.145              2         (94,300)
+u_rgb2dvi/enc_0/add_105/i2|I0         adder        0.034             0.179              2         (94,300)
+u_rgb2dvi/enc_0/add_105/i2|O          adder        0.000             0.179              3         (94,300)
+u_rgb2dvi/enc_0/acc[1]~FF_brt_38|D    ff           0.000             0.179              3         (94,300)
+
+Capture Clock Path
+                name                  model name   delay (ns)  cumulative delay (ns) pins on net    location
+==============================================================================================================
+clk_pixel                               inpad        0.000             0.000               0       (219,159)
+clk_pixel                               inpad        0.070             0.070             178       (219,159)
+clk_pixel                               net          1.137             1.207             178       (219,159)
+   Routing elements:
+      Manhattan distance of X:125, Y:141
+u_rgb2dvi/enc_0/acc[1]~FF_brt_38|CLK    ff           0.000             1.207             178       (94,300) 
+
+++++ Path 6 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : u_rgb2dvi/enc_1/acc[1]~FF_brt_14|CLK
+Path End      : u_rgb2dvi/enc_1/acc[1]~FF_brt_14|D  
+Launch Clock  : clk_pixel (RISE)                    
+Capture Clock : clk_pixel (RISE)                    
+Slack         : 0.109 (arrival time - required time)
+Delay         : 0.107                               
+
+Logic Level             : 1
+Non-global nets on path : 1
+Global nets on path     : 0
+
+Launch Clock Path Delay        : 1.207
++ Clock To Q + Data Path Delay : 0.179
+--------------------------------------
+End-of-path arrival time       : 1.386
+
+Constraint                     : 0.000
++ Capture Clock Path Delay     : 1.207
++ Clock Uncertainty            : 0.070
+--------------------------------------
+End-of-path required time      : 1.277
+
+Launch Clock Path
+                name                  model name   delay (ns)  cumulative delay (ns) pins on net    location
+==============================================================================================================
+clk_pixel                               inpad        0.000             0.000               0       (219,159)
+clk_pixel                               inpad        0.070             0.070             178       (219,159)
+clk_pixel                               net          1.137             1.207             178       (219,159)
+   Routing elements:
+      Manhattan distance of X:181, Y:142
+u_rgb2dvi/enc_1/acc[1]~FF_brt_14|CLK    ff           0.000             1.207             178       (38,301) 
+
+Data Path
+               name                 model name   delay (ns)  cumulative delay (ns) pins on net    location
+============================================================================================================
+u_rgb2dvi/enc_1/acc[1]~FF_brt_14|Q    ff           0.072             0.072              2         (38,301)
+u_rgb2dvi/enc_1/acc[3]_q              net          0.073             0.145              2         (38,301)
+u_rgb2dvi/enc_1/add_105/i4|I0         adder        0.034             0.179              2         (38,301)
+u_rgb2dvi/enc_1/add_105/i4|O          adder        0.000             0.179              3         (38,301)
+u_rgb2dvi/enc_1/acc[1]~FF_brt_14|D    ff           0.000             0.179              3         (38,301)
+
+Capture Clock Path
+                name                  model name   delay (ns)  cumulative delay (ns) pins on net    location
+==============================================================================================================
+clk_pixel                               inpad        0.000             0.000               0       (219,159)
+clk_pixel                               inpad        0.070             0.070             178       (219,159)
+clk_pixel                               net          1.137             1.207             178       (219,159)
+   Routing elements:
+      Manhattan distance of X:181, Y:142
+u_rgb2dvi/enc_1/acc[1]~FF_brt_14|CLK    ff           0.000             1.207             178       (38,301) 
+
+++++ Path 7 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : u_lcd_driver/hcnt[0]~FF|CLK         
+Path End      : u_lcd_driver/hcnt[0]~FF|D           
+Launch Clock  : clk_pixel (RISE)                    
+Capture Clock : clk_pixel (RISE)                    
+Slack         : 0.109 (arrival time - required time)
+Delay         : 0.107                               
+
+Logic Level             : 1
+Non-global nets on path : 1
+Global nets on path     : 0
+
+Launch Clock Path Delay        : 1.207
++ Clock To Q + Data Path Delay : 0.179
+--------------------------------------
+End-of-path arrival time       : 1.386
+
+Constraint                     : 0.000
++ Capture Clock Path Delay     : 1.207
++ Clock Uncertainty            : 0.070
+--------------------------------------
+End-of-path required time      : 1.277
+
+Launch Clock Path
+           name              model name   delay (ns)  cumulative delay (ns) pins on net    location
+=====================================================================================================
+clk_pixel                      inpad        0.000             0.000               0       (219,159)
+clk_pixel                      inpad        0.070             0.070             178       (219,159)
+clk_pixel                      net          1.137             1.207             178       (219,159)
+   Routing elements:
+      Manhattan distance of X:178, Y:125
+u_lcd_driver/hcnt[0]~FF|CLK    ff           0.000             1.207             178       (41,284) 
+
+Data Path
+          name             model name   delay (ns)  cumulative delay (ns) pins on net    location
+===================================================================================================
+u_lcd_driver/hcnt[0]~FF|Q     ff          0.072             0.072              9         (41,284)
+u_lcd_driver/hcnt[0]          net         0.073             0.145              9         (41,284)
+LUT__1039|in[1]               lut         0.034             0.179              9         (41,284)
+LUT__1039|out                 lut         0.000             0.179              2         (41,284)
+u_lcd_driver/hcnt[0]~FF|D     ff          0.000             0.179              2         (41,284)
+
+Capture Clock Path
+           name              model name   delay (ns)  cumulative delay (ns) pins on net    location
+=====================================================================================================
+clk_pixel                      inpad        0.000             0.000               0       (219,159)
+clk_pixel                      inpad        0.070             0.070             178       (219,159)
+clk_pixel                      net          1.137             1.207             178       (219,159)
+   Routing elements:
+      Manhattan distance of X:178, Y:125
+u_lcd_driver/hcnt[0]~FF|CLK    ff           0.000             1.207             178       (41,284) 
+
+++++ Path 8 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : u_rgb2dvi/enc_0/acc[1]~FF_brt_41|CLK
+Path End      : u_rgb2dvi/enc_0/acc[1]~FF_brt_41|D  
+Launch Clock  : clk_pixel (RISE)                    
+Capture Clock : clk_pixel (RISE)                    
+Slack         : 0.109 (arrival time - required time)
+Delay         : 0.107                               
+
+Logic Level             : 1
+Non-global nets on path : 1
+Global nets on path     : 0
+
+Launch Clock Path Delay        : 1.207
++ Clock To Q + Data Path Delay : 0.179
+--------------------------------------
+End-of-path arrival time       : 1.386
+
+Constraint                     : 0.000
++ Capture Clock Path Delay     : 1.207
++ Clock Uncertainty            : 0.070
+--------------------------------------
+End-of-path required time      : 1.277
+
+Launch Clock Path
+                name                  model name   delay (ns)  cumulative delay (ns) pins on net    location
+==============================================================================================================
+clk_pixel                               inpad        0.000             0.000               0       (219,159)
+clk_pixel                               inpad        0.070             0.070             178       (219,159)
+clk_pixel                               net          1.137             1.207             178       (219,159)
+   Routing elements:
+      Manhattan distance of X:125, Y:144
+u_rgb2dvi/enc_0/acc[1]~FF_brt_41|CLK    ff           0.000             1.207             178       (94,303) 
+
+Data Path
+               name                 model name   delay (ns)  cumulative delay (ns) pins on net    location
+============================================================================================================
+u_rgb2dvi/enc_0/acc[1]~FF_brt_41|Q    ff           0.072             0.072              2         (94,303)
+u_rgb2dvi/enc_0/acc[4]_q              net          0.073             0.145              2         (94,303)
+u_rgb2dvi/enc_0/add_105/i5|I0         adder        0.034             0.179              2         (94,303)
+u_rgb2dvi/enc_0/add_105/i5|O          adder        0.000             0.179              4         (94,303)
+u_rgb2dvi/enc_0/acc[1]~FF_brt_41|D    ff           0.000             0.179              4         (94,303)
+
+Capture Clock Path
+                name                  model name   delay (ns)  cumulative delay (ns) pins on net    location
+==============================================================================================================
+clk_pixel                               inpad        0.000             0.000               0       (219,159)
+clk_pixel                               inpad        0.070             0.070             178       (219,159)
+clk_pixel                               net          1.137             1.207             178       (219,159)
+   Routing elements:
+      Manhattan distance of X:125, Y:144
+u_rgb2dvi/enc_0/acc[1]~FF_brt_41|CLK    ff           0.000             1.207             178       (94,303) 
+
+++++ Path 9 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : u_rgb2dvi/enc_1/acc[1]~FF_brt_12|CLK
+Path End      : u_rgb2dvi/enc_1/acc[1]~FF_brt_12|D  
+Launch Clock  : clk_pixel (RISE)                    
+Capture Clock : clk_pixel (RISE)                    
+Slack         : 0.109 (arrival time - required time)
+Delay         : 0.107                               
+
+Logic Level             : 1
+Non-global nets on path : 1
+Global nets on path     : 0
+
+Launch Clock Path Delay        : 1.207
++ Clock To Q + Data Path Delay : 0.179
+--------------------------------------
+End-of-path arrival time       : 1.386
+
+Constraint                     : 0.000
++ Capture Clock Path Delay     : 1.207
++ Clock Uncertainty            : 0.070
+--------------------------------------
+End-of-path required time      : 1.277
+
+Launch Clock Path
+                name                  model name   delay (ns)  cumulative delay (ns) pins on net    location
+==============================================================================================================
+clk_pixel                               inpad        0.000             0.000               0       (219,159)
+clk_pixel                               inpad        0.070             0.070             178       (219,159)
+clk_pixel                               net          1.137             1.207             178       (219,159)
+   Routing elements:
+      Manhattan distance of X:181, Y:140
+u_rgb2dvi/enc_1/acc[1]~FF_brt_12|CLK    ff           0.000             1.207             178       (38,299) 
+
+Data Path
+               name                 model name   delay (ns)  cumulative delay (ns) pins on net    location
+============================================================================================================
+u_rgb2dvi/enc_1/acc[1]~FF_brt_12|Q    ff           0.072             0.072              2         (38,299)
+u_rgb2dvi/enc_1/acc[1]_q              net          0.073             0.145              2         (38,299)
+u_rgb2dvi/enc_1/add_105/i2|I0         adder        0.034             0.179              2         (38,299)
+u_rgb2dvi/enc_1/add_105/i2|O          adder        0.000             0.179              3         (38,299)
+u_rgb2dvi/enc_1/acc[1]~FF_brt_12|D    ff           0.000             0.179              3         (38,299)
+
+Capture Clock Path
+                name                  model name   delay (ns)  cumulative delay (ns) pins on net    location
+==============================================================================================================
+clk_pixel                               inpad        0.000             0.000               0       (219,159)
+clk_pixel                               inpad        0.070             0.070             178       (219,159)
+clk_pixel                               net          1.137             1.207             178       (219,159)
+   Routing elements:
+      Manhattan distance of X:181, Y:140
+u_rgb2dvi/enc_1/acc[1]~FF_brt_12|CLK    ff           0.000             1.207             178       (38,299) 
+
+++++ Path 10 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : u_lcd_driver/hcnt[4]~FF|CLK         
+Path End      : u_lcd_driver/hcnt[5]~FF|D           
+Launch Clock  : clk_pixel (RISE)                    
+Capture Clock : clk_pixel (RISE)                    
+Slack         : 0.109 (arrival time - required time)
+Delay         : 0.107                               
+
+Logic Level             : 1
+Non-global nets on path : 1
+Global nets on path     : 0
+
+Launch Clock Path Delay        : 1.207
++ Clock To Q + Data Path Delay : 0.179
+--------------------------------------
+End-of-path arrival time       : 1.386
+
+Constraint                     : 0.000
++ Capture Clock Path Delay     : 1.207
++ Clock Uncertainty            : 0.070
+--------------------------------------
+End-of-path required time      : 1.277
+
+Launch Clock Path
+           name              model name   delay (ns)  cumulative delay (ns) pins on net    location
+=====================================================================================================
+clk_pixel                      inpad        0.000             0.000               0       (219,159)
+clk_pixel                      inpad        0.070             0.070             178       (219,159)
+clk_pixel                      net          1.137             1.207             178       (219,159)
+   Routing elements:
+      Manhattan distance of X:169, Y:125
+u_lcd_driver/hcnt[4]~FF|CLK    ff           0.000             1.207             178       (50,284) 
+
+Data Path
+          name             model name   delay (ns)  cumulative delay (ns) pins on net    location
+===================================================================================================
+u_lcd_driver/hcnt[4]~FF|Q     ff          0.072             0.072              11        (50,284)
+u_lcd_driver/hcnt[4]          net         0.073             0.145              11        (50,284)
+   Routing elements:
+      Manhattan distance of X:0, Y:1
+LUT__1054|in[1]               lut         0.034             0.179              11        (50,285)
+LUT__1054|out                 lut         0.000             0.179               2        (50,285)
+u_lcd_driver/hcnt[5]~FF|D     ff          0.000             0.179               2        (50,285)
+
+Capture Clock Path
+           name              model name   delay (ns)  cumulative delay (ns) pins on net    location
+=====================================================================================================
+clk_pixel                      inpad        0.000             0.000               0       (219,159)
+clk_pixel                      inpad        0.070             0.070             178       (219,159)
+clk_pixel                      net          1.137             1.207             178       (219,159)
+   Routing elements:
+      Manhattan distance of X:169, Y:126
+u_lcd_driver/hcnt[5]~FF|CLK    ff           0.000             1.207             178       (50,285) 
+
+---------- Path Details for Min Critical Paths (end) ---------------
+

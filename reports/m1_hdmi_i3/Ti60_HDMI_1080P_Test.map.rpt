@@ -1,0 +1,92 @@
+Efinity Synthesis report for project Ti60_HDMI_1080P_Test
+Version: 2025.1.110.5.9
+Generated at: Oct 01, 2026 21:28:27
+Copyright (C) 2013 - 2025  All rights reserved.
+
+Top-level Entity Name : Ti60_HDMI_1080P_Test
+
+family : Titanium
+device : Ti60F225
+project : Ti60_HDMI_1080P_Test
+project-xml : F:\Projects\stareye_fpga\efinity\m1_hdmi_i3\Ti60_HDMI_1080P_Test.xml
+root : Ti60_HDMI_1080P_Test
+output-dir : outflow
+work-dir : work_syn
+write-efx-verilog : outflow\Ti60_HDMI_1080P_Test.map.v
+binary-db : outflow\Ti60_HDMI_1080P_Test.vdb
+insert-ios : 0
+insert-gclk : 0
+max-carry-cascade : 320
+max-dsp-cascade : 16
+max_mult : -1
+max_ram : -1
+mode : speed
+veri_options : verilog_mode=verilog_2k,vhdl_mode=vhdl_2008
+num_srl : -1
+
+File List:
+
+F:\Projects\stareye_fpga\efinity\m1_hdmi_i3\src\Ti60_HDMI_1080P_Test.v
+F:\Projects\stareye_fpga\efinity\m1_hdmi_i3\src\lcd_24bit_ip\lcd_driver.v
+F:\Projects\stareye_fpga\efinity\m1_hdmi_i3\src\lcd_24bit_ip\lcd_display.v
+F:\Projects\stareye_fpga\efinity\m1_hdmi_i3\src\lcd_24bit_ip\lcd_para.v
+F:\Projects\stareye_fpga\efinity\m1_hdmi_i3\src\hdmi_ip\tmds_channel.v
+F:\Projects\stareye_fpga\efinity\m1_hdmi_i3\src\hdmi_ip\rgb2dvi.v
+
+### ### Report Section Start ### ###
+
+
+### ### EFX_FF CE enables (begin) ### ### ###
+Total number of enable signals: 2
+Total number of FFs with enable signals: 13
+CE signal <u_lcd_driver/equal_15/n23>, number of controlling flip flops: 11
+CE signal <u_lcd_display/equal_81/n55>, number of controlling flip flops: 2
+### ### EFX_FF CE enables (end) ### ### ###
+
+### ### EFX_FF SR set/reset (begin) ### ### ###
+Total number of set/reset signals: 2
+Total number of FFs with set/reset signals: 155
+SR signal <led_o[4]>, number of controlling flip flops: 88
+SR signal <led_o[1]>, number of controlling flip flops: 67
+### ### EFX_FF SR set/reset (end) ### ### ###
+
+### ### Module Resource Usage Distribution Estimates (begin) ### ###
+
+**Note: some resources maybe grouped under different hierarchy due to optimization and LUT mapping
+
+Module                                              FFs        SRLs        ADDs        LUTs    COMB4s      RAMs DSP/MULTs
+-------------------------------------------         ---        ----        ----        ----      ----      ---- ---------
+Ti60_HDMI_1080P_Test:Ti60_HDMI_1080P_Test        172(0)        0(0)      103(0)      436(0)      0(0)      0(0)      1(0)
+ +u_lcd_driver:lcd_driver                        23(23)        0(0)      21(21)    166(166)      0(0)      0(0)      0(0)
+ +u_lcd_display:lcd_display                      44(44)        0(0)      27(27)      92(92)      0(0)      0(0)      1(1)
+ +u_rgb2dvi:rgb2dvi(ENABLE_OSERDES=0)            105(0)        0(0)       55(0)      178(0)      0(0)      0(0)      0(0)
+  +enc_0:tmds_channel                            36(36)        0(0)      19(19)      61(61)      0(0)      0(0)      0(0)
+  +enc_1:tmds_channel                            34(34)        0(0)      14(14)      56(56)      0(0)      0(0)      0(0)
+  +enc_2:tmds_channel                            35(35)        0(0)      22(22)      61(61)      0(0)      0(0)      0(0)
+
+### ### Module Resource Usage Distribution Estimates (end) ### ###
+
+
+### ### Clock Load Distribution Report (begin) ### ###
+
+     Clock     Flip-Flops     Shift-Regs   Memory Ports    Multipliers
+     -----     ----------     ----------   ------------    -----------
+ clk_pixel            172              0              0              1
+
+### ### Clock Load Distribution Report (end) ### ###
+
+### ### Resource Summary (begin) ### ### ### 
+INPUT  PORTS    : 	4
+OUTPUT PORTS    : 	55
+
+EFX_ADD         : 	103
+EFX_LUT4        : 	436
+   1-2  Inputs  : 	132
+   3    Inputs  : 	125
+   4    Inputs  : 	179
+EFX_DSP48       : 	1
+EFX_FF          : 	172
+### ### Resource Summary (end) ### ### ###
+
+Plain synthesis (without verilog dump and post-map checks) time : 8s
+Elapsed synthesis time : 8s

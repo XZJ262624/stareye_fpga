@@ -55,7 +55,7 @@ S01 第 12 页：**赛题四——基于 FPGA 的实时图像边缘检测系统*
 
 技术支持：指南第 21 页给出官网下载入口、[易灵思官网](https://www.elitestek.com/)、[钛金芯片入口](https://www.elitestek.com/product/gongju/taijinxiliexiangguan/576.html) 和竞赛 QQ 群 **831548702**；板卡采购为“娅妮电子”二维码，未解析成网址。HDK 版本备注的厂商群 **851598171** 是另一入口，不混用。
 
-## 板卡型号与资料差异
+## 板卡型号与资料差异（历史P0核查；更新见文末）
 
 - S03 参数页：核心板 **VF-Ti60F225-C**，底板 **VF-Ti60F225-B**；FPGA **Ti60F225I3**。这是资料记载，用户实物后缀、PCB 版本及状态均**待实物确认**。
 - 手册封面/文件名版号不同；部分图注 Ti60F255 与参数页 Ti60F225I3 不同，保留差异，不据图注改变平台。
@@ -66,5 +66,21 @@ S01 第 12 页：**赛题四——基于 FPGA 的实时图像边缘检测系统*
 
 ## 核查边界
 
+以下边界段保留此前P0历史核查范围；当前M1新增读取和验证见文末，不以历史“未编译”覆盖已完成的M0/M1结果。
+
 只按关键目录和文件定向核查，没有全量遍历 HDK 的一万多个文件。顶层未见独立 README/Release Notes，使用“版本备注(必读).txt”作为发布说明；未断言全部子目录不存在 README。PDF 文字提取可用，前轮关键页已在项目外渲染，但图像查看工具失败，未完成视觉逐页验收。本轮定向核对核心板第 2/4 页、底板第 2 页以及 BANK 3.3 指定行；未读取压缩包内部、完整管脚表或所有算法 RTL；主会话/子代理未导入、仿真、综合、编程或上板。用户 JTAG 实物识别验收另有明确来源，不混同为主会话独立测试。
 
+## M1新增资料核查（2026-10-01，当前）
+
+- S04核心原理图V1.4第6页、S05底板V1.1第5/7页已定向提取文字并实际渲染/目视核对：F7/GPIOT_P_04→P1 B16→HDMI_CLK_P；F8/GPIOT_N_04→P1 B17→HDMI_CLK_N；ESD保护与0.1uF AC耦合到HDMI插座。S06管脚表时钟标签相反，冲突保留；两原理图一致，不能据表格更换管脚或声称实物反接。
+- 原厂独立HDMI工程：[Ti60_HDMI_1080P_Test.xml](../document/VF-Ti60F225_HDK_V2.1_20251009/VF-Ti60F225_HDK_V2.1_20251009/VF-Ti60F225_HDK_V2.1_20251009/06-FPGA_HDL_Basic-2023.2/07_Ti60_HDMI_1080P_Lvds_Test/Ti60_HDMI_1080P_Test.xml)，2023.1.150.3.11/C4，发布目录HDK V2.1_20251009/Basic-2023.2。已读取XML/peri/六份源/旧SDC及定向历史报告，未改原工程；发布目录不能证明实际PCB版本。
+- 本轮I3/Efinity2025.1.110.5.9生成报告：[reports/m1_hdmi_i3](../reports/m1_hdmi_i3/BUILD_REPORT.md)，可信于实际离线构建/时序与哈希结果，不证明未执行的显示、复位启动或电气认证。
+- 官方本地文档E:/Efinity/2025.1/doc/topics/{tim-add-clock-create.html,tim-add-clock-creategen.html,tim-clock-latency-pll-cascading.html,concept_constraints_uncertainty.html}及pt/doc/topics/{titanium-pll.html,titanium-hsio-as-lvds.html}用于解释时钟边界、默认不确定度、异步LOCKED与原生串行器。保留必要安装路径；未查询网络或猜测时钟/复位行为。
+- reference/tools用途、路径与规模见[LOCAL_MATERIALS.md](../reports/m1_hdmi_i3/LOCAL_MATERIALS.md)，未执行其中安装器/工具，不将未跟踪资料整目录加入Git。
+
+
+## M1实物结果与后续接线前资料核查（2026-10-02）
+
+用户确认Ti60F225I3和AR0135，M1测试图JTAG实测正常；具体相机模块接口、电源、复位与PCB版本待实物确认。S03 p5记载VS-AR0135黑白DVP8bit，p16列出AR0135 HDMI例程；S05 p2记载P3相机接口/D3V3_Sensor，p7记载PCLK与CTL3电平转换及LED6/7共享线。本轮只读提取这些页面文字及S12顶层、peri、I2C配置、旧warn.log，未修改/编译相机工程，未宣称本轮目视检查原理图。详见[AR0135接线前核查](AR0135_PRECONNECT_CHECK.md)。
+
+M1最终实现DB隔离I3 STA、bit元数据和用户实物报告分别见reports/m1_hdmi_i3，不以厂商资料替代实物结果。历史P0“未编译/待型号”段仅描述当时状态，当前用户型号确认及M0/M1验收优先。

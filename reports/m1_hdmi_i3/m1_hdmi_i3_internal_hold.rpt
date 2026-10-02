@@ -1,0 +1,522 @@
+
+Efinix Timing Path Constraint Report
+Version: 2025.1.110.5.9
+Date: Fri Oct  2 13:12:15 2026
+
+Copyright (C) 2013 - 2025 Efinix, Inc. All rights reserved.
+
+User command: report_timing -npaths 10 -nworst 1 -hold -detail full_path -file {m1_hdmi_i3_internal_hold.rpt}
+
+Timing Model: I3
+	process : typical
+	temperature : -40C to 100C
+	voltage : 0.95 +/-30mV
+	speedgrade : 3
+	technology : t16ff
+	status : final
+
+Summary:
+
+ Path #  | Slack (ns) | Delay (ns) |             Start Pin              |              End Pin               |  Launch Clk   |  Capture Clk
+============================================================================================================================================
+  1      |  0.098     |  0.096     | u_lcd_driver/hcnt[0]~FF|Q          | u_lcd_driver/hcnt[1]~FF|D          | clk_pixel (R) | clk_pixel (R)
+  2      |  0.104     |  0.102     | u_lcd_driver/vcnt[2]~FF|Q          | tmds_lvds_tx_data0[9]~FF_brt_87|D  | clk_pixel (R) | clk_pixel (R)
+  3      |  0.109     |  0.107     | u_rgb2dvi/enc_0/acc[1]~FF_brt_41|Q | u_rgb2dvi/enc_0/acc[1]~FF_brt_41|D | clk_pixel (R) | clk_pixel (R)
+  4      |  0.109     |  0.107     | u_rgb2dvi/enc_0/acc[1]~FF_brt_38|Q | u_rgb2dvi/enc_0/acc[1]~FF_brt_38|D | clk_pixel (R) | clk_pixel (R)
+  5      |  0.109     |  0.107     | u_rgb2dvi/enc_1/acc[1]~FF_brt_13|Q | u_rgb2dvi/enc_1/acc[1]~FF_brt_13|D | clk_pixel (R) | clk_pixel (R)
+  6      |  0.109     |  0.107     | u_rgb2dvi/enc_0/acc[1]~FF_brt_39|Q | u_rgb2dvi/enc_0/acc[1]~FF_brt_39|D | clk_pixel (R) | clk_pixel (R)
+  7      |  0.109     |  0.107     | u_rgb2dvi/enc_1/acc[1]~FF_brt_12|Q | u_rgb2dvi/enc_1/acc[1]~FF_brt_12|D | clk_pixel (R) | clk_pixel (R)
+  8      |  0.109     |  0.107     | u_rgb2dvi/enc_1/acc[1]~FF_brt_14|Q | u_rgb2dvi/enc_1/acc[1]~FF_brt_14|D | clk_pixel (R) | clk_pixel (R)
+  9      |  0.109     |  0.107     | u_lcd_driver/hcnt[0]~FF|Q          | u_lcd_driver/hcnt[0]~FF|D          | clk_pixel (R) | clk_pixel (R)
+ 10      |  0.109     |  0.107     | u_lcd_driver/hcnt[4]~FF|Q          | u_lcd_driver/hcnt[5]~FF|D          | clk_pixel (R) | clk_pixel (R)
+
+++++ Path 1 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : u_lcd_driver/hcnt[0]~FF|CLK         
+Path End      : u_lcd_driver/hcnt[1]~FF|D           
+Launch Clock  : clk_pixel (RISE)                    
+Capture Clock : clk_pixel (RISE)                    
+Slack         : 0.098 (arrival time - required time)
+Delay         : 0.096                               
+
+Logic Level             : 1
+Non-global nets on path : 1
+Global nets on path     : 0
+
+Launch Clock Path Delay        : 1.207
++ Clock To Q + Data Path Delay : 0.168
+--------------------------------------
+End-of-path arrival time       : 1.375
+
+Constraint                     : 0.000
++ Capture Clock Path Delay     : 1.207
++ Clock Uncertainty            : 0.070
+--------------------------------------
+End-of-path required time      : 1.277
+
+Launch Clock Path
+           name              model name   delay (ns)  cumulative delay (ns) pins on net    location
+=====================================================================================================
+clk_pixel                      inpad        0.000             0.000               0       (219,159)
+clk_pixel                      inpad        0.070             0.070             178       (219,159)
+clk_pixel                      net          1.137             1.207             178       (219,159)
+u_lcd_driver/hcnt[0]~FF|CLK    ff           0.000             1.207             178       (41,284) 
+
+Data Path
+          name             model name   delay (ns)  cumulative delay (ns) pins on net    location
+===================================================================================================
+u_lcd_driver/hcnt[0]~FF|Q     ff          0.072             0.072              9         (41,284)
+u_lcd_driver/hcnt[0]          net         0.062             0.134              9         (41,284)
+LUT__1050|in[1]               lut         0.034             0.168              9         (41,282)
+LUT__1050|out                 lut         0.000             0.168              2         (41,282)
+u_lcd_driver/hcnt[1]~FF|D     ff          0.000             0.168              2         (41,282)
+
+Capture Clock Path
+           name              model name   delay (ns)  cumulative delay (ns) pins on net    location
+=====================================================================================================
+clk_pixel                      inpad        0.000             0.000               0       (219,159)
+clk_pixel                      inpad        0.070             0.070             178       (219,159)
+clk_pixel                      net          1.137             1.207             178       (219,159)
+u_lcd_driver/hcnt[1]~FF|CLK    ff           0.000             1.207             178       (41,282) 
+
+++++ Path 2 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : u_lcd_driver/vcnt[2]~FF|CLK         
+Path End      : tmds_lvds_tx_data0[9]~FF_brt_87|D   
+Launch Clock  : clk_pixel (RISE)                    
+Capture Clock : clk_pixel (RISE)                    
+Slack         : 0.104 (arrival time - required time)
+Delay         : 0.102                               
+
+Logic Level             : 1
+Non-global nets on path : 1
+Global nets on path     : 0
+
+Launch Clock Path Delay        : 1.207
++ Clock To Q + Data Path Delay : 0.174
+--------------------------------------
+End-of-path arrival time       : 1.381
+
+Constraint                     : 0.000
++ Capture Clock Path Delay     : 1.207
++ Clock Uncertainty            : 0.070
+--------------------------------------
+End-of-path required time      : 1.277
+
+Launch Clock Path
+           name              model name   delay (ns)  cumulative delay (ns) pins on net    location
+=====================================================================================================
+clk_pixel                      inpad        0.000             0.000               0       (219,159)
+clk_pixel                      inpad        0.070             0.070             178       (219,159)
+clk_pixel                      net          1.137             1.207             178       (219,159)
+u_lcd_driver/vcnt[2]~FF|CLK    ff           0.000             1.207             178       (67,281) 
+
+Data Path
+              name                 model name   delay (ns)  cumulative delay (ns) pins on net    location
+===========================================================================================================
+u_lcd_driver/vcnt[2]~FF|Q             ff          0.072             0.072              13        (67,281)
+u_lcd_driver/vcnt[2]                  net         0.068             0.140              13        (67,281)
+LUT__995|in[0]                        lut         0.034             0.174              13        (67,285)
+LUT__995|out                          lut         0.000             0.174               3        (67,285)
+tmds_lvds_tx_data0[9]~FF_brt_87|D     ff          0.000             0.174               3        (67,285)
+
+Capture Clock Path
+               name                  model name   delay (ns)  cumulative delay (ns) pins on net    location
+=============================================================================================================
+clk_pixel                              inpad        0.000             0.000               0       (219,159)
+clk_pixel                              inpad        0.070             0.070             178       (219,159)
+clk_pixel                              net          1.137             1.207             178       (219,159)
+tmds_lvds_tx_data0[9]~FF_brt_87|CLK    ff           0.000             1.207             178       (67,285) 
+
+++++ Path 3 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : u_rgb2dvi/enc_0/acc[1]~FF_brt_41|CLK
+Path End      : u_rgb2dvi/enc_0/acc[1]~FF_brt_41|D  
+Launch Clock  : clk_pixel (RISE)                    
+Capture Clock : clk_pixel (RISE)                    
+Slack         : 0.109 (arrival time - required time)
+Delay         : 0.107                               
+
+Logic Level             : 1
+Non-global nets on path : 1
+Global nets on path     : 0
+
+Launch Clock Path Delay        : 1.207
++ Clock To Q + Data Path Delay : 0.179
+--------------------------------------
+End-of-path arrival time       : 1.386
+
+Constraint                     : 0.000
++ Capture Clock Path Delay     : 1.207
++ Clock Uncertainty            : 0.070
+--------------------------------------
+End-of-path required time      : 1.277
+
+Launch Clock Path
+                name                  model name   delay (ns)  cumulative delay (ns) pins on net    location
+==============================================================================================================
+clk_pixel                               inpad        0.000             0.000               0       (219,159)
+clk_pixel                               inpad        0.070             0.070             178       (219,159)
+clk_pixel                               net          1.137             1.207             178       (219,159)
+u_rgb2dvi/enc_0/acc[1]~FF_brt_41|CLK    ff           0.000             1.207             178       (94,303) 
+
+Data Path
+               name                 model name   delay (ns)  cumulative delay (ns) pins on net    location
+============================================================================================================
+u_rgb2dvi/enc_0/acc[1]~FF_brt_41|Q    ff           0.072             0.072              2         (94,303)
+u_rgb2dvi/enc_0/acc[4]_q              net          0.073             0.145              2         (94,303)
+u_rgb2dvi/enc_0/add_105/i5|I0         adder        0.034             0.179              2         (94,303)
+u_rgb2dvi/enc_0/add_105/i5|O          adder        0.000             0.179              4         (94,303)
+u_rgb2dvi/enc_0/acc[1]~FF_brt_41|D    ff           0.000             0.179              4         (94,303)
+
+Capture Clock Path
+                name                  model name   delay (ns)  cumulative delay (ns) pins on net    location
+==============================================================================================================
+clk_pixel                               inpad        0.000             0.000               0       (219,159)
+clk_pixel                               inpad        0.070             0.070             178       (219,159)
+clk_pixel                               net          1.137             1.207             178       (219,159)
+u_rgb2dvi/enc_0/acc[1]~FF_brt_41|CLK    ff           0.000             1.207             178       (94,303) 
+
+++++ Path 4 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : u_rgb2dvi/enc_0/acc[1]~FF_brt_38|CLK
+Path End      : u_rgb2dvi/enc_0/acc[1]~FF_brt_38|D  
+Launch Clock  : clk_pixel (RISE)                    
+Capture Clock : clk_pixel (RISE)                    
+Slack         : 0.109 (arrival time - required time)
+Delay         : 0.107                               
+
+Logic Level             : 1
+Non-global nets on path : 1
+Global nets on path     : 0
+
+Launch Clock Path Delay        : 1.207
++ Clock To Q + Data Path Delay : 0.179
+--------------------------------------
+End-of-path arrival time       : 1.386
+
+Constraint                     : 0.000
++ Capture Clock Path Delay     : 1.207
++ Clock Uncertainty            : 0.070
+--------------------------------------
+End-of-path required time      : 1.277
+
+Launch Clock Path
+                name                  model name   delay (ns)  cumulative delay (ns) pins on net    location
+==============================================================================================================
+clk_pixel                               inpad        0.000             0.000               0       (219,159)
+clk_pixel                               inpad        0.070             0.070             178       (219,159)
+clk_pixel                               net          1.137             1.207             178       (219,159)
+u_rgb2dvi/enc_0/acc[1]~FF_brt_38|CLK    ff           0.000             1.207             178       (94,300) 
+
+Data Path
+               name                 model name   delay (ns)  cumulative delay (ns) pins on net    location
+============================================================================================================
+u_rgb2dvi/enc_0/acc[1]~FF_brt_38|Q    ff           0.072             0.072              2         (94,300)
+u_rgb2dvi/enc_0/acc[1]_q              net          0.073             0.145              2         (94,300)
+u_rgb2dvi/enc_0/add_105/i2|I0         adder        0.034             0.179              2         (94,300)
+u_rgb2dvi/enc_0/add_105/i2|O          adder        0.000             0.179              3         (94,300)
+u_rgb2dvi/enc_0/acc[1]~FF_brt_38|D    ff           0.000             0.179              3         (94,300)
+
+Capture Clock Path
+                name                  model name   delay (ns)  cumulative delay (ns) pins on net    location
+==============================================================================================================
+clk_pixel                               inpad        0.000             0.000               0       (219,159)
+clk_pixel                               inpad        0.070             0.070             178       (219,159)
+clk_pixel                               net          1.137             1.207             178       (219,159)
+u_rgb2dvi/enc_0/acc[1]~FF_brt_38|CLK    ff           0.000             1.207             178       (94,300) 
+
+++++ Path 5 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : u_rgb2dvi/enc_1/acc[1]~FF_brt_13|CLK
+Path End      : u_rgb2dvi/enc_1/acc[1]~FF_brt_13|D  
+Launch Clock  : clk_pixel (RISE)                    
+Capture Clock : clk_pixel (RISE)                    
+Slack         : 0.109 (arrival time - required time)
+Delay         : 0.107                               
+
+Logic Level             : 1
+Non-global nets on path : 1
+Global nets on path     : 0
+
+Launch Clock Path Delay        : 1.207
++ Clock To Q + Data Path Delay : 0.179
+--------------------------------------
+End-of-path arrival time       : 1.386
+
+Constraint                     : 0.000
++ Capture Clock Path Delay     : 1.207
++ Clock Uncertainty            : 0.070
+--------------------------------------
+End-of-path required time      : 1.277
+
+Launch Clock Path
+                name                  model name   delay (ns)  cumulative delay (ns) pins on net    location
+==============================================================================================================
+clk_pixel                               inpad        0.000             0.000               0       (219,159)
+clk_pixel                               inpad        0.070             0.070             178       (219,159)
+clk_pixel                               net          1.137             1.207             178       (219,159)
+u_rgb2dvi/enc_1/acc[1]~FF_brt_13|CLK    ff           0.000             1.207             178       (38,300) 
+
+Data Path
+               name                 model name   delay (ns)  cumulative delay (ns) pins on net    location
+============================================================================================================
+u_rgb2dvi/enc_1/acc[1]~FF_brt_13|Q    ff           0.072             0.072              2         (38,300)
+u_rgb2dvi/enc_1/acc[2]_q              net          0.073             0.145              2         (38,300)
+u_rgb2dvi/enc_1/add_105/i3|I0         adder        0.034             0.179              2         (38,300)
+u_rgb2dvi/enc_1/add_105/i3|O          adder        0.000             0.179              3         (38,300)
+u_rgb2dvi/enc_1/acc[1]~FF_brt_13|D    ff           0.000             0.179              3         (38,300)
+
+Capture Clock Path
+                name                  model name   delay (ns)  cumulative delay (ns) pins on net    location
+==============================================================================================================
+clk_pixel                               inpad        0.000             0.000               0       (219,159)
+clk_pixel                               inpad        0.070             0.070             178       (219,159)
+clk_pixel                               net          1.137             1.207             178       (219,159)
+u_rgb2dvi/enc_1/acc[1]~FF_brt_13|CLK    ff           0.000             1.207             178       (38,300) 
+
+++++ Path 6 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : u_rgb2dvi/enc_0/acc[1]~FF_brt_39|CLK
+Path End      : u_rgb2dvi/enc_0/acc[1]~FF_brt_39|D  
+Launch Clock  : clk_pixel (RISE)                    
+Capture Clock : clk_pixel (RISE)                    
+Slack         : 0.109 (arrival time - required time)
+Delay         : 0.107                               
+
+Logic Level             : 1
+Non-global nets on path : 1
+Global nets on path     : 0
+
+Launch Clock Path Delay        : 1.207
++ Clock To Q + Data Path Delay : 0.179
+--------------------------------------
+End-of-path arrival time       : 1.386
+
+Constraint                     : 0.000
++ Capture Clock Path Delay     : 1.207
++ Clock Uncertainty            : 0.070
+--------------------------------------
+End-of-path required time      : 1.277
+
+Launch Clock Path
+                name                  model name   delay (ns)  cumulative delay (ns) pins on net    location
+==============================================================================================================
+clk_pixel                               inpad        0.000             0.000               0       (219,159)
+clk_pixel                               inpad        0.070             0.070             178       (219,159)
+clk_pixel                               net          1.137             1.207             178       (219,159)
+u_rgb2dvi/enc_0/acc[1]~FF_brt_39|CLK    ff           0.000             1.207             178       (94,301) 
+
+Data Path
+               name                 model name   delay (ns)  cumulative delay (ns) pins on net    location
+============================================================================================================
+u_rgb2dvi/enc_0/acc[1]~FF_brt_39|Q    ff           0.072             0.072              2         (94,301)
+u_rgb2dvi/enc_0/acc[2]_q              net          0.073             0.145              2         (94,301)
+u_rgb2dvi/enc_0/add_105/i3|I0         adder        0.034             0.179              2         (94,301)
+u_rgb2dvi/enc_0/add_105/i3|O          adder        0.000             0.179              3         (94,301)
+u_rgb2dvi/enc_0/acc[1]~FF_brt_39|D    ff           0.000             0.179              3         (94,301)
+
+Capture Clock Path
+                name                  model name   delay (ns)  cumulative delay (ns) pins on net    location
+==============================================================================================================
+clk_pixel                               inpad        0.000             0.000               0       (219,159)
+clk_pixel                               inpad        0.070             0.070             178       (219,159)
+clk_pixel                               net          1.137             1.207             178       (219,159)
+u_rgb2dvi/enc_0/acc[1]~FF_brt_39|CLK    ff           0.000             1.207             178       (94,301) 
+
+++++ Path 7 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : u_rgb2dvi/enc_1/acc[1]~FF_brt_12|CLK
+Path End      : u_rgb2dvi/enc_1/acc[1]~FF_brt_12|D  
+Launch Clock  : clk_pixel (RISE)                    
+Capture Clock : clk_pixel (RISE)                    
+Slack         : 0.109 (arrival time - required time)
+Delay         : 0.107                               
+
+Logic Level             : 1
+Non-global nets on path : 1
+Global nets on path     : 0
+
+Launch Clock Path Delay        : 1.207
++ Clock To Q + Data Path Delay : 0.179
+--------------------------------------
+End-of-path arrival time       : 1.386
+
+Constraint                     : 0.000
++ Capture Clock Path Delay     : 1.207
++ Clock Uncertainty            : 0.070
+--------------------------------------
+End-of-path required time      : 1.277
+
+Launch Clock Path
+                name                  model name   delay (ns)  cumulative delay (ns) pins on net    location
+==============================================================================================================
+clk_pixel                               inpad        0.000             0.000               0       (219,159)
+clk_pixel                               inpad        0.070             0.070             178       (219,159)
+clk_pixel                               net          1.137             1.207             178       (219,159)
+u_rgb2dvi/enc_1/acc[1]~FF_brt_12|CLK    ff           0.000             1.207             178       (38,299) 
+
+Data Path
+               name                 model name   delay (ns)  cumulative delay (ns) pins on net    location
+============================================================================================================
+u_rgb2dvi/enc_1/acc[1]~FF_brt_12|Q    ff           0.072             0.072              2         (38,299)
+u_rgb2dvi/enc_1/acc[1]_q              net          0.073             0.145              2         (38,299)
+u_rgb2dvi/enc_1/add_105/i2|I0         adder        0.034             0.179              2         (38,299)
+u_rgb2dvi/enc_1/add_105/i2|O          adder        0.000             0.179              3         (38,299)
+u_rgb2dvi/enc_1/acc[1]~FF_brt_12|D    ff           0.000             0.179              3         (38,299)
+
+Capture Clock Path
+                name                  model name   delay (ns)  cumulative delay (ns) pins on net    location
+==============================================================================================================
+clk_pixel                               inpad        0.000             0.000               0       (219,159)
+clk_pixel                               inpad        0.070             0.070             178       (219,159)
+clk_pixel                               net          1.137             1.207             178       (219,159)
+u_rgb2dvi/enc_1/acc[1]~FF_brt_12|CLK    ff           0.000             1.207             178       (38,299) 
+
+++++ Path 8 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : u_rgb2dvi/enc_1/acc[1]~FF_brt_14|CLK
+Path End      : u_rgb2dvi/enc_1/acc[1]~FF_brt_14|D  
+Launch Clock  : clk_pixel (RISE)                    
+Capture Clock : clk_pixel (RISE)                    
+Slack         : 0.109 (arrival time - required time)
+Delay         : 0.107                               
+
+Logic Level             : 1
+Non-global nets on path : 1
+Global nets on path     : 0
+
+Launch Clock Path Delay        : 1.207
++ Clock To Q + Data Path Delay : 0.179
+--------------------------------------
+End-of-path arrival time       : 1.386
+
+Constraint                     : 0.000
++ Capture Clock Path Delay     : 1.207
++ Clock Uncertainty            : 0.070
+--------------------------------------
+End-of-path required time      : 1.277
+
+Launch Clock Path
+                name                  model name   delay (ns)  cumulative delay (ns) pins on net    location
+==============================================================================================================
+clk_pixel                               inpad        0.000             0.000               0       (219,159)
+clk_pixel                               inpad        0.070             0.070             178       (219,159)
+clk_pixel                               net          1.137             1.207             178       (219,159)
+u_rgb2dvi/enc_1/acc[1]~FF_brt_14|CLK    ff           0.000             1.207             178       (38,301) 
+
+Data Path
+               name                 model name   delay (ns)  cumulative delay (ns) pins on net    location
+============================================================================================================
+u_rgb2dvi/enc_1/acc[1]~FF_brt_14|Q    ff           0.072             0.072              2         (38,301)
+u_rgb2dvi/enc_1/acc[3]_q              net          0.073             0.145              2         (38,301)
+u_rgb2dvi/enc_1/add_105/i4|I0         adder        0.034             0.179              2         (38,301)
+u_rgb2dvi/enc_1/add_105/i4|O          adder        0.000             0.179              3         (38,301)
+u_rgb2dvi/enc_1/acc[1]~FF_brt_14|D    ff           0.000             0.179              3         (38,301)
+
+Capture Clock Path
+                name                  model name   delay (ns)  cumulative delay (ns) pins on net    location
+==============================================================================================================
+clk_pixel                               inpad        0.000             0.000               0       (219,159)
+clk_pixel                               inpad        0.070             0.070             178       (219,159)
+clk_pixel                               net          1.137             1.207             178       (219,159)
+u_rgb2dvi/enc_1/acc[1]~FF_brt_14|CLK    ff           0.000             1.207             178       (38,301) 
+
+++++ Path 9 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : u_lcd_driver/hcnt[0]~FF|CLK         
+Path End      : u_lcd_driver/hcnt[0]~FF|D           
+Launch Clock  : clk_pixel (RISE)                    
+Capture Clock : clk_pixel (RISE)                    
+Slack         : 0.109 (arrival time - required time)
+Delay         : 0.107                               
+
+Logic Level             : 1
+Non-global nets on path : 1
+Global nets on path     : 0
+
+Launch Clock Path Delay        : 1.207
++ Clock To Q + Data Path Delay : 0.179
+--------------------------------------
+End-of-path arrival time       : 1.386
+
+Constraint                     : 0.000
++ Capture Clock Path Delay     : 1.207
++ Clock Uncertainty            : 0.070
+--------------------------------------
+End-of-path required time      : 1.277
+
+Launch Clock Path
+           name              model name   delay (ns)  cumulative delay (ns) pins on net    location
+=====================================================================================================
+clk_pixel                      inpad        0.000             0.000               0       (219,159)
+clk_pixel                      inpad        0.070             0.070             178       (219,159)
+clk_pixel                      net          1.137             1.207             178       (219,159)
+u_lcd_driver/hcnt[0]~FF|CLK    ff           0.000             1.207             178       (41,284) 
+
+Data Path
+          name             model name   delay (ns)  cumulative delay (ns) pins on net    location
+===================================================================================================
+u_lcd_driver/hcnt[0]~FF|Q     ff          0.072             0.072              9         (41,284)
+u_lcd_driver/hcnt[0]          net         0.073             0.145              9         (41,284)
+LUT__1039|in[1]               lut         0.034             0.179              9         (41,284)
+LUT__1039|out                 lut         0.000             0.179              2         (41,284)
+u_lcd_driver/hcnt[0]~FF|D     ff          0.000             0.179              2         (41,284)
+
+Capture Clock Path
+           name              model name   delay (ns)  cumulative delay (ns) pins on net    location
+=====================================================================================================
+clk_pixel                      inpad        0.000             0.000               0       (219,159)
+clk_pixel                      inpad        0.070             0.070             178       (219,159)
+clk_pixel                      net          1.137             1.207             178       (219,159)
+u_lcd_driver/hcnt[0]~FF|CLK    ff           0.000             1.207             178       (41,284) 
+
+++++ Path 10 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : u_lcd_driver/hcnt[4]~FF|CLK         
+Path End      : u_lcd_driver/hcnt[5]~FF|D           
+Launch Clock  : clk_pixel (RISE)                    
+Capture Clock : clk_pixel (RISE)                    
+Slack         : 0.109 (arrival time - required time)
+Delay         : 0.107                               
+
+Logic Level             : 1
+Non-global nets on path : 1
+Global nets on path     : 0
+
+Launch Clock Path Delay        : 1.207
++ Clock To Q + Data Path Delay : 0.179
+--------------------------------------
+End-of-path arrival time       : 1.386
+
+Constraint                     : 0.000
++ Capture Clock Path Delay     : 1.207
++ Clock Uncertainty            : 0.070
+--------------------------------------
+End-of-path required time      : 1.277
+
+Launch Clock Path
+           name              model name   delay (ns)  cumulative delay (ns) pins on net    location
+=====================================================================================================
+clk_pixel                      inpad        0.000             0.000               0       (219,159)
+clk_pixel                      inpad        0.070             0.070             178       (219,159)
+clk_pixel                      net          1.137             1.207             178       (219,159)
+u_lcd_driver/hcnt[4]~FF|CLK    ff           0.000             1.207             178       (50,284) 
+
+Data Path
+          name             model name   delay (ns)  cumulative delay (ns) pins on net    location
+===================================================================================================
+u_lcd_driver/hcnt[4]~FF|Q     ff          0.072             0.072              11        (50,284)
+u_lcd_driver/hcnt[4]          net         0.073             0.145              11        (50,284)
+LUT__1054|in[1]               lut         0.034             0.179              11        (50,285)
+LUT__1054|out                 lut         0.000             0.179               2        (50,285)
+u_lcd_driver/hcnt[5]~FF|D     ff          0.000             0.179               2        (50,285)
+
+Capture Clock Path
+           name              model name   delay (ns)  cumulative delay (ns) pins on net    location
+=====================================================================================================
+clk_pixel                      inpad        0.000             0.000               0       (219,159)
+clk_pixel                      inpad        0.070             0.070             178       (219,159)
+clk_pixel                      net          1.137             1.207             178       (219,159)
+u_lcd_driver/hcnt[5]~FF|CLK    ff           0.000             1.207             178       (50,285) 
+

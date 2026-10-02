@@ -1,15 +1,15 @@
 # 星眸项目状态
 
-更新日期：2026-10-01。
+更新日期：2026-10-02。
 
 ## 当前阶段与交接
 
-- P0：背景与其余外设需求仍待冻结；M0：基础验收通过（I3编译、用户报告JTAG配置与流水灯定性PASS）；M1～M7：未开始。
+- P0：背景与其余外设需求仍待冻结；M0：基础验收通过（I3编译、用户报告JTAG配置与流水灯定性PASS）；M1：PASS（独立HDMI编译/时序、用户JTAG临时下载及图案定性验收；摄像头直通未验收）；M2～M7：未开始。
 - AGENTS.md 已经识别；已有自动模型调度原则保持不变。
-- 自动委派能力已经具备；骨架初始化、Git 初始化和首次提交范围收敛均顺序委派 GPT-6.1 Sol，Medium，未调用 Astra；同一时间只有一个主线写入者，主会话负责最终验收。
-- 文件化交接初始化已完成；本轮M0最小LED副本基础验收通过，详情见文末及H-20261001-08。其余外设/需求仍不冻结。
-- 前轮 P0 资料核查尝试委派 GPT-6.1 Sol、Medium，但停留 pending_init，取消后由主会话接手；本轮最小工程选择已由 Sol、Medium 完成只读核查，主会话独立复核并为唯一文档写入者，未调用 Astra。
-- 当前M0仅复制厂商LED示例；配置/完整编译及用户JTAG、流水灯定性结果已验收，不新增算法RTL。当前bit持久性和长期稳定性未验证。
+- 自动委派能力已经具备；历史骨架/Git初始化顺序委派Sol/Medium，本轮M1按L3顺序委派Astra/Medium；同一时间只有一个主线写入者，主会话负责最终验收。
+- 文件化交接初始化已完成；M0最小LED副本基础验收通过并提交，本轮M1实物验收与证据整改见文末及H-20261002-10。其余外设/需求仍不冻结。
+- 历史P0资料核查曾委派Sol/Medium但pending_init，取消后由主会话接手；历史最小LED工程选择由Sol/Medium只读核查。当前M1的Astra委派与验收见文末。
+- M0仅复制厂商LED示例；配置/完整编译及用户JTAG、流水灯定性结果已验收，不新增算法RTL。M0 bit持久性和长期稳定性未验证；M1独立HDMI已由用户定性验收；显示参数和复位鲁棒性边界见文末。
 
 ## 检测与文件状态
 
@@ -17,7 +17,7 @@
 - 初始 Git 基线提交：f7f0fa2753011a04744b4b2d8a5ffc0f24446dac，提交信息 chore: initialize StarEye project；提交包含已验收的九份文件。随后仅对 STATUS.md 和 HANDOFF.md 的哈希记录使用 docs: record initial Git baseline 单独提交；该记录提交的哈希以 git log 为准。
 - .gitignore：新增 /document/ 与 /reports/git_baseline_inventory/，保留原有 Efinity 生成目录、仿真缓存与波形、Python/编辑器/系统临时文件规则；未全局忽略 log、rpt、bin、hex，其他 reports/ 内容仍可进入版本控制。
 - 原方案完整迁移至 docs/AI_COLLABORATION_PLAN.md；AGENTS.md 与 document/ 原始资料保持原样。
-- rtl/、tb/、constraints/仍无业务实现；efinity/m0_led_i3已有厂商LED工作副本，scripts/已有官方配置/编译辅助脚本，reports/m0_led_i3保留关键结果。reference/competition/已有赛题PDF；历史盘点、document和用户tools保持原样。
+- rtl/、tb/、constraints/仍无业务实现；efinity/m0_led_i3和efinity/m1_hdmi_i3分别保留厂商LED与独立HDMI工作副本，scripts/含官方配置/编译辅助脚本，reports/保留文本证据。reference/competition/已有赛题PDF；历史盘点、document和用户tools保持原样。
 - 验证方式：静态检查、官方编译/时序证据及用户硬件报告；硬件结果见文末M0验收，主会话未独立操作板卡。
 
 ## 历史骨架初始化主会话验收证据
@@ -94,7 +94,7 @@
 - 没有编译、仿真、综合、下载或 Flash 操作；用户验收仅为 JTAG 识别，不标记点灯通过。P0 尚未整体冻结，本轮授权到参考工程选择/编译前核查。
 - 主会话最终静态验收：六份相关文档链接无缺失、六项用户 JTAG 事实齐全；AGENTS/原协作方案与七份厂商候选源配置/RTL/调试文件 SHA256 保持不变；实现目录为空，git diff --check 通过，main 分支/暂存区为空。用户已有 tools/ 与 reference/ 文件保留，未暂存或提交。
 
-## P0 历史待确认清单（最新状态以文末M0验收为准）
+## P0 历史待确认清单（最新状态以文末M1验收为准）
 
 | 事项 | 状态 |
 | --- | --- |
@@ -141,7 +141,7 @@
 - 未运行Programmer或任何program流程，未JTAG下载、SPI Active或Flash固化。离线bit生成保留厂商mode=active及hex选项，属于文件生成配置，不是Program Flash操作；后续仅使用审查后的.bit进行经确认的JTAG临时下载。
 - 摄像头和扩展外设断开状态待实物确认，尤其LED6/7与CMOS_D0/D1共享；新I3点灯现象待用户确认。
 
-## M0 上板基础验收与提交范围（2026-10-01，当前）
+## M0 上板基础验收与提交范围（2026-10-01，历史提交前）
 
 - M0基础验收通过：I3完整编译PASS、用户报告JTAG配置PASS、流水灯功能定性PASS。
 - 用户确认 Device ID `0x10660A79`、Programmer `Device is in user mode`、JTAG下载成功。报告为用户文字摘录，未提供原始导出日志；所选bit路径及下载文件哈希未独立核验。
@@ -152,3 +152,37 @@
 - 独立M0提交范围已核查，见[COMMIT_SCOPE.md](../reports/m0_led_i3/COMMIT_SCOPE.md)；实际提交哈希以git log为准。仅纳入M0文档、源码/配置、脚本与文本证据，排除资料、缓存、锁及大型bit/hex/lbf/vdb。
 - 用户确认摄像头AR0135，具体接口/适配板/实际连接待确认，不由型号推断DVP；用户有HDMI显示器但缺HDMI连接线，线缆待补齐。
 - 下一步在M0提交后只读核查AR0135与HDMI参考，优先评估HDMI彩条链路；本轮未读取视频例程，M1尚未开始。
+
+## M1独立HDMI离线任务启动（2026-10-01）
+
+- 用户本轮授权独立HDMI工作副本I3迁移与完整编译，原厂只读；HDMI线缺少，不下载，不接AR0135，不Sobel，不Git暂存或提交。
+- M0基线 a8c39c93a06eeb0686cbb5c13fd44717d49195fa 已核对；本轮按L3委派Astra/Medium，交接H-20261001-09。
+
+## M1独立HDMI离线验收（2026-10-01，历史离线阶段）
+
+- 工作副本[Ti60_HDMI_1080P_Test.xml](../efinity/m1_hdmi_i3/Ti60_HDMI_1080P_Test.xml)，Titanium / Ti60F225 / FBGA225 / I3 final；顶层Ti60_HDMI_1080P_Test。官方projectdb配置和DesignAPI检查/保存/接口生成通过；debug自动插入off，未新增业务RTL。
+- Efinity2025.1.110.5.9完整map/interface/pnr/pgm通过，外层退出0；pgm仅离线生成文件。本轮未运行Programmer、未下载、未SPI Active或Flash固化。
+- 原厂HDMI目录69/69文件路径、大小、修改时间、SHA256完全保持；六份参与编译的RTL逐字相同。M0和AR0135工程未修改。
+- 24MHz C5输入，PLL_TL0输出27MHz给PLL_TR0，输出148.5MHz像素和742.5MHz串行时钟；2200×1125总像素对应1920×1080@60Hz。四种测试图源代码目标每秒切换，尚未观察实物画面。
+- 旧VIP_System.sdc仍保留但不使用；其25/150/750MHz及单PLL历史模型与当前源不一致。实际约束为重新生成的官方Ti60_HDMI_1080P_Test_I3.sdc，未添加虚构I/O delay或false-path。
+- 最终内部setup **+1.656ns**、hold **+0.098ns**；30/30 TMDS并行数据出口定向setup **+4.029ns**、hold **+0.245ns**。no_clock/unconstrained_internal_endpoints/multiple_clock均0。
+- 2个LOCKED输入无input_delay，6个LED及sys_pll_RSTN无output_delay；PLL_LOCKED异步释放复位、串行器复位恒0、启动/失锁恢复仍未功能验收。CDC工具无同步器警告不能替代这些检查；无功能仿真/上板视频验收。
+- 33条综合warning行含1条汇总，另1条未使用clk_25M接口警告；主要为常量端口位宽、未使用SerialClk/旧输出、循环变量裁剪、clk27m仅供原生PLL及DSP CE配置。完整告警与解释保留，未抑制。
+- HDL生成TMDS，原生LVDS串行器经ESD/AC耦合到HDMI插座，无原理图中的外置TMDS发射ASIC。两原理图支持F7=P/F8=N，XLS标签相反；保持源配置。实际PCB版本、电源跳线、信号质量与显示器仍待实物确认。
+- bit：`F:/Projects/stareye_fpga/efinity/m1_hdmi_i3/outflow/Ti60_HDMI_1080P_Test.bit`；**1,626,948字节**；SHA256 **D96068C5D88EE861FD70F1FF4C82221DAE5582E5C1642366A631B053EA7B3E89**；未下载，已被.gitignore排除。
+- 资源551/60800 XLR、172 FF、436 LUT4、103 ADD、1 DSP、0 RAM、2 PLL、4 LVDS串行通道。M1只确认离线子步骤通过，视频直通阶段继续进行中。
+- 资料盘点：reference仅赛题PDF；tools含GTKWave与ELITES-232DL/libusbK驱动（父目录名USB_Blaster不准确）。未运行、移动、安装或暂存，详见[本地资料用途](../reports/m1_hdmi_i3/LOCAL_MATERIALS.md)。
+- Git保持main，HEAD仍为M0提交；暂存区为空，本轮未git add/commit。变更范围和大小见[CHANGE_SCOPE.md](../reports/m1_hdmi_i3/CHANGE_SCOPE.md)，生成物排除证据见root_review.json。关键结果见[BUILD_REPORT.md](../reports/m1_hdmi_i3/BUILD_REPORT.md)、[PIN_CLOCK_CHECK.md](../reports/m1_hdmi_i3/PIN_CLOCK_CHECK.md)及[CDC_RESET_REVIEW.md](../reports/m1_hdmi_i3/CDC_RESET_REVIEW.md)。
+- Astra完成后停写，主会话独立读取最终报告、核对SHA/源文件/约束与原理图，并接回文档维护；M2～M7未开始。
+
+## M1独立HDMI实物验收与收尾（2026-10-02，当前）
+
+- **M1独立HDMI基线：PASS**。完整编译/时序PASS、用户报告JTAG临时下载PASS、测试图定性显示PASS分开记录；不是摄像头直通验收，也不是复位鲁棒性或HDMI电气合规认证。
+- 用户确认画面循环显示黑白灰矩形、彩色曲线、横向及竖向多色矩形条纹；持续观察约几分钟，无闪烁、花屏、黑屏、撕裂或其他异常。显示器识别分辨率和刷新率待用户确认；源工程目标1920×1080@60Hz不冒充显示器读数。
+- 本轮仅用户JTAG临时下载，未SPI Active或Flash固化；主会话/代理未操作Programmer。原始Programmer日志及实际所选下载文件路径/哈希未提供。历史Flash官方流水灯保留，断电行为不能归于本轮HDMI bit。
+- Astra / Medium顺序整改自动验收，主会话独立复核：取消硬编码PASS，读取真实日志/外层状态，检查内部及30路TMDS setup/hold、覆盖范围、精确I3/工具版本和最终DB绑定；46个负向用例全部拒绝。
+- 新审计只运行隔离最终实现副本的STA，进程退出0；内部setup/hold +1.656/+0.098ns，TMDS30/30路 +4.029/+0.245ns。原outflow/work_pnr/配置/SDC的路径、大小、SHA256和mtime前后一致，没有重新综合、P&R或生成bit。
+- bit仍为1,626,948字节，SHA256 D96068C5D88EE861FD70F1FF4C82221DAE5582E5C1642366A631B053EA7B3E89；完整路径与哈希仅归档，不提交bit。当前DB复制件与新STA绑定已确认；原始构建缺少当时输入哈希，不声称追溯密码学证明bit生成来源。
+- **保留风险**：PLL LOCKED异步释放复位/短脉冲、启动和失锁恢复未经专项验证；用户数分钟正常显示不消除该结构风险。33条综合告警及未使用25MHz输入原样保留，详见构建报告。
+- Git main；以M0提交a8c39c93a06eeb0686cbb5c13fd44717d49195fa为父基线，独立提交消息`chore: complete M1 HDMI baseline validation`，提交完成与哈希以git log及本轮最终回复为准。显式文件清单见COMMIT_SCOPE.md；.gitattributes仅对M1工程/脚本/报告禁用换行规范化，使暂存blob与证据SHA256逐字对应；排除bit/outflow/work/cache/lock/reference/tools/document，不使用git add .。
+- [实物验收](../reports/m1_hdmi_i3/ACCEPTANCE_REPORT.md)、[最终实现绑定](../reports/m1_hdmi_i3/FINAL_IMPLEMENTATION_AUDIT.md)、[下一阶段接线前核查](AR0135_PRECONNECT_CHECK.md)。AR0135尚未连接，摄像头接口/供电/复位、LED6/7共享管脚与旧Flash冷启动必须先核查；M2～M7未开始。
