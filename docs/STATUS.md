@@ -1,10 +1,10 @@
 # 星眸项目状态
 
-更新日期：2026-10-03。
+更新日期：2026-10-04。
 
 ## 当前阶段与交接
 
-- P0：背景与其余外设需求仍待冻结；M0：基础验收通过（I3编译、用户报告JTAG配置与流水灯定性PASS）；M1：PASS（独立HDMI编译/时序、用户JTAG临时下载及图案定性验收；摄像头直通未验收）；M2：PASS（新I3相机→DDR→HDMI基础链路；用户JTAG临时下载，1280×720@60Hz、10～15分钟定性正常）；M3～M7：未开始。
+- P0：其余需求仍待冻结；M0/M1/M2基础链路实物PASS，M2为新I3相机→DDR→HDMI、1280×720@60Hz、10～15分钟定性正常。**M3 m3_sobel_core：实物功能PASS、图像质量待调优；M3.1控制与阈值比较开发已获授权**；M4～M7未开始。
 - AGENTS.md 已经识别；已有自动模型调度原则保持不变。
 - 自动委派能力已经具备；历史骨架/Git初始化顺序委派Sol/Medium，M1与本轮M2按L3顺序委派Astra/Medium；同一时间只有一个主线写入者，主会话负责最终验收。
 - 文件化交接初始化已完成；M0最小LED副本基础验收通过并提交，M1实物验收见历史记录，本轮M2离线迁移收尾见文末及H-20261003-12。其余外设/需求仍不冻结。
@@ -17,7 +17,7 @@
 - 初始 Git 基线提交：f7f0fa2753011a04744b4b2d8a5ffc0f24446dac，提交信息 chore: initialize StarEye project；提交包含已验收的九份文件。随后仅对 STATUS.md 和 HANDOFF.md 的哈希记录使用 docs: record initial Git baseline 单独提交；该记录提交的哈希以 git log 为准。
 - .gitignore：新增 /document/ 与 /reports/git_baseline_inventory/，保留原有 Efinity 生成目录、仿真缓存与波形、Python/编辑器/系统临时文件规则；未全局忽略 log、rpt、bin、hex，其他 reports/ 内容仍可进入版本控制。
 - 原方案完整迁移至 docs/AI_COLLABORATION_PLAN.md；AGENTS.md 与 document/ 原始资料保持原样。
-- rtl/、tb/、constraints/仍无业务实现；efinity/m0_led_i3和efinity/m1_hdmi_i3分别保留厂商LED与独立HDMI工作副本，scripts/含官方配置/编译辅助脚本，reports/保留文本证据。reference/competition/已有赛题PDF；历史盘点、document和用户tools保持原样。
+- rtl/m3_sobel_core已有五个Sobel流水线模块，tb/m3_sobel_core有流/720p集成/mapped行RAM测试；efinity/m3_sobel_core_i3是独立M3工程。M0/M1/M2和M2已编译源快照保留，scripts/reports含可复验脚本与证据；document/reference/tools未改动。
 - 验证方式：静态检查、官方编译/时序证据及用户硬件报告；硬件结果见文末M0验收，主会话未独立操作板卡。
 
 ## 历史骨架初始化主会话验收证据
@@ -223,7 +223,7 @@
 - 审查报告：[RELEASE_REVIEW](../reports/m2_ar0135_ddr_hdmi_i3/preboard_release/RELEASE_REVIEW.md)、[20针](../reports/m2_ar0135_ddr_hdmi_i3/preboard_release/CAMERA_PIN_AUDIT.md)、[安全启动/Flash](../reports/m2_ar0135_ddr_hdmi_i3/preboard_release/COLD_BOOT_AND_FLASH_PLAN.md)。
 - 本轮不Programmer/下载/Flash、不接拔相机、不编译/STA、不改RTL/IP/工程、不git add/commit；main HEAD仍d2f48c6e8befa16c9eedea9c07aca82ff16b9879，暂存区空。新I3下载/Flash/冷启动测试不自动放行。
 
-## M2新I3实物验收与归档（2026-10-03，当前权威状态）
+## 历史M2新I3实物验收与归档（2026-10-03）
 
 - **M2基础链路PASS**：用户确认新Ti60F225I3 bitstream经JTAG临时下载；AR0135实时图像；显示器识别1280×720@60Hz；连续10～15分钟正常，移动镜头/运动物体时持续更新，无黑屏/闪屏/花屏/冻结/明显撕裂。不是此前厂商旧bit验收。
 - 离线I3完整编译/已约束STA、用户JTAG配置、相机功能、HDMI显示及有限时段稳定性分别签收；没有全面DDR压力/全容量/温度/校准信号、CDC/电气/复位/冷启动认证。灰度化延期，M3～M7未开始。
@@ -233,3 +233,19 @@
 - [实物验收报告](../reports/m2_ar0135_ddr_hdmi_i3/ACCEPTANCE_REPORT.md)、[用户反馈整理](../reports/m2_ar0135_ddr_hdmi_i3/jtag_user_report.txt)、[本轮交接](HANDOFF.md)。用户已授权独立M2提交，main父基线d2f48c6e8befa16c9eedea9c07aca82ff16b9879；由主会话最终复核后执行，提交状态/哈希以git log为准，不自动进入后续阶段。
 
 主会话新增只读核查：22业务设计源、peri/SDC、DdrCtrl v5.14及W0_FIFO_8 v8.0与最终构建哈希一致；再生成差异位于附带CSI/DSI及其他FIFO，当前bit未变。已归档独立final_build/source_snapshot，共69文件/2,689,858字节，逐项哈希匹配最终构建输入清单；主会话检查完成，不覆盖当前工程。源基线说明[SOURCE_BASELINE.md](../reports/m2_ar0135_ddr_hdmi_i3/SOURCE_BASELINE.md)已由主会话完成，当前再生成附带IP无新编译证据。
+
+## M3 m3_sobel_core离线验收（2026-10-03，当前状态）
+
+- 用户指定M3范围为两行缓存/3×3/Sobel/阈值，L3由GPT-6 Astra Ultra实现，主会话先审架构并持续只读独立复核；单一写入者。feature/m3-sobel-core，父基线9a6d33db4dd3d5f6842cd43661a9a35409eadf1e；未暂存/提交。
+- 从M2已编译69文件快照创建独立工程，五个新增RTL和像素域接入完成；保持I3、74.4MHz像素PLL、720p、DDR/相机/HDMI外部配置和原SDC。显示默认阈值64/二值，提供原灰度/幅值选择；没有滤波/Canny/形状识别。
+- **离线PASS**：真实ModelSim独立黄金比较1,066窗口；真实R0_FIFO_8/lcd_driver两帧720p共1,843,200 DE像素和1,835,208算法窗口；mapped行RAM26,882像素。18项仿真破坏检查、26项实际CLI证据负测与8种正向控制通过。
+- 官方完整编译退出0，map/interface/pnr/pgm PASS；隔离最终DB的90份I3 STA报告通过，最差setup/hold +0.102/+0.027ns；clk_pixel +7.419/+0.031ns；30路HDMI +11.297/+0.039ns。no_clock/unconstrained_internal_endpoints/multiple_clock均0，既有5/136 I/O例外保留。
+- 资源6,535 XLR、50 RAM10、0 DSP；相对M2增加307 XLR和4 RAM10。两条逻辑行实际映射四块2048×4 RAM10；没有新整帧缓存。详细警告302条，比M2末轮少1条端口宽度警告，无新增归一化详细警告。
+- bit为2,141,760字节，SHA256 **eb8f1d9d586a319d8c18e37ea3e577c445b4a538d70c7fcd4d681832675fcb1b**。原M2735个可读文件内容/大小/mtime一致，原先不可读的临时.lock消失单列；M2快照69文件一致。
+- **Sobel实物未验收**，未Programmer/JTAG/SPI Active/Flash/板卡操作。旧Flash/R3/R4及DDR压力/校准、CDC/复位、电气/冷启动边界保留。M4～M7未开始；M4剩余范围待确认。主会话独立复核已完成，当前停在离线交付点，实物验收待用户后续确认。
+- [主会话独立复核](../reports/m3_sobel_core_i3/ROOT_REVIEW.md)：独立复算1,066窗口、重跑34正负CLI、核对最终证据与Git排除，全部通过；未修改冻结实现、未暂存/提交。
+- [M3报告](../reports/m3_sobel_core_i3/BUILD_REPORT.md)、[机器验收](../reports/m3_sobel_core_i3/ACCEPTANCE.json)、[交接](HANDOFF.md)。
+
+## M3实物验收与M3.1授权（2026-10-04，当前状态）
+
+用户确认二值Sobel实时显示正常，水平/垂直/斜向边缘可检出，运动持续更新；1280×720@60Hz，10分钟稳定，无黑屏/花屏/撕裂/冻结/错位/重影。**M3实物功能PASS、图像质量待调优。** 阈值64，静止场景存在动态白色散斑，挥动手臂后散斑密度可增可减；原因待区分，不认定为DDR/窗口故障。两张照片已从document/m3_pic只读定位、目视核查并归档。见[M3实物报告](../reports/m3_sobel_core_i3/HARDWARE_ACCEPTANCE.md)。用户授权精准提交M3基线，随后M3.1独立分支/副本仅增加三模式、8位阈值按键调节、同步消抖和当前值显示/记录；不改相机/DDR/HDMI/窗口/Sobel核，不加中值，完成仿真/离线编译后暂停，不下载或Flash。旧Flash冷启动风险保留。

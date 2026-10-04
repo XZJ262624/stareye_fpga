@@ -1,39 +1,25 @@
 # 星眸项目交接单
 
 ## 1. 基本信息
+H-20261004-M31；阶段M3.1；项目m31_sobel_controls；L3按AGENTS自动委派GPT-6 Astra/Medium，主会话最终独立复核。用户授权先提交M3基线，再创建独立分支和英文路径工程副本；本轮不自动提交M3.1。
 
-H-20261003-13；2026-10-03；M2实物验收归档与独立Git提交。L2，GPT-6.1 Sol / Medium顺序文档委派；子代理期间唯一文档写入，主会话只读核查。主会话负责最终验收与Git操作。
+## 2. 已验证基线
+Ti60F225I3、Efinity2025.1.110.5.9；M2实物720p60实时相机→DDR→HDMI；M3离线通过，用户本轮实物二值Sobel/水平垂直斜边/动态更新通过，运行10分钟稳定、720p60、无黑屏花屏撕裂冻结错位重影。M3状态为“实物功能PASS、图像质量待调优”，见reports/m3_sobel_core_i3/HARDWARE_ACCEPTANCE.md。M3当前阈值64，静止场景动态白散斑、运动前后密度变化原因未确认。两张照片位于document/m3_pic，主会话已查看归档；照片不单独诊断动态现象原因。
 
-## 2. 已确认基线与最新实物事实
+## 3. 目标与架构门槛
+先只读核实板载按键数量/管脚/极性/电压/复用、既有LED及像素域控制接口，提出三模式、阈值步长、可靠同步/消抖、当前值显示、帧内一致性和阈值64/96/128比较方案，经主会话放行后实现。优先使用已证实硬件，不猜按键管脚。曝光/增益/传感器噪声只核查，不改初始化。
 
-Ti60F225I3；Efinity2025.1.110.5.9；核心VF-Ti60F225 V1.5、底板VF-Ti60/125F225 V1.5、AR0135 PCB V5.0；DDR Samsung K4B4G1646E-BYMA/512MiB；用户确认实物和相机针脚一致性，相机当前连接。
-用户本轮明确确认新I3 bit通过JTAG临时下载，实时取图、显示器识别1280×720@60Hz，连续10～15分钟无黑屏/闪屏/花屏/冻结/明显撕裂，移动镜头/运动物体持续更新；未SPI Active/Flash。此前厂商bit出图为历史事实，新报告独立签收新I3镜像。
+## 4. 唯一写入权与范围
+主会话先独占写入完成M3报告/精准暂存/提交；Astra第一阶段只读架构核查。收到主会话明确放行后才是唯一实现写入者，可写efinity/m31_sobel_controls_i3、rtl/tb/scripts的M3.1专用目录、reports/m31_sobel_controls_i3、必要docs/.gitignore/.gitattributes。禁止修改M2/M3原工程、M3五个核心RTL、document/reference/tools。子代理不做Git操作。
 
-## 3. 本轮结果与证据
+## 5. 验收
+按键双触发器同步、稳定计时消抖、一次按压一次事件、长按/复位/组合键/同时事件行为明确；阈值8位、步长明确、0..255饱和不回绕，64/96/128可达；三模式可操作，当前模式和值可见或可可靠记录。仿真须覆盖抖动、短脉冲、释放、长按、边界、帧边界与模式/阈值生效时机、输出同步。完整官方I3接口生成/综合/P&R/bit，setup/hold/新增告警/资源/HDMI出口/新增CDC约束及最终DB/报告/bit哈希绑定；负向验收不可写死PASS。
 
-M2基础链路PASS；离线编译/STA与用户配置/功能/有限稳定性分开记录。详见[ACCEPTANCE_REPORT](../reports/m2_ar0135_ddr_hdmi_i3/ACCEPTANCE_REPORT.md)及[jtag_user_report.txt](../reports/m2_ar0135_ddr_hdmi_i3/jtag_user_report.txt)（用户文字整理，不是Programmer日志）。现有bit：F:/Projects/stareye_fpga/efinity/m2_ar0135_ddr_hdmi_i3/outflow/Ti60_Demo.bit，2,137,974字节，SHA256 524213AA27C5797074E9BD71D0761EB31F9D09AEFAC825FA7201CAA6DD33940A。用户未提供下载时哈希/所选文件完整路径/Programmer原始日志，不能宣称密码学绑定下载过程。
+## 6. 禁止与停止边界
+不Programmer、JTAG、SPI Active或Flash，不碰板卡，不改相机/DDR/HDMI频率/既有管脚和参数，不改窗口/Sobel核，不加中值。新增按键接口仅按实际资料证据配置。离线完成暂停，不自动提交M3.1，不宣称M3.1上板通过。
 
-## 4. 写入与委派复核
+## 7. 当前进度
+主会话已读取PROJECT_BRIEF/STATUS/DECISIONS，正在保存M3用户实测并准备提交。M3输入哈希未变，新增.lock是GUI临时锁，需精确排除验收输入盘点，不删除锁。委派第一阶段只读分析，尚未放行实现。
 
-子代理仅更新README、docs下状态/交接/里程碑/背景/决定/接线核查、新增验收报告及用户反馈；在BUILD_REPORT、CHECK_REPORT、CHANGE_SCOPE与preboard RELEASE_REVIEW开头增加历史定位和最新链接，不改历史证据。无Git、工程、RTL/IP/约束、脚本、编译/STA或硬件操作。主会话检查文档链接/状态口径和提交范围后独立执行Git。
-
-## 5. 仍需关闭的条件
-
-PASS仅是相机→DDR→HDMI基础链路及10～15分钟定性稳定性。校准信号、DDR压力/全容量/温度/刷新、复位/失锁恢复、CDC、电气合规未专项验证；既有303条告警记录及网表汇总、接口提示、主动高I2C/CTL控制/加密DDR问题仍保留。
-旧Flash官方流水灯未改/读回，冷启动R3/R4共享线争用和配置前隔离仍未关闭；短时成功不消除风险。
-当前XML有GUI格式/时间戳/design_ood及IP .v→.sv、ooc=false差异；csi_rx/dsi_tx和多FIFO settings/HDL有再生成差异、部分旧.v/.vh缺失。不得声称当前工作区所有输入等于最终构建；当前再生成版本无新编译证据。编译源快照、业务RTL及DdrCtrl/W0_FIFO_8逐项复核完成；提交范围见COMMIT_SCOPE.md，不覆盖用户工程、不推测修改者。
-
-主会话新增只读核查：22业务设计源、peri/SDC、DdrCtrl v5.14及W0_FIFO_8 v8.0与最终构建哈希一致；再生成差异位于附带CSI/DSI及其他FIFO，当前bit未变。已归档独立final_build/source_snapshot，共69文件/2,689,858字节，逐项哈希匹配最终构建输入清单；主会话检查完成，不覆盖当前工程。源基线说明[SOURCE_BASELINE.md](../reports/m2_ar0135_ddr_hdmi_i3/SOURCE_BASELINE.md)已由主会话完成，当前再生成附带IP无新编译证据。
-
-## 6. 禁止事项
-
-不Programmer/JTAG/Flash读写擦除、bridge加载、断电/相机插拔；不修改业务RTL/IP/约束或用户工程，不编译/STA，不自动实施安全启动bit，不灰度化/Sobel，不自动推进下一阶段。子代理不得Git；主会话Git独立提交是用户已授权范围。
-
-## 7. Git与阶段状态
-
-main父基线M1提交d2f48c6e8befa16c9eedea9c07aca82ff16b9879。用户已授权独立M2提交，完成状态/真实hash以git log及主会话最终回复为准，不写占位值或承诺额外提交。现有用户工程差异须与编译源快照明确区分后由主会话显式选择提交范围。
-P0其余需求待冻结，M0/M1 PASS；M2基础链路PASS；灰度化延期；M3～M7未开始。
-
-## 8. 下一步
-
-主会话接回唯一写入权，复核文档与编译源快照/当前工程差异，完成授权的独立M2提交并报告真实hash。向用户解释基础链路已通过及未覆盖项，不安排重复上板或断电；等待用户后续任务，不自动进入算法或Flash阶段。
+## 8. 交付与主会话复核
+提交后由主会话提供确切M3基线hash，创建M3.1分支；Astra交付架构、按键/引脚证据、控制及比较方案、实现测试和构建结果、变更清单、风险和bit路径/大小/SHA。主会话独立核实原核不变、按键CDC/消抖/边界、同步和实际时序、Git范围，更新状态与交接。旧Flash风险不因M3实测关闭。

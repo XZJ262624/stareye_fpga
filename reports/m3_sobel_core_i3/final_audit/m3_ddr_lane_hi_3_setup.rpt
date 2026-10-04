@@ -1,0 +1,73 @@
+
+Efinix Timing Path Constraint Report
+Version: 2025.1.110.5.9
+Date: Sat Oct  3 13:47:54 2026
+
+Copyright (C) 2013 - 2025 Efinix, Inc. All rights reserved.
+
+User command: report_timing -from {i_dq_hi[3]} -npaths 1 -nworst 1 -setup -detail full_path -file {m3_ddr_lane_hi_3_setup.rpt}
+
+Timing Model: I3
+	process : typical
+	temperature : -40C to 100C
+	voltage : 0.95 +/-30mV
+	speedgrade : 3
+	technology : t16ff
+	status : final
+
+Summary:
+
+ Path #  | Slack (ns) | Delay (ns) | Start Pin  |                                                            End Pin                                                             | Launch Clk  | Capture Clk
+============================================================================================================================================================================================================
+ 1       |  1.508     |  0.502     | i_dq_hi[3] | ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/controller_main/phy_ddr_dq_IN_HI_p0[3]~FF|D | tac_clk (R) | tac_clk (R)
+
+++++ Path 1 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : i_dq_hi[3]                                                                                                                    
+Path End      : ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/controller_main/phy_ddr_dq_IN_HI_p0[3]~FF|D
+Launch Clock  : tac_clk (RISE)                                                                                                                
+Capture Clock : tac_clk (RISE)                                                                                                                
+Slack         : 1.508 (required time - arrival time)                                                                                          
+Delay         : 0.502                                                                                                                         
+
+Logic Level             : 0
+Non-global nets on path : 1
+Global nets on path     : 0
+
+Launch Clock Path Delay        : 2.117
++ Clock To Q + Data Path Delay : 0.505
++ Input Delay                  : 0.476
+--------------------------------------
+End-of-path arrival time       : 3.098
+
+Constraint                     : 2.604
++ Capture Clock Path Delay     : 2.128
+- Clock Uncertainty            : 0.126
+--------------------------------------
+End-of-path required time      : 4.606
+
+Launch Clock Path
+        name          model name   delay (ns)  cumulative delay (ns) pins on net    location
+==============================================================================================
+tac_clk                 inpad        0.000             0.000               0        (111,0)
+tac_clk                 inpad        0.126             0.126             332        (111,0)
+tac_clk                 net          1.941             2.067             332        (111,0)
+tac_clk~CLKOUT~149~1    outpad       0.050             2.117             332        (149,0)
+tac_clk~CLKOUT~149~1    outpad       0.000             2.117               0        (149,0)
+
+Data Path
+                                                             name                                                               model name   delay (ns)  cumulative delay (ns) pins on net    location
+========================================================================================================================================================================================================
+i_dq_hi[3]                                                                                                                        inpad        0.126             0.126              0         (157,0)
+i_dq_hi[3]                                                                                                                        inpad        0.000             0.126              3         (157,0)
+i_dq_hi[3]                                                                                                                        net          0.376             0.502              3         (157,0)
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/controller_main/phy_ddr_dq_IN_HI_p0[3]~FF|D    ff           0.003             0.505              3         (158,5)
+
+Capture Clock Path
+                                                              name                                                                model name   delay (ns)  cumulative delay (ns) pins on net    location
+==========================================================================================================================================================================================================
+tac_clk                                                                                                                             inpad        0.000             0.000               0        (111,0)
+tac_clk                                                                                                                             inpad        0.126             0.126             332        (111,0)
+tac_clk                                                                                                                             net          2.002             2.128             332        (111,0)
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/controller_main/phy_ddr_dq_IN_HI_p0[3]~FF|CLK    ff           0.000             2.128             332        (158,5)
+
