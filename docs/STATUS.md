@@ -1,10 +1,10 @@
 # 星眸项目状态
 
-更新日期：2026-10-04。
+更新日期：2026-10-06。
 
 ## 当前阶段与交接
 
-- P0：其余需求仍待冻结；M0/M1/M2基础链路实物PASS，M2为新I3相机→DDR→HDMI、1280×720@60Hz、10～15分钟定性正常。**M3 m3_sobel_core：实物功能PASS、图像质量待调优；M3.1控制与阈值比较开发已获授权**；M4～M7未开始。
+- P0：其余需求仍待冻结；M0/M1/M2基础链路实物PASS，M2为新I3相机→DDR→HDMI、1280×720@60Hz、10～15分钟定性正常。**M3 m3_sobel_core：实物功能PASS、图像质量待调优；M3.1控制与阈值比较离线PASS、用户确认实物阈值正常**；M4～M7未开始。
 - AGENTS.md 已经识别；已有自动模型调度原则保持不变。
 - 自动委派能力已经具备；历史骨架/Git初始化顺序委派Sol/Medium，M1与本轮M2按L3顺序委派Astra/Medium；同一时间只有一个主线写入者，主会话负责最终验收。
 - 文件化交接初始化已完成；M0最小LED副本基础验收通过并提交，M1实物验收见历史记录，本轮M2离线迁移收尾见文末及H-20261003-12。其余外设/需求仍不冻结。
@@ -249,3 +249,15 @@
 ## M3实物验收与M3.1授权（2026-10-04，当前状态）
 
 用户确认二值Sobel实时显示正常，水平/垂直/斜向边缘可检出，运动持续更新；1280×720@60Hz，10分钟稳定，无黑屏/花屏/撕裂/冻结/错位/重影。**M3实物功能PASS、图像质量待调优。** 阈值64，静止场景存在动态白色散斑，挥动手臂后散斑密度可增可减；原因待区分，不认定为DDR/窗口故障。两张照片已从document/m3_pic只读定位、目视核查并归档。见[M3实物报告](../reports/m3_sobel_core_i3/HARDWARE_ACCEPTANCE.md)。用户授权精准提交M3基线，随后M3.1独立分支/副本仅增加三模式、8位阈值按键调节、同步消抖和当前值显示/记录；不改相机/DDR/HDMI/窗口/Sobel核，不加中值，完成仿真/离线编译后暂停，不下载或Flash。旧Flash冷启动风险保留。
+
+M3独立基线已保存：7a9b448080fd6f1624c2ef37ee2eb267fed49c82（feat: establish verified M3 Sobel baseline）；精准242文件，排除bit/生成物/reference/tools，M3源码/证据字节经主会话逐项核对。M3.1当前分支codex/m31-sobel-controls，英文副本efinity/m31_sobel_controls_i3，尚未放行实现；Astra/Medium正在只读核查按键。M2/M3/五核初始指纹已保存于reports/m31_sobel_controls_i3/BASELINE_IMMUTABLE.json。
+
+## 2026-10-04 M3.1离线收尾
+M3冻结提交7a9b448080fd6f1624c2ef37ee2eb267fed49c82；M3仍为实物功能PASS、图像质量待调优。分支codex/m31-sobel-controls，工作副本efinity/m31_sobel_controls_i3，M3.1仿真/完整编译/94份最终已约束STA PASS，实物未测试、不自动提交。主会话接管最终验收，实际运行1正向25负向、重新仿真，1018受保护文件无变化。报告见../reports/m31_sobel_controls_i3/BUILD_REPORT.md。旧Flash和PLL异步复位风险保留。两键原先复用旧LCD输出，M3不可按；仅M3.1通过官方API改输入。硬件未操作。
+
+
+
+## M3.1独立基线归档（2026-10-06）
+离线仿真、完整编译和已约束最终STA PASS；用户确认上板阈值调节正常。当前授权独立提交运行时控制、三模式、按键、消抖、帧边界更新及OSD；不编译、不下载、不写Flash、不进入后续开发。M3基线7a9b448080fd6f1624c2ef37ee2eb267fed49c82保持不变。
+## 归档证据与重放边界（2026-10-06）
+主会话与Astra独立核验94份历史最终STA，最小setup/hold为+0.187/+0.019 ns；保留的work/audit_20261004_120245副本bit、LPF、LBF均匹配历史构建及最终绑定。原outflow有25项缺失、6项改变，当前原目录验收器不能完整重放；本轮没有恢复生成物或重新编译，不宣称当前原目录完整验收器PASS。完整差异及证据见PRECOMMIT_EVIDENCE_CHECK.json。GUI XML仅运行状态及显式ooc=false变化，完整递归规范化与官方schema证明功能参数等价。日志、work、bit和数据库不提交，源输入、历史JSON绑定与STA文本报告归档。

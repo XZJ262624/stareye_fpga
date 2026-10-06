@@ -1,0 +1,1271 @@
+
+Efinix Timing Path Constraint Report
+Version: 2025.1.110.5.9
+Date: Sun Oct  4 12:03:08 2026
+
+Copyright (C) 2013 - 2025 Efinix, Inc. All rights reserved.
+
+User command: report_timing -from {cmos_vsync cmos_href cmos_data[7] cmos_data[6] cmos_data[5] cmos_data[4] cmos_data[3] cmos_data[2] cmos_data[1] cmos_data[0]} -npaths 20 -nworst 1 -setup -detail full_path -file {m31_cmos_setup.rpt}
+
+Timing Model: I3
+	process : typical
+	temperature : -40C to 100C
+	voltage : 0.95 +/-30mV
+	speedgrade : 3
+	technology : t16ff
+	status : final
+
+Summary:
+
+ Path #  | Slack (ns) | Delay (ns) | Start Pin  |                  End Pin                   |  Launch Clk   |  Capture Clk
+============================================================================================================================
+  1      |  2.024     |  1.962     | cmos_vsync | u_Sensor_Image_XYCrop/image_ypos[6]~FF|CE  | cmos_pclk (F) | cmos_pclk (R)
+  2      |  2.024     |  1.962     | cmos_vsync | u_Sensor_Image_XYCrop/image_ypos[2]~FF|CE  | cmos_pclk (F) | cmos_pclk (R)
+  3      |  2.024     |  1.962     | cmos_vsync | u_Sensor_Image_XYCrop/image_ypos[4]~FF|CE  | cmos_pclk (F) | cmos_pclk (R)
+  4      |  2.024     |  1.962     | cmos_vsync | u_Sensor_Image_XYCrop/image_ypos[1]~FF|CE  | cmos_pclk (F) | cmos_pclk (R)
+  5      |  2.024     |  1.962     | cmos_vsync | u_Sensor_Image_XYCrop/image_ypos[8]~FF|CE  | cmos_pclk (F) | cmos_pclk (R)
+  6      |  2.024     |  1.962     | cmos_vsync | u_Sensor_Image_XYCrop/image_ypos[3]~FF|CE  | cmos_pclk (F) | cmos_pclk (R)
+  7      |  2.024     |  1.962     | cmos_vsync | u_Sensor_Image_XYCrop/image_ypos[7]~FF|CE  | cmos_pclk (F) | cmos_pclk (R)
+  8      |  2.024     |  1.962     | cmos_vsync | u_Sensor_Image_XYCrop/image_ypos[10]~FF|CE | cmos_pclk (F) | cmos_pclk (R)
+  9      |  2.024     |  1.962     | cmos_vsync | u_Sensor_Image_XYCrop/image_ypos[11]~FF|CE | cmos_pclk (F) | cmos_pclk (R)
+ 10      |  2.024     |  1.962     | cmos_vsync | u_Sensor_Image_XYCrop/image_ypos[5]~FF|CE  | cmos_pclk (F) | cmos_pclk (R)
+ 11      |  2.024     |  1.962     | cmos_vsync | u_Sensor_Image_XYCrop/image_ypos[9]~FF|CE  | cmos_pclk (F) | cmos_pclk (R)
+ 12      |  2.385     |  1.702     | cmos_href  | XYCrop_frame_href~FF|D                     | cmos_pclk (F) | cmos_pclk (R)
+ 13      |  2.396     |  1.691     | cmos_href  | u_Sensor_Image_XYCrop/image_xpos[11]~FF|D  | cmos_pclk (F) | cmos_pclk (R)
+ 14      |  2.398     |  1.588     | cmos_vsync | u_Sensor_Image_XYCrop/image_ypos[0]~FF|CE  | cmos_pclk (F) | cmos_pclk (R)
+ 15      |  2.420     |  1.667     | cmos_href  | u_Sensor_Image_XYCrop/image_xpos[10]~FF|D  | cmos_pclk (F) | cmos_pclk (R)
+ 16      |  2.444     |  1.643     | cmos_href  | u_Sensor_Image_XYCrop/image_xpos[9]~FF|D   | cmos_pclk (F) | cmos_pclk (R)
+ 17      |  2.468     |  1.619     | cmos_href  | u_Sensor_Image_XYCrop/image_xpos[8]~FF|D   | cmos_pclk (F) | cmos_pclk (R)
+ 18      |  2.492     |  1.595     | cmos_href  | u_Sensor_Image_XYCrop/image_xpos[7]~FF|D   | cmos_pclk (F) | cmos_pclk (R)
+ 19      |  2.516     |  1.571     | cmos_href  | u_Sensor_Image_XYCrop/image_xpos[6]~FF|D   | cmos_pclk (F) | cmos_pclk (R)
+ 20      |  2.521     |  1.566     | cmos_vsync | u_Sensor_Image_XYCrop/image_ypos[1]~FF|D   | cmos_pclk (F) | cmos_pclk (R)
+
+++++ Path 1 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : cmos_vsync                               
+Path End      : u_Sensor_Image_XYCrop/image_ypos[6]~FF|CE
+Launch Clock  : cmos_pclk (FALL)                         
+Capture Clock : cmos_pclk (RISE)                         
+Slack         : 2.024 (required time - arrival time)     
+Delay         : 1.962                                    
+
+Logic Level             : 1
+Non-global nets on path : 2
+Global nets on path     : 0
+
+Launch Clock Path Delay        : 2.063
++ Clock To Q + Data Path Delay : 2.066
++ Input Delay                  : 0.795
+--------------------------------------
+End-of-path arrival time       : 4.924
+
+Constraint                     : 5.000
++ Capture Clock Path Delay     : 2.074
+- Clock Uncertainty            : 0.126
+--------------------------------------
+End-of-path required time      : 6.948
+
+Launch Clock Path
+         name            model name   delay (ns)  cumulative delay (ns) pins on net    location
+=================================================================================================
+cmos_pclk                  inpad        0.000             0.000               0       (111,323)
+cmos_pclk                  inpad        0.126             0.126             137       (111,323)
+cmos_pclk                  net          1.887             2.013             137       (111,323)
+cmos_pclk~CLKOUT~18~322    outpad       0.050             2.063             137       (18,323) 
+cmos_pclk~CLKOUT~18~322    outpad       0.000             2.063               0       (18,323) 
+
+Data Path
+                  name                     model name   delay (ns)  cumulative delay (ns) pins on net    location
+===================================================================================================================
+cmos_vsync                                   inpad        0.126             0.126               0       (0,321)  
+cmos_vsync                                   inpad        0.000             0.126              16       (0,321)  
+cmos_vsync                                   net          1.194             1.320              16       (0,321)  
+LUT__23774|in[2]                             lut          0.061             1.381              16       (122,304)
+LUT__23774|out                               lut          0.000             1.381              13       (122,304)
+ceg_net606                                   net          0.581             1.962              13       (122,304)
+u_Sensor_Image_XYCrop/image_ypos[6]~FF|CE    ff           0.104             2.066              13       (122,311)
+
+Capture Clock Path
+                   name                     model name   delay (ns)  cumulative delay (ns) pins on net    location
+====================================================================================================================
+cmos_pclk                                     inpad        0.000             0.000               0       (111,323)
+cmos_pclk                                     inpad        0.126             0.126             137       (111,323)
+cmos_pclk                                     net          1.948             2.074             137       (111,323)
+u_Sensor_Image_XYCrop/image_ypos[6]~FF|CLK    ff           0.000             2.074             137       (122,311)
+
+++++ Path 2 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : cmos_vsync                               
+Path End      : u_Sensor_Image_XYCrop/image_ypos[2]~FF|CE
+Launch Clock  : cmos_pclk (FALL)                         
+Capture Clock : cmos_pclk (RISE)                         
+Slack         : 2.024 (required time - arrival time)     
+Delay         : 1.962                                    
+
+Logic Level             : 1
+Non-global nets on path : 2
+Global nets on path     : 0
+
+Launch Clock Path Delay        : 2.063
++ Clock To Q + Data Path Delay : 2.066
++ Input Delay                  : 0.795
+--------------------------------------
+End-of-path arrival time       : 4.924
+
+Constraint                     : 5.000
++ Capture Clock Path Delay     : 2.074
+- Clock Uncertainty            : 0.126
+--------------------------------------
+End-of-path required time      : 6.948
+
+Launch Clock Path
+         name            model name   delay (ns)  cumulative delay (ns) pins on net    location
+=================================================================================================
+cmos_pclk                  inpad        0.000             0.000               0       (111,323)
+cmos_pclk                  inpad        0.126             0.126             137       (111,323)
+cmos_pclk                  net          1.887             2.013             137       (111,323)
+cmos_pclk~CLKOUT~18~322    outpad       0.050             2.063             137       (18,323) 
+cmos_pclk~CLKOUT~18~322    outpad       0.000             2.063               0       (18,323) 
+
+Data Path
+                  name                     model name   delay (ns)  cumulative delay (ns) pins on net    location
+===================================================================================================================
+cmos_vsync                                   inpad        0.126             0.126               0       (0,321)  
+cmos_vsync                                   inpad        0.000             0.126              16       (0,321)  
+cmos_vsync                                   net          1.194             1.320              16       (0,321)  
+LUT__23774|in[2]                             lut          0.061             1.381              16       (122,304)
+LUT__23774|out                               lut          0.000             1.381              13       (122,304)
+ceg_net606                                   net          0.581             1.962              13       (122,304)
+u_Sensor_Image_XYCrop/image_ypos[2]~FF|CE    ff           0.104             2.066              13       (122,307)
+
+Capture Clock Path
+                   name                     model name   delay (ns)  cumulative delay (ns) pins on net    location
+====================================================================================================================
+cmos_pclk                                     inpad        0.000             0.000               0       (111,323)
+cmos_pclk                                     inpad        0.126             0.126             137       (111,323)
+cmos_pclk                                     net          1.948             2.074             137       (111,323)
+u_Sensor_Image_XYCrop/image_ypos[2]~FF|CLK    ff           0.000             2.074             137       (122,307)
+
+++++ Path 3 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : cmos_vsync                               
+Path End      : u_Sensor_Image_XYCrop/image_ypos[4]~FF|CE
+Launch Clock  : cmos_pclk (FALL)                         
+Capture Clock : cmos_pclk (RISE)                         
+Slack         : 2.024 (required time - arrival time)     
+Delay         : 1.962                                    
+
+Logic Level             : 1
+Non-global nets on path : 2
+Global nets on path     : 0
+
+Launch Clock Path Delay        : 2.063
++ Clock To Q + Data Path Delay : 2.066
++ Input Delay                  : 0.795
+--------------------------------------
+End-of-path arrival time       : 4.924
+
+Constraint                     : 5.000
++ Capture Clock Path Delay     : 2.074
+- Clock Uncertainty            : 0.126
+--------------------------------------
+End-of-path required time      : 6.948
+
+Launch Clock Path
+         name            model name   delay (ns)  cumulative delay (ns) pins on net    location
+=================================================================================================
+cmos_pclk                  inpad        0.000             0.000               0       (111,323)
+cmos_pclk                  inpad        0.126             0.126             137       (111,323)
+cmos_pclk                  net          1.887             2.013             137       (111,323)
+cmos_pclk~CLKOUT~18~322    outpad       0.050             2.063             137       (18,323) 
+cmos_pclk~CLKOUT~18~322    outpad       0.000             2.063               0       (18,323) 
+
+Data Path
+                  name                     model name   delay (ns)  cumulative delay (ns) pins on net    location
+===================================================================================================================
+cmos_vsync                                   inpad        0.126             0.126               0       (0,321)  
+cmos_vsync                                   inpad        0.000             0.126              16       (0,321)  
+cmos_vsync                                   net          1.194             1.320              16       (0,321)  
+LUT__23774|in[2]                             lut          0.061             1.381              16       (122,304)
+LUT__23774|out                               lut          0.000             1.381              13       (122,304)
+ceg_net606                                   net          0.581             1.962              13       (122,304)
+u_Sensor_Image_XYCrop/image_ypos[4]~FF|CE    ff           0.104             2.066              13       (122,309)
+
+Capture Clock Path
+                   name                     model name   delay (ns)  cumulative delay (ns) pins on net    location
+====================================================================================================================
+cmos_pclk                                     inpad        0.000             0.000               0       (111,323)
+cmos_pclk                                     inpad        0.126             0.126             137       (111,323)
+cmos_pclk                                     net          1.948             2.074             137       (111,323)
+u_Sensor_Image_XYCrop/image_ypos[4]~FF|CLK    ff           0.000             2.074             137       (122,309)
+
+++++ Path 4 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : cmos_vsync                               
+Path End      : u_Sensor_Image_XYCrop/image_ypos[1]~FF|CE
+Launch Clock  : cmos_pclk (FALL)                         
+Capture Clock : cmos_pclk (RISE)                         
+Slack         : 2.024 (required time - arrival time)     
+Delay         : 1.962                                    
+
+Logic Level             : 1
+Non-global nets on path : 2
+Global nets on path     : 0
+
+Launch Clock Path Delay        : 2.063
++ Clock To Q + Data Path Delay : 2.066
++ Input Delay                  : 0.795
+--------------------------------------
+End-of-path arrival time       : 4.924
+
+Constraint                     : 5.000
++ Capture Clock Path Delay     : 2.074
+- Clock Uncertainty            : 0.126
+--------------------------------------
+End-of-path required time      : 6.948
+
+Launch Clock Path
+         name            model name   delay (ns)  cumulative delay (ns) pins on net    location
+=================================================================================================
+cmos_pclk                  inpad        0.000             0.000               0       (111,323)
+cmos_pclk                  inpad        0.126             0.126             137       (111,323)
+cmos_pclk                  net          1.887             2.013             137       (111,323)
+cmos_pclk~CLKOUT~18~322    outpad       0.050             2.063             137       (18,323) 
+cmos_pclk~CLKOUT~18~322    outpad       0.000             2.063               0       (18,323) 
+
+Data Path
+                  name                     model name   delay (ns)  cumulative delay (ns) pins on net    location
+===================================================================================================================
+cmos_vsync                                   inpad        0.126             0.126               0       (0,321)  
+cmos_vsync                                   inpad        0.000             0.126              16       (0,321)  
+cmos_vsync                                   net          1.194             1.320              16       (0,321)  
+LUT__23774|in[2]                             lut          0.061             1.381              16       (122,304)
+LUT__23774|out                               lut          0.000             1.381              13       (122,304)
+ceg_net606                                   net          0.581             1.962              13       (122,304)
+u_Sensor_Image_XYCrop/image_ypos[1]~FF|CE    ff           0.104             2.066              13       (122,306)
+
+Capture Clock Path
+                   name                     model name   delay (ns)  cumulative delay (ns) pins on net    location
+====================================================================================================================
+cmos_pclk                                     inpad        0.000             0.000               0       (111,323)
+cmos_pclk                                     inpad        0.126             0.126             137       (111,323)
+cmos_pclk                                     net          1.948             2.074             137       (111,323)
+u_Sensor_Image_XYCrop/image_ypos[1]~FF|CLK    ff           0.000             2.074             137       (122,306)
+
+++++ Path 5 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : cmos_vsync                               
+Path End      : u_Sensor_Image_XYCrop/image_ypos[8]~FF|CE
+Launch Clock  : cmos_pclk (FALL)                         
+Capture Clock : cmos_pclk (RISE)                         
+Slack         : 2.024 (required time - arrival time)     
+Delay         : 1.962                                    
+
+Logic Level             : 1
+Non-global nets on path : 2
+Global nets on path     : 0
+
+Launch Clock Path Delay        : 2.063
++ Clock To Q + Data Path Delay : 2.066
++ Input Delay                  : 0.795
+--------------------------------------
+End-of-path arrival time       : 4.924
+
+Constraint                     : 5.000
++ Capture Clock Path Delay     : 2.074
+- Clock Uncertainty            : 0.126
+--------------------------------------
+End-of-path required time      : 6.948
+
+Launch Clock Path
+         name            model name   delay (ns)  cumulative delay (ns) pins on net    location
+=================================================================================================
+cmos_pclk                  inpad        0.000             0.000               0       (111,323)
+cmos_pclk                  inpad        0.126             0.126             137       (111,323)
+cmos_pclk                  net          1.887             2.013             137       (111,323)
+cmos_pclk~CLKOUT~18~322    outpad       0.050             2.063             137       (18,323) 
+cmos_pclk~CLKOUT~18~322    outpad       0.000             2.063               0       (18,323) 
+
+Data Path
+                  name                     model name   delay (ns)  cumulative delay (ns) pins on net    location
+===================================================================================================================
+cmos_vsync                                   inpad        0.126             0.126               0       (0,321)  
+cmos_vsync                                   inpad        0.000             0.126              16       (0,321)  
+cmos_vsync                                   net          1.194             1.320              16       (0,321)  
+LUT__23774|in[2]                             lut          0.061             1.381              16       (122,304)
+LUT__23774|out                               lut          0.000             1.381              13       (122,304)
+ceg_net606                                   net          0.581             1.962              13       (122,304)
+u_Sensor_Image_XYCrop/image_ypos[8]~FF|CE    ff           0.104             2.066              13       (122,316)
+
+Capture Clock Path
+                   name                     model name   delay (ns)  cumulative delay (ns) pins on net    location
+====================================================================================================================
+cmos_pclk                                     inpad        0.000             0.000               0       (111,323)
+cmos_pclk                                     inpad        0.126             0.126             137       (111,323)
+cmos_pclk                                     net          1.948             2.074             137       (111,323)
+u_Sensor_Image_XYCrop/image_ypos[8]~FF|CLK    ff           0.000             2.074             137       (122,316)
+
+++++ Path 6 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : cmos_vsync                               
+Path End      : u_Sensor_Image_XYCrop/image_ypos[3]~FF|CE
+Launch Clock  : cmos_pclk (FALL)                         
+Capture Clock : cmos_pclk (RISE)                         
+Slack         : 2.024 (required time - arrival time)     
+Delay         : 1.962                                    
+
+Logic Level             : 1
+Non-global nets on path : 2
+Global nets on path     : 0
+
+Launch Clock Path Delay        : 2.063
++ Clock To Q + Data Path Delay : 2.066
++ Input Delay                  : 0.795
+--------------------------------------
+End-of-path arrival time       : 4.924
+
+Constraint                     : 5.000
++ Capture Clock Path Delay     : 2.074
+- Clock Uncertainty            : 0.126
+--------------------------------------
+End-of-path required time      : 6.948
+
+Launch Clock Path
+         name            model name   delay (ns)  cumulative delay (ns) pins on net    location
+=================================================================================================
+cmos_pclk                  inpad        0.000             0.000               0       (111,323)
+cmos_pclk                  inpad        0.126             0.126             137       (111,323)
+cmos_pclk                  net          1.887             2.013             137       (111,323)
+cmos_pclk~CLKOUT~18~322    outpad       0.050             2.063             137       (18,323) 
+cmos_pclk~CLKOUT~18~322    outpad       0.000             2.063               0       (18,323) 
+
+Data Path
+                  name                     model name   delay (ns)  cumulative delay (ns) pins on net    location
+===================================================================================================================
+cmos_vsync                                   inpad        0.126             0.126               0       (0,321)  
+cmos_vsync                                   inpad        0.000             0.126              16       (0,321)  
+cmos_vsync                                   net          1.194             1.320              16       (0,321)  
+LUT__23774|in[2]                             lut          0.061             1.381              16       (122,304)
+LUT__23774|out                               lut          0.000             1.381              13       (122,304)
+ceg_net606                                   net          0.581             1.962              13       (122,304)
+u_Sensor_Image_XYCrop/image_ypos[3]~FF|CE    ff           0.104             2.066              13       (122,308)
+
+Capture Clock Path
+                   name                     model name   delay (ns)  cumulative delay (ns) pins on net    location
+====================================================================================================================
+cmos_pclk                                     inpad        0.000             0.000               0       (111,323)
+cmos_pclk                                     inpad        0.126             0.126             137       (111,323)
+cmos_pclk                                     net          1.948             2.074             137       (111,323)
+u_Sensor_Image_XYCrop/image_ypos[3]~FF|CLK    ff           0.000             2.074             137       (122,308)
+
+++++ Path 7 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : cmos_vsync                               
+Path End      : u_Sensor_Image_XYCrop/image_ypos[7]~FF|CE
+Launch Clock  : cmos_pclk (FALL)                         
+Capture Clock : cmos_pclk (RISE)                         
+Slack         : 2.024 (required time - arrival time)     
+Delay         : 1.962                                    
+
+Logic Level             : 1
+Non-global nets on path : 2
+Global nets on path     : 0
+
+Launch Clock Path Delay        : 2.063
++ Clock To Q + Data Path Delay : 2.066
++ Input Delay                  : 0.795
+--------------------------------------
+End-of-path arrival time       : 4.924
+
+Constraint                     : 5.000
++ Capture Clock Path Delay     : 2.074
+- Clock Uncertainty            : 0.126
+--------------------------------------
+End-of-path required time      : 6.948
+
+Launch Clock Path
+         name            model name   delay (ns)  cumulative delay (ns) pins on net    location
+=================================================================================================
+cmos_pclk                  inpad        0.000             0.000               0       (111,323)
+cmos_pclk                  inpad        0.126             0.126             137       (111,323)
+cmos_pclk                  net          1.887             2.013             137       (111,323)
+cmos_pclk~CLKOUT~18~322    outpad       0.050             2.063             137       (18,323) 
+cmos_pclk~CLKOUT~18~322    outpad       0.000             2.063               0       (18,323) 
+
+Data Path
+                  name                     model name   delay (ns)  cumulative delay (ns) pins on net    location
+===================================================================================================================
+cmos_vsync                                   inpad        0.126             0.126               0       (0,321)  
+cmos_vsync                                   inpad        0.000             0.126              16       (0,321)  
+cmos_vsync                                   net          1.194             1.320              16       (0,321)  
+LUT__23774|in[2]                             lut          0.061             1.381              16       (122,304)
+LUT__23774|out                               lut          0.000             1.381              13       (122,304)
+ceg_net606                                   net          0.581             1.962              13       (122,304)
+u_Sensor_Image_XYCrop/image_ypos[7]~FF|CE    ff           0.104             2.066              13       (122,312)
+
+Capture Clock Path
+                   name                     model name   delay (ns)  cumulative delay (ns) pins on net    location
+====================================================================================================================
+cmos_pclk                                     inpad        0.000             0.000               0       (111,323)
+cmos_pclk                                     inpad        0.126             0.126             137       (111,323)
+cmos_pclk                                     net          1.948             2.074             137       (111,323)
+u_Sensor_Image_XYCrop/image_ypos[7]~FF|CLK    ff           0.000             2.074             137       (122,312)
+
+++++ Path 8 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : cmos_vsync                                
+Path End      : u_Sensor_Image_XYCrop/image_ypos[10]~FF|CE
+Launch Clock  : cmos_pclk (FALL)                          
+Capture Clock : cmos_pclk (RISE)                          
+Slack         : 2.024 (required time - arrival time)      
+Delay         : 1.962                                     
+
+Logic Level             : 1
+Non-global nets on path : 2
+Global nets on path     : 0
+
+Launch Clock Path Delay        : 2.063
++ Clock To Q + Data Path Delay : 2.066
++ Input Delay                  : 0.795
+--------------------------------------
+End-of-path arrival time       : 4.924
+
+Constraint                     : 5.000
++ Capture Clock Path Delay     : 2.074
+- Clock Uncertainty            : 0.126
+--------------------------------------
+End-of-path required time      : 6.948
+
+Launch Clock Path
+         name            model name   delay (ns)  cumulative delay (ns) pins on net    location
+=================================================================================================
+cmos_pclk                  inpad        0.000             0.000               0       (111,323)
+cmos_pclk                  inpad        0.126             0.126             137       (111,323)
+cmos_pclk                  net          1.887             2.013             137       (111,323)
+cmos_pclk~CLKOUT~18~322    outpad       0.050             2.063             137       (18,323) 
+cmos_pclk~CLKOUT~18~322    outpad       0.000             2.063               0       (18,323) 
+
+Data Path
+                   name                     model name   delay (ns)  cumulative delay (ns) pins on net    location
+====================================================================================================================
+cmos_vsync                                    inpad        0.126             0.126               0       (0,321)  
+cmos_vsync                                    inpad        0.000             0.126              16       (0,321)  
+cmos_vsync                                    net          1.194             1.320              16       (0,321)  
+LUT__23774|in[2]                              lut          0.061             1.381              16       (122,304)
+LUT__23774|out                                lut          0.000             1.381              13       (122,304)
+ceg_net606                                    net          0.581             1.962              13       (122,304)
+u_Sensor_Image_XYCrop/image_ypos[10]~FF|CE    ff           0.104             2.066              13       (122,315)
+
+Capture Clock Path
+                   name                      model name   delay (ns)  cumulative delay (ns) pins on net    location
+=====================================================================================================================
+cmos_pclk                                      inpad        0.000             0.000               0       (111,323)
+cmos_pclk                                      inpad        0.126             0.126             137       (111,323)
+cmos_pclk                                      net          1.948             2.074             137       (111,323)
+u_Sensor_Image_XYCrop/image_ypos[10]~FF|CLK    ff           0.000             2.074             137       (122,315)
+
+++++ Path 9 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : cmos_vsync                                
+Path End      : u_Sensor_Image_XYCrop/image_ypos[11]~FF|CE
+Launch Clock  : cmos_pclk (FALL)                          
+Capture Clock : cmos_pclk (RISE)                          
+Slack         : 2.024 (required time - arrival time)      
+Delay         : 1.962                                     
+
+Logic Level             : 1
+Non-global nets on path : 2
+Global nets on path     : 0
+
+Launch Clock Path Delay        : 2.063
++ Clock To Q + Data Path Delay : 2.066
++ Input Delay                  : 0.795
+--------------------------------------
+End-of-path arrival time       : 4.924
+
+Constraint                     : 5.000
++ Capture Clock Path Delay     : 2.074
+- Clock Uncertainty            : 0.126
+--------------------------------------
+End-of-path required time      : 6.948
+
+Launch Clock Path
+         name            model name   delay (ns)  cumulative delay (ns) pins on net    location
+=================================================================================================
+cmos_pclk                  inpad        0.000             0.000               0       (111,323)
+cmos_pclk                  inpad        0.126             0.126             137       (111,323)
+cmos_pclk                  net          1.887             2.013             137       (111,323)
+cmos_pclk~CLKOUT~18~322    outpad       0.050             2.063             137       (18,323) 
+cmos_pclk~CLKOUT~18~322    outpad       0.000             2.063               0       (18,323) 
+
+Data Path
+                   name                     model name   delay (ns)  cumulative delay (ns) pins on net    location
+====================================================================================================================
+cmos_vsync                                    inpad        0.126             0.126               0       (0,321)  
+cmos_vsync                                    inpad        0.000             0.126              16       (0,321)  
+cmos_vsync                                    net          1.194             1.320              16       (0,321)  
+LUT__23774|in[2]                              lut          0.061             1.381              16       (122,304)
+LUT__23774|out                                lut          0.000             1.381              13       (122,304)
+ceg_net606                                    net          0.581             1.962              13       (122,304)
+u_Sensor_Image_XYCrop/image_ypos[11]~FF|CE    ff           0.104             2.066              13       (122,317)
+
+Capture Clock Path
+                   name                      model name   delay (ns)  cumulative delay (ns) pins on net    location
+=====================================================================================================================
+cmos_pclk                                      inpad        0.000             0.000               0       (111,323)
+cmos_pclk                                      inpad        0.126             0.126             137       (111,323)
+cmos_pclk                                      net          1.948             2.074             137       (111,323)
+u_Sensor_Image_XYCrop/image_ypos[11]~FF|CLK    ff           0.000             2.074             137       (122,317)
+
+++++ Path 10 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : cmos_vsync                               
+Path End      : u_Sensor_Image_XYCrop/image_ypos[5]~FF|CE
+Launch Clock  : cmos_pclk (FALL)                         
+Capture Clock : cmos_pclk (RISE)                         
+Slack         : 2.024 (required time - arrival time)     
+Delay         : 1.962                                    
+
+Logic Level             : 1
+Non-global nets on path : 2
+Global nets on path     : 0
+
+Launch Clock Path Delay        : 2.063
++ Clock To Q + Data Path Delay : 2.066
++ Input Delay                  : 0.795
+--------------------------------------
+End-of-path arrival time       : 4.924
+
+Constraint                     : 5.000
++ Capture Clock Path Delay     : 2.074
+- Clock Uncertainty            : 0.126
+--------------------------------------
+End-of-path required time      : 6.948
+
+Launch Clock Path
+         name            model name   delay (ns)  cumulative delay (ns) pins on net    location
+=================================================================================================
+cmos_pclk                  inpad        0.000             0.000               0       (111,323)
+cmos_pclk                  inpad        0.126             0.126             137       (111,323)
+cmos_pclk                  net          1.887             2.013             137       (111,323)
+cmos_pclk~CLKOUT~18~322    outpad       0.050             2.063             137       (18,323) 
+cmos_pclk~CLKOUT~18~322    outpad       0.000             2.063               0       (18,323) 
+
+Data Path
+                  name                     model name   delay (ns)  cumulative delay (ns) pins on net    location
+===================================================================================================================
+cmos_vsync                                   inpad        0.126             0.126               0       (0,321)  
+cmos_vsync                                   inpad        0.000             0.126              16       (0,321)  
+cmos_vsync                                   net          1.194             1.320              16       (0,321)  
+LUT__23774|in[2]                             lut          0.061             1.381              16       (122,304)
+LUT__23774|out                               lut          0.000             1.381              13       (122,304)
+ceg_net606                                   net          0.581             1.962              13       (122,304)
+u_Sensor_Image_XYCrop/image_ypos[5]~FF|CE    ff           0.104             2.066              13       (122,310)
+
+Capture Clock Path
+                   name                     model name   delay (ns)  cumulative delay (ns) pins on net    location
+====================================================================================================================
+cmos_pclk                                     inpad        0.000             0.000               0       (111,323)
+cmos_pclk                                     inpad        0.126             0.126             137       (111,323)
+cmos_pclk                                     net          1.948             2.074             137       (111,323)
+u_Sensor_Image_XYCrop/image_ypos[5]~FF|CLK    ff           0.000             2.074             137       (122,310)
+
+++++ Path 11 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : cmos_vsync                               
+Path End      : u_Sensor_Image_XYCrop/image_ypos[9]~FF|CE
+Launch Clock  : cmos_pclk (FALL)                         
+Capture Clock : cmos_pclk (RISE)                         
+Slack         : 2.024 (required time - arrival time)     
+Delay         : 1.962                                    
+
+Logic Level             : 1
+Non-global nets on path : 2
+Global nets on path     : 0
+
+Launch Clock Path Delay        : 2.063
++ Clock To Q + Data Path Delay : 2.066
++ Input Delay                  : 0.795
+--------------------------------------
+End-of-path arrival time       : 4.924
+
+Constraint                     : 5.000
++ Capture Clock Path Delay     : 2.074
+- Clock Uncertainty            : 0.126
+--------------------------------------
+End-of-path required time      : 6.948
+
+Launch Clock Path
+         name            model name   delay (ns)  cumulative delay (ns) pins on net    location
+=================================================================================================
+cmos_pclk                  inpad        0.000             0.000               0       (111,323)
+cmos_pclk                  inpad        0.126             0.126             137       (111,323)
+cmos_pclk                  net          1.887             2.013             137       (111,323)
+cmos_pclk~CLKOUT~18~322    outpad       0.050             2.063             137       (18,323) 
+cmos_pclk~CLKOUT~18~322    outpad       0.000             2.063               0       (18,323) 
+
+Data Path
+                  name                     model name   delay (ns)  cumulative delay (ns) pins on net    location
+===================================================================================================================
+cmos_vsync                                   inpad        0.126             0.126               0       (0,321)  
+cmos_vsync                                   inpad        0.000             0.126              16       (0,321)  
+cmos_vsync                                   net          1.194             1.320              16       (0,321)  
+LUT__23774|in[2]                             lut          0.061             1.381              16       (122,304)
+LUT__23774|out                               lut          0.000             1.381              13       (122,304)
+ceg_net606                                   net          0.581             1.962              13       (122,304)
+u_Sensor_Image_XYCrop/image_ypos[9]~FF|CE    ff           0.104             2.066              13       (122,314)
+
+Capture Clock Path
+                   name                     model name   delay (ns)  cumulative delay (ns) pins on net    location
+====================================================================================================================
+cmos_pclk                                     inpad        0.000             0.000               0       (111,323)
+cmos_pclk                                     inpad        0.126             0.126             137       (111,323)
+cmos_pclk                                     net          1.948             2.074             137       (111,323)
+u_Sensor_Image_XYCrop/image_ypos[9]~FF|CLK    ff           0.000             2.074             137       (122,314)
+
+++++ Path 12 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : cmos_href                           
+Path End      : XYCrop_frame_href~FF|D              
+Launch Clock  : cmos_pclk (FALL)                    
+Capture Clock : cmos_pclk (RISE)                    
+Slack         : 2.385 (required time - arrival time)
+Delay         : 1.702                               
+
+Logic Level             : 3
+Non-global nets on path : 3
+Global nets on path     : 0
+
+Launch Clock Path Delay        : 2.063
++ Clock To Q + Data Path Delay : 1.705
++ Input Delay                  : 0.795
+--------------------------------------
+End-of-path arrival time       : 4.563
+
+Constraint                     : 5.000
++ Capture Clock Path Delay     : 2.074
+- Clock Uncertainty            : 0.126
+--------------------------------------
+End-of-path required time      : 6.948
+
+Launch Clock Path
+          name            model name   delay (ns)  cumulative delay (ns) pins on net    location
+==================================================================================================
+cmos_pclk                   inpad        0.000             0.000               0       (111,323)
+cmos_pclk                   inpad        0.126             0.126             137       (111,323)
+cmos_pclk                   net          1.887             2.013             137       (111,323)
+cmos_pclk~CLKOUT~216~322    outpad       0.050             2.063             137       (216,323)
+cmos_pclk~CLKOUT~216~322    outpad       0.000             2.063               0       (216,323)
+
+Data Path
+         name           model name   delay (ns)  cumulative delay (ns) pins on net    location
+================================================================================================
+cmos_href                 inpad        0.126             0.126               0       (219,321)
+cmos_href                 inpad        0.000             0.126              17       (219,321)
+cmos_href                 net          0.761             0.887              17       (219,321)
+LUT__23786|in[3]          lut          0.061             0.948              17       (127,315)
+LUT__23786|out            lut          0.000             0.948               2       (127,315)
+n11049                    net          0.362             1.310               2       (127,315)
+LUT__23787|in[3]          lut          0.061             1.371               2       (134,313)
+LUT__23787|out            lut          0.000             1.371               2       (134,313)
+n11050                    net          0.270             1.641               2       (134,313)
+LUT__23788|in[3]          lut          0.061             1.702               2       (122,313)
+LUT__23788|out            lut          0.000             1.702               2       (122,313)
+XYCrop_frame_href~FF|D    ff           0.003             1.705               2       (122,313)
+
+Capture Clock Path
+          name            model name   delay (ns)  cumulative delay (ns) pins on net    location
+==================================================================================================
+cmos_pclk                   inpad        0.000             0.000               0       (111,323)
+cmos_pclk                   inpad        0.126             0.126             137       (111,323)
+cmos_pclk                   net          1.948             2.074             137       (111,323)
+XYCrop_frame_href~FF|CLK    ff           0.000             2.074             137       (122,313)
+
+++++ Path 13 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : cmos_href                                
+Path End      : u_Sensor_Image_XYCrop/image_xpos[11]~FF|D
+Launch Clock  : cmos_pclk (FALL)                         
+Capture Clock : cmos_pclk (RISE)                         
+Slack         : 2.396 (required time - arrival time)     
+Delay         : 1.691                                    
+
+Logic Level             : 13
+Non-global nets on path : 13
+Global nets on path     :  0
+
+Launch Clock Path Delay        : 2.063
++ Clock To Q + Data Path Delay : 1.694
++ Input Delay                  : 0.795
+--------------------------------------
+End-of-path arrival time       : 4.552
+
+Constraint                     : 5.000
++ Capture Clock Path Delay     : 2.074
+- Clock Uncertainty            : 0.126
+--------------------------------------
+End-of-path required time      : 6.948
+
+Launch Clock Path
+          name            model name   delay (ns)  cumulative delay (ns) pins on net    location
+==================================================================================================
+cmos_pclk                   inpad        0.000             0.000               0       (111,323)
+cmos_pclk                   inpad        0.126             0.126             137       (111,323)
+cmos_pclk                   net          1.887             2.013             137       (111,323)
+cmos_pclk~CLKOUT~216~322    outpad       0.050             2.063             137       (216,323)
+cmos_pclk~CLKOUT~216~322    outpad       0.000             2.063               0       (216,323)
+
+Data Path
+                  name                     model name   delay (ns)  cumulative delay (ns) pins on net    location
+===================================================================================================================
+cmos_href                                    inpad        0.126             0.126               0       (219,321)
+cmos_href                                    inpad        0.000             0.126              17       (219,321)
+cmos_href                                    net          0.966             1.092              17       (219,321)
+u_Sensor_Image_XYCrop/add_27/i1|I1           adder        0.057             1.149              17       (139,304)
+u_Sensor_Image_XYCrop/add_27/i1|CO           adder        0.000             1.149               2       (139,304)
+u_Sensor_Image_XYCrop/add_27/n2              net          0.000             1.149               2       (139,304)
+u_Sensor_Image_XYCrop/add_27/i2|CI           adder        0.024             1.173               2       (139,305)
+u_Sensor_Image_XYCrop/add_27/i2|CO           adder        0.000             1.173               2       (139,305)
+u_Sensor_Image_XYCrop/add_27/n4              net          0.000             1.173               2       (139,305)
+u_Sensor_Image_XYCrop/add_27/i3|CI           adder        0.024             1.197               2       (139,306)
+u_Sensor_Image_XYCrop/add_27/i3|CO           adder        0.000             1.197               2       (139,306)
+u_Sensor_Image_XYCrop/add_27/n6              net          0.000             1.197               2       (139,306)
+u_Sensor_Image_XYCrop/add_27/i4|CI           adder        0.024             1.221               2       (139,307)
+u_Sensor_Image_XYCrop/add_27/i4|CO           adder        0.000             1.221               2       (139,307)
+u_Sensor_Image_XYCrop/add_27/n8              net          0.000             1.221               2       (139,307)
+u_Sensor_Image_XYCrop/add_27/i5|CI           adder        0.024             1.245               2       (139,308)
+u_Sensor_Image_XYCrop/add_27/i5|CO           adder        0.000             1.245               2       (139,308)
+u_Sensor_Image_XYCrop/add_27/n10             net          0.000             1.245               2       (139,308)
+u_Sensor_Image_XYCrop/add_27/i6|CI           adder        0.024             1.269               2       (139,309)
+u_Sensor_Image_XYCrop/add_27/i6|CO           adder        0.000             1.269               2       (139,309)
+u_Sensor_Image_XYCrop/add_27/n12             net          0.000             1.269               2       (139,309)
+u_Sensor_Image_XYCrop/add_27/i7|CI           adder        0.024             1.293               2       (139,310)
+u_Sensor_Image_XYCrop/add_27/i7|CO           adder        0.000             1.293               2       (139,310)
+u_Sensor_Image_XYCrop/add_27/n14             net          0.000             1.293               2       (139,310)
+u_Sensor_Image_XYCrop/add_27/i8|CI           adder        0.024             1.317               2       (139,311)
+u_Sensor_Image_XYCrop/add_27/i8|CO           adder        0.000             1.317               2       (139,311)
+u_Sensor_Image_XYCrop/add_27/n16             net          0.000             1.317               2       (139,311)
+u_Sensor_Image_XYCrop/add_27/i9|CI           adder        0.024             1.341               2       (139,312)
+u_Sensor_Image_XYCrop/add_27/i9|CO           adder        0.000             1.341               2       (139,312)
+u_Sensor_Image_XYCrop/add_27/n18             net          0.000             1.341               2       (139,312)
+u_Sensor_Image_XYCrop/add_27/i10|CI          adder        0.024             1.365               2       (139,313)
+u_Sensor_Image_XYCrop/add_27/i10|CO          adder        0.000             1.365               2       (139,313)
+u_Sensor_Image_XYCrop/add_27/n20             net          0.000             1.365               2       (139,313)
+u_Sensor_Image_XYCrop/add_27/i11|CI          adder        0.024             1.389               2       (139,314)
+u_Sensor_Image_XYCrop/add_27/i11|CO          adder        0.000             1.389               2       (139,314)
+u_Sensor_Image_XYCrop/add_27/n22             net          0.000             1.389               2       (139,314)
+u_Sensor_Image_XYCrop/add_27/i12|CI          adder        0.097             1.486               2       (139,315)
+u_Sensor_Image_XYCrop/add_27/i12|O           adder        0.000             1.486               2       (139,315)
+u_Sensor_Image_XYCrop/n87                    net          0.142             1.628               2       (139,315)
+LUT__23801|in[1]                             lut          0.063             1.691               2       (135,315)
+LUT__23801|out                               lut          0.000             1.691               2       (135,315)
+u_Sensor_Image_XYCrop/image_xpos[11]~FF|D    ff           0.003             1.694               2       (135,315)
+
+Capture Clock Path
+                   name                      model name   delay (ns)  cumulative delay (ns) pins on net    location
+=====================================================================================================================
+cmos_pclk                                      inpad        0.000             0.000               0       (111,323)
+cmos_pclk                                      inpad        0.126             0.126             137       (111,323)
+cmos_pclk                                      net          1.948             2.074             137       (111,323)
+u_Sensor_Image_XYCrop/image_xpos[11]~FF|CLK    ff           0.000             2.074             137       (135,315)
+
+++++ Path 14 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : cmos_vsync                               
+Path End      : u_Sensor_Image_XYCrop/image_ypos[0]~FF|CE
+Launch Clock  : cmos_pclk (FALL)                         
+Capture Clock : cmos_pclk (RISE)                         
+Slack         : 2.398 (required time - arrival time)     
+Delay         : 1.588                                    
+
+Logic Level             : 1
+Non-global nets on path : 2
+Global nets on path     : 0
+
+Launch Clock Path Delay        : 2.063
++ Clock To Q + Data Path Delay : 1.692
++ Input Delay                  : 0.795
+--------------------------------------
+End-of-path arrival time       : 4.550
+
+Constraint                     : 5.000
++ Capture Clock Path Delay     : 2.074
+- Clock Uncertainty            : 0.126
+--------------------------------------
+End-of-path required time      : 6.948
+
+Launch Clock Path
+         name            model name   delay (ns)  cumulative delay (ns) pins on net    location
+=================================================================================================
+cmos_pclk                  inpad        0.000             0.000               0       (111,323)
+cmos_pclk                  inpad        0.126             0.126             137       (111,323)
+cmos_pclk                  net          1.887             2.013             137       (111,323)
+cmos_pclk~CLKOUT~18~322    outpad       0.050             2.063             137       (18,323) 
+cmos_pclk~CLKOUT~18~322    outpad       0.000             2.063               0       (18,323) 
+
+Data Path
+                  name                     model name   delay (ns)  cumulative delay (ns) pins on net    location
+===================================================================================================================
+cmos_vsync                                   inpad        0.126             0.126               0       (0,321)  
+cmos_vsync                                   inpad        0.000             0.126              16       (0,321)  
+cmos_vsync                                   net          1.194             1.320              16       (0,321)  
+LUT__23774|in[2]                             lut          0.061             1.381              16       (122,304)
+LUT__23774|out                               lut          0.000             1.381              13       (122,304)
+ceg_net606                                   net          0.207             1.588              13       (122,304)
+u_Sensor_Image_XYCrop/image_ypos[0]~FF|CE    ff           0.104             1.692              13       (122,303)
+
+Capture Clock Path
+                   name                     model name   delay (ns)  cumulative delay (ns) pins on net    location
+====================================================================================================================
+cmos_pclk                                     inpad        0.000             0.000               0       (111,323)
+cmos_pclk                                     inpad        0.126             0.126             137       (111,323)
+cmos_pclk                                     net          1.948             2.074             137       (111,323)
+u_Sensor_Image_XYCrop/image_ypos[0]~FF|CLK    ff           0.000             2.074             137       (122,303)
+
+++++ Path 15 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : cmos_href                                
+Path End      : u_Sensor_Image_XYCrop/image_xpos[10]~FF|D
+Launch Clock  : cmos_pclk (FALL)                         
+Capture Clock : cmos_pclk (RISE)                         
+Slack         : 2.420 (required time - arrival time)     
+Delay         : 1.667                                    
+
+Logic Level             : 12
+Non-global nets on path : 12
+Global nets on path     :  0
+
+Launch Clock Path Delay        : 2.063
++ Clock To Q + Data Path Delay : 1.670
++ Input Delay                  : 0.795
+--------------------------------------
+End-of-path arrival time       : 4.528
+
+Constraint                     : 5.000
++ Capture Clock Path Delay     : 2.074
+- Clock Uncertainty            : 0.126
+--------------------------------------
+End-of-path required time      : 6.948
+
+Launch Clock Path
+          name            model name   delay (ns)  cumulative delay (ns) pins on net    location
+==================================================================================================
+cmos_pclk                   inpad        0.000             0.000               0       (111,323)
+cmos_pclk                   inpad        0.126             0.126             137       (111,323)
+cmos_pclk                   net          1.887             2.013             137       (111,323)
+cmos_pclk~CLKOUT~216~322    outpad       0.050             2.063             137       (216,323)
+cmos_pclk~CLKOUT~216~322    outpad       0.000             2.063               0       (216,323)
+
+Data Path
+                  name                     model name   delay (ns)  cumulative delay (ns) pins on net    location
+===================================================================================================================
+cmos_href                                    inpad        0.126             0.126               0       (219,321)
+cmos_href                                    inpad        0.000             0.126              17       (219,321)
+cmos_href                                    net          0.966             1.092              17       (219,321)
+u_Sensor_Image_XYCrop/add_27/i1|I1           adder        0.057             1.149              17       (139,304)
+u_Sensor_Image_XYCrop/add_27/i1|CO           adder        0.000             1.149               2       (139,304)
+u_Sensor_Image_XYCrop/add_27/n2              net          0.000             1.149               2       (139,304)
+u_Sensor_Image_XYCrop/add_27/i2|CI           adder        0.024             1.173               2       (139,305)
+u_Sensor_Image_XYCrop/add_27/i2|CO           adder        0.000             1.173               2       (139,305)
+u_Sensor_Image_XYCrop/add_27/n4              net          0.000             1.173               2       (139,305)
+u_Sensor_Image_XYCrop/add_27/i3|CI           adder        0.024             1.197               2       (139,306)
+u_Sensor_Image_XYCrop/add_27/i3|CO           adder        0.000             1.197               2       (139,306)
+u_Sensor_Image_XYCrop/add_27/n6              net          0.000             1.197               2       (139,306)
+u_Sensor_Image_XYCrop/add_27/i4|CI           adder        0.024             1.221               2       (139,307)
+u_Sensor_Image_XYCrop/add_27/i4|CO           adder        0.000             1.221               2       (139,307)
+u_Sensor_Image_XYCrop/add_27/n8              net          0.000             1.221               2       (139,307)
+u_Sensor_Image_XYCrop/add_27/i5|CI           adder        0.024             1.245               2       (139,308)
+u_Sensor_Image_XYCrop/add_27/i5|CO           adder        0.000             1.245               2       (139,308)
+u_Sensor_Image_XYCrop/add_27/n10             net          0.000             1.245               2       (139,308)
+u_Sensor_Image_XYCrop/add_27/i6|CI           adder        0.024             1.269               2       (139,309)
+u_Sensor_Image_XYCrop/add_27/i6|CO           adder        0.000             1.269               2       (139,309)
+u_Sensor_Image_XYCrop/add_27/n12             net          0.000             1.269               2       (139,309)
+u_Sensor_Image_XYCrop/add_27/i7|CI           adder        0.024             1.293               2       (139,310)
+u_Sensor_Image_XYCrop/add_27/i7|CO           adder        0.000             1.293               2       (139,310)
+u_Sensor_Image_XYCrop/add_27/n14             net          0.000             1.293               2       (139,310)
+u_Sensor_Image_XYCrop/add_27/i8|CI           adder        0.024             1.317               2       (139,311)
+u_Sensor_Image_XYCrop/add_27/i8|CO           adder        0.000             1.317               2       (139,311)
+u_Sensor_Image_XYCrop/add_27/n16             net          0.000             1.317               2       (139,311)
+u_Sensor_Image_XYCrop/add_27/i9|CI           adder        0.024             1.341               2       (139,312)
+u_Sensor_Image_XYCrop/add_27/i9|CO           adder        0.000             1.341               2       (139,312)
+u_Sensor_Image_XYCrop/add_27/n18             net          0.000             1.341               2       (139,312)
+u_Sensor_Image_XYCrop/add_27/i10|CI          adder        0.024             1.365               2       (139,313)
+u_Sensor_Image_XYCrop/add_27/i10|CO          adder        0.000             1.365               2       (139,313)
+u_Sensor_Image_XYCrop/add_27/n20             net          0.000             1.365               2       (139,313)
+u_Sensor_Image_XYCrop/add_27/i11|CI          adder        0.097             1.462               2       (139,314)
+u_Sensor_Image_XYCrop/add_27/i11|O           adder        0.000             1.462               2       (139,314)
+u_Sensor_Image_XYCrop/n88                    net          0.142             1.604               2       (139,314)
+LUT__23800|in[1]                             lut          0.063             1.667               2       (135,314)
+LUT__23800|out                               lut          0.000             1.667               2       (135,314)
+u_Sensor_Image_XYCrop/image_xpos[10]~FF|D    ff           0.003             1.670               2       (135,314)
+
+Capture Clock Path
+                   name                      model name   delay (ns)  cumulative delay (ns) pins on net    location
+=====================================================================================================================
+cmos_pclk                                      inpad        0.000             0.000               0       (111,323)
+cmos_pclk                                      inpad        0.126             0.126             137       (111,323)
+cmos_pclk                                      net          1.948             2.074             137       (111,323)
+u_Sensor_Image_XYCrop/image_xpos[10]~FF|CLK    ff           0.000             2.074             137       (135,314)
+
+++++ Path 16 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : cmos_href                               
+Path End      : u_Sensor_Image_XYCrop/image_xpos[9]~FF|D
+Launch Clock  : cmos_pclk (FALL)                        
+Capture Clock : cmos_pclk (RISE)                        
+Slack         : 2.444 (required time - arrival time)    
+Delay         : 1.643                                   
+
+Logic Level             : 11
+Non-global nets on path : 11
+Global nets on path     :  0
+
+Launch Clock Path Delay        : 2.063
++ Clock To Q + Data Path Delay : 1.646
++ Input Delay                  : 0.795
+--------------------------------------
+End-of-path arrival time       : 4.504
+
+Constraint                     : 5.000
++ Capture Clock Path Delay     : 2.074
+- Clock Uncertainty            : 0.126
+--------------------------------------
+End-of-path required time      : 6.948
+
+Launch Clock Path
+          name            model name   delay (ns)  cumulative delay (ns) pins on net    location
+==================================================================================================
+cmos_pclk                   inpad        0.000             0.000               0       (111,323)
+cmos_pclk                   inpad        0.126             0.126             137       (111,323)
+cmos_pclk                   net          1.887             2.013             137       (111,323)
+cmos_pclk~CLKOUT~216~322    outpad       0.050             2.063             137       (216,323)
+cmos_pclk~CLKOUT~216~322    outpad       0.000             2.063               0       (216,323)
+
+Data Path
+                  name                    model name   delay (ns)  cumulative delay (ns) pins on net    location
+==================================================================================================================
+cmos_href                                   inpad        0.126             0.126               0       (219,321)
+cmos_href                                   inpad        0.000             0.126              17       (219,321)
+cmos_href                                   net          0.966             1.092              17       (219,321)
+u_Sensor_Image_XYCrop/add_27/i1|I1          adder        0.057             1.149              17       (139,304)
+u_Sensor_Image_XYCrop/add_27/i1|CO          adder        0.000             1.149               2       (139,304)
+u_Sensor_Image_XYCrop/add_27/n2             net          0.000             1.149               2       (139,304)
+u_Sensor_Image_XYCrop/add_27/i2|CI          adder        0.024             1.173               2       (139,305)
+u_Sensor_Image_XYCrop/add_27/i2|CO          adder        0.000             1.173               2       (139,305)
+u_Sensor_Image_XYCrop/add_27/n4             net          0.000             1.173               2       (139,305)
+u_Sensor_Image_XYCrop/add_27/i3|CI          adder        0.024             1.197               2       (139,306)
+u_Sensor_Image_XYCrop/add_27/i3|CO          adder        0.000             1.197               2       (139,306)
+u_Sensor_Image_XYCrop/add_27/n6             net          0.000             1.197               2       (139,306)
+u_Sensor_Image_XYCrop/add_27/i4|CI          adder        0.024             1.221               2       (139,307)
+u_Sensor_Image_XYCrop/add_27/i4|CO          adder        0.000             1.221               2       (139,307)
+u_Sensor_Image_XYCrop/add_27/n8             net          0.000             1.221               2       (139,307)
+u_Sensor_Image_XYCrop/add_27/i5|CI          adder        0.024             1.245               2       (139,308)
+u_Sensor_Image_XYCrop/add_27/i5|CO          adder        0.000             1.245               2       (139,308)
+u_Sensor_Image_XYCrop/add_27/n10            net          0.000             1.245               2       (139,308)
+u_Sensor_Image_XYCrop/add_27/i6|CI          adder        0.024             1.269               2       (139,309)
+u_Sensor_Image_XYCrop/add_27/i6|CO          adder        0.000             1.269               2       (139,309)
+u_Sensor_Image_XYCrop/add_27/n12            net          0.000             1.269               2       (139,309)
+u_Sensor_Image_XYCrop/add_27/i7|CI          adder        0.024             1.293               2       (139,310)
+u_Sensor_Image_XYCrop/add_27/i7|CO          adder        0.000             1.293               2       (139,310)
+u_Sensor_Image_XYCrop/add_27/n14            net          0.000             1.293               2       (139,310)
+u_Sensor_Image_XYCrop/add_27/i8|CI          adder        0.024             1.317               2       (139,311)
+u_Sensor_Image_XYCrop/add_27/i8|CO          adder        0.000             1.317               2       (139,311)
+u_Sensor_Image_XYCrop/add_27/n16            net          0.000             1.317               2       (139,311)
+u_Sensor_Image_XYCrop/add_27/i9|CI          adder        0.024             1.341               2       (139,312)
+u_Sensor_Image_XYCrop/add_27/i9|CO          adder        0.000             1.341               2       (139,312)
+u_Sensor_Image_XYCrop/add_27/n18            net          0.000             1.341               2       (139,312)
+u_Sensor_Image_XYCrop/add_27/i10|CI         adder        0.097             1.438               2       (139,313)
+u_Sensor_Image_XYCrop/add_27/i10|O          adder        0.000             1.438               2       (139,313)
+u_Sensor_Image_XYCrop/n89                   net          0.142             1.580               2       (139,313)
+LUT__23799|in[1]                            lut          0.063             1.643               2       (135,313)
+LUT__23799|out                              lut          0.000             1.643               2       (135,313)
+u_Sensor_Image_XYCrop/image_xpos[9]~FF|D    ff           0.003             1.646               2       (135,313)
+
+Capture Clock Path
+                   name                     model name   delay (ns)  cumulative delay (ns) pins on net    location
+====================================================================================================================
+cmos_pclk                                     inpad        0.000             0.000               0       (111,323)
+cmos_pclk                                     inpad        0.126             0.126             137       (111,323)
+cmos_pclk                                     net          1.948             2.074             137       (111,323)
+u_Sensor_Image_XYCrop/image_xpos[9]~FF|CLK    ff           0.000             2.074             137       (135,313)
+
+++++ Path 17 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : cmos_href                               
+Path End      : u_Sensor_Image_XYCrop/image_xpos[8]~FF|D
+Launch Clock  : cmos_pclk (FALL)                        
+Capture Clock : cmos_pclk (RISE)                        
+Slack         : 2.468 (required time - arrival time)    
+Delay         : 1.619                                   
+
+Logic Level             : 10
+Non-global nets on path : 10
+Global nets on path     :  0
+
+Launch Clock Path Delay        : 2.063
++ Clock To Q + Data Path Delay : 1.622
++ Input Delay                  : 0.795
+--------------------------------------
+End-of-path arrival time       : 4.480
+
+Constraint                     : 5.000
++ Capture Clock Path Delay     : 2.074
+- Clock Uncertainty            : 0.126
+--------------------------------------
+End-of-path required time      : 6.948
+
+Launch Clock Path
+          name            model name   delay (ns)  cumulative delay (ns) pins on net    location
+==================================================================================================
+cmos_pclk                   inpad        0.000             0.000               0       (111,323)
+cmos_pclk                   inpad        0.126             0.126             137       (111,323)
+cmos_pclk                   net          1.887             2.013             137       (111,323)
+cmos_pclk~CLKOUT~216~322    outpad       0.050             2.063             137       (216,323)
+cmos_pclk~CLKOUT~216~322    outpad       0.000             2.063               0       (216,323)
+
+Data Path
+                  name                    model name   delay (ns)  cumulative delay (ns) pins on net    location
+==================================================================================================================
+cmos_href                                   inpad        0.126             0.126               0       (219,321)
+cmos_href                                   inpad        0.000             0.126              17       (219,321)
+cmos_href                                   net          0.966             1.092              17       (219,321)
+u_Sensor_Image_XYCrop/add_27/i1|I1          adder        0.057             1.149              17       (139,304)
+u_Sensor_Image_XYCrop/add_27/i1|CO          adder        0.000             1.149               2       (139,304)
+u_Sensor_Image_XYCrop/add_27/n2             net          0.000             1.149               2       (139,304)
+u_Sensor_Image_XYCrop/add_27/i2|CI          adder        0.024             1.173               2       (139,305)
+u_Sensor_Image_XYCrop/add_27/i2|CO          adder        0.000             1.173               2       (139,305)
+u_Sensor_Image_XYCrop/add_27/n4             net          0.000             1.173               2       (139,305)
+u_Sensor_Image_XYCrop/add_27/i3|CI          adder        0.024             1.197               2       (139,306)
+u_Sensor_Image_XYCrop/add_27/i3|CO          adder        0.000             1.197               2       (139,306)
+u_Sensor_Image_XYCrop/add_27/n6             net          0.000             1.197               2       (139,306)
+u_Sensor_Image_XYCrop/add_27/i4|CI          adder        0.024             1.221               2       (139,307)
+u_Sensor_Image_XYCrop/add_27/i4|CO          adder        0.000             1.221               2       (139,307)
+u_Sensor_Image_XYCrop/add_27/n8             net          0.000             1.221               2       (139,307)
+u_Sensor_Image_XYCrop/add_27/i5|CI          adder        0.024             1.245               2       (139,308)
+u_Sensor_Image_XYCrop/add_27/i5|CO          adder        0.000             1.245               2       (139,308)
+u_Sensor_Image_XYCrop/add_27/n10            net          0.000             1.245               2       (139,308)
+u_Sensor_Image_XYCrop/add_27/i6|CI          adder        0.024             1.269               2       (139,309)
+u_Sensor_Image_XYCrop/add_27/i6|CO          adder        0.000             1.269               2       (139,309)
+u_Sensor_Image_XYCrop/add_27/n12            net          0.000             1.269               2       (139,309)
+u_Sensor_Image_XYCrop/add_27/i7|CI          adder        0.024             1.293               2       (139,310)
+u_Sensor_Image_XYCrop/add_27/i7|CO          adder        0.000             1.293               2       (139,310)
+u_Sensor_Image_XYCrop/add_27/n14            net          0.000             1.293               2       (139,310)
+u_Sensor_Image_XYCrop/add_27/i8|CI          adder        0.024             1.317               2       (139,311)
+u_Sensor_Image_XYCrop/add_27/i8|CO          adder        0.000             1.317               2       (139,311)
+u_Sensor_Image_XYCrop/add_27/n16            net          0.000             1.317               2       (139,311)
+u_Sensor_Image_XYCrop/add_27/i9|CI          adder        0.097             1.414               2       (139,312)
+u_Sensor_Image_XYCrop/add_27/i9|O           adder        0.000             1.414               2       (139,312)
+u_Sensor_Image_XYCrop/n90                   net          0.142             1.556               2       (139,312)
+LUT__23798|in[1]                            lut          0.063             1.619               2       (135,312)
+LUT__23798|out                              lut          0.000             1.619               2       (135,312)
+u_Sensor_Image_XYCrop/image_xpos[8]~FF|D    ff           0.003             1.622               2       (135,312)
+
+Capture Clock Path
+                   name                     model name   delay (ns)  cumulative delay (ns) pins on net    location
+====================================================================================================================
+cmos_pclk                                     inpad        0.000             0.000               0       (111,323)
+cmos_pclk                                     inpad        0.126             0.126             137       (111,323)
+cmos_pclk                                     net          1.948             2.074             137       (111,323)
+u_Sensor_Image_XYCrop/image_xpos[8]~FF|CLK    ff           0.000             2.074             137       (135,312)
+
+++++ Path 18 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : cmos_href                               
+Path End      : u_Sensor_Image_XYCrop/image_xpos[7]~FF|D
+Launch Clock  : cmos_pclk (FALL)                        
+Capture Clock : cmos_pclk (RISE)                        
+Slack         : 2.492 (required time - arrival time)    
+Delay         : 1.595                                   
+
+Logic Level             : 9
+Non-global nets on path : 9
+Global nets on path     : 0
+
+Launch Clock Path Delay        : 2.063
++ Clock To Q + Data Path Delay : 1.598
++ Input Delay                  : 0.795
+--------------------------------------
+End-of-path arrival time       : 4.456
+
+Constraint                     : 5.000
++ Capture Clock Path Delay     : 2.074
+- Clock Uncertainty            : 0.126
+--------------------------------------
+End-of-path required time      : 6.948
+
+Launch Clock Path
+          name            model name   delay (ns)  cumulative delay (ns) pins on net    location
+==================================================================================================
+cmos_pclk                   inpad        0.000             0.000               0       (111,323)
+cmos_pclk                   inpad        0.126             0.126             137       (111,323)
+cmos_pclk                   net          1.887             2.013             137       (111,323)
+cmos_pclk~CLKOUT~216~322    outpad       0.050             2.063             137       (216,323)
+cmos_pclk~CLKOUT~216~322    outpad       0.000             2.063               0       (216,323)
+
+Data Path
+                  name                    model name   delay (ns)  cumulative delay (ns) pins on net    location
+==================================================================================================================
+cmos_href                                   inpad        0.126             0.126               0       (219,321)
+cmos_href                                   inpad        0.000             0.126              17       (219,321)
+cmos_href                                   net          0.966             1.092              17       (219,321)
+u_Sensor_Image_XYCrop/add_27/i1|I1          adder        0.057             1.149              17       (139,304)
+u_Sensor_Image_XYCrop/add_27/i1|CO          adder        0.000             1.149               2       (139,304)
+u_Sensor_Image_XYCrop/add_27/n2             net          0.000             1.149               2       (139,304)
+u_Sensor_Image_XYCrop/add_27/i2|CI          adder        0.024             1.173               2       (139,305)
+u_Sensor_Image_XYCrop/add_27/i2|CO          adder        0.000             1.173               2       (139,305)
+u_Sensor_Image_XYCrop/add_27/n4             net          0.000             1.173               2       (139,305)
+u_Sensor_Image_XYCrop/add_27/i3|CI          adder        0.024             1.197               2       (139,306)
+u_Sensor_Image_XYCrop/add_27/i3|CO          adder        0.000             1.197               2       (139,306)
+u_Sensor_Image_XYCrop/add_27/n6             net          0.000             1.197               2       (139,306)
+u_Sensor_Image_XYCrop/add_27/i4|CI          adder        0.024             1.221               2       (139,307)
+u_Sensor_Image_XYCrop/add_27/i4|CO          adder        0.000             1.221               2       (139,307)
+u_Sensor_Image_XYCrop/add_27/n8             net          0.000             1.221               2       (139,307)
+u_Sensor_Image_XYCrop/add_27/i5|CI          adder        0.024             1.245               2       (139,308)
+u_Sensor_Image_XYCrop/add_27/i5|CO          adder        0.000             1.245               2       (139,308)
+u_Sensor_Image_XYCrop/add_27/n10            net          0.000             1.245               2       (139,308)
+u_Sensor_Image_XYCrop/add_27/i6|CI          adder        0.024             1.269               2       (139,309)
+u_Sensor_Image_XYCrop/add_27/i6|CO          adder        0.000             1.269               2       (139,309)
+u_Sensor_Image_XYCrop/add_27/n12            net          0.000             1.269               2       (139,309)
+u_Sensor_Image_XYCrop/add_27/i7|CI          adder        0.024             1.293               2       (139,310)
+u_Sensor_Image_XYCrop/add_27/i7|CO          adder        0.000             1.293               2       (139,310)
+u_Sensor_Image_XYCrop/add_27/n14            net          0.000             1.293               2       (139,310)
+u_Sensor_Image_XYCrop/add_27/i8|CI          adder        0.097             1.390               2       (139,311)
+u_Sensor_Image_XYCrop/add_27/i8|O           adder        0.000             1.390               2       (139,311)
+u_Sensor_Image_XYCrop/n91                   net          0.142             1.532               2       (139,311)
+LUT__23797|in[1]                            lut          0.063             1.595               2       (135,311)
+LUT__23797|out                              lut          0.000             1.595               2       (135,311)
+u_Sensor_Image_XYCrop/image_xpos[7]~FF|D    ff           0.003             1.598               2       (135,311)
+
+Capture Clock Path
+                   name                     model name   delay (ns)  cumulative delay (ns) pins on net    location
+====================================================================================================================
+cmos_pclk                                     inpad        0.000             0.000               0       (111,323)
+cmos_pclk                                     inpad        0.126             0.126             137       (111,323)
+cmos_pclk                                     net          1.948             2.074             137       (111,323)
+u_Sensor_Image_XYCrop/image_xpos[7]~FF|CLK    ff           0.000             2.074             137       (135,311)
+
+++++ Path 19 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : cmos_href                               
+Path End      : u_Sensor_Image_XYCrop/image_xpos[6]~FF|D
+Launch Clock  : cmos_pclk (FALL)                        
+Capture Clock : cmos_pclk (RISE)                        
+Slack         : 2.516 (required time - arrival time)    
+Delay         : 1.571                                   
+
+Logic Level             : 8
+Non-global nets on path : 8
+Global nets on path     : 0
+
+Launch Clock Path Delay        : 2.063
++ Clock To Q + Data Path Delay : 1.574
++ Input Delay                  : 0.795
+--------------------------------------
+End-of-path arrival time       : 4.432
+
+Constraint                     : 5.000
++ Capture Clock Path Delay     : 2.074
+- Clock Uncertainty            : 0.126
+--------------------------------------
+End-of-path required time      : 6.948
+
+Launch Clock Path
+          name            model name   delay (ns)  cumulative delay (ns) pins on net    location
+==================================================================================================
+cmos_pclk                   inpad        0.000             0.000               0       (111,323)
+cmos_pclk                   inpad        0.126             0.126             137       (111,323)
+cmos_pclk                   net          1.887             2.013             137       (111,323)
+cmos_pclk~CLKOUT~216~322    outpad       0.050             2.063             137       (216,323)
+cmos_pclk~CLKOUT~216~322    outpad       0.000             2.063               0       (216,323)
+
+Data Path
+                  name                    model name   delay (ns)  cumulative delay (ns) pins on net    location
+==================================================================================================================
+cmos_href                                   inpad        0.126             0.126               0       (219,321)
+cmos_href                                   inpad        0.000             0.126              17       (219,321)
+cmos_href                                   net          0.966             1.092              17       (219,321)
+u_Sensor_Image_XYCrop/add_27/i1|I1          adder        0.057             1.149              17       (139,304)
+u_Sensor_Image_XYCrop/add_27/i1|CO          adder        0.000             1.149               2       (139,304)
+u_Sensor_Image_XYCrop/add_27/n2             net          0.000             1.149               2       (139,304)
+u_Sensor_Image_XYCrop/add_27/i2|CI          adder        0.024             1.173               2       (139,305)
+u_Sensor_Image_XYCrop/add_27/i2|CO          adder        0.000             1.173               2       (139,305)
+u_Sensor_Image_XYCrop/add_27/n4             net          0.000             1.173               2       (139,305)
+u_Sensor_Image_XYCrop/add_27/i3|CI          adder        0.024             1.197               2       (139,306)
+u_Sensor_Image_XYCrop/add_27/i3|CO          adder        0.000             1.197               2       (139,306)
+u_Sensor_Image_XYCrop/add_27/n6             net          0.000             1.197               2       (139,306)
+u_Sensor_Image_XYCrop/add_27/i4|CI          adder        0.024             1.221               2       (139,307)
+u_Sensor_Image_XYCrop/add_27/i4|CO          adder        0.000             1.221               2       (139,307)
+u_Sensor_Image_XYCrop/add_27/n8             net          0.000             1.221               2       (139,307)
+u_Sensor_Image_XYCrop/add_27/i5|CI          adder        0.024             1.245               2       (139,308)
+u_Sensor_Image_XYCrop/add_27/i5|CO          adder        0.000             1.245               2       (139,308)
+u_Sensor_Image_XYCrop/add_27/n10            net          0.000             1.245               2       (139,308)
+u_Sensor_Image_XYCrop/add_27/i6|CI          adder        0.024             1.269               2       (139,309)
+u_Sensor_Image_XYCrop/add_27/i6|CO          adder        0.000             1.269               2       (139,309)
+u_Sensor_Image_XYCrop/add_27/n12            net          0.000             1.269               2       (139,309)
+u_Sensor_Image_XYCrop/add_27/i7|CI          adder        0.097             1.366               2       (139,310)
+u_Sensor_Image_XYCrop/add_27/i7|O           adder        0.000             1.366               2       (139,310)
+u_Sensor_Image_XYCrop/n92                   net          0.142             1.508               2       (139,310)
+LUT__23796|in[1]                            lut          0.063             1.571               2       (135,310)
+LUT__23796|out                              lut          0.000             1.571               2       (135,310)
+u_Sensor_Image_XYCrop/image_xpos[6]~FF|D    ff           0.003             1.574               2       (135,310)
+
+Capture Clock Path
+                   name                     model name   delay (ns)  cumulative delay (ns) pins on net    location
+====================================================================================================================
+cmos_pclk                                     inpad        0.000             0.000               0       (111,323)
+cmos_pclk                                     inpad        0.126             0.126             137       (111,323)
+cmos_pclk                                     net          1.948             2.074             137       (111,323)
+u_Sensor_Image_XYCrop/image_xpos[6]~FF|CLK    ff           0.000             2.074             137       (135,310)
+
+++++ Path 20 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : cmos_vsync                              
+Path End      : u_Sensor_Image_XYCrop/image_ypos[1]~FF|D
+Launch Clock  : cmos_pclk (FALL)                        
+Capture Clock : cmos_pclk (RISE)                        
+Slack         : 2.521 (required time - arrival time)    
+Delay         : 1.566                                   
+
+Logic Level             : 1
+Non-global nets on path : 1
+Global nets on path     : 0
+
+Launch Clock Path Delay        : 2.063
++ Clock To Q + Data Path Delay : 1.569
++ Input Delay                  : 0.795
+--------------------------------------
+End-of-path arrival time       : 4.427
+
+Constraint                     : 5.000
++ Capture Clock Path Delay     : 2.074
+- Clock Uncertainty            : 0.126
+--------------------------------------
+End-of-path required time      : 6.948
+
+Launch Clock Path
+         name            model name   delay (ns)  cumulative delay (ns) pins on net    location
+=================================================================================================
+cmos_pclk                  inpad        0.000             0.000               0       (111,323)
+cmos_pclk                  inpad        0.126             0.126             137       (111,323)
+cmos_pclk                  net          1.887             2.013             137       (111,323)
+cmos_pclk~CLKOUT~18~322    outpad       0.050             2.063             137       (18,323) 
+cmos_pclk~CLKOUT~18~322    outpad       0.000             2.063               0       (18,323) 
+
+Data Path
+                  name                    model name   delay (ns)  cumulative delay (ns) pins on net    location
+==================================================================================================================
+cmos_vsync                                  inpad        0.126             0.126               0       (0,321)  
+cmos_vsync                                  inpad        0.000             0.126              16       (0,321)  
+cmos_vsync                                  net          1.379             1.505              16       (0,321)  
+LUT__23790|in[0]                            lut          0.061             1.566              16       (122,306)
+LUT__23790|out                              lut          0.000             1.566               2       (122,306)
+u_Sensor_Image_XYCrop/image_ypos[1]~FF|D    ff           0.003             1.569               2       (122,306)
+
+Capture Clock Path
+                   name                     model name   delay (ns)  cumulative delay (ns) pins on net    location
+====================================================================================================================
+cmos_pclk                                     inpad        0.000             0.000               0       (111,323)
+cmos_pclk                                     inpad        0.126             0.126             137       (111,323)
+cmos_pclk                                     net          1.948             2.074             137       (111,323)
+u_Sensor_Image_XYCrop/image_ypos[1]~FF|CLK    ff           0.000             2.074             137       (122,306)
+
