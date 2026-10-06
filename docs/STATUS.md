@@ -4,7 +4,7 @@
 
 ## 当前阶段与交接
 
-- P0：其余需求仍待冻结；M0/M1/M2基础链路实物PASS，M2为新I3相机→DDR→HDMI、1280×720@60Hz、10～15分钟定性正常。**M3 m3_sobel_core：实物功能PASS、图像质量待调优；M3.1控制与阈值比较离线PASS、用户确认实物阈值正常；M3.2交付模块验收PASS，整机离线集成PASS，实物功能与当前运行条件下的稳定性验收PASS；窄hold裕量及跨PVT鲁棒性作为保留边界。**；M4～M7未开始。
+- P0：其余需求仍待冻结；M0/M1/M2基础链路实物PASS，M2为新I3相机→DDR→HDMI、1280×720@60Hz、10～15分钟定性正常。**M3 m3_sobel_core：实物功能PASS、图像质量待调优；M3.1控制与阈值比较离线PASS、用户确认实物阈值正常；M3.2交付模块验收PASS，整机离线集成PASS，实物功能与当前运行条件下的稳定性验收PASS；窄hold裕量及跨PVT鲁棒性作为保留边界。**；**M4离线仿真、完整I3编译、STA和实物功能验收PASS（保留已知首行异常）**；M5～M7未开始。
 - AGENTS.md 已经识别；已有自动模型调度原则保持不变。
 - 自动委派能力已经具备；历史骨架/Git初始化顺序委派Sol/Medium，M1与本轮M2按L3顺序委派Astra/Medium；同一时间只有一个主线写入者，主会话负责最终验收。
 - 文件化交接初始化已完成；M0最小LED副本基础验收通过并提交，M1实物验收见历史记录，本轮M2离线迁移收尾见文末及H-20261003-12。其余外设/需求仍不冻结。
@@ -275,3 +275,20 @@ M3.1历史构建的原位置生成物存在25项缺失、6项变化，不能完�
 
 ## 顺序提交记录（2026-10-06）
 M3.1已独立提交：742d8a461b36f5970f7caea04fb8f8c925fe8a02，feat: add runtime Sobel controls and OSD，203个文件、7774280字节（提交涉及文件的最终blob总大小）。父提交为M3 7a9b448080fd6f1624c2ef37ee2eb267fed49c82。M3.2将以此为直接父提交，feat: integrate optional median filter；其自身ID以git log为准，避免在提交内容中循环写入自身哈希。当前分支codex/m32-median-integration；仅归档与顺序提交，不进入M4。
+
+## 2026-10-06 M4历史离线完成状态（实物签收前）
+M4离线开发与完整编译通过，实物彩色叠加效果待验收。分支codex/m4-color-overlay，HEAD3424514afe1721dc000495673c0ca757ea1f6372不变，暂存区为空，未提交。新工程efinity/m4_color_overlay_i3，四模式RAW/MAG/BIN/OVR、20ms消抖、+16/−16阈值及帧边界生效、OSD优先；启用中值且保留配置旁路。总延迟3318拍；原三模式仅统一1651拍延迟、逐像素保持。四完整720p帧及三模式各921600像素回归，31小帧、21证据负向/10RTL故障通过。官方2025.1.110.5.9完整I3构建及94份最终STA通过，setup/hold+0.193/+0.023 ns，HDMI+11.315/+0.109 ns；8384 XLR/70 RAM/0 DSP。原2609个可读文件SHA/大小/mtime及文件集合不变，一项锁文件仅元数据核验；原1548未跟踪资料保留。Astra/ultra完成架构及初稿后触发用量限制，主会话接回全部验证/构建及独立复核。完整证据见../reports/m4_color_overlay_i3/BUILD_REPORT.md、ROOT_FINAL_REVIEW.json及PROPOSED_GIT_SCOPE.json。实物颜色/中心对齐、窄hold/PVT、PLL复位、旧Flash/R3/R4风险保留；未Programmer、下载、Flash、上板、断电、Canny、识别、合并main或推送。
+
+## 2026-10-06 M4实物签收与独立提交归档（当前）
+
+M4离线仿真、完整I3编译、STA和实物功能验收PASS。RAW、MAG、BIN、OVERLAY模式、阈值控制、OSD、红色边缘、空间对齐、动态更新及720p60输出正常。厂商AR0135参考链路继承的固定首行冻结异常作为已接受的延期问题保留，不属于M4新增回归。
+
+实物证据为用户文字确认：JTAG临时运行当前M4镜像，BIN/64启动；四模式循环BIN→OVERLAY→RAW→MAG→BIN，每次完整双键手势一次，单键不误切模式；RAW/MAG/BIN与M3.2视觉一致，纯红/灰度背景/OSD/三方向空间对齐/阈值/动态及连续运行检查通过。阈值仅改变BIN与OVERLAY边缘筛选，MAG幅值图不随阈值变化。除已知首行异常外，无用户列出的新增显示回归；运行具体时长和PVT条件未提供。
+
+**DEFERRED：厂商AR0135参考链路继承的固定首行冻结异常，用户已知并接受本阶段延期处理；待更换AR0135模块后复测。该问题尚未定位或修复。** 厂商原始01-1_Ti60_AR0135_HDMI_1280720参考bitstream在相同实物上同样存在；不能归因于M4叠加/3318拍延迟/Sobel/中值/I3迁移，也不能据此断言摄像头硬件根因或新模块必能修复。暂停诊断，后续换模块再交叉验证。
+
+最小setup/hold +0.193/+0.023 ns，hold为正但较窄；连续实物稳定不严格证明跨全部工艺、电压和温度稳定。PLL复位、I/O、CDC及旧Flash/R3/R4风险保留。完整结果见[实物验收报告](../reports/m4_color_overlay_i3/HARDWARE_ACCEPTANCE.md)与[构建报告](../reports/m4_color_overlay_i3/BUILD_REPORT.md)；原PASS_OFFLINE JSON保留历史时点含义。
+
+实际归档起点为codex/m4-color-overlay、M3.2提交3424514afe1721dc000495673c0ca757ea1f6372、空暂存区。bit只读复算2,179,422字节、SHA-256 `5cbaa12da39eb141d6b481299c496e9f71885edc1ba220f071aed88dff4f46d3`，匹配记录值。主会话核查2609个可读保护文件内容/大小/mtime未变，旧1548份未跟踪资料保留；文件集合仅旧GUI临时锁efinity/m32_median_integration_i3/.lock已不存在，原因未确认，未擅自删除或恢复。
+
+用户授权本轮feat: add real-time color edge overlay独立提交；主会话独立核对验收边界、实际文件清单、暂存blob和提交结果。M4自身ID以Git日志为准，避免在提交内容中循环写入自身哈希；提交清单重算，新增实物验收及本轮独立复核证据使文件数不机械沿用旧215。镜像/生成物/临时诊断/资料不提交。本轮不重新编译、Programmer、再次下载、Flash、继续诊断、M5、合并main或推送，提交后停止。

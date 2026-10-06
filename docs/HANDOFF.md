@@ -1,5 +1,44 @@
 # 星眸项目交接单
 
+## H-20261006-M4实物归档与独立提交（当前）
+
+### 1. 项目与结论
+`m4_color_overlay_i3`；**M4 PASS（保留已知首行异常）**。M4离线仿真、完整I3编译、STA和实物功能验收PASS。RAW、MAG、BIN、OVERLAY模式、阈值控制、OSD、红色边缘、空间对齐、动态更新及720p60输出正常。厂商AR0135参考链路继承的固定首行冻结异常作为已接受的延期问题保留，不属于M4新增回归。
+
+### 2. 真实基线
+分支`codex/m4-color-overlay`；本轮起始HEAD为M3.2 `3424514afe1721dc000495673c0ca757ea1f6372`、暂存区空。工作工程`efinity/m4_color_overlay_i3/Ti60_Demo.xml`。bit只读复算2,179,422字节，SHA-256 `5cbaa12da39eb141d6b481299c496e9f71885edc1ba220f071aed88dff4f46d3`，与用户已验收镜像记录一致，没有重新生成。
+
+### 3. 用户实物证据
+用户已JTAG临时下载并完成全部计划检查。BIN/64启动、720p60、RAW/MAG/BIN回归正常；BIN→OVERLAY→RAW→MAG→BIN，每次完整双键手势一次，单键不误切模式；纯红边缘/灰度背景/OSD覆盖/三方向中心对齐/阈值/动态和连续运行通过。MAG不受阈值修改。具体运行时长、Programmer完整日志及照片未提供。详见[实物验收](../reports/m4_color_overlay_i3/HARDWARE_ACCEPTANCE.md)。
+
+### 4. 延期问题与边界
+**DEFERRED：厂商AR0135参考链路继承的固定首行冻结异常，用户已知并接受本阶段延期处理；待更换AR0135模块后复测。该问题尚未定位或修复。** 厂商原始参考bitstream同实物也有该现象，非M4叠加、3318拍延迟、Sobel、中值或I3迁移新增回归；根因未定位，不能断言摄像头故障或新模块必能解决。用户暂停排查，后续更换模块再交叉验证。最小setup/hold +0.193/+0.023 ns；hold较窄，长时实物稳定不严格证明全PVT。PLL复位/I/O/CDC、旧Flash/R3/R4边界继续保留。
+
+### 5. 写入与委派
+本轮按用户指定由GPT-6 Astra / ultra归档文档；同一时间只有一个写入者。主会话独立复核验收语义、文件范围、逐项暂存blob及提交结果，负责唯一Git提交。允许范围为项目文档、M4报告和清单；既有离线ACCEPTANCE.json/ROOT_FINAL_REVIEW.json保留历史PASS_OFFLINE语义。
+
+### 6. 文件保护与范围
+主会话本轮核查2609个可读保护文件内容/大小/mtime未变、原1548份未跟踪资料保留。唯一集合差异是旧GUI临时锁`efinity/m32_median_integration_i3/.lock`已不存在，原因未确认，未删除或恢复。沿用M4报告目录，新增实物验收报告及主会话本轮复核证据；旧215清单需重新计算，最终数量、总大小及哈希以最新清单与实际暂存blob一致为准。bit/outflow/work/数据库/缓存/锁/波形/临时日志/reference/tools和无关首行诊断临时文件不提交。
+
+### 7. 独立提交与核查
+用户已授权`feat: add real-time color edge overlay`；父提交必须保持上述M3.2提交。主会话按清单逐项暂存，独立核对文件数/总大小/SHA及无生成物，然后提交。新提交自身ID以git log与主会话提交后报告为准；提交后核查分支、HEAD、父提交、信息、文件数/大小、空暂存区、跟踪工作区干净、未跟踪资料保留、bit未跟踪及M2～M3.2保护范围。
+
+### 8. 停止边界
+本轮不重新编译、不运行Programmer、不再次下载、不写Flash、不继续首行诊断、不修改业务RTL、不进入M5/Canny、不合并main、不推送、不删除资料。完成归档和独立提交后停止；下文均为历史交接，不取代本节当前结论与授权。
+
+## H-20261006-M4：历史离线任务交接
+
+### 架构放行
+主会话已独立追踪M32原RAW与边缘中心，批准统一输出光栅延迟方案：旧M32输出包延后1651拍，旧三模式像素及同步仅整体平移；当前边缘中心需等于延迟包slot坐标，OVERLAY背景用原始RAW，边界/无效/非法固定光栅帧禁止红。输入原像素n到M32输出n+1666、新packet n+3317、RGB OSD n+3318，最终以真实HDL验证为准。所有模式使用同一DE/HS/VS，不按模式切换光栅延迟。允许Astra作为唯一写入者实现与验证；主会话从此只读直到代理交回写入权。
+
+用户任务全文：本机附件6cdccd98-7463-4f79-a47d-578779549d91/已粘贴的文本.txt。当前目标为M4灰度背景与红色边缘叠加，优先从启用中值的M3.2已签收基线建立独立副本。实际HEAD为3424514afe1721dc000495673c0ca757ea1f6372，M3.1直接父提交为742d8a461b36f5970f7caea04fb8f8c925fe8a02；启动时已跟踪工作区及暂存区为空，未跟踪资料完整保留。
+
+委派GPT-6 Astra / ultra。第一步仅架构审查，先源码追踪RAW中心坐标、边缘及RGB/OSD通路，再由主会话复核后放行实现。顺序唯一写入者：Astra实现期间主会话仅只读复核。允许修改新efinity/m4_color_overlay_i3、rtl/tb/scripts的M4专用内容、reports/m4_color_overlay_i3及必要项目状态文档和定向忽略规则；不修改旧M2/M3/M3.1/M3.2工程或共享原算法核，不修改相机、DDR、FIFO、PLL、管脚和复位结构。分支codex/m4-color-overlay由主会话建立。
+
+验收：RAW/MAG/BIN行为保持，模式RAW→MAG→BIN→OVERLAY→RAW、按键+16/-16饱和及20ms消抖/释放/帧边界机制保持。OVERLAY背景为中心位置匹配的原始灰度，边缘有效且阈值通过时纯红，不完整窗口仍显示灰度背景；OSD优先。必须独立二维黄金、原三模式逐像素回归、至少两完整720p帧及用户指定负向验证。官方2025.1.110.5.9完整I3构建、最终内部及HDMI STA、coverage/CDC/I/O告警审计，源码/最终数据库/报告/bit哈希绑定，主会话独立核查。
+
+停止边界：只允许离线开发与编译结论，实物颜色和空间对齐待验收。禁止Programmer、JTAG、Flash、断电、上板、Canny/识别、历史资料清理；不暂存、不提交、不合并main、不推送。旧Flash/R3/R4与窄hold/PVT边界保留。保护旧工程前后内容、大小及mtime；不以旧报告代替M4证据。
+
 ## 1. 基本信息
 H-20261004-M31；阶段M3.1；项目m31_sobel_controls；L3按AGENTS自动委派GPT-6 Astra/Medium，主会话最终独立复核。用户授权先提交M3基线，再创建独立分支和英文路径工程副本；本轮不自动提交M3.1。
 
@@ -52,7 +91,7 @@ M31硬件新信息只确认阈值调节正常，旧Flash风险未关闭。用户
 User authorizes hardware acceptance archival and exactly ordered independent M31 then M32 commits on current development branch, no merge/push. First inspect real HEAD/index/file scopes and verify existing bit hashes without recompilation. Astra gpt-6-astra/ultra is delegated read-only review; ROOT sole writer and sole Git operator. Allowed writes: documentation, reviewed scope manifests and byte-preserving Git attributes; no RTL/clock/pins/IP changes. ROOT independently verifies dependency separation, source/DB/bit hashes, narrow hold/PVT wording, staged blobs and final commits. M31 shared RTL belongs only to first commit; M32 archive ZIP and generated artifacts excluded. Both commits exclude raw logs, caches, bit/wave/database, reference/tools. Generic shared docs/ignore are staged as reviewed M31-only snapshots first without overwriting current worktree, followed by final M32 versions. If scope cannot be reliably separated, stop before staging. No Programmer/download/Flash/power cycling/M4.
 
 
-## 当前实物验收与停止边界（2026-10-06）
+## 历史M3.2实物验收与停止边界（2026-10-06）
 用户反馈详见reports/m32_median_integration_i3/ACCEPTANCE_REPORT.md；M32模块、离线、实物功能及本次运行条件稳定性均PASS。高阈值噪点差异小合理，低阈值中值收益明显且主要边缘保留；不扩展为全部图像质量或严格跨PVT证明。启用版+0.026 ns窄hold、PLL复位、旧Flash冷启动/R3/R4共享风险仍保留。M31共享控制/OSD依赖先入第一提交，M32两工程及本轮验收后入第二提交。仅归档和提交，不编译、不运行Programmer、不下载、Flash、重复断电或M4开发。
 
 ## 本轮归档限制
@@ -60,3 +99,7 @@ M3.1历史构建的原位置生成物存在25项缺失、6项变化，不能完�
 
 ## 顺序提交记录（2026-10-06）
 M3.1已独立提交：742d8a461b36f5970f7caea04fb8f8c925fe8a02，feat: add runtime Sobel controls and OSD，203个文件、7774280字节（提交涉及文件的最终blob总大小）。父提交为M3 7a9b448080fd6f1624c2ef37ee2eb267fed49c82。M3.2将以此为直接父提交，feat: integrate optional median filter；其自身ID以git log为准，避免在提交内容中循环写入自身哈希。当前分支codex/m32-median-integration；仅归档与顺序提交，不进入M4。
+
+## H-20261006-M4历史离线最终交接（实物签收前）
+M4离线开发与完整编译通过，实物彩色叠加效果待验收。分支codex/m4-color-overlay，HEAD3424514afe1721dc000495673c0ca757ea1f6372不变，暂存区为空，未提交。新工程efinity/m4_color_overlay_i3，四模式RAW/MAG/BIN/OVR、20ms消抖、+16/−16阈值及帧边界生效、OSD优先；启用中值且保留配置旁路。总延迟3318拍；原三模式仅统一1651拍延迟、逐像素保持。四完整720p帧及三模式各921600像素回归，31小帧、21证据负向/10RTL故障通过。官方2025.1.110.5.9完整I3构建及94份最终STA通过，setup/hold+0.193/+0.023 ns，HDMI+11.315/+0.109 ns；8384 XLR/70 RAM/0 DSP。原2609个可读文件SHA/大小/mtime及文件集合不变，一项锁文件仅元数据核验；原1548未跟踪资料保留。Astra/ultra完成架构及初稿后触发用量限制，主会话接回全部验证/构建及独立复核。完整证据见../reports/m4_color_overlay_i3/BUILD_REPORT.md、ROOT_FINAL_REVIEW.json及PROPOSED_GIT_SCOPE.json。实物颜色/中心对齐、窄hold/PVT、PLL复位、旧Flash/R3/R4风险保留；未Programmer、下载、Flash、上板、断电、Canny、识别、合并main或推送。
+旧记录中的不进入M4为此前归档轮次停止边界；本轮由用户新授权覆盖。主会话为最终唯一写入者，代理已停止，等待用户实物签收。
