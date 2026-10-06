@@ -4,7 +4,7 @@
 
 ## 当前阶段与交接
 
-- P0：其余需求仍待冻结；M0/M1/M2基础链路实物PASS，M2为新I3相机→DDR→HDMI、1280×720@60Hz、10～15分钟定性正常。**M3 m3_sobel_core：实物功能PASS、图像质量待调优；M3.1控制与阈值比较离线PASS、用户确认实物阈值正常**；M4～M7未开始。
+- P0：其余需求仍待冻结；M0/M1/M2基础链路实物PASS，M2为新I3相机→DDR→HDMI、1280×720@60Hz、10～15分钟定性正常。**M3 m3_sobel_core：实物功能PASS、图像质量待调优；M3.1控制与阈值比较离线PASS、用户确认实物阈值正常；M3.2交付模块验收PASS，整机离线集成PASS，实物功能与当前运行条件下的稳定性验收PASS；窄hold裕量及跨PVT鲁棒性作为保留边界。**；M4～M7未开始。
 - AGENTS.md 已经识别；已有自动模型调度原则保持不变。
 - 自动委派能力已经具备；历史骨架/Git初始化顺序委派Sol/Medium，M1与本轮M2按L3顺序委派Astra/Medium；同一时间只有一个主线写入者，主会话负责最终验收。
 - 文件化交接初始化已完成；M0最小LED副本基础验收通过并提交，M1实物验收见历史记录，本轮M2离线迁移收尾见文末及H-20261003-12。其余外设/需求仍不冻结。
@@ -256,8 +256,22 @@ M3独立基线已保存：7a9b448080fd6f1624c2ef37ee2eb267fed49c82（feat: estab
 M3冻结提交7a9b448080fd6f1624c2ef37ee2eb267fed49c82；M3仍为实物功能PASS、图像质量待调优。分支codex/m31-sobel-controls，工作副本efinity/m31_sobel_controls_i3，M3.1仿真/完整编译/94份最终已约束STA PASS，实物未测试、不自动提交。主会话接管最终验收，实际运行1正向25负向、重新仿真，1018受保护文件无变化。报告见../reports/m31_sobel_controls_i3/BUILD_REPORT.md。旧Flash和PLL异步复位风险保留。两键原先复用旧LCD输出，M3不可按；仅M3.1通过官方API改输入。硬件未操作。
 
 
+## 2026-10-06 M3.2交付签收与离线集成
+- 用户确认M3.1已经上板且阈值调节正常；未补充全部模式与长期稳定性，不扩大实物结论。M3.1原工作树尚未提交，Git父提交仍为M3 7a9b448080fd6f1624c2ef37ee2eb267fed49c82。
+- M3.2交付模块独立验收PASS：安全ZIP核查、79文件完整清单/大小/SHA、Astra/Ultra静态审查、全部队友测试重跑、主会话独立排序黄金和负向测试均通过。见../reports/m32_median_review/MODULE_ACCEPTANCE.md。
+- 当前项目m32_median_integration，阶段M3.2；分支codex/m32-median-integration。仅创建efinity/m32_median_integration_i3及启用滤波变体m32_median_integration_enabled_i3，原M2/M3/M3.1及共享核保持不变。
+- Astra/Ultra完成模块与架构审查、首版新包装及官方配置；后续代理触发使用限额，主会话接管，独立完成整链路仿真、告警整改、两套完整Efinity 2025.1.110.5.9 I3编译、各94份最终STA、17项真实CLI负向验收及证据绑定。
+- M3.2离线集成PASS，实物未验证。默认旁路、启用滤波两种bit均已生成；RAW原灰度、MAG、BIN保持三模式与原两键手势，彩色仅预留数据接口。固定1650拍行周期，增加中心重锚与光栅延迟；不支持任意行内valid停顿的整链路重锚协议。
+- 旧Flash流水灯冷启动与相机共享R3/R4风险、PLL异步复位/失锁恢复、旧外设未约束I/O、窄hold裕量和散斑成因均保留。本轮未Programmer、下载、SPI Active操作或Flash；未暂存、未提交Git。见../reports/m32_median_integration_i3/BUILD_REPORT.md。
 
-## M3.1独立基线归档（2026-10-06）
-离线仿真、完整编译和已约束最终STA PASS；用户确认上板阈值调节正常。当前授权独立提交运行时控制、三模式、按键、消抖、帧边界更新及OSD；不编译、不下载、不写Flash、不进入后续开发。M3基线7a9b448080fd6f1624c2ef37ee2eb267fed49c82保持不变。
-## 归档证据与重放边界（2026-10-06）
-主会话与Astra独立核验94份历史最终STA，最小setup/hold为+0.187/+0.019 ns；保留的work/audit_20261004_120245副本bit、LPF、LBF均匹配历史构建及最终绑定。原outflow有25项缺失、6项改变，当前原目录验收器不能完整重放；本轮没有恢复生成物或重新编译，不宣称当前原目录完整验收器PASS。完整差异及证据见PRECOMMIT_EVIDENCE_CHECK.json。GUI XML仅运行状态及显式ooc=false变化，完整递归规范化与官方schema证明功能参数等价。日志、work、bit和数据库不提交，源输入、历史JSON绑定与STA文本报告归档。
+
+## 2026-10-06 M3.2实物签收与顺序提交
+用户明确确认默认旁路RAW/MAG/BIN、阈值/OSD及720p60正常；启用中值低阈值孤立白点明显减少、高阈值差异小，主要轮廓保留，无运动残影/异常边界/挥手后白点大幅持续增加。长时间连续运行与反复模式/阈值切换正常，具体时长、阈值值与PVT范围未提供。
+M3.2交付模块验收PASS，整机离线集成PASS，实物功能与当前运行条件下的稳定性验收PASS；窄hold裕量及跨PVT鲁棒性作为保留边界。启用版STA+0.194/+0.026 ns，长时实物正常不证明跨PVT。旧Flash冷启动/R3/R4风险保持。见../reports/m32_median_integration_i3/ACCEPTANCE_REPORT.md。
+本轮按实际HEAD确认M31尚未提交，用户授权先M31再M32独立提交；主会话独立核对清单、依赖、暂存blob与父子关系。最终提交以git log为准；不重新编译、不Programmer/下载/Flash/断电测试/M4，不合并main或推送。
+
+## 本轮归档限制
+M3.1历史构建的原位置生成物存在25项缺失、6项变化，不能完整重放原验收器；保留审计副本bit/LPF/LBF及94份STA已独立匹配。详见../reports/m31_sobel_controls_i3/PRECOMMIT_EVIDENCE_CHECK.json。本轮不恢复或重编译。M3.2历史交付重放需本地handoff交付内容；最终整机源码闭包已纳入清单。
+
+## 顺序提交记录（2026-10-06）
+M3.1已独立提交：742d8a461b36f5970f7caea04fb8f8c925fe8a02，feat: add runtime Sobel controls and OSD，203个文件、7774280字节（提交涉及文件的最终blob总大小）。父提交为M3 7a9b448080fd6f1624c2ef37ee2eb267fed49c82。M3.2将以此为直接父提交，feat: integrate optional median filter；其自身ID以git log为准，避免在提交内容中循环写入自身哈希。当前分支codex/m32-median-integration；仅归档与顺序提交，不进入M4。

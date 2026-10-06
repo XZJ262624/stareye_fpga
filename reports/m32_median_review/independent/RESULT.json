@@ -1,0 +1,258 @@
+{
+  "status": "PASS",
+  "golden": "ROOT-owned Python sorted[4], independent seed/data/protocol model; no delivery golden import",
+  "core_cycles": 387013,
+  "core_valid_outputs": 380486,
+  "permutations_1_to_9": 362880,
+  "binary_exhaustive": 512,
+  "random_windows": 20000,
+  "stream_cycles": 4503,
+  "stream_frames": 22,
+  "stream_valid_outputs": 1696,
+  "negative_tests": 1,
+  "commands": [
+    {
+      "command": [
+        "E:\\Modelsim_10.1c\\win64\\vlib.exe",
+        "work"
+      ],
+      "exit_code": 0,
+      "log": "vlib.log"
+    },
+    {
+      "command": [
+        "E:\\Modelsim_10.1c\\win64\\vlog.exe",
+        "-sv",
+        "-work",
+        "work",
+        "F:\\Projects\\stareye_fpga\\handoff\\review\\m32_median_filter_delivery\\task_workspace\\rtl\\line_buffer_3x3.v",
+        "F:\\Projects\\stareye_fpga\\handoff\\review\\m32_median_filter_delivery\\task_workspace\\rtl\\median_3x3.v",
+        "F:\\Projects\\stareye_fpga\\handoff\\review\\m32_median_filter_delivery\\task_workspace\\rtl\\median_stream_top.v",
+        "F:\\Projects\\stareye_fpga\\handoff\\review\\m32_median_filter_delivery\\task_workspace\\rtl\\window_3x3.v",
+        "F:\\Projects\\stareye_fpga\\handoff\\review\\m32_median_filter_delivery\\task_workspace\\tb\\tb_median_core.sv",
+        "F:\\Projects\\stareye_fpga\\handoff\\review\\m32_median_filter_delivery\\task_workspace\\tb\\tb_median_stream.sv"
+      ],
+      "exit_code": 0,
+      "log": "compile.log"
+    },
+    {
+      "command": [
+        "E:\\Modelsim_10.1c\\win64\\vsim.exe",
+        "-c",
+        "-novopt",
+        "-onfinish",
+        "stop",
+        "work.tb_median_core",
+        "+STIM=F:\\Projects\\stareye_fpga\\reports\\m32_median_review\\independent\\core_stim.txt",
+        "+GOLD=F:\\Projects\\stareye_fpga\\reports\\m32_median_review\\independent\\core_gold.txt",
+        "+OBS=F:\\Projects\\stareye_fpga\\reports\\m32_median_review\\independent\\core_obs.txt",
+        "-do",
+        "F:\\Projects\\stareye_fpga\\handoff\\review\\m32_median_filter_delivery\\task_workspace\\scripts\\run_core.do"
+      ],
+      "exit_code": 0,
+      "log": "core.log"
+    },
+    {
+      "command": [
+        "E:\\Modelsim_10.1c\\win64\\vsim.exe",
+        "-c",
+        "-novopt",
+        "-onfinish",
+        "stop",
+        "work.tb_median_stream",
+        "-gWIDTH=13",
+        "-gHEIGHT=9",
+        "+STIM=F:\\Projects\\stareye_fpga\\reports\\m32_median_review\\independent\\stream_stim.txt",
+        "+GOLD=F:\\Projects\\stareye_fpga\\reports\\m32_median_review\\independent\\stream_gold.txt",
+        "+OBS=F:\\Projects\\stareye_fpga\\reports\\m32_median_review\\independent\\stream_obs.txt",
+        "-do",
+        "F:\\Projects\\stareye_fpga\\handoff\\review\\m32_median_filter_delivery\\task_workspace\\scripts\\run_stream.do"
+      ],
+      "exit_code": 0,
+      "log": "stream.log"
+    },
+    {
+      "command": [
+        "E:\\Modelsim_10.1c\\win64\\vsim.exe",
+        "-c",
+        "-novopt",
+        "-onfinish",
+        "stop",
+        "work.tb_median_core",
+        "+STIM=F:\\Projects\\stareye_fpga\\reports\\m32_median_review\\independent\\core_stim.txt",
+        "+GOLD=F:\\Projects\\stareye_fpga\\reports\\m32_median_review\\independent\\bad_core_gold.txt",
+        "+OBS=F:\\Projects\\stareye_fpga\\reports\\m32_median_review\\independent\\bad_core_obs.txt",
+        "-do",
+        "F:\\Projects\\stareye_fpga\\handoff\\review\\m32_median_filter_delivery\\task_workspace\\scripts\\run_core.do"
+      ],
+      "exit_code": 1,
+      "log": "negative_core.log"
+    }
+  ],
+  "inputs_before": [
+    {
+      "path": "scripts/m32_median_independent_review.py",
+      "bytes": 7073,
+      "sha256": "a32518a56ede6a5299ebe9d1361ce5e67d67f36bdba64725396132002c2da494"
+    },
+    {
+      "path": "handoff/review/m32_median_filter_delivery/task_workspace/rtl/line_buffer_3x3.v",
+      "bytes": 2383,
+      "sha256": "d8f057a6f14970e771275a0347e39ba8e6080c4b24427348a7a0e21c60b8d904"
+    },
+    {
+      "path": "handoff/review/m32_median_filter_delivery/task_workspace/rtl/median_3x3.v",
+      "bytes": 1871,
+      "sha256": "1a216481bd2a375e2cf6d524630150213045b92d2cffdd7ca3b1a840eb8166e9"
+    },
+    {
+      "path": "handoff/review/m32_median_filter_delivery/task_workspace/rtl/median_stream_top.v",
+      "bytes": 3638,
+      "sha256": "8e5933dbcc10f01c47d217ba65ad3c5e6f358a50e490ad60a6cd698929a61d51"
+    },
+    {
+      "path": "handoff/review/m32_median_filter_delivery/task_workspace/rtl/window_3x3.v",
+      "bytes": 1004,
+      "sha256": "972a8c70c5f8a91f3e6533dd6f34d138e10074f8f4615ed6ad8f175c494173a6"
+    },
+    {
+      "path": "handoff/review/m32_median_filter_delivery/task_workspace/tb/tb_median_core.sv",
+      "bytes": 2031,
+      "sha256": "9b10bb5998c9a984d6439a2fcdb644e8aa8707a95798d675cc37698da02ab2ce"
+    },
+    {
+      "path": "handoff/review/m32_median_filter_delivery/task_workspace/tb/tb_median_stream.sv",
+      "bytes": 3497,
+      "sha256": "e096e0d15ae485980af717d7b894e5901c93a9c31d5ebbc488abbb3c2fe25bd6"
+    },
+    {
+      "path": "handoff/review/m32_median_filter_delivery/task_workspace/scripts/run_core.do",
+      "bytes": 325,
+      "sha256": "02e4356d98583c043c8e061dc93bbb9ebfda9c55d5f131a69cdda10cd69c6c1b"
+    },
+    {
+      "path": "handoff/review/m32_median_filter_delivery/task_workspace/scripts/run_stream.do",
+      "bytes": 329,
+      "sha256": "6a70ebe0d18c05e983081c215194b502f5c4b7edddb6a45d9a24730e4f2b4941"
+    }
+  ],
+  "inputs_after": [
+    {
+      "path": "scripts/m32_median_independent_review.py",
+      "bytes": 7073,
+      "sha256": "a32518a56ede6a5299ebe9d1361ce5e67d67f36bdba64725396132002c2da494"
+    },
+    {
+      "path": "handoff/review/m32_median_filter_delivery/task_workspace/rtl/line_buffer_3x3.v",
+      "bytes": 2383,
+      "sha256": "d8f057a6f14970e771275a0347e39ba8e6080c4b24427348a7a0e21c60b8d904"
+    },
+    {
+      "path": "handoff/review/m32_median_filter_delivery/task_workspace/rtl/median_3x3.v",
+      "bytes": 1871,
+      "sha256": "1a216481bd2a375e2cf6d524630150213045b92d2cffdd7ca3b1a840eb8166e9"
+    },
+    {
+      "path": "handoff/review/m32_median_filter_delivery/task_workspace/rtl/median_stream_top.v",
+      "bytes": 3638,
+      "sha256": "8e5933dbcc10f01c47d217ba65ad3c5e6f358a50e490ad60a6cd698929a61d51"
+    },
+    {
+      "path": "handoff/review/m32_median_filter_delivery/task_workspace/rtl/window_3x3.v",
+      "bytes": 1004,
+      "sha256": "972a8c70c5f8a91f3e6533dd6f34d138e10074f8f4615ed6ad8f175c494173a6"
+    },
+    {
+      "path": "handoff/review/m32_median_filter_delivery/task_workspace/tb/tb_median_core.sv",
+      "bytes": 2031,
+      "sha256": "9b10bb5998c9a984d6439a2fcdb644e8aa8707a95798d675cc37698da02ab2ce"
+    },
+    {
+      "path": "handoff/review/m32_median_filter_delivery/task_workspace/tb/tb_median_stream.sv",
+      "bytes": 3497,
+      "sha256": "e096e0d15ae485980af717d7b894e5901c93a9c31d5ebbc488abbb3c2fe25bd6"
+    },
+    {
+      "path": "handoff/review/m32_median_filter_delivery/task_workspace/scripts/run_core.do",
+      "bytes": 325,
+      "sha256": "02e4356d98583c043c8e061dc93bbb9ebfda9c55d5f131a69cdda10cd69c6c1b"
+    },
+    {
+      "path": "handoff/review/m32_median_filter_delivery/task_workspace/scripts/run_stream.do",
+      "bytes": 329,
+      "sha256": "6a70ebe0d18c05e983081c215194b502f5c4b7edddb6a45d9a24730e4f2b4941"
+    }
+  ],
+  "outputs": [
+    {
+      "path": "reports/m32_median_review/independent/bad_core_gold.txt",
+      "bytes": 4564916,
+      "sha256": "93e66010eeed436bc0480c975a997952a77f525cc65a58aa6b106a9f08be251f"
+    },
+    {
+      "path": "reports/m32_median_review/independent/bad_core_obs.txt",
+      "bytes": 78,
+      "sha256": "6b189ceb5c49db2371f8278c27e770e32ffa7787b44cc5ee48636b2a8935582f"
+    },
+    {
+      "path": "reports/m32_median_review/independent/compile.log",
+      "bytes": 345,
+      "sha256": "fafe6fa4a5ce498bd7a066a50e9bca309193f03b9e8578f8c46eaa35cad00291"
+    },
+    {
+      "path": "reports/m32_median_review/independent/core.log",
+      "bytes": 1564,
+      "sha256": "1e8b70331cb5e524e4a94849c487f2e909b43d0aae389a72ebc7c1dfe0406a60"
+    },
+    {
+      "path": "reports/m32_median_review/independent/core_gold.txt",
+      "bytes": 4564916,
+      "sha256": "8f9e16d68782390fd7a95ababede20a459b75f6420beb66528d569aca41f7668"
+    },
+    {
+      "path": "reports/m32_median_review/independent/core_obs.txt",
+      "bytes": 4564916,
+      "sha256": "8f9e16d68782390fd7a95ababede20a459b75f6420beb66528d569aca41f7668"
+    },
+    {
+      "path": "reports/m32_median_review/independent/core_stim.txt",
+      "bytes": 9247630,
+      "sha256": "7042c5eecaf5b0115d4504ba715399b9bd2c428e8fc97f1467f6705a0a6f7355"
+    },
+    {
+      "path": "reports/m32_median_review/independent/negative_core.log",
+      "bytes": 1557,
+      "sha256": "57233395a376dbbc75d7e87c3cf3148beb63721e4aed745bb0dd675f9068c751"
+    },
+    {
+      "path": "reports/m32_median_review/independent/stream.log",
+      "bytes": 1899,
+      "sha256": "7bca835534ef02dc515929382494eeae49f0ce8aae337936cd70040bf198cdd3"
+    },
+    {
+      "path": "reports/m32_median_review/independent/stream_gold.txt",
+      "bytes": 282874,
+      "sha256": "c76e642a30d1df3b222b3a981c3f9d5e3cccd3ca3ef6f0321496914f9a4fea0d"
+    },
+    {
+      "path": "reports/m32_median_review/independent/stream_obs.txt",
+      "bytes": 311252,
+      "sha256": "eec69eec5c1cba74446b9a8de556ff10b29f6b7fa5b432ced1c036b76f51337f"
+    },
+    {
+      "path": "reports/m32_median_review/independent/stream_stim.txt",
+      "bytes": 81191,
+      "sha256": "5b7f63aa9446a02785554bbf6801b638a90a6e34819a41d281243028a444a4f8"
+    },
+    {
+      "path": "reports/m32_median_review/independent/transcript",
+      "bytes": 1498,
+      "sha256": "e8bc2c81ebffb564588bc1f61eb250456f1156446f72acd5e32123e485fe18ad"
+    },
+    {
+      "path": "reports/m32_median_review/independent/vlib.log",
+      "bytes": 58,
+      "sha256": "c718211f3edf61dcdd3ba59b604d2736224a6787859276c62734ccfbf143b660"
+    }
+  ]
+}

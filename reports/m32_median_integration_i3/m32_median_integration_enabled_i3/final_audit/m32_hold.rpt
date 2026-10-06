@@ -1,0 +1,1466 @@
+
+Efinix Timing Path Constraint Report
+Version: 2025.1.110.5.9
+Date: Tue Oct  6 03:43:58 2026
+
+Copyright (C) 2013 - 2025 Efinix, Inc. All rights reserved.
+
+User command: report_timing -npaths 30 -nworst 1 -hold -detail full_path -file {m32_hold.rpt}
+
+Timing Model: I3
+	process : typical
+	temperature : -40C to 100C
+	voltage : 0.95 +/-30mV
+	speedgrade : 3
+	technology : t16ff
+	status : final
+
+Summary:
+
+ Path #  | Slack (ns) | Delay (ns) |                                                                         Start Pin                                                                          |                                                            End Pin                                                            |  Launch Clk   |  Capture Clk
+===============================================================================================================================================================================================================================================================================================================================================================
+  1      |  0.026     |  0.135     | u_axi4_ctrl/rfifo_wdata[127]~FF|Q                                                                                                                          | u_axi4_ctrl/Gen_RFIFO_8.u_R0_FIFO_8/u_efx_fifo_top/xefx_fifo_ram/ram__D$g1|WDATA[10]                                          | clk_sys (R)   | clk_sys (R)  
+  2      |  0.026     |  0.107     | XYCrop_frame_Gray[0]~FF|Q                                                                                                                                  | r_XYCrop_frame_Gray[0]~FF|D                                                                                                   | cmos_pclk (R) | cmos_pclk (R)
+  3      |  0.027     |  0.171     | ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/controller_main/dffrs_2532/i32_2|Q                                      | ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/controller_main/wr_data_buf_p[4][31]~FF|D  | twd_clk (R)   | twd_clk (R)  
+  4      |  0.027     |  0.136     | ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/i_phy_ddrA_cs~FF|Q                                                      | ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/ac_fifo/ram__D$b1|WDATA[8]                 | core_clk (R)  | core_clk (R) 
+  5      |  0.028     |  0.121     | ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/rst_ctrl0/genblk1[1].genblk1.genblk1.inst_sysclk_rstn/r_srst_1P[2]~FF|Q | ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/twd_clk_rstn~FF|D                          | twd_clk (R)   | twd_clk (R)  
+  6      |  0.031     |  0.175     | ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/controller_main/dffrs_2532/i123_2|Q                                     | ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/controller_main/wr_data_buf_p[4][122]~FF|D | twd_clk (R)   | twd_clk (R)  
+  7      |  0.032     |  0.141     | ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/w_rd_fifo_wr_data[61]~FF|Q                                              | ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_rd/xefx_fifo_ram/ram__D$c12|WDATA[3]  | tac_clk (R)   | tac_clk (R)  
+  8      |  0.033     |  0.142     | ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/i_phy_ddrB_addr[15]~FF|Q                                                | ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/ac_fifo/ram__D$12|WDATA[13]                | core_clk (R)  | core_clk (R) 
+  9      |  0.033     |  0.142     | u_axi4_ctrl/rfifo_wdata[103]~FF|Q                                                                                                                          | u_axi4_ctrl/Gen_RFIFO_8.u_R0_FIFO_8/u_efx_fifo_top/xefx_fifo_ram/ram__D$g1|WDATA[13]                                          | clk_sys (R)   | clk_sys (R)  
+ 10      |  0.034     |  0.143     | u_m32_stream/u_median/bottom_pixel[3]~FF|Q                                                                                                                 | u_m32_stream/u_median/u_lines/row1__D$2|WDATA[3]                                                                              | clk_pixel (R) | clk_pixel (R)
+ 11      |  0.035     |  0.033     | ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/U_SRL8_D[3].U_SRL8_W[7].srl8_inst|Q7                                          | ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/U_SRL8_D[2].U_SRL8_W[7].srl8_inst|D              | clk_sys (R)   | clk_sys (R)  
+ 12      |  0.035     |  0.033     | ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/U_SRL8_D[3].U_SRL8_W[26].srl8_inst|Q7                                         | ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/U_SRL8_D[2].U_SRL8_W[26].srl8_inst|D             | clk_sys (R)   | clk_sys (R)  
+ 13      |  0.035     |  0.033     | ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/U_SRL8_D[3].U_SRL8_W[19].srl8_inst|Q7                                         | ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/U_SRL8_D[2].U_SRL8_W[19].srl8_inst|D             | clk_sys (R)   | clk_sys (R)  
+ 14      |  0.035     |  0.033     | ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/U_SRL8_D[3].U_SRL8_W[27].srl8_inst|Q7                                         | ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/U_SRL8_D[2].U_SRL8_W[27].srl8_inst|D             | clk_sys (R)   | clk_sys (R)  
+ 15      |  0.035     |  0.033     | ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/U_SRL8_D[3].U_SRL8_W[25].srl8_inst|Q7                                         | ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/U_SRL8_D[2].U_SRL8_W[25].srl8_inst|D             | clk_sys (R)   | clk_sys (R)  
+ 16      |  0.035     |  0.033     | ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/U_SRL8_D[2].U_SRL8_W[13].srl8_inst|Q7                                         | ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/U_SRL8_D[1].U_SRL8_W[13].srl8_inst|D             | clk_sys (R)   | clk_sys (R)  
+ 17      |  0.035     |  0.033     | ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/U_SRL8_D[3].U_SRL8_W[17].srl8_inst|Q7                                         | ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/U_SRL8_D[2].U_SRL8_W[17].srl8_inst|D             | clk_sys (R)   | clk_sys (R)  
+ 18      |  0.035     |  0.033     | ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/U_SRL8_D[3].U_SRL8_W[16].srl8_inst|Q7                                         | ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/U_SRL8_D[2].U_SRL8_W[16].srl8_inst|D             | clk_sys (R)   | clk_sys (R)  
+ 19      |  0.035     |  0.033     | ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/U_SRL8_D[3].U_SRL8_W[22].srl8_inst|Q7                                         | ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/U_SRL8_D[2].U_SRL8_W[22].srl8_inst|D             | clk_sys (R)   | clk_sys (R)  
+ 20      |  0.035     |  0.033     | ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/U_SRL8_D[3].U_SRL8_W[21].srl8_inst|Q7                                         | ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/U_SRL8_D[2].U_SRL8_W[21].srl8_inst|D             | clk_sys (R)   | clk_sys (R)  
+ 21      |  0.035     |  0.033     | ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/U_SRL8_D[3].U_SRL8_W[20].srl8_inst|Q7                                         | ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/U_SRL8_D[2].U_SRL8_W[20].srl8_inst|D             | clk_sys (R)   | clk_sys (R)  
+ 22      |  0.035     |  0.033     | ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/U_SRL8_D[2].U_SRL8_W[24].srl8_inst|Q7                                         | ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/U_SRL8_D[1].U_SRL8_W[24].srl8_inst|D             | clk_sys (R)   | clk_sys (R)  
+ 23      |  0.035     |  0.033     | ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/U_SRL8_D[2].U_SRL8_W[26].srl8_inst|Q7                                         | ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/U_SRL8_D[1].U_SRL8_W[26].srl8_inst|D             | clk_sys (R)   | clk_sys (R)  
+ 24      |  0.035     |  0.033     | ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/U_SRL8_D[2].U_SRL8_W[11].srl8_inst|Q7                                         | ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/U_SRL8_D[1].U_SRL8_W[11].srl8_inst|D             | clk_sys (R)   | clk_sys (R)  
+ 25      |  0.035     |  0.033     | ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/U_SRL8_D[3].U_SRL8_W[15].srl8_inst|Q7                                         | ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/U_SRL8_D[2].U_SRL8_W[15].srl8_inst|D             | clk_sys (R)   | clk_sys (R)  
+ 26      |  0.035     |  0.033     | ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/U_SRL8_D[3].U_SRL8_W[12].srl8_inst|Q7                                         | ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/U_SRL8_D[2].U_SRL8_W[12].srl8_inst|D             | clk_sys (R)   | clk_sys (R)  
+ 27      |  0.035     |  0.033     | ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/U_SRL8_D[3].U_SRL8_W[14].srl8_inst|Q7                                         | ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/U_SRL8_D[2].U_SRL8_W[14].srl8_inst|D             | clk_sys (R)   | clk_sys (R)  
+ 28      |  0.035     |  0.033     | ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/U_SRL8_D[2].U_SRL8_W[5].srl8_inst|Q7                                          | ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/U_SRL8_D[1].U_SRL8_W[5].srl8_inst|D              | clk_sys (R)   | clk_sys (R)  
+ 29      |  0.035     |  0.033     | ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/U_SRL8_D[3].U_SRL8_W[24].srl8_inst|Q7                                         | ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/U_SRL8_D[2].U_SRL8_W[24].srl8_inst|D             | clk_sys (R)   | clk_sys (R)  
+ 30      |  0.035     |  0.033     | ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/U_SRL8_D[2].U_SRL8_W[4].srl8_inst|Q7                                          | ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/U_SRL8_D[1].U_SRL8_W[4].srl8_inst|D              | clk_sys (R)   | clk_sys (R)  
+
+++++ Path 1 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : u_axi4_ctrl/rfifo_wdata[127]~FF|CLK                                                 
+Path End      : u_axi4_ctrl/Gen_RFIFO_8.u_R0_FIFO_8/u_efx_fifo_top/xefx_fifo_ram/ram__D$g1|WDATA[10]
+Launch Clock  : clk_sys (RISE)                                                                      
+Capture Clock : clk_sys (RISE)                                                                      
+Slack         : 0.026 (arrival time - required time)                                                
+Delay         : 0.135                                                                               
+
+Logic Level             : 0
+Non-global nets on path : 1
+Global nets on path     : 0
+
+Launch Clock Path Delay        : 1.189
++ Clock To Q + Data Path Delay : 0.096
+--------------------------------------
+End-of-path arrival time       : 1.285
+
+Constraint                     : 0.000
++ Capture Clock Path Delay     : 1.189
++ Clock Uncertainty            : 0.070
+--------------------------------------
+End-of-path required time      : 1.259
+
+Launch Clock Path
+               name                  model name   delay (ns)  cumulative delay (ns) pins on net    location
+=============================================================================================================
+clk_sys                                inpad        0.000             0.000                0       (0,162) 
+clk_sys                                inpad        0.070             0.070             1475       (0,162) 
+clk_sys                                net          1.119             1.189             1475       (0,162) 
+u_axi4_ctrl/rfifo_wdata[127]~FF|CLK    ff           0.000             1.189             1475       (131,52)
+
+Data Path
+                                        name                                          model name   delay (ns)  cumulative delay (ns) pins on net    location
+==============================================================================================================================================================
+u_axi4_ctrl/rfifo_wdata[127]~FF|Q                                                    ff               0.072            0.072              2         (131,52)
+u_axi4_ctrl/rfifo_wdata[127]                                                         net              0.135            0.207              2         (131,52)
+u_axi4_ctrl/Gen_RFIFO_8.u_R0_FIFO_8/u_efx_fifo_top/xefx_fifo_ram/ram__D$g1|WDATA[10] ram_8192x20     -0.111            0.096              2         (132,42)
+
+Capture Clock Path
+                                     name                                        model name   delay (ns)  cumulative delay (ns) pins on net    location
+=========================================================================================================================================================
+clk_sys                                                                         inpad           0.000             0.000                0       (0,162) 
+clk_sys                                                                         inpad           0.070             0.070             1475       (0,162) 
+clk_sys                                                                         net             1.119             1.189             1475       (0,162) 
+u_axi4_ctrl/Gen_RFIFO_8.u_R0_FIFO_8/u_efx_fifo_top/xefx_fifo_ram/ram__D$g1|WCLK ram_8192x20     0.000             1.189             1475       (132,42)
+
+++++ Path 2 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : XYCrop_frame_Gray[0]~FF|CLK         
+Path End      : r_XYCrop_frame_Gray[0]~FF|D         
+Launch Clock  : cmos_pclk (RISE)                    
+Capture Clock : cmos_pclk (RISE)                    
+Slack         : 0.026 (arrival time - required time)
+Delay         : 0.107                               
+
+Logic Level             : 0
+Non-global nets on path : 1
+Global nets on path     : 0
+
+Launch Clock Path Delay        : 1.804
++ Clock To Q + Data Path Delay : 0.096
+--------------------------------------
+End-of-path arrival time       : 1.900
+
+Constraint                     : 0.000
++ Capture Clock Path Delay     : 1.804
++ Clock Uncertainty            : 0.070
+--------------------------------------
+End-of-path required time      : 1.874
+
+Launch Clock Path
+           name              model name   delay (ns)  cumulative delay (ns) pins on net    location
+=====================================================================================================
+cmos_pclk                      inpad        0.000             0.000               0       (111,323)
+cmos_pclk                      inpad        0.070             0.070             137       (111,323)
+cmos_pclk                      net          1.734             1.804             137       (111,323)
+XYCrop_frame_Gray[0]~FF|CLK    ff           0.000             1.804             137       (47,34)  
+
+Data Path
+           name              model name   delay (ns)  cumulative delay (ns) pins on net    location
+=====================================================================================================
+XYCrop_frame_Gray[0]~FF|Q       ff           0.072            0.072              2         (47,34)
+XYCrop_frame_Gray[0]            net          0.107            0.179              2         (47,34)
+r_XYCrop_frame_Gray[0]~FF|D     ff          -0.083            0.096              2         (47,35)
+
+Capture Clock Path
+            name               model name   delay (ns)  cumulative delay (ns) pins on net    location
+=======================================================================================================
+cmos_pclk                        inpad        0.000             0.000               0       (111,323)
+cmos_pclk                        inpad        0.070             0.070             137       (111,323)
+cmos_pclk                        net          1.734             1.804             137       (111,323)
+r_XYCrop_frame_Gray[0]~FF|CLK    ff           0.000             1.804             137       (47,35)  
+
+++++ Path 3 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/controller_main/dffrs_2532/i32_2|CLK     
+Path End      : ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/controller_main/wr_data_buf_p[4][31]~FF|D
+Launch Clock  : twd_clk (RISE)                                                                                                              
+Capture Clock : twd_clk (RISE)                                                                                                              
+Slack         : 0.027 (arrival time - required time)                                                                                        
+Delay         : 0.171                                                                                                                       
+
+Logic Level             : 1
+Non-global nets on path : 1
+Global nets on path     : 0
+
+Launch Clock Path Delay        : 1.207
++ Clock To Q + Data Path Delay : 0.224
+--------------------------------------
+End-of-path arrival time       : 1.431
+
+Constraint                     : 0.000
++ Capture Clock Path Delay     : 1.334
++ Clock Uncertainty            : 0.070
+--------------------------------------
+End-of-path required time      : 1.404
+
+Launch Clock Path
+                                                         name                                                            model name   delay (ns)  cumulative delay (ns) pins on net    location
+=================================================================================================================================================================================================
+twd_clk                                                                                                                    inpad        0.000             0.000               0       (219,159)
+twd_clk                                                                                                                    inpad        0.070             0.070             429       (219,159)
+twd_clk                                                                                                                    net          1.137             1.207             429       (219,159)
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/controller_main/dffrs_2532/i32_2|CLK    srl8         0.000             1.207             429       (57,20)  
+
+Data Path
+                                                            name                                                              model name   delay (ns)  cumulative delay (ns) pins on net    location
+======================================================================================================================================================================================================
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/controller_main/dffrs_2532/i32_2|Q            srl8         0.072            0.072              2         (57,20)
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/controller_main/dffrs_2532/i32_pre            net          0.136            0.208              2         (57,20)
+LUT__24580|in[0]                                                                                                                 lut          0.035            0.243              2         (69,20)
+LUT__24580|out                                                                                                                   lut          0.000            0.243              2         (69,20)
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/controller_main/wr_data_buf_p[4][31]~FF|D     ff          -0.019            0.224              2         (69,20)
+
+Capture Clock Path
+                                                             name                                                               model name   delay (ns)  cumulative delay (ns) pins on net    location
+========================================================================================================================================================================================================
+twd_clk                                                                                                                           inpad        0.000             0.000               0       (219,159)
+twd_clk                                                                                                                           inpad        0.070             0.070             429       (219,159)
+twd_clk                                                                                                                           net          1.264             1.334             429       (219,159)
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/controller_main/wr_data_buf_p[4][31]~FF|CLK    ff           0.000             1.334             429       (69,20)  
+
+++++ Path 4 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/i_phy_ddrA_cs~FF|CLK      
+Path End      : ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/ac_fifo/ram__D$b1|WDATA[8]
+Launch Clock  : core_clk (RISE)                                                                                              
+Capture Clock : core_clk (RISE)                                                                                              
+Slack         : 0.027 (arrival time - required time)                                                                         
+Delay         : 0.136                                                                                                        
+
+Logic Level             : 0
+Non-global nets on path : 1
+Global nets on path     : 0
+
+Launch Clock Path Delay        : 1.157
++ Clock To Q + Data Path Delay : 0.097
+--------------------------------------
+End-of-path arrival time       : 1.254
+
+Constraint                     : 0.000
++ Capture Clock Path Delay     : 1.157
++ Clock Uncertainty            : 0.070
+--------------------------------------
+End-of-path required time      : 1.227
+
+Launch Clock Path
+                                                 name                                                    model name   delay (ns)  cumulative delay (ns) pins on net    location
+=================================================================================================================================================================================
+core_clk                                                                                                   inpad        0.000             0.000               0       (219,164)
+core_clk                                                                                                   inpad        0.070             0.070             811       (219,164)
+core_clk                                                                                                   net          1.087             1.157             811       (219,164)
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/i_phy_ddrA_cs~FF|CLK    ff           0.000             1.157             811       (169,50) 
+
+Data Path
+                                                    name                                                       model name   delay (ns)  cumulative delay (ns) pins on net    location
+=======================================================================================================================================================================================
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/i_phy_ddrA_cs~FF|Q         ff               0.072            0.072              2         (169,50)
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/i_phy_ddrA_cs              net              0.136            0.208              2         (169,50)
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/ac_fifo/ram__D$b1|WDATA[8] ram_8192x20     -0.111            0.097              2         (171,42)
+
+Capture Clock Path
+                                                  name                                                     model name   delay (ns)  cumulative delay (ns) pins on net    location
+===================================================================================================================================================================================
+core_clk                                                                                                  inpad           0.000             0.000               0       (219,164)
+core_clk                                                                                                  inpad           0.070             0.070             811       (219,164)
+core_clk                                                                                                  net             1.087             1.157             811       (219,164)
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/ac_fifo/ram__D$b1|WCLK ram_8192x20     0.000             1.157             811       (171,42) 
+
+++++ Path 5 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/rst_ctrl0/genblk1[1].genblk1.genblk1.inst_sysclk_rstn/r_srst_1P[2]~FF|CLK
+Path End      : ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/twd_clk_rstn~FF|D                                                        
+Launch Clock  : twd_clk (RISE)                                                                                                                                              
+Capture Clock : twd_clk (RISE)                                                                                                                                              
+Slack         : 0.028 (arrival time - required time)                                                                                                                        
+Delay         : 0.121                                                                                                                                                       
+
+Logic Level             : 0
+Non-global nets on path : 1
+Global nets on path     : 0
+
+Launch Clock Path Delay        : 1.916
++ Clock To Q + Data Path Delay : 0.098
+--------------------------------------
+End-of-path arrival time       : 2.014
+
+Constraint                     : 0.000
++ Capture Clock Path Delay     : 1.916
++ Clock Uncertainty            : 0.070
+--------------------------------------
+End-of-path required time      : 1.986
+
+Launch Clock Path
+                                                                            name                                                                              model name   delay (ns)  cumulative delay (ns) pins on net    location
+======================================================================================================================================================================================================================================
+twd_clk                                                                                                                                                         inpad        0.000             0.000               0       (219,159)
+twd_clk                                                                                                                                                         inpad        0.070             0.070             429       (219,159)
+twd_clk                                                                                                                                                         net          1.846             1.916             429       (219,159)
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/rst_ctrl0/genblk1[1].genblk1.genblk1.inst_sysclk_rstn/r_srst_1P[2]~FF|CLK    ff           0.000             1.916             429       (95,20)  
+
+Data Path
+                                                                           name                                                                             model name   delay (ns)  cumulative delay (ns) pins on net    location
+====================================================================================================================================================================================================================================
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/rst_ctrl0/genblk1[1].genblk1.genblk1.inst_sysclk_rstn/r_srst_1P[2]~FF|Q     ff           0.072            0.072              2         (95,20)
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/rst_ctrl0/genblk1[1].genblk1.genblk1.inst_sysclk_rstn/r_srst_1P[2]          net          0.121            0.193              2         (95,20)
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/twd_clk_rstn~FF|D                                                           ff          -0.095            0.098              2         (95,23)
+
+Capture Clock Path
+                                                 name                                                   model name   delay (ns)  cumulative delay (ns) pins on net    location
+================================================================================================================================================================================
+twd_clk                                                                                                   inpad        0.000             0.000               0       (219,159)
+twd_clk                                                                                                   inpad        0.070             0.070             429       (219,159)
+twd_clk                                                                                                   net          1.846             1.916             429       (219,159)
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/twd_clk_rstn~FF|CLK    ff           0.000             1.916             429       (95,23)  
+
+++++ Path 6 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/controller_main/dffrs_2532/i123_2|CLK     
+Path End      : ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/controller_main/wr_data_buf_p[4][122]~FF|D
+Launch Clock  : twd_clk (RISE)                                                                                                               
+Capture Clock : twd_clk (RISE)                                                                                                               
+Slack         : 0.031 (arrival time - required time)                                                                                         
+Delay         : 0.175                                                                                                                        
+
+Logic Level             : 1
+Non-global nets on path : 1
+Global nets on path     : 0
+
+Launch Clock Path Delay        : 1.207
++ Clock To Q + Data Path Delay : 0.228
+--------------------------------------
+End-of-path arrival time       : 1.435
+
+Constraint                     : 0.000
++ Capture Clock Path Delay     : 1.334
++ Clock Uncertainty            : 0.070
+--------------------------------------
+End-of-path required time      : 1.404
+
+Launch Clock Path
+                                                          name                                                            model name   delay (ns)  cumulative delay (ns) pins on net    location
+==================================================================================================================================================================================================
+twd_clk                                                                                                                     inpad        0.000             0.000               0       (219,159)
+twd_clk                                                                                                                     inpad        0.070             0.070             429       (219,159)
+twd_clk                                                                                                                     net          1.137             1.207             429       (219,159)
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/controller_main/dffrs_2532/i123_2|CLK    srl8         0.000             1.207             429       (75,28)  
+
+Data Path
+                                                            name                                                               model name   delay (ns)  cumulative delay (ns) pins on net    location
+=======================================================================================================================================================================================================
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/controller_main/dffrs_2532/i123_2|Q            srl8         0.072            0.072              2         (75,28)
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/controller_main/dffrs_2532/i123_pre            net          0.140            0.212              2         (75,28)
+LUT__24438|in[0]                                                                                                                  lut          0.035            0.247              2         (69,28)
+LUT__24438|out                                                                                                                    lut          0.000            0.247              2         (69,28)
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/controller_main/wr_data_buf_p[4][122]~FF|D     ff          -0.019            0.228              2         (69,28)
+
+Capture Clock Path
+                                                             name                                                                model name   delay (ns)  cumulative delay (ns) pins on net    location
+=========================================================================================================================================================================================================
+twd_clk                                                                                                                            inpad        0.000             0.000               0       (219,159)
+twd_clk                                                                                                                            inpad        0.070             0.070             429       (219,159)
+twd_clk                                                                                                                            net          1.264             1.334             429       (219,159)
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/controller_main/wr_data_buf_p[4][122]~FF|CLK    ff           0.000             1.334             429       (69,28)  
+
+++++ Path 7 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/w_rd_fifo_wr_data[61]~FF|CLK             
+Path End      : ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_rd/xefx_fifo_ram/ram__D$c12|WDATA[3]
+Launch Clock  : tac_clk (RISE)                                                                                                              
+Capture Clock : tac_clk (RISE)                                                                                                              
+Slack         : 0.032 (arrival time - required time)                                                                                        
+Delay         : 0.141                                                                                                                       
+
+Logic Level             : 0
+Non-global nets on path : 1
+Global nets on path     : 0
+
+Launch Clock Path Delay        : 1.203
++ Clock To Q + Data Path Delay : 0.102
+--------------------------------------
+End-of-path arrival time       : 1.305
+
+Constraint                     : 0.000
++ Capture Clock Path Delay     : 1.203
++ Clock Uncertainty            : 0.070
+--------------------------------------
+End-of-path required time      : 1.273
+
+Launch Clock Path
+                                                     name                                                        model name   delay (ns)  cumulative delay (ns) pins on net    location
+=========================================================================================================================================================================================
+tac_clk                                                                                                            inpad        0.000             0.000               0        (111,0) 
+tac_clk                                                                                                            inpad        0.070             0.070             332        (111,0) 
+tac_clk                                                                                                            net          1.133             1.203             332        (111,0) 
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/w_rd_fifo_wr_data[61]~FF|CLK    ff           0.000             1.203             332        (121,25)
+
+Data Path
+                                                            name                                                              model name   delay (ns)  cumulative delay (ns) pins on net    location
+======================================================================================================================================================================================================
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/w_rd_fifo_wr_data[61]~FF|Q                ff               0.072            0.072              3         (121,25)
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/w_rd_fifo_wr_data[61]                     net              0.141            0.213              3         (121,25)
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_rd/xefx_fifo_ram/ram__D$c12|WDATA[3] ram_8192x20     -0.111            0.102              3         (117,22)
+
+Capture Clock Path
+                                                          name                                                            model name   delay (ns)  cumulative delay (ns) pins on net    location
+==================================================================================================================================================================================================
+tac_clk                                                                                                                  inpad           0.000             0.000               0        (111,0) 
+tac_clk                                                                                                                  inpad           0.070             0.070             332        (111,0) 
+tac_clk                                                                                                                  net             1.133             1.203             332        (111,0) 
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_rd/xefx_fifo_ram/ram__D$c12|WCLK ram_8192x20     0.000             1.203             332        (117,22)
+
+++++ Path 8 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/i_phy_ddrB_addr[15]~FF|CLK 
+Path End      : ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/ac_fifo/ram__D$12|WDATA[13]
+Launch Clock  : core_clk (RISE)                                                                                               
+Capture Clock : core_clk (RISE)                                                                                               
+Slack         : 0.033 (arrival time - required time)                                                                          
+Delay         : 0.142                                                                                                         
+
+Logic Level             : 0
+Non-global nets on path : 1
+Global nets on path     : 0
+
+Launch Clock Path Delay        : 1.157
++ Clock To Q + Data Path Delay : 0.103
+--------------------------------------
+End-of-path arrival time       : 1.260
+
+Constraint                     : 0.000
++ Capture Clock Path Delay     : 1.157
++ Clock Uncertainty            : 0.070
+--------------------------------------
+End-of-path required time      : 1.227
+
+Launch Clock Path
+                                                    name                                                       model name   delay (ns)  cumulative delay (ns) pins on net    location
+=======================================================================================================================================================================================
+core_clk                                                                                                         inpad        0.000             0.000               0       (219,164)
+core_clk                                                                                                         inpad        0.070             0.070             811       (219,164)
+core_clk                                                                                                         net          1.087             1.157             811       (219,164)
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/i_phy_ddrB_addr[15]~FF|CLK    ff           0.000             1.157             811       (158,55) 
+
+Data Path
+                                                     name                                                       model name   delay (ns)  cumulative delay (ns) pins on net    location
+========================================================================================================================================================================================
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/i_phy_ddrB_addr[15]~FF|Q    ff               0.072            0.072              2         (158,55)
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/i_phy_ddrB_addr[15]         net              0.142            0.214              2         (158,55)
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/ac_fifo/ram__D$12|WDATA[13] ram_8192x20     -0.111            0.103              2         (156,42)
+
+Capture Clock Path
+                                                  name                                                     model name   delay (ns)  cumulative delay (ns) pins on net    location
+===================================================================================================================================================================================
+core_clk                                                                                                  inpad           0.000             0.000               0       (219,164)
+core_clk                                                                                                  inpad           0.070             0.070             811       (219,164)
+core_clk                                                                                                  net             1.087             1.157             811       (219,164)
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/ac_fifo/ram__D$12|WCLK ram_8192x20     0.000             1.157             811       (156,42) 
+
+++++ Path 9 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : u_axi4_ctrl/rfifo_wdata[103]~FF|CLK                                                 
+Path End      : u_axi4_ctrl/Gen_RFIFO_8.u_R0_FIFO_8/u_efx_fifo_top/xefx_fifo_ram/ram__D$g1|WDATA[13]
+Launch Clock  : clk_sys (RISE)                                                                      
+Capture Clock : clk_sys (RISE)                                                                      
+Slack         : 0.033 (arrival time - required time)                                                
+Delay         : 0.142                                                                               
+
+Logic Level             : 0
+Non-global nets on path : 1
+Global nets on path     : 0
+
+Launch Clock Path Delay        : 1.189
++ Clock To Q + Data Path Delay : 0.103
+--------------------------------------
+End-of-path arrival time       : 1.292
+
+Constraint                     : 0.000
++ Capture Clock Path Delay     : 1.189
++ Clock Uncertainty            : 0.070
+--------------------------------------
+End-of-path required time      : 1.259
+
+Launch Clock Path
+               name                  model name   delay (ns)  cumulative delay (ns) pins on net    location
+=============================================================================================================
+clk_sys                                inpad        0.000             0.000                0       (0,162) 
+clk_sys                                inpad        0.070             0.070             1475       (0,162) 
+clk_sys                                net          1.119             1.189             1475       (0,162) 
+u_axi4_ctrl/rfifo_wdata[103]~FF|CLK    ff           0.000             1.189             1475       (134,55)
+
+Data Path
+                                        name                                          model name   delay (ns)  cumulative delay (ns) pins on net    location
+==============================================================================================================================================================
+u_axi4_ctrl/rfifo_wdata[103]~FF|Q                                                    ff               0.072            0.072              2         (134,55)
+u_axi4_ctrl/rfifo_wdata[103]                                                         net              0.142            0.214              2         (134,55)
+u_axi4_ctrl/Gen_RFIFO_8.u_R0_FIFO_8/u_efx_fifo_top/xefx_fifo_ram/ram__D$g1|WDATA[13] ram_8192x20     -0.111            0.103              2         (132,42)
+
+Capture Clock Path
+                                     name                                        model name   delay (ns)  cumulative delay (ns) pins on net    location
+=========================================================================================================================================================
+clk_sys                                                                         inpad           0.000             0.000                0       (0,162) 
+clk_sys                                                                         inpad           0.070             0.070             1475       (0,162) 
+clk_sys                                                                         net             1.119             1.189             1475       (0,162) 
+u_axi4_ctrl/Gen_RFIFO_8.u_R0_FIFO_8/u_efx_fifo_top/xefx_fifo_ram/ram__D$g1|WCLK ram_8192x20     0.000             1.189             1475       (132,42)
+
+++++ Path 10 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : u_m32_stream/u_median/bottom_pixel[3]~FF|CLK    
+Path End      : u_m32_stream/u_median/u_lines/row1__D$2|WDATA[3]
+Launch Clock  : clk_pixel (RISE)                                
+Capture Clock : clk_pixel (RISE)                                
+Slack         : 0.034 (arrival time - required time)            
+Delay         : 0.143                                           
+
+Logic Level             : 0
+Non-global nets on path : 1
+Global nets on path     : 0
+
+Launch Clock Path Delay        : 1.184
++ Clock To Q + Data Path Delay : 0.104
+--------------------------------------
+End-of-path arrival time       : 1.288
+
+Constraint                     : 0.000
++ Capture Clock Path Delay     : 1.184
++ Clock Uncertainty            : 0.070
+--------------------------------------
+End-of-path required time      : 1.254
+
+Launch Clock Path
+                    name                      model name   delay (ns)  cumulative delay (ns) pins on net    location
+======================================================================================================================
+clk_pixel                                       inpad        0.000             0.000                0      (0,159)  
+clk_pixel                                       inpad        0.070             0.070             1311      (0,159)  
+clk_pixel                                       net          1.114             1.184             1311      (0,159)  
+u_m32_stream/u_median/bottom_pixel[3]~FF|CLK    ff           0.000             1.184             1311      (104,165)
+
+Data Path
+                      name                        model name   delay (ns)  cumulative delay (ns) pins on net    location
+==========================================================================================================================
+u_m32_stream/u_median/bottom_pixel[3]~FF|Q       ff               0.072            0.072              3        (104,165)
+u_m32_stream/u_median/bottom_pixel[3]            net              0.143            0.215              3        (104,165)
+u_m32_stream/u_median/u_lines/row1__D$2|WDATA[3] ram_8192x20     -0.111            0.104              3        (102,162)
+
+Capture Clock Path
+                    name                      model name   delay (ns)  cumulative delay (ns) pins on net    location
+======================================================================================================================
+clk_pixel                                    inpad           0.000             0.000                0      (0,159)  
+clk_pixel                                    inpad           0.070             0.070             1311      (0,159)  
+clk_pixel                                    net             1.114             1.184             1311      (0,159)  
+u_m32_stream/u_median/u_lines/row1__D$2|WCLK ram_8192x20     0.000             1.184             1311      (102,162)
+
+++++ Path 11 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/U_SRL8_D[3].U_SRL8_W[7].srl8_inst|CLK
+Path End      : ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/U_SRL8_D[2].U_SRL8_W[7].srl8_inst|D  
+Launch Clock  : clk_sys (RISE)                                                                                                    
+Capture Clock : clk_sys (RISE)                                                                                                    
+Slack         : 0.035 (arrival time - required time)                                                                              
+Delay         : 0.033                                                                                                             
+
+Logic Level             : 0
+Non-global nets on path : 1
+Global nets on path     : 0
+
+Launch Clock Path Delay        : 1.189
++ Clock To Q + Data Path Delay : 0.105
+--------------------------------------
+End-of-path arrival time       : 1.294
+
+Constraint                     : 0.000
++ Capture Clock Path Delay     : 1.189
++ Clock Uncertainty            : 0.070
+--------------------------------------
+End-of-path required time      : 1.259
+
+Launch Clock Path
+                                                       name                                                         model name   delay (ns)  cumulative delay (ns) pins on net    location
+============================================================================================================================================================================================
+clk_sys                                                                                                               inpad        0.000             0.000                0       (0,162) 
+clk_sys                                                                                                               inpad        0.070             0.070             1475       (0,162) 
+clk_sys                                                                                                               net          1.119             1.189             1475       (0,162) 
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/U_SRL8_D[3].U_SRL8_W[7].srl8_inst|CLK    srl8         0.000             1.189             1475       (93,116)
+
+Data Path
+                                                      name                                                         model name   delay (ns)  cumulative delay (ns) pins on net    location
+===========================================================================================================================================================================================
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/U_SRL8_D[3].U_SRL8_W[7].srl8_inst|Q7     srl8        0.072             0.072              2         (93,116)
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/Shift_Q7_Out[3][7]                       net         0.033             0.105              2         (93,116)
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/U_SRL8_D[2].U_SRL8_W[7].srl8_inst|D      srl8        0.000             0.105              2         (93,117)
+
+Capture Clock Path
+                                                       name                                                         model name   delay (ns)  cumulative delay (ns) pins on net    location
+============================================================================================================================================================================================
+clk_sys                                                                                                               inpad        0.000             0.000                0       (0,162) 
+clk_sys                                                                                                               inpad        0.070             0.070             1475       (0,162) 
+clk_sys                                                                                                               net          1.119             1.189             1475       (0,162) 
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/U_SRL8_D[2].U_SRL8_W[7].srl8_inst|CLK    srl8         0.000             1.189             1475       (93,117)
+
+++++ Path 12 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/U_SRL8_D[3].U_SRL8_W[26].srl8_inst|CLK
+Path End      : ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/U_SRL8_D[2].U_SRL8_W[26].srl8_inst|D  
+Launch Clock  : clk_sys (RISE)                                                                                                     
+Capture Clock : clk_sys (RISE)                                                                                                     
+Slack         : 0.035 (arrival time - required time)                                                                               
+Delay         : 0.033                                                                                                              
+
+Logic Level             : 0
+Non-global nets on path : 1
+Global nets on path     : 0
+
+Launch Clock Path Delay        : 1.189
++ Clock To Q + Data Path Delay : 0.105
+--------------------------------------
+End-of-path arrival time       : 1.294
+
+Constraint                     : 0.000
++ Capture Clock Path Delay     : 1.189
++ Clock Uncertainty            : 0.070
+--------------------------------------
+End-of-path required time      : 1.259
+
+Launch Clock Path
+                                                       name                                                          model name   delay (ns)  cumulative delay (ns) pins on net    location
+=============================================================================================================================================================================================
+clk_sys                                                                                                                inpad        0.000             0.000                0      (0,162)  
+clk_sys                                                                                                                inpad        0.070             0.070             1475      (0,162)  
+clk_sys                                                                                                                net          1.119             1.189             1475      (0,162)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/U_SRL8_D[3].U_SRL8_W[26].srl8_inst|CLK    srl8         0.000             1.189             1475      (120,142)
+
+Data Path
+                                                       name                                                         model name   delay (ns)  cumulative delay (ns) pins on net    location
+============================================================================================================================================================================================
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/U_SRL8_D[3].U_SRL8_W[26].srl8_inst|Q7     srl8        0.072             0.072              2        (120,142)
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/Shift_Q7_Out[3][26]                       net         0.033             0.105              2        (120,142)
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/U_SRL8_D[2].U_SRL8_W[26].srl8_inst|D      srl8        0.000             0.105              2        (120,143)
+
+Capture Clock Path
+                                                       name                                                          model name   delay (ns)  cumulative delay (ns) pins on net    location
+=============================================================================================================================================================================================
+clk_sys                                                                                                                inpad        0.000             0.000                0      (0,162)  
+clk_sys                                                                                                                inpad        0.070             0.070             1475      (0,162)  
+clk_sys                                                                                                                net          1.119             1.189             1475      (0,162)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/U_SRL8_D[2].U_SRL8_W[26].srl8_inst|CLK    srl8         0.000             1.189             1475      (120,143)
+
+++++ Path 13 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/U_SRL8_D[3].U_SRL8_W[19].srl8_inst|CLK
+Path End      : ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/U_SRL8_D[2].U_SRL8_W[19].srl8_inst|D  
+Launch Clock  : clk_sys (RISE)                                                                                                     
+Capture Clock : clk_sys (RISE)                                                                                                     
+Slack         : 0.035 (arrival time - required time)                                                                               
+Delay         : 0.033                                                                                                              
+
+Logic Level             : 0
+Non-global nets on path : 1
+Global nets on path     : 0
+
+Launch Clock Path Delay        : 1.189
++ Clock To Q + Data Path Delay : 0.105
+--------------------------------------
+End-of-path arrival time       : 1.294
+
+Constraint                     : 0.000
++ Capture Clock Path Delay     : 1.189
++ Clock Uncertainty            : 0.070
+--------------------------------------
+End-of-path required time      : 1.259
+
+Launch Clock Path
+                                                       name                                                          model name   delay (ns)  cumulative delay (ns) pins on net    location
+=============================================================================================================================================================================================
+clk_sys                                                                                                                inpad        0.000             0.000                0      (0,162)  
+clk_sys                                                                                                                inpad        0.070             0.070             1475      (0,162)  
+clk_sys                                                                                                                net          1.119             1.189             1475      (0,162)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/U_SRL8_D[3].U_SRL8_W[19].srl8_inst|CLK    srl8         0.000             1.189             1475      (114,123)
+
+Data Path
+                                                       name                                                         model name   delay (ns)  cumulative delay (ns) pins on net    location
+============================================================================================================================================================================================
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/U_SRL8_D[3].U_SRL8_W[19].srl8_inst|Q7     srl8        0.072             0.072              2        (114,123)
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/Shift_Q7_Out[3][19]                       net         0.033             0.105              2        (114,123)
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/U_SRL8_D[2].U_SRL8_W[19].srl8_inst|D      srl8        0.000             0.105              2        (114,124)
+
+Capture Clock Path
+                                                       name                                                          model name   delay (ns)  cumulative delay (ns) pins on net    location
+=============================================================================================================================================================================================
+clk_sys                                                                                                                inpad        0.000             0.000                0      (0,162)  
+clk_sys                                                                                                                inpad        0.070             0.070             1475      (0,162)  
+clk_sys                                                                                                                net          1.119             1.189             1475      (0,162)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/U_SRL8_D[2].U_SRL8_W[19].srl8_inst|CLK    srl8         0.000             1.189             1475      (114,124)
+
+++++ Path 14 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/U_SRL8_D[3].U_SRL8_W[27].srl8_inst|CLK
+Path End      : ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/U_SRL8_D[2].U_SRL8_W[27].srl8_inst|D  
+Launch Clock  : clk_sys (RISE)                                                                                                     
+Capture Clock : clk_sys (RISE)                                                                                                     
+Slack         : 0.035 (arrival time - required time)                                                                               
+Delay         : 0.033                                                                                                              
+
+Logic Level             : 0
+Non-global nets on path : 1
+Global nets on path     : 0
+
+Launch Clock Path Delay        : 1.189
++ Clock To Q + Data Path Delay : 0.105
+--------------------------------------
+End-of-path arrival time       : 1.294
+
+Constraint                     : 0.000
++ Capture Clock Path Delay     : 1.189
++ Clock Uncertainty            : 0.070
+--------------------------------------
+End-of-path required time      : 1.259
+
+Launch Clock Path
+                                                       name                                                          model name   delay (ns)  cumulative delay (ns) pins on net    location
+=============================================================================================================================================================================================
+clk_sys                                                                                                                inpad        0.000             0.000                0      (0,162)  
+clk_sys                                                                                                                inpad        0.070             0.070             1475      (0,162)  
+clk_sys                                                                                                                net          1.119             1.189             1475      (0,162)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/U_SRL8_D[3].U_SRL8_W[27].srl8_inst|CLK    srl8         0.000             1.189             1475      (105,139)
+
+Data Path
+                                                       name                                                         model name   delay (ns)  cumulative delay (ns) pins on net    location
+============================================================================================================================================================================================
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/U_SRL8_D[3].U_SRL8_W[27].srl8_inst|Q7     srl8        0.072             0.072              2        (105,139)
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/Shift_Q7_Out[3][27]                       net         0.033             0.105              2        (105,139)
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/U_SRL8_D[2].U_SRL8_W[27].srl8_inst|D      srl8        0.000             0.105              2        (105,140)
+
+Capture Clock Path
+                                                       name                                                          model name   delay (ns)  cumulative delay (ns) pins on net    location
+=============================================================================================================================================================================================
+clk_sys                                                                                                                inpad        0.000             0.000                0      (0,162)  
+clk_sys                                                                                                                inpad        0.070             0.070             1475      (0,162)  
+clk_sys                                                                                                                net          1.119             1.189             1475      (0,162)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/U_SRL8_D[2].U_SRL8_W[27].srl8_inst|CLK    srl8         0.000             1.189             1475      (105,140)
+
+++++ Path 15 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/U_SRL8_D[3].U_SRL8_W[25].srl8_inst|CLK
+Path End      : ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/U_SRL8_D[2].U_SRL8_W[25].srl8_inst|D  
+Launch Clock  : clk_sys (RISE)                                                                                                     
+Capture Clock : clk_sys (RISE)                                                                                                     
+Slack         : 0.035 (arrival time - required time)                                                                               
+Delay         : 0.033                                                                                                              
+
+Logic Level             : 0
+Non-global nets on path : 1
+Global nets on path     : 0
+
+Launch Clock Path Delay        : 1.189
++ Clock To Q + Data Path Delay : 0.105
+--------------------------------------
+End-of-path arrival time       : 1.294
+
+Constraint                     : 0.000
++ Capture Clock Path Delay     : 1.189
++ Clock Uncertainty            : 0.070
+--------------------------------------
+End-of-path required time      : 1.259
+
+Launch Clock Path
+                                                       name                                                          model name   delay (ns)  cumulative delay (ns) pins on net    location
+=============================================================================================================================================================================================
+clk_sys                                                                                                                inpad        0.000             0.000                0      (0,162)  
+clk_sys                                                                                                                inpad        0.070             0.070             1475      (0,162)  
+clk_sys                                                                                                                net          1.119             1.189             1475      (0,162)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/U_SRL8_D[3].U_SRL8_W[25].srl8_inst|CLK    srl8         0.000             1.189             1475      (108,137)
+
+Data Path
+                                                       name                                                         model name   delay (ns)  cumulative delay (ns) pins on net    location
+============================================================================================================================================================================================
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/U_SRL8_D[3].U_SRL8_W[25].srl8_inst|Q7     srl8        0.072             0.072              2        (108,137)
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/Shift_Q7_Out[3][25]                       net         0.033             0.105              2        (108,137)
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/U_SRL8_D[2].U_SRL8_W[25].srl8_inst|D      srl8        0.000             0.105              2        (108,138)
+
+Capture Clock Path
+                                                       name                                                          model name   delay (ns)  cumulative delay (ns) pins on net    location
+=============================================================================================================================================================================================
+clk_sys                                                                                                                inpad        0.000             0.000                0      (0,162)  
+clk_sys                                                                                                                inpad        0.070             0.070             1475      (0,162)  
+clk_sys                                                                                                                net          1.119             1.189             1475      (0,162)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/U_SRL8_D[2].U_SRL8_W[25].srl8_inst|CLK    srl8         0.000             1.189             1475      (108,138)
+
+++++ Path 16 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/U_SRL8_D[2].U_SRL8_W[13].srl8_inst|CLK
+Path End      : ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/U_SRL8_D[1].U_SRL8_W[13].srl8_inst|D  
+Launch Clock  : clk_sys (RISE)                                                                                                     
+Capture Clock : clk_sys (RISE)                                                                                                     
+Slack         : 0.035 (arrival time - required time)                                                                               
+Delay         : 0.033                                                                                                              
+
+Logic Level             : 0
+Non-global nets on path : 1
+Global nets on path     : 0
+
+Launch Clock Path Delay        : 1.189
++ Clock To Q + Data Path Delay : 0.105
+--------------------------------------
+End-of-path arrival time       : 1.294
+
+Constraint                     : 0.000
++ Capture Clock Path Delay     : 1.189
++ Clock Uncertainty            : 0.070
+--------------------------------------
+End-of-path required time      : 1.259
+
+Launch Clock Path
+                                                       name                                                          model name   delay (ns)  cumulative delay (ns) pins on net    location
+=============================================================================================================================================================================================
+clk_sys                                                                                                                inpad        0.000             0.000                0       (0,162) 
+clk_sys                                                                                                                inpad        0.070             0.070             1475       (0,162) 
+clk_sys                                                                                                                net          1.119             1.189             1475       (0,162) 
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/U_SRL8_D[2].U_SRL8_W[13].srl8_inst|CLK    srl8         0.000             1.189             1475       (93,108)
+
+Data Path
+                                                       name                                                         model name   delay (ns)  cumulative delay (ns) pins on net    location
+============================================================================================================================================================================================
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/U_SRL8_D[2].U_SRL8_W[13].srl8_inst|Q7     srl8        0.072             0.072              2         (93,108)
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/Shift_Q7_Out[2][13]                       net         0.033             0.105              2         (93,108)
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/U_SRL8_D[1].U_SRL8_W[13].srl8_inst|D      srl8        0.000             0.105              2         (93,109)
+
+Capture Clock Path
+                                                       name                                                          model name   delay (ns)  cumulative delay (ns) pins on net    location
+=============================================================================================================================================================================================
+clk_sys                                                                                                                inpad        0.000             0.000                0       (0,162) 
+clk_sys                                                                                                                inpad        0.070             0.070             1475       (0,162) 
+clk_sys                                                                                                                net          1.119             1.189             1475       (0,162) 
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/U_SRL8_D[1].U_SRL8_W[13].srl8_inst|CLK    srl8         0.000             1.189             1475       (93,109)
+
+++++ Path 17 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/U_SRL8_D[3].U_SRL8_W[17].srl8_inst|CLK
+Path End      : ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/U_SRL8_D[2].U_SRL8_W[17].srl8_inst|D  
+Launch Clock  : clk_sys (RISE)                                                                                                     
+Capture Clock : clk_sys (RISE)                                                                                                     
+Slack         : 0.035 (arrival time - required time)                                                                               
+Delay         : 0.033                                                                                                              
+
+Logic Level             : 0
+Non-global nets on path : 1
+Global nets on path     : 0
+
+Launch Clock Path Delay        : 1.189
++ Clock To Q + Data Path Delay : 0.105
+--------------------------------------
+End-of-path arrival time       : 1.294
+
+Constraint                     : 0.000
++ Capture Clock Path Delay     : 1.189
++ Clock Uncertainty            : 0.070
+--------------------------------------
+End-of-path required time      : 1.259
+
+Launch Clock Path
+                                                       name                                                          model name   delay (ns)  cumulative delay (ns) pins on net    location
+=============================================================================================================================================================================================
+clk_sys                                                                                                                inpad        0.000             0.000                0      (0,162)  
+clk_sys                                                                                                                inpad        0.070             0.070             1475      (0,162)  
+clk_sys                                                                                                                net          1.119             1.189             1475      (0,162)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/U_SRL8_D[3].U_SRL8_W[17].srl8_inst|CLK    srl8         0.000             1.189             1475      (105,128)
+
+Data Path
+                                                       name                                                         model name   delay (ns)  cumulative delay (ns) pins on net    location
+============================================================================================================================================================================================
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/U_SRL8_D[3].U_SRL8_W[17].srl8_inst|Q7     srl8        0.072             0.072              2        (105,128)
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/Shift_Q7_Out[3][17]                       net         0.033             0.105              2        (105,128)
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/U_SRL8_D[2].U_SRL8_W[17].srl8_inst|D      srl8        0.000             0.105              2        (105,129)
+
+Capture Clock Path
+                                                       name                                                          model name   delay (ns)  cumulative delay (ns) pins on net    location
+=============================================================================================================================================================================================
+clk_sys                                                                                                                inpad        0.000             0.000                0      (0,162)  
+clk_sys                                                                                                                inpad        0.070             0.070             1475      (0,162)  
+clk_sys                                                                                                                net          1.119             1.189             1475      (0,162)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/U_SRL8_D[2].U_SRL8_W[17].srl8_inst|CLK    srl8         0.000             1.189             1475      (105,129)
+
+++++ Path 18 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/U_SRL8_D[3].U_SRL8_W[16].srl8_inst|CLK
+Path End      : ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/U_SRL8_D[2].U_SRL8_W[16].srl8_inst|D  
+Launch Clock  : clk_sys (RISE)                                                                                                     
+Capture Clock : clk_sys (RISE)                                                                                                     
+Slack         : 0.035 (arrival time - required time)                                                                               
+Delay         : 0.033                                                                                                              
+
+Logic Level             : 0
+Non-global nets on path : 1
+Global nets on path     : 0
+
+Launch Clock Path Delay        : 1.189
++ Clock To Q + Data Path Delay : 0.105
+--------------------------------------
+End-of-path arrival time       : 1.294
+
+Constraint                     : 0.000
++ Capture Clock Path Delay     : 1.189
++ Clock Uncertainty            : 0.070
+--------------------------------------
+End-of-path required time      : 1.259
+
+Launch Clock Path
+                                                       name                                                          model name   delay (ns)  cumulative delay (ns) pins on net    location
+=============================================================================================================================================================================================
+clk_sys                                                                                                                inpad        0.000             0.000                0      (0,162)  
+clk_sys                                                                                                                inpad        0.070             0.070             1475      (0,162)  
+clk_sys                                                                                                                net          1.119             1.189             1475      (0,162)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/U_SRL8_D[3].U_SRL8_W[16].srl8_inst|CLK    srl8         0.000             1.189             1475      (105,123)
+
+Data Path
+                                                       name                                                         model name   delay (ns)  cumulative delay (ns) pins on net    location
+============================================================================================================================================================================================
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/U_SRL8_D[3].U_SRL8_W[16].srl8_inst|Q7     srl8        0.072             0.072              2        (105,123)
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/Shift_Q7_Out[3][16]                       net         0.033             0.105              2        (105,123)
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/U_SRL8_D[2].U_SRL8_W[16].srl8_inst|D      srl8        0.000             0.105              2        (105,124)
+
+Capture Clock Path
+                                                       name                                                          model name   delay (ns)  cumulative delay (ns) pins on net    location
+=============================================================================================================================================================================================
+clk_sys                                                                                                                inpad        0.000             0.000                0      (0,162)  
+clk_sys                                                                                                                inpad        0.070             0.070             1475      (0,162)  
+clk_sys                                                                                                                net          1.119             1.189             1475      (0,162)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/U_SRL8_D[2].U_SRL8_W[16].srl8_inst|CLK    srl8         0.000             1.189             1475      (105,124)
+
+++++ Path 19 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/U_SRL8_D[3].U_SRL8_W[22].srl8_inst|CLK
+Path End      : ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/U_SRL8_D[2].U_SRL8_W[22].srl8_inst|D  
+Launch Clock  : clk_sys (RISE)                                                                                                     
+Capture Clock : clk_sys (RISE)                                                                                                     
+Slack         : 0.035 (arrival time - required time)                                                                               
+Delay         : 0.033                                                                                                              
+
+Logic Level             : 0
+Non-global nets on path : 1
+Global nets on path     : 0
+
+Launch Clock Path Delay        : 1.189
++ Clock To Q + Data Path Delay : 0.105
+--------------------------------------
+End-of-path arrival time       : 1.294
+
+Constraint                     : 0.000
++ Capture Clock Path Delay     : 1.189
++ Clock Uncertainty            : 0.070
+--------------------------------------
+End-of-path required time      : 1.259
+
+Launch Clock Path
+                                                       name                                                          model name   delay (ns)  cumulative delay (ns) pins on net    location
+=============================================================================================================================================================================================
+clk_sys                                                                                                                inpad        0.000             0.000                0      (0,162)  
+clk_sys                                                                                                                inpad        0.070             0.070             1475      (0,162)  
+clk_sys                                                                                                                net          1.119             1.189             1475      (0,162)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/U_SRL8_D[3].U_SRL8_W[22].srl8_inst|CLK    srl8         0.000             1.189             1475      (114,142)
+
+Data Path
+                                                       name                                                         model name   delay (ns)  cumulative delay (ns) pins on net    location
+============================================================================================================================================================================================
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/U_SRL8_D[3].U_SRL8_W[22].srl8_inst|Q7     srl8        0.072             0.072              2        (114,142)
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/Shift_Q7_Out[3][22]                       net         0.033             0.105              2        (114,142)
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/U_SRL8_D[2].U_SRL8_W[22].srl8_inst|D      srl8        0.000             0.105              2        (114,143)
+
+Capture Clock Path
+                                                       name                                                          model name   delay (ns)  cumulative delay (ns) pins on net    location
+=============================================================================================================================================================================================
+clk_sys                                                                                                                inpad        0.000             0.000                0      (0,162)  
+clk_sys                                                                                                                inpad        0.070             0.070             1475      (0,162)  
+clk_sys                                                                                                                net          1.119             1.189             1475      (0,162)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/U_SRL8_D[2].U_SRL8_W[22].srl8_inst|CLK    srl8         0.000             1.189             1475      (114,143)
+
+++++ Path 20 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/U_SRL8_D[3].U_SRL8_W[21].srl8_inst|CLK
+Path End      : ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/U_SRL8_D[2].U_SRL8_W[21].srl8_inst|D  
+Launch Clock  : clk_sys (RISE)                                                                                                     
+Capture Clock : clk_sys (RISE)                                                                                                     
+Slack         : 0.035 (arrival time - required time)                                                                               
+Delay         : 0.033                                                                                                              
+
+Logic Level             : 0
+Non-global nets on path : 1
+Global nets on path     : 0
+
+Launch Clock Path Delay        : 1.189
++ Clock To Q + Data Path Delay : 0.105
+--------------------------------------
+End-of-path arrival time       : 1.294
+
+Constraint                     : 0.000
++ Capture Clock Path Delay     : 1.189
++ Clock Uncertainty            : 0.070
+--------------------------------------
+End-of-path required time      : 1.259
+
+Launch Clock Path
+                                                       name                                                          model name   delay (ns)  cumulative delay (ns) pins on net    location
+=============================================================================================================================================================================================
+clk_sys                                                                                                                inpad        0.000             0.000                0      (0,162)  
+clk_sys                                                                                                                inpad        0.070             0.070             1475      (0,162)  
+clk_sys                                                                                                                net          1.119             1.189             1475      (0,162)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/U_SRL8_D[3].U_SRL8_W[21].srl8_inst|CLK    srl8         0.000             1.189             1475      (108,131)
+
+Data Path
+                                                       name                                                         model name   delay (ns)  cumulative delay (ns) pins on net    location
+============================================================================================================================================================================================
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/U_SRL8_D[3].U_SRL8_W[21].srl8_inst|Q7     srl8        0.072             0.072              2        (108,131)
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/Shift_Q7_Out[3][21]                       net         0.033             0.105              2        (108,131)
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/U_SRL8_D[2].U_SRL8_W[21].srl8_inst|D      srl8        0.000             0.105              2        (108,132)
+
+Capture Clock Path
+                                                       name                                                          model name   delay (ns)  cumulative delay (ns) pins on net    location
+=============================================================================================================================================================================================
+clk_sys                                                                                                                inpad        0.000             0.000                0      (0,162)  
+clk_sys                                                                                                                inpad        0.070             0.070             1475      (0,162)  
+clk_sys                                                                                                                net          1.119             1.189             1475      (0,162)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/U_SRL8_D[2].U_SRL8_W[21].srl8_inst|CLK    srl8         0.000             1.189             1475      (108,132)
+
+++++ Path 21 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/U_SRL8_D[3].U_SRL8_W[20].srl8_inst|CLK
+Path End      : ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/U_SRL8_D[2].U_SRL8_W[20].srl8_inst|D  
+Launch Clock  : clk_sys (RISE)                                                                                                     
+Capture Clock : clk_sys (RISE)                                                                                                     
+Slack         : 0.035 (arrival time - required time)                                                                               
+Delay         : 0.033                                                                                                              
+
+Logic Level             : 0
+Non-global nets on path : 1
+Global nets on path     : 0
+
+Launch Clock Path Delay        : 1.189
++ Clock To Q + Data Path Delay : 0.105
+--------------------------------------
+End-of-path arrival time       : 1.294
+
+Constraint                     : 0.000
++ Capture Clock Path Delay     : 1.189
++ Clock Uncertainty            : 0.070
+--------------------------------------
+End-of-path required time      : 1.259
+
+Launch Clock Path
+                                                       name                                                          model name   delay (ns)  cumulative delay (ns) pins on net    location
+=============================================================================================================================================================================================
+clk_sys                                                                                                                inpad        0.000             0.000                0      (0,162)  
+clk_sys                                                                                                                inpad        0.070             0.070             1475      (0,162)  
+clk_sys                                                                                                                net          1.119             1.189             1475      (0,162)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/U_SRL8_D[3].U_SRL8_W[20].srl8_inst|CLK    srl8         0.000             1.189             1475      (126,138)
+
+Data Path
+                                                       name                                                         model name   delay (ns)  cumulative delay (ns) pins on net    location
+============================================================================================================================================================================================
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/U_SRL8_D[3].U_SRL8_W[20].srl8_inst|Q7     srl8        0.072             0.072              2        (126,138)
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/Shift_Q7_Out[3][20]                       net         0.033             0.105              2        (126,138)
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/U_SRL8_D[2].U_SRL8_W[20].srl8_inst|D      srl8        0.000             0.105              2        (126,139)
+
+Capture Clock Path
+                                                       name                                                          model name   delay (ns)  cumulative delay (ns) pins on net    location
+=============================================================================================================================================================================================
+clk_sys                                                                                                                inpad        0.000             0.000                0      (0,162)  
+clk_sys                                                                                                                inpad        0.070             0.070             1475      (0,162)  
+clk_sys                                                                                                                net          1.119             1.189             1475      (0,162)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/U_SRL8_D[2].U_SRL8_W[20].srl8_inst|CLK    srl8         0.000             1.189             1475      (126,139)
+
+++++ Path 22 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/U_SRL8_D[2].U_SRL8_W[24].srl8_inst|CLK
+Path End      : ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/U_SRL8_D[1].U_SRL8_W[24].srl8_inst|D  
+Launch Clock  : clk_sys (RISE)                                                                                                     
+Capture Clock : clk_sys (RISE)                                                                                                     
+Slack         : 0.035 (arrival time - required time)                                                                               
+Delay         : 0.033                                                                                                              
+
+Logic Level             : 0
+Non-global nets on path : 1
+Global nets on path     : 0
+
+Launch Clock Path Delay        : 1.189
++ Clock To Q + Data Path Delay : 0.105
+--------------------------------------
+End-of-path arrival time       : 1.294
+
+Constraint                     : 0.000
++ Capture Clock Path Delay     : 1.189
++ Clock Uncertainty            : 0.070
+--------------------------------------
+End-of-path required time      : 1.259
+
+Launch Clock Path
+                                                       name                                                          model name   delay (ns)  cumulative delay (ns) pins on net    location
+=============================================================================================================================================================================================
+clk_sys                                                                                                                inpad        0.000             0.000                0      (0,162)  
+clk_sys                                                                                                                inpad        0.070             0.070             1475      (0,162)  
+clk_sys                                                                                                                net          1.119             1.189             1475      (0,162)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/U_SRL8_D[2].U_SRL8_W[24].srl8_inst|CLK    srl8         0.000             1.189             1475      (105,134)
+
+Data Path
+                                                       name                                                         model name   delay (ns)  cumulative delay (ns) pins on net    location
+============================================================================================================================================================================================
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/U_SRL8_D[2].U_SRL8_W[24].srl8_inst|Q7     srl8        0.072             0.072              2        (105,134)
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/Shift_Q7_Out[2][24]                       net         0.033             0.105              2        (105,134)
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/U_SRL8_D[1].U_SRL8_W[24].srl8_inst|D      srl8        0.000             0.105              2        (105,135)
+
+Capture Clock Path
+                                                       name                                                          model name   delay (ns)  cumulative delay (ns) pins on net    location
+=============================================================================================================================================================================================
+clk_sys                                                                                                                inpad        0.000             0.000                0      (0,162)  
+clk_sys                                                                                                                inpad        0.070             0.070             1475      (0,162)  
+clk_sys                                                                                                                net          1.119             1.189             1475      (0,162)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/U_SRL8_D[1].U_SRL8_W[24].srl8_inst|CLK    srl8         0.000             1.189             1475      (105,135)
+
+++++ Path 23 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/U_SRL8_D[2].U_SRL8_W[26].srl8_inst|CLK
+Path End      : ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/U_SRL8_D[1].U_SRL8_W[26].srl8_inst|D  
+Launch Clock  : clk_sys (RISE)                                                                                                     
+Capture Clock : clk_sys (RISE)                                                                                                     
+Slack         : 0.035 (arrival time - required time)                                                                               
+Delay         : 0.033                                                                                                              
+
+Logic Level             : 0
+Non-global nets on path : 1
+Global nets on path     : 0
+
+Launch Clock Path Delay        : 1.189
++ Clock To Q + Data Path Delay : 0.105
+--------------------------------------
+End-of-path arrival time       : 1.294
+
+Constraint                     : 0.000
++ Capture Clock Path Delay     : 1.189
++ Clock Uncertainty            : 0.070
+--------------------------------------
+End-of-path required time      : 1.259
+
+Launch Clock Path
+                                                       name                                                          model name   delay (ns)  cumulative delay (ns) pins on net    location
+=============================================================================================================================================================================================
+clk_sys                                                                                                                inpad        0.000             0.000                0      (0,162)  
+clk_sys                                                                                                                inpad        0.070             0.070             1475      (0,162)  
+clk_sys                                                                                                                net          1.119             1.189             1475      (0,162)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/U_SRL8_D[2].U_SRL8_W[26].srl8_inst|CLK    srl8         0.000             1.189             1475      (120,143)
+
+Data Path
+                                                       name                                                         model name   delay (ns)  cumulative delay (ns) pins on net    location
+============================================================================================================================================================================================
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/U_SRL8_D[2].U_SRL8_W[26].srl8_inst|Q7     srl8        0.072             0.072              2        (120,143)
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/Shift_Q7_Out[2][26]                       net         0.033             0.105              2        (120,143)
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/U_SRL8_D[1].U_SRL8_W[26].srl8_inst|D      srl8        0.000             0.105              2        (120,144)
+
+Capture Clock Path
+                                                       name                                                          model name   delay (ns)  cumulative delay (ns) pins on net    location
+=============================================================================================================================================================================================
+clk_sys                                                                                                                inpad        0.000             0.000                0      (0,162)  
+clk_sys                                                                                                                inpad        0.070             0.070             1475      (0,162)  
+clk_sys                                                                                                                net          1.119             1.189             1475      (0,162)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/U_SRL8_D[1].U_SRL8_W[26].srl8_inst|CLK    srl8         0.000             1.189             1475      (120,144)
+
+++++ Path 24 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/U_SRL8_D[2].U_SRL8_W[11].srl8_inst|CLK
+Path End      : ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/U_SRL8_D[1].U_SRL8_W[11].srl8_inst|D  
+Launch Clock  : clk_sys (RISE)                                                                                                     
+Capture Clock : clk_sys (RISE)                                                                                                     
+Slack         : 0.035 (arrival time - required time)                                                                               
+Delay         : 0.033                                                                                                              
+
+Logic Level             : 0
+Non-global nets on path : 1
+Global nets on path     : 0
+
+Launch Clock Path Delay        : 1.189
++ Clock To Q + Data Path Delay : 0.105
+--------------------------------------
+End-of-path arrival time       : 1.294
+
+Constraint                     : 0.000
++ Capture Clock Path Delay     : 1.189
++ Clock Uncertainty            : 0.070
+--------------------------------------
+End-of-path required time      : 1.259
+
+Launch Clock Path
+                                                       name                                                          model name   delay (ns)  cumulative delay (ns) pins on net    location
+=============================================================================================================================================================================================
+clk_sys                                                                                                                inpad        0.000             0.000                0      (0,162)  
+clk_sys                                                                                                                inpad        0.070             0.070             1475      (0,162)  
+clk_sys                                                                                                                net          1.119             1.189             1475      (0,162)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/U_SRL8_D[2].U_SRL8_W[11].srl8_inst|CLK    srl8         0.000             1.189             1475      (111,118)
+
+Data Path
+                                                       name                                                         model name   delay (ns)  cumulative delay (ns) pins on net    location
+============================================================================================================================================================================================
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/U_SRL8_D[2].U_SRL8_W[11].srl8_inst|Q7     srl8        0.072             0.072              2        (111,118)
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/Shift_Q7_Out[2][11]                       net         0.033             0.105              2        (111,118)
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/U_SRL8_D[1].U_SRL8_W[11].srl8_inst|D      srl8        0.000             0.105              2        (111,119)
+
+Capture Clock Path
+                                                       name                                                          model name   delay (ns)  cumulative delay (ns) pins on net    location
+=============================================================================================================================================================================================
+clk_sys                                                                                                                inpad        0.000             0.000                0      (0,162)  
+clk_sys                                                                                                                inpad        0.070             0.070             1475      (0,162)  
+clk_sys                                                                                                                net          1.119             1.189             1475      (0,162)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/U_SRL8_D[1].U_SRL8_W[11].srl8_inst|CLK    srl8         0.000             1.189             1475      (111,119)
+
+++++ Path 25 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/U_SRL8_D[3].U_SRL8_W[15].srl8_inst|CLK
+Path End      : ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/U_SRL8_D[2].U_SRL8_W[15].srl8_inst|D  
+Launch Clock  : clk_sys (RISE)                                                                                                     
+Capture Clock : clk_sys (RISE)                                                                                                     
+Slack         : 0.035 (arrival time - required time)                                                                               
+Delay         : 0.033                                                                                                              
+
+Logic Level             : 0
+Non-global nets on path : 1
+Global nets on path     : 0
+
+Launch Clock Path Delay        : 1.189
++ Clock To Q + Data Path Delay : 0.105
+--------------------------------------
+End-of-path arrival time       : 1.294
+
+Constraint                     : 0.000
++ Capture Clock Path Delay     : 1.189
++ Clock Uncertainty            : 0.070
+--------------------------------------
+End-of-path required time      : 1.259
+
+Launch Clock Path
+                                                       name                                                          model name   delay (ns)  cumulative delay (ns) pins on net    location
+=============================================================================================================================================================================================
+clk_sys                                                                                                                inpad        0.000             0.000                0      (0,162)  
+clk_sys                                                                                                                inpad        0.070             0.070             1475      (0,162)  
+clk_sys                                                                                                                net          1.119             1.189             1475      (0,162)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/U_SRL8_D[3].U_SRL8_W[15].srl8_inst|CLK    srl8         0.000             1.189             1475      (114,101)
+
+Data Path
+                                                       name                                                         model name   delay (ns)  cumulative delay (ns) pins on net    location
+============================================================================================================================================================================================
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/U_SRL8_D[3].U_SRL8_W[15].srl8_inst|Q7     srl8        0.072             0.072              2        (114,101)
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/Shift_Q7_Out[3][15]                       net         0.033             0.105              2        (114,101)
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/U_SRL8_D[2].U_SRL8_W[15].srl8_inst|D      srl8        0.000             0.105              2        (114,102)
+
+Capture Clock Path
+                                                       name                                                          model name   delay (ns)  cumulative delay (ns) pins on net    location
+=============================================================================================================================================================================================
+clk_sys                                                                                                                inpad        0.000             0.000                0      (0,162)  
+clk_sys                                                                                                                inpad        0.070             0.070             1475      (0,162)  
+clk_sys                                                                                                                net          1.119             1.189             1475      (0,162)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/U_SRL8_D[2].U_SRL8_W[15].srl8_inst|CLK    srl8         0.000             1.189             1475      (114,102)
+
+++++ Path 26 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/U_SRL8_D[3].U_SRL8_W[12].srl8_inst|CLK
+Path End      : ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/U_SRL8_D[2].U_SRL8_W[12].srl8_inst|D  
+Launch Clock  : clk_sys (RISE)                                                                                                     
+Capture Clock : clk_sys (RISE)                                                                                                     
+Slack         : 0.035 (arrival time - required time)                                                                               
+Delay         : 0.033                                                                                                              
+
+Logic Level             : 0
+Non-global nets on path : 1
+Global nets on path     : 0
+
+Launch Clock Path Delay        : 1.189
++ Clock To Q + Data Path Delay : 0.105
+--------------------------------------
+End-of-path arrival time       : 1.294
+
+Constraint                     : 0.000
++ Capture Clock Path Delay     : 1.189
++ Clock Uncertainty            : 0.070
+--------------------------------------
+End-of-path required time      : 1.259
+
+Launch Clock Path
+                                                       name                                                          model name   delay (ns)  cumulative delay (ns) pins on net    location
+=============================================================================================================================================================================================
+clk_sys                                                                                                                inpad        0.000             0.000                0      (0,162)  
+clk_sys                                                                                                                inpad        0.070             0.070             1475      (0,162)  
+clk_sys                                                                                                                net          1.119             1.189             1475      (0,162)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/U_SRL8_D[3].U_SRL8_W[12].srl8_inst|CLK    srl8         0.000             1.189             1475      (114,111)
+
+Data Path
+                                                       name                                                         model name   delay (ns)  cumulative delay (ns) pins on net    location
+============================================================================================================================================================================================
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/U_SRL8_D[3].U_SRL8_W[12].srl8_inst|Q7     srl8        0.072             0.072              2        (114,111)
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/Shift_Q7_Out[3][12]                       net         0.033             0.105              2        (114,111)
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/U_SRL8_D[2].U_SRL8_W[12].srl8_inst|D      srl8        0.000             0.105              2        (114,112)
+
+Capture Clock Path
+                                                       name                                                          model name   delay (ns)  cumulative delay (ns) pins on net    location
+=============================================================================================================================================================================================
+clk_sys                                                                                                                inpad        0.000             0.000                0      (0,162)  
+clk_sys                                                                                                                inpad        0.070             0.070             1475      (0,162)  
+clk_sys                                                                                                                net          1.119             1.189             1475      (0,162)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/U_SRL8_D[2].U_SRL8_W[12].srl8_inst|CLK    srl8         0.000             1.189             1475      (114,112)
+
+++++ Path 27 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/U_SRL8_D[3].U_SRL8_W[14].srl8_inst|CLK
+Path End      : ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/U_SRL8_D[2].U_SRL8_W[14].srl8_inst|D  
+Launch Clock  : clk_sys (RISE)                                                                                                     
+Capture Clock : clk_sys (RISE)                                                                                                     
+Slack         : 0.035 (arrival time - required time)                                                                               
+Delay         : 0.033                                                                                                              
+
+Logic Level             : 0
+Non-global nets on path : 1
+Global nets on path     : 0
+
+Launch Clock Path Delay        : 1.189
++ Clock To Q + Data Path Delay : 0.105
+--------------------------------------
+End-of-path arrival time       : 1.294
+
+Constraint                     : 0.000
++ Capture Clock Path Delay     : 1.189
++ Clock Uncertainty            : 0.070
+--------------------------------------
+End-of-path required time      : 1.259
+
+Launch Clock Path
+                                                       name                                                          model name   delay (ns)  cumulative delay (ns) pins on net    location
+=============================================================================================================================================================================================
+clk_sys                                                                                                                inpad        0.000             0.000                0       (0,162) 
+clk_sys                                                                                                                inpad        0.070             0.070             1475       (0,162) 
+clk_sys                                                                                                                net          1.119             1.189             1475       (0,162) 
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/U_SRL8_D[3].U_SRL8_W[14].srl8_inst|CLK    srl8         0.000             1.189             1475       (99,122)
+
+Data Path
+                                                       name                                                         model name   delay (ns)  cumulative delay (ns) pins on net    location
+============================================================================================================================================================================================
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/U_SRL8_D[3].U_SRL8_W[14].srl8_inst|Q7     srl8        0.072             0.072              2         (99,122)
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/Shift_Q7_Out[3][14]                       net         0.033             0.105              2         (99,122)
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/U_SRL8_D[2].U_SRL8_W[14].srl8_inst|D      srl8        0.000             0.105              2         (99,123)
+
+Capture Clock Path
+                                                       name                                                          model name   delay (ns)  cumulative delay (ns) pins on net    location
+=============================================================================================================================================================================================
+clk_sys                                                                                                                inpad        0.000             0.000                0       (0,162) 
+clk_sys                                                                                                                inpad        0.070             0.070             1475       (0,162) 
+clk_sys                                                                                                                net          1.119             1.189             1475       (0,162) 
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/U_SRL8_D[2].U_SRL8_W[14].srl8_inst|CLK    srl8         0.000             1.189             1475       (99,123)
+
+++++ Path 28 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/U_SRL8_D[2].U_SRL8_W[5].srl8_inst|CLK
+Path End      : ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/U_SRL8_D[1].U_SRL8_W[5].srl8_inst|D  
+Launch Clock  : clk_sys (RISE)                                                                                                    
+Capture Clock : clk_sys (RISE)                                                                                                    
+Slack         : 0.035 (arrival time - required time)                                                                              
+Delay         : 0.033                                                                                                             
+
+Logic Level             : 0
+Non-global nets on path : 1
+Global nets on path     : 0
+
+Launch Clock Path Delay        : 1.189
++ Clock To Q + Data Path Delay : 0.105
+--------------------------------------
+End-of-path arrival time       : 1.294
+
+Constraint                     : 0.000
++ Capture Clock Path Delay     : 1.189
++ Clock Uncertainty            : 0.070
+--------------------------------------
+End-of-path required time      : 1.259
+
+Launch Clock Path
+                                                       name                                                         model name   delay (ns)  cumulative delay (ns) pins on net    location
+============================================================================================================================================================================================
+clk_sys                                                                                                               inpad        0.000             0.000                0       (0,162) 
+clk_sys                                                                                                               inpad        0.070             0.070             1475       (0,162) 
+clk_sys                                                                                                               net          1.119             1.189             1475       (0,162) 
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/U_SRL8_D[2].U_SRL8_W[5].srl8_inst|CLK    srl8         0.000             1.189             1475       (105,97)
+
+Data Path
+                                                      name                                                         model name   delay (ns)  cumulative delay (ns) pins on net    location
+===========================================================================================================================================================================================
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/U_SRL8_D[2].U_SRL8_W[5].srl8_inst|Q7     srl8        0.072             0.072              2         (105,97)
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/Shift_Q7_Out[2][5]                       net         0.033             0.105              2         (105,97)
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/U_SRL8_D[1].U_SRL8_W[5].srl8_inst|D      srl8        0.000             0.105              2         (105,98)
+
+Capture Clock Path
+                                                       name                                                         model name   delay (ns)  cumulative delay (ns) pins on net    location
+============================================================================================================================================================================================
+clk_sys                                                                                                               inpad        0.000             0.000                0       (0,162) 
+clk_sys                                                                                                               inpad        0.070             0.070             1475       (0,162) 
+clk_sys                                                                                                               net          1.119             1.189             1475       (0,162) 
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/U_SRL8_D[1].U_SRL8_W[5].srl8_inst|CLK    srl8         0.000             1.189             1475       (105,98)
+
+++++ Path 29 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/U_SRL8_D[3].U_SRL8_W[24].srl8_inst|CLK
+Path End      : ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/U_SRL8_D[2].U_SRL8_W[24].srl8_inst|D  
+Launch Clock  : clk_sys (RISE)                                                                                                     
+Capture Clock : clk_sys (RISE)                                                                                                     
+Slack         : 0.035 (arrival time - required time)                                                                               
+Delay         : 0.033                                                                                                              
+
+Logic Level             : 0
+Non-global nets on path : 1
+Global nets on path     : 0
+
+Launch Clock Path Delay        : 1.189
++ Clock To Q + Data Path Delay : 0.105
+--------------------------------------
+End-of-path arrival time       : 1.294
+
+Constraint                     : 0.000
++ Capture Clock Path Delay     : 1.189
++ Clock Uncertainty            : 0.070
+--------------------------------------
+End-of-path required time      : 1.259
+
+Launch Clock Path
+                                                       name                                                          model name   delay (ns)  cumulative delay (ns) pins on net    location
+=============================================================================================================================================================================================
+clk_sys                                                                                                                inpad        0.000             0.000                0      (0,162)  
+clk_sys                                                                                                                inpad        0.070             0.070             1475      (0,162)  
+clk_sys                                                                                                                net          1.119             1.189             1475      (0,162)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/U_SRL8_D[3].U_SRL8_W[24].srl8_inst|CLK    srl8         0.000             1.189             1475      (105,133)
+
+Data Path
+                                                       name                                                         model name   delay (ns)  cumulative delay (ns) pins on net    location
+============================================================================================================================================================================================
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/U_SRL8_D[3].U_SRL8_W[24].srl8_inst|Q7     srl8        0.072             0.072              2        (105,133)
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/Shift_Q7_Out[3][24]                       net         0.033             0.105              2        (105,133)
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/U_SRL8_D[2].U_SRL8_W[24].srl8_inst|D      srl8        0.000             0.105              2        (105,134)
+
+Capture Clock Path
+                                                       name                                                          model name   delay (ns)  cumulative delay (ns) pins on net    location
+=============================================================================================================================================================================================
+clk_sys                                                                                                                inpad        0.000             0.000                0      (0,162)  
+clk_sys                                                                                                                inpad        0.070             0.070             1475      (0,162)  
+clk_sys                                                                                                                net          1.119             1.189             1475      (0,162)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/U_SRL8_D[2].U_SRL8_W[24].srl8_inst|CLK    srl8         0.000             1.189             1475      (105,134)
+
+++++ Path 30 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/U_SRL8_D[2].U_SRL8_W[4].srl8_inst|CLK
+Path End      : ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/U_SRL8_D[1].U_SRL8_W[4].srl8_inst|D  
+Launch Clock  : clk_sys (RISE)                                                                                                    
+Capture Clock : clk_sys (RISE)                                                                                                    
+Slack         : 0.035 (arrival time - required time)                                                                              
+Delay         : 0.033                                                                                                             
+
+Logic Level             : 0
+Non-global nets on path : 1
+Global nets on path     : 0
+
+Launch Clock Path Delay        : 1.189
++ Clock To Q + Data Path Delay : 0.105
+--------------------------------------
+End-of-path arrival time       : 1.294
+
+Constraint                     : 0.000
++ Capture Clock Path Delay     : 1.189
++ Clock Uncertainty            : 0.070
+--------------------------------------
+End-of-path required time      : 1.259
+
+Launch Clock Path
+                                                       name                                                         model name   delay (ns)  cumulative delay (ns) pins on net    location
+============================================================================================================================================================================================
+clk_sys                                                                                                               inpad        0.000             0.000                0       (0,162) 
+clk_sys                                                                                                               inpad        0.070             0.070             1475       (0,162) 
+clk_sys                                                                                                               net          1.119             1.189             1475       (0,162) 
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/U_SRL8_D[2].U_SRL8_W[4].srl8_inst|CLK    srl8         0.000             1.189             1475       (99,112)
+
+Data Path
+                                                      name                                                         model name   delay (ns)  cumulative delay (ns) pins on net    location
+===========================================================================================================================================================================================
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/U_SRL8_D[2].U_SRL8_W[4].srl8_inst|Q7     srl8        0.072             0.072              2         (99,112)
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/Shift_Q7_Out[2][4]                       net         0.033             0.105              2         (99,112)
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/U_SRL8_D[1].U_SRL8_W[4].srl8_inst|D      srl8        0.000             0.105              2         (99,113)
+
+Capture Clock Path
+                                                       name                                                         model name   delay (ns)  cumulative delay (ns) pins on net    location
+============================================================================================================================================================================================
+clk_sys                                                                                                               inpad        0.000             0.000                0       (0,162) 
+clk_sys                                                                                                               inpad        0.070             0.070             1475       (0,162) 
+clk_sys                                                                                                               net          1.119             1.189             1475       (0,162) 
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/u_rd_addr_fifo/U_SRL8_D[1].U_SRL8_W[4].srl8_inst|CLK    srl8         0.000             1.189             1475       (99,113)
+
