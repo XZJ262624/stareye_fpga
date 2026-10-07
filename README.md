@@ -3,7 +3,7 @@
 面向2026全国大学生嵌入式芯片与系统设计竞赛FPGA赛道，目标平台为易灵思VF-Ti60F225。
 技术路线：摄像头采集→灰度化→滤波→边缘检测→HDMI显示；扩展多算子切换、自适应阈值、彩色叠加、OSD、延迟与资源测试。
 
-M0/M1/M2基础链路实物PASS；M2为新Ti60F225I3相机→DDR→HDMI，用户确认720p60、10～15分钟定性正常，未SPI Active/Flash。**M3 m3_sobel_core实物功能PASS、图像质量待调优；M3.1离线PASS且用户确认上板阈值调节正常；M3.2模块、整机离线与当前条件下实物验收PASS。** 两行缓存、3×3窗口、Sobel/阈值与原灰度/边缘显示已实现，使用AR0135单色8位流。M4离线仿真、完整I3编译、STA和实物功能验收PASS（保留已知首行异常）；M5A完成离线算法验证、完整I3编译、STA及用户实物功能验收，阶段PASS；M5B及M6～M7未开始，P0其余需求待确认。DDR压力/全容量/温度/校准、复位/CDC、电气/冷启动以及旧Flash R3/R4风险保留。
+M0/M1/M2基础链路实物PASS；M2为新Ti60F225I3相机→DDR→HDMI，用户确认720p60、10～15分钟定性正常，未SPI Active/Flash。**M3 m3_sobel_core实物功能PASS、图像质量待调优；M3.1离线PASS且用户确认上板阈值调节正常；M3.2模块、整机离线与当前条件下实物验收PASS。** 两行缓存、3×3窗口、Sobel/阈值与原灰度/边缘显示已实现，使用AR0135单色8位流。M4离线仿真、完整I3编译、STA和实物功能验收PASS（保留已知首行异常）；M5A完成离线算法验证、完整I3编译、STA及用户实物功能验收，阶段PASS；M5B.0架构与软件可行性分析完成，结论NO-GO；M5B.1生产RTL和整机DDR接入未启动，M6～M7未开始，P0其余需求待确认。DDR压力/全容量/温度/校准、复位/CDC、电气/冷启动以及旧Flash R3/R4风险保留。
 
 [M3工程](efinity/m3_sobel_core_i3/Ti60_Demo.xml)、[五个算法模块](rtl/m3_sobel_core/sobel_stream_top.v)、[M3离线报告](reports/m3_sobel_core_i3/BUILD_REPORT.md)、[机器验收证据](reports/m3_sobel_core_i3/ACCEPTANCE.json)、[验收脚本](scripts/m3_sobel_core_validate.py)。新工程来自M2已编译源快照，保留74.4MHz像素PLL、720p及原外围参数；默认阈值64/二值显示。该M3离线轮次没有Programmer、下载、Flash或Git暂存/提交；后续各阶段授权与结果见相应报告。
 
@@ -59,3 +59,5 @@ M4历史归档时分支codex/m4-color-overlay；该轮归档并独立提交，M3
 - 分支`codex/m5a-streaming-canny`；本次归档起始HEAD及新提交直接父节点为M4 `95bf83f7172ecdf11ee9b8deb3e2c1bba535a56d`，起始索引为空。用户授权独立提交`feat: add streaming local canny pipeline`；提交自身ID、最终文件数/字节数及提交后状态以主会话实际Git核查为准，避免在提交内容中循环写入自身哈希。
 - 按重新生成的[明确范围清单](reports/m5a_streaming_canny_i3/PROPOSED_GIT_SCOPE.json)逐项暂存，主会话独立核对blob与M2～M4保护范围。历史254文件/12,063,517字节是实物归档前清单，不作为当前固定目标。
 - 本轮仅实物归档与独立提交，未重新编译、未运行Programmer、未再次下载、未写Flash、未修改业务RTL、未继续首行诊断、未进入M5B、未合并main、未推送。M5B及其余后续阶段未开始。
+
+M5B.0只完成分析：[NO-GO闸门](reports/m5b0_global_canny_architecture/GO_NO_GO.md)、[主会话复核](reports/m5b0_global_canny_architecture/ROOT_REVIEW.md)、[归档范围](reports/m5b0_global_canny_architecture/FINAL_CHANGE_SCOPE.json)。新增已证明安全DDR容量仍为0；没有生产RTL、Efinity副本、全局Canny bitstream或局部/全局融合。2026-10-07本轮只授权独立归档提交，随后等待M5B.0R阻断项关闭任务。

@@ -1,5 +1,24 @@
 # 星眸项目状态
 
+## 2026-10-07 M5B.0归档状态（当前）
+
+M5B.0分析完成，最终结论保持 **NO-GO**：全局Canny算法软件可行性通过，M5B.1生产RTL和整机DDR接入不放行。用户本轮授权独立归档提交`docs: assess global canny architecture feasibility`，直接父提交为`4e0496e8a36f53dcfffa9e9564ffbf0f780a55ba`。分支`codex/m5b0-global-canny-architecture`；新提交ID及提交后状态以实际Git复核为准，避免循环记录自身哈希。
+
+六项缺口继续阻断：DDR高位译码/物理可达/校准保留；多主仲裁与真实AXI响应；视频FIFO服务界限；真实分类帧统计；新增综合/STA/资源；DDR压力与720p60共存实物验证。本轮不关闭任何缺口。当前归档保护检查发现历史唯一不可读M5A/.lock现已不存在，原因未确认，本轮未操作该锁；不得沿用历史锁元数据不变结论。10430可读文件按哈希/大小/mtime核对，见[当前保护](../reports/m5b0_global_canny_architecture/ARCHIVE_PROTECTION_CHECK.json)。下文“未暂存/未提交/HEAD不变”为上轮分析快照，本轮归档授权已覆盖该停止限制。只归档报告、软件模型及管理文档，没有生产RTL、新工程、全局bitstream、硬件验证或融合。见[归档主审](../reports/m5b0_global_canny_architecture/ROOT_REVIEW.md)、[最终范围](../reports/m5b0_global_canny_architecture/FINAL_CHANGE_SCOPE.json)。
+
+## 2026-10-07 M5B.0分析快照（历史，归档状态见上文）
+
+项目m5b0_global_canny_architecture：架构、DDR源码/候选地址/带宽审计和软件可行性分析完成。**最终NO-GO：M5B.1生产RTL或DDR接入尚不放行；算法软件单项GO。** M5A保持原实物功能PASS，M5B硬件未实现。
+
+推荐2bit冻结分类快照、前反向八连通传播、1bit工作/结果双缓冲。19683个3×3穷举与30图（15完整720p）全部等于BFS；典型合成4～8扫，横/竖蛇362/642扫；真实分类场景0帧。地址候选[0x01000000,0x010E7000)，新增已证明安全容量0；单modified AXI口、UI96MHz、共享DDR峰1.536GB/s，实时安全预算未测，不能保证720p60不阻塞或1～2fps。
+
+协议34项契约用例通过，只有收敛且复制前reserve、写响应栅栏和descriptor合法才发布；64双向轮/1秒watchdog失败保留旧有效结果或无结果。资源粗估新增6k～16kXLR/33～64RAM10/0DSP，待综合。需先解除地址译码/校准保留区、多主事务响应/QoS、实时FIFO服务界限和真实场景指标阻断。见[闸门报告](../reports/m5b0_global_canny_architecture/GO_NO_GO.md)。
+
+本轮只报告、Python模型和必要管理文档；未生产RTL、未工程副本、未编译、未bit、未Programmer/下载/Flash、未暂存/提交/合并/推送。完整保护、当前Git及主会话独立复核由同目录最终证据绑定；下文旧授权/停止边界属于对应历史阶段。
+
+主会话独立复核完成：630组随机图/9990像素、两项确定性用例及独立union-find完整720p竖蛇通过；全部穷举/30图、地址负向、34项协议及带宽负向已独立重跑。M2～M5A共10430可读文件/2264422457B的hash/大小/mtime与保护文件集合未变，唯一不可读锁只比较元数据；1550历史未跟踪文件全部保留。实际分支`codex/m5b0-global-canny-architecture`，HEAD仍`4e0496e8a36f53dcfffa9e9564ffbf0f780a55ba`，索引为空。见[主会话审查](../reports/m5b0_global_canny_architecture/ROOT_REVIEW.md)、[最终保护](../reports/m5b0_global_canny_architecture/PROTECTED_BASELINES_AFTER.json)、[最终范围](../reports/m5b0_global_canny_architecture/FINAL_CHANGE_SCOPE.json)、[Git状态](../reports/m5b0_global_canny_architecture/FINAL_GIT_STATUS.json)。到此停止，不进入M5B.1。
+
+
 更新日期：2026-10-07。
 
 ## 当前阶段与交接

@@ -139,3 +139,17 @@ bit本轮只读复算2,179,422字节/SHA-256 `5cbaa12da39eb141d6b481299c496e9f71
 | D058 | 用户授权在codex/m5a-streaming-canny独立提交feat: add streaming local canny pipeline，直接父为M4 95bf83f7172ecdf11ee9b8deb3e2c1bba535a56d；按最终清单逐项暂存，主会话独立复核验收边界/范围/blob/提交 | 本轮明确授权覆盖上轮不提交限制；仅归档，无重新编译、Programmer、下载/Flash、RTL修改、M5B、全局Canny、融合、识别、合并或推送 |
 
 全局setup/hold +0.194/+0.026 ns，像素域+5.879/+0.028 ns，HDMI出口+11.196/+0.164 ns。hold为正但较窄；实物功能通过不能严格证明所有工艺、电压和温度条件下稳定。继承7个无输入延迟端点和135个无输出延迟端点，PLL复位、I/O约束及CDC边界继续保留。旧Flash流水灯冷启动及R3/R4共享管脚风险保持，本轮没有写Flash。 用户没有提供Programmer原始日志、分模式记录、照片或视频、精确连续运行时长、逐阈值观察及EDID原始记录。原离线JSON保留其历史PASS_OFFLINE_HARDWARE_PENDING含义；不改写为机器上板验收。
+
+
+## 2026-10-07 M5B.0架构决定与未放行边界
+
+|编号|决定/结论|依据及边界|
+|---|---|---|
+|D059|用户授权M5B.0架构/DDR/软件闸门，GPT-6 Astra / ultra实施分析、主会话独立复核|只报告/Python/docs；禁止生产RTL/工程副本/编译/bit/下载/Flash/暂存提交合并推送|
+|D060|推荐M5A NMS双阈值2bit冻结分类快照、前反向全局八连通传播、工作/结果1bit双缓冲，仅收敛结果发布|19683个3×3穷举、30模式含15完整720p软件与BFS一致；真实分类分布尚缺|
+|D061|当前M5B.1生产实施NO-GO；算法软件可行单项GO|新增地址safe=0，单modifiedAXI响应/QoS和实时FIFO最大停服未证，不能保证720p60或1～2fps；资源只是估算|
+|D062|快照携epoch/回放frame_id/config；结果复制前reserve、写响应完成后原子ready；64pair或1s watchdog不发布截断传播|34项协议契约通过，不代表CDC/RTL/硬件验证；M5C只接口，不实现static_mask/融合|
+
+## 2026-10-07 M5B.0归档授权
+
+D063：用户明确授权本轮按最终清单独立提交`docs: assess global canny architecture feasibility`，直接父为M5A 4e0496e8a36f53dcfffa9e9564ffbf0f780a55ba。NO-GO结论与六项阻断不变；只归档，无生产RTL、新工程、编译、bitstream、下载/Flash、M5B.1、融合、合并或推送。先前禁止提交规则为历史分析轮次，本轮授权仅覆盖归档提交。

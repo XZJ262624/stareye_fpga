@@ -1,5 +1,38 @@
 # 星眸项目交接单
 
+## H-M5B0-20261007-ARCHIVE-FINAL（当前归档）
+
+目标：归档M5B.0，保持NO-GO，按明确范围独立提交`docs: assess global canny architecture feasibility`，直接父4e0496e8a36f53dcfffa9e9564ffbf0f780a55ba。GPT-6 Astra / ultra只读审查，主会话负责文档、范围、换行、暂存blob、保护及提交结果。
+
+当前M5B.1未启动，六项缺口全部保留；新增安全DDR容量0，没有生产RTL/整机DDR接入/全局bitstream/融合。历史不提交说明为前轮分析停止边界，本轮用户明确授权仅归档提交。新提交ID与最终blob总大小以实际Git核查为准。范围见reports/m5b0_global_canny_architecture/FINAL_CHANGE_SCOPE.json，归档复核见ROOT_REVIEW.md，当前保护见ARCHIVE_PROTECTION_CHECK.json。禁止编译、候选地址测试、仲裁实现、Programmer/下载/Flash、清理资料、M5B.1、合并或推送；提交后停止，等待M5B.0R。
+
+## H-M5B0-20261007-FINAL（历史分析快照，主会话独立复核完成）
+
+### 1. 项目与结论
+m5b0_global_canny_architecture，M5B.0架构/DDR核查/软件分析完成；生产实施闸门NO-GO，算法软件单项GO。M5B硬件未实现，M5A继续PASS。
+
+### 2. 基线与边界
+HEAD为4e0496e8a36f53dcfffa9e9564ffbf0f780a55ba。主会话创建codex/m5b0-global-canny-architecture；架构代理没有Git写操作。只新增本轮报告/Python和必要docs，不修改M2～M5A工程/RTL/旧报告/脚本。
+
+### 3. 方案
+冻结M5A NMS强弱2bit整帧；UI96MHz单DDR端口需未来事务仲裁；前反向完整八邻域扫描、工作1bit A/B、结果1bit A/B。所有坐标/config/frame_id/epoch一致，复制前reserve结果槽，完全收敛且B响应完成后发布，busy拒绝新请求。
+
+### 4. 证据
+19683个3×3穷举、30模式/15完整720p与BFS一致，小图literal/事件激活时刻及changed数一致；横蛇362扫、竖蛇642扫。地址1正6负，带宽3参数负向，协议34项用例通过。主会话已独立重跑这些用例，并用另一套DFS/二维扫描验证630随机图、用union-find验证完整720p竖蛇；结果绑定root_replay/ROOT_TEST_RESULTS.json及ROOT_REVIEW.md。无真实M5A分类帧或硬件吞吐/CDC证明。
+
+### 5. 阻断
+新增实际已证安全地址0；候选[0x01000000,0x010E7000)仅算术规划。IP高位别名/校准保留、真实R/B响应与多主owner/QoS、FIFO最坏停服及真实场景1～2fps统计不足。资源仅粗估，不能依据DDR峰自动放行。
+
+### 6. 保护与范围
+BEFORE/AFTER全量10430可读文件/2264422457B的SHA/大小/mtime及保护文件集合一致，另1个既有不可读锁仅大小/mtime一致；1550历史未跟踪路径全部保留。最终范围、AFTER/ROOT独立审查及Git状态已归档于reports/m5b0_global_canny_architecture/FINAL_CHANGE_SCOPE.json、PROTECTED_BASELINES_AFTER.json、ROOT_REVIEW.md、FINAL_GIT_STATUS.json。索引为空、HEAD未变；本轮没有暂存/提交。
+
+### 7. 写入权交还
+GPT-6 Astra / ultra架构代理已完成软件、报告和本节管理更新；交回唯一主线写入权给主会话。主会话独立复核算法/地址/带宽/最坏/闸门并生成最终保护和复验记录，本代理之后仅只读答疑。
+
+### 8. 停止边界
+未生产RTL、未复制工程、未完整编译、未bit、未Programmer/下载/Flash、未暂存/提交/合并/推送、未删除历史未跟踪资料。不得把本轮完成当作进入M5B.1硬件实现授权；不处理首行、不融合/static_mask/识别。
+
+
 ## H-M5A-20261007-HARDWARE-ARCHIVE（当前）
 
 ### 1. 项目与结论
@@ -152,3 +185,14 @@ M4离线开发与完整编译通过，实物彩色叠加效果待验收。分支
 6. 委派：GPT-6 Astra / ultra完成实现和主要验证，文档收尾额度中断；主会话接回完成CLI负向、独立HDL/黄金/STA/保护/Git及文档范围。
 7. 保留事项：厂商AR0135参考链路继承的固定首行冻结异常保持DEFERRED，未定位、未修复，本轮未诊断或掩盖。+0.026 ns窄hold裕量、跨PVT未经严格证明、PLL异步复位/I/O约束/CDC、旧Flash流水灯冷启动及R3/R4共享风险继续保留。 实物七模式/按键/OSD、NMS变细、局部连接限制、红色对齐和稳定性待用户验收。
 8. 下一步/停止边界：等待用户按MODES_AND_HARDWARE_PLAN.md验收；本轮不Programmer、下载、Flash、首行诊断、全局Canny、暂存/提交、合并或推送，不擅自安排实际下载。
+
+## H-M5B0-20261007-ARCHITECTURE（当前任务，覆盖此前M5A停止边界）
+目标：从实际M5A 4e0496e8a36f53dcfffa9e9564ffbf0f780a55ba开展M5B.0架构闸门，分支codex/m5b0-global-canny-architecture，追踪实际DDR地址/带宽/AXI端口与完整八连通收敛算法，软件模型必须与独立BFS逐像素相等，输出GO/条件GO/NO-GO和阻断项。
+委派：GPT-6 Astra / ultra为唯一新报告/软件模型/分析脚本写入者；主会话独立复核源证据、地址单位、最坏迭代/带宽、发布失败规则和资源结论。
+允许：reports/m5b0_global_canny_architecture、M5B0专用软件/分析脚本及必要背景状态/交接/阶段/决定。必须完整阅读用户附件 a8ecb2ee-a497-4565-9c34-c43c8153ae16/已粘贴的文本.txt。
+禁止：任何生产RTL、Efinity副本/编译/bit、旧M2～M5A输入/输出/报告/脚本、Programmer/下载/Flash、首行诊断、实际融合/static_mask/识别、暂存/提交/合并/推送、删除历史未跟踪文件。快照输入冻结完整分类图，只收敛结果发布，watchdog超时不得冒称全局Canny。
+保护：reports/m5b0_global_canny_architecture/PROTECTED_BASELINES_BEFORE.json实际记录10430可读文件/2264422457字节及1项无法读取锁元数据、1550历史未跟踪路径。本轮开始跟踪工作区/索引干净；此HANDOFF是授权管理变更，不改变已验收工程。
+验收：自动地址半开区间/对齐/无重叠/负向检查；机器可读带宽复算；独立BFS/候选算法含完整720p与蛇形最坏、超时/帧身份/所有权测试；不保证1～2fps或安全闲置DDR端口；最终主会话复核后归档架构完成但不写M5B硬件实现PASS。
+
+## H-M5B0-20261007-ARCHIVE（本轮授权）
+目标：保持NO-GO，归档M5B.0并独立提交docs: assess global canny architecture feasibility，直接父4e0496e8a36f53dcfffa9e9564ffbf0f780a55ba。GPT-6 Astra / ultra只读审查文档、清单、软件证据及归档边界；主会话唯一写入，负责最终范围、暂存blob、保护与提交复核。允许管理文档及本阶段归档证据；禁止生产RTL、新Efinity工程、编译、bit、下载、Flash、候选地址测试、仲裁实现、融合、M5B.1、删除历史资料、合并或推送。此前不暂存/提交的停止限制属于上轮分析，本轮用户明确授权按清单归档提交。验收：范围及换行可解释、暂存blob哈希一致、父节点正确、NO-GO不变、M2～M5A保护与1550历史未跟踪保留。

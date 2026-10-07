@@ -1,0 +1,951 @@
+{
+  "units": "decimal B/s and seconds; allocations elsewhere use binary MiB",
+  "width": 1280,
+  "height": 720,
+  "pixels": 921600,
+  "ui_clock_hz": 96000000,
+  "engine_clock_hz_assumed": 96000000,
+  "engine_pixels_per_cycle_assumed": 1,
+  "ddr_clock_hz": 384000000,
+  "ddr_data_rate_MTps": 768,
+  "axi_bits": 128,
+  "ddr_bits": 16,
+  "physical_shared_peak_Bps": 1536000000,
+  "axi_each_direction_peak_Bps": 1536000000,
+  "read_write_peaks_must_not_be_added": true,
+  "pixel_clock_hz": 74400000,
+  "display_fps_design": 60.121212121212125,
+  "camera_fps_assumed": 60,
+  "camera_fps_measured": null,
+  "nominal60_camera_Bps": 55296000,
+  "nominal60_hdmi_Bps": 55296000,
+  "nominal60_video_Bps": 110592000,
+  "clock_based_video_Bps": 110703709.0909091,
+  "nominal_video_peak_fraction": 0.072,
+  "class_bytes": 230400,
+  "mask_bytes": 115200,
+  "capture_bytes": 230400,
+  "capture_active_Bps": 18600000.0,
+  "capture_one_frame_average_Bps": 13851927.272727273,
+  "initialization_read_bytes": 230400,
+  "initialization_write_bytes": 115200,
+  "per_scan_read_bytes": 345600,
+  "per_scan_write_bytes": 115200,
+  "per_scan_total_bytes": 460800,
+  "per_pair_total_bytes": 921600,
+  "final_copy_read_bytes": 115200,
+  "final_copy_write_bytes": 115200,
+  "metadata_mirror_B_per_job_assumed": 1024,
+  "job_fixed_bytes": 807424,
+  "future_mask_display_Bps": 6925963.636363637,
+  "four_video_buffers_multiplier": 1,
+  "four_video_metadata_DDR_bytes": 0,
+  "class_variable_bursts": 113,
+  "mask_variable_bursts": 57,
+  "class_fixed128_padded_bytes": 231424,
+  "mask_fixed128_padded_bytes": 116736,
+  "class_row_bursts": 765,
+  "mask_row_bursts": 743,
+  "safe_global_budget_measured_Bps": null,
+  "efficiency_scenarios": [
+    {
+      "burst_efficiency": 0.7,
+      "arbitration_factor": 0.6,
+      "row_bank_factor": 0.85,
+      "refresh_factor": 0.98,
+      "aggregate_Bps": 537384960.0,
+      "twenty_percent_guard_Bps": 107476992.0,
+      "residual_after_guard_and_video_Bps": 319204258.9090909,
+      "measured": false,
+      "guaranteed": false
+    },
+    {
+      "burst_efficiency": 0.85,
+      "arbitration_factor": 0.8,
+      "row_bank_factor": 0.9,
+      "refresh_factor": 0.98,
+      "aggregate_Bps": 921231360.0,
+      "twenty_percent_guard_Bps": 184246272.0,
+      "residual_after_guard_and_video_Bps": 626281378.9090909,
+      "measured": false,
+      "guaranteed": false
+    },
+    {
+      "burst_efficiency": 0.95,
+      "arbitration_factor": 0.9,
+      "row_bank_factor": 0.95,
+      "refresh_factor": 0.99,
+      "aggregate_Bps": 1235139840.0,
+      "twenty_percent_guard_Bps": 247027968.0,
+      "residual_after_guard_and_video_Bps": 877408162.9090909,
+      "measured": false,
+      "guaranteed": false
+    }
+  ],
+  "source_of_idle_ratio": "UNMEASURED; existing command RR is not occupancy/QoS measurement",
+  "cases": [
+    {
+      "name": "single_strong",
+      "scans": 2,
+      "pairs": 1,
+      "job_bytes": 1729024,
+      "jacobi_job_bytes": 1268224,
+      "jacobi_compute_seconds": 0.0288,
+      "targets": [
+        {
+          "fps": 1,
+          "global_Bps": 1729024,
+          "global_over_nominal_video_fraction": 0.01563425925925926,
+          "global_over_physical_peak_fraction": 0.0011256666666666667
+        },
+        {
+          "fps": 2,
+          "global_Bps": 3458048,
+          "global_over_nominal_video_fraction": 0.03126851851851852,
+          "global_over_physical_peak_fraction": 0.0022513333333333335
+        },
+        {
+          "fps": 5,
+          "global_Bps": 8645120,
+          "global_over_nominal_video_fraction": 0.0781712962962963,
+          "global_over_physical_peak_fraction": 0.005628333333333333
+        }
+      ],
+      "time_scenarios": [
+        {
+          "assumed_global_budget_Bps": 25000000,
+          "transfer_seconds": 0.06916096,
+          "compute_seconds": 0.0384,
+          "capture_seconds": 0.01663306451612903,
+          "optimistic_overlap_seconds": 0.08579402451612902,
+          "serialized_estimate_seconds": 0.12419402451612901,
+          "guaranteed_wall_clock_bound": false
+        },
+        {
+          "assumed_global_budget_Bps": 50000000,
+          "transfer_seconds": 0.03458048,
+          "compute_seconds": 0.0384,
+          "capture_seconds": 0.01663306451612903,
+          "optimistic_overlap_seconds": 0.05503306451612903,
+          "serialized_estimate_seconds": 0.08961354451612902,
+          "guaranteed_wall_clock_bound": false
+        },
+        {
+          "assumed_global_budget_Bps": 100000000,
+          "transfer_seconds": 0.01729024,
+          "compute_seconds": 0.0384,
+          "capture_seconds": 0.01663306451612903,
+          "optimistic_overlap_seconds": 0.05503306451612903,
+          "serialized_estimate_seconds": 0.07232330451612903,
+          "guaranteed_wall_clock_bound": false
+        }
+      ]
+    },
+    {
+      "name": "short_chain",
+      "scans": 4,
+      "pairs": 2,
+      "job_bytes": 2650624,
+      "jacobi_job_bytes": 4493824,
+      "jacobi_compute_seconds": 0.096,
+      "targets": [
+        {
+          "fps": 1,
+          "global_Bps": 2650624,
+          "global_over_nominal_video_fraction": 0.023967592592592592,
+          "global_over_physical_peak_fraction": 0.0017256666666666666
+        },
+        {
+          "fps": 2,
+          "global_Bps": 5301248,
+          "global_over_nominal_video_fraction": 0.047935185185185185,
+          "global_over_physical_peak_fraction": 0.003451333333333333
+        },
+        {
+          "fps": 5,
+          "global_Bps": 13253120,
+          "global_over_nominal_video_fraction": 0.11983796296296297,
+          "global_over_physical_peak_fraction": 0.008628333333333333
+        }
+      ],
+      "time_scenarios": [
+        {
+          "assumed_global_budget_Bps": 25000000,
+          "transfer_seconds": 0.10602496,
+          "compute_seconds": 0.0576,
+          "capture_seconds": 0.01663306451612903,
+          "optimistic_overlap_seconds": 0.12265802451612903,
+          "serialized_estimate_seconds": 0.18025802451612902,
+          "guaranteed_wall_clock_bound": false
+        },
+        {
+          "assumed_global_budget_Bps": 50000000,
+          "transfer_seconds": 0.05301248,
+          "compute_seconds": 0.0576,
+          "capture_seconds": 0.01663306451612903,
+          "optimistic_overlap_seconds": 0.07423306451612903,
+          "serialized_estimate_seconds": 0.12724554451612902,
+          "guaranteed_wall_clock_bound": false
+        },
+        {
+          "assumed_global_budget_Bps": 100000000,
+          "transfer_seconds": 0.02650624,
+          "compute_seconds": 0.0576,
+          "capture_seconds": 0.01663306451612903,
+          "optimistic_overlap_seconds": 0.07423306451612903,
+          "serialized_estimate_seconds": 0.10073930451612903,
+          "guaranteed_wall_clock_bound": false
+        }
+      ]
+    },
+    {
+      "name": "long_chain",
+      "scans": 4,
+      "pairs": 2,
+      "job_bytes": 2650624,
+      "jacobi_job_bytes": 590631424,
+      "jacobi_compute_seconds": 12.3072,
+      "targets": [
+        {
+          "fps": 1,
+          "global_Bps": 2650624,
+          "global_over_nominal_video_fraction": 0.023967592592592592,
+          "global_over_physical_peak_fraction": 0.0017256666666666666
+        },
+        {
+          "fps": 2,
+          "global_Bps": 5301248,
+          "global_over_nominal_video_fraction": 0.047935185185185185,
+          "global_over_physical_peak_fraction": 0.003451333333333333
+        },
+        {
+          "fps": 5,
+          "global_Bps": 13253120,
+          "global_over_nominal_video_fraction": 0.11983796296296297,
+          "global_over_physical_peak_fraction": 0.008628333333333333
+        }
+      ],
+      "time_scenarios": [
+        {
+          "assumed_global_budget_Bps": 25000000,
+          "transfer_seconds": 0.10602496,
+          "compute_seconds": 0.0576,
+          "capture_seconds": 0.01663306451612903,
+          "optimistic_overlap_seconds": 0.12265802451612903,
+          "serialized_estimate_seconds": 0.18025802451612902,
+          "guaranteed_wall_clock_bound": false
+        },
+        {
+          "assumed_global_budget_Bps": 50000000,
+          "transfer_seconds": 0.05301248,
+          "compute_seconds": 0.0576,
+          "capture_seconds": 0.01663306451612903,
+          "optimistic_overlap_seconds": 0.07423306451612903,
+          "serialized_estimate_seconds": 0.12724554451612902,
+          "guaranteed_wall_clock_bound": false
+        },
+        {
+          "assumed_global_budget_Bps": 100000000,
+          "transfer_seconds": 0.02650624,
+          "compute_seconds": 0.0576,
+          "capture_seconds": 0.01663306451612903,
+          "optimistic_overlap_seconds": 0.07423306451612903,
+          "serialized_estimate_seconds": 0.10073930451612903,
+          "guaranteed_wall_clock_bound": false
+        }
+      ]
+    },
+    {
+      "name": "disconnected",
+      "scans": 4,
+      "pairs": 2,
+      "job_bytes": 2650624,
+      "jacobi_job_bytes": 331661824,
+      "jacobi_compute_seconds": 6.912,
+      "targets": [
+        {
+          "fps": 1,
+          "global_Bps": 2650624,
+          "global_over_nominal_video_fraction": 0.023967592592592592,
+          "global_over_physical_peak_fraction": 0.0017256666666666666
+        },
+        {
+          "fps": 2,
+          "global_Bps": 5301248,
+          "global_over_nominal_video_fraction": 0.047935185185185185,
+          "global_over_physical_peak_fraction": 0.003451333333333333
+        },
+        {
+          "fps": 5,
+          "global_Bps": 13253120,
+          "global_over_nominal_video_fraction": 0.11983796296296297,
+          "global_over_physical_peak_fraction": 0.008628333333333333
+        }
+      ],
+      "time_scenarios": [
+        {
+          "assumed_global_budget_Bps": 25000000,
+          "transfer_seconds": 0.10602496,
+          "compute_seconds": 0.0576,
+          "capture_seconds": 0.01663306451612903,
+          "optimistic_overlap_seconds": 0.12265802451612903,
+          "serialized_estimate_seconds": 0.18025802451612902,
+          "guaranteed_wall_clock_bound": false
+        },
+        {
+          "assumed_global_budget_Bps": 50000000,
+          "transfer_seconds": 0.05301248,
+          "compute_seconds": 0.0576,
+          "capture_seconds": 0.01663306451612903,
+          "optimistic_overlap_seconds": 0.07423306451612903,
+          "serialized_estimate_seconds": 0.12724554451612902,
+          "guaranteed_wall_clock_bound": false
+        },
+        {
+          "assumed_global_budget_Bps": 100000000,
+          "transfer_seconds": 0.02650624,
+          "compute_seconds": 0.0576,
+          "capture_seconds": 0.01663306451612903,
+          "optimistic_overlap_seconds": 0.07423306451612903,
+          "serialized_estimate_seconds": 0.10073930451612903,
+          "guaranteed_wall_clock_bound": false
+        }
+      ]
+    },
+    {
+      "name": "diagonal",
+      "scans": 4,
+      "pairs": 2,
+      "job_bytes": 2650624,
+      "jacobi_job_bytes": 332583424,
+      "jacobi_compute_seconds": 6.9312,
+      "targets": [
+        {
+          "fps": 1,
+          "global_Bps": 2650624,
+          "global_over_nominal_video_fraction": 0.023967592592592592,
+          "global_over_physical_peak_fraction": 0.0017256666666666666
+        },
+        {
+          "fps": 2,
+          "global_Bps": 5301248,
+          "global_over_nominal_video_fraction": 0.047935185185185185,
+          "global_over_physical_peak_fraction": 0.003451333333333333
+        },
+        {
+          "fps": 5,
+          "global_Bps": 13253120,
+          "global_over_nominal_video_fraction": 0.11983796296296297,
+          "global_over_physical_peak_fraction": 0.008628333333333333
+        }
+      ],
+      "time_scenarios": [
+        {
+          "assumed_global_budget_Bps": 25000000,
+          "transfer_seconds": 0.10602496,
+          "compute_seconds": 0.0576,
+          "capture_seconds": 0.01663306451612903,
+          "optimistic_overlap_seconds": 0.12265802451612903,
+          "serialized_estimate_seconds": 0.18025802451612902,
+          "guaranteed_wall_clock_bound": false
+        },
+        {
+          "assumed_global_budget_Bps": 50000000,
+          "transfer_seconds": 0.05301248,
+          "compute_seconds": 0.0576,
+          "capture_seconds": 0.01663306451612903,
+          "optimistic_overlap_seconds": 0.07423306451612903,
+          "serialized_estimate_seconds": 0.12724554451612902,
+          "guaranteed_wall_clock_bound": false
+        },
+        {
+          "assumed_global_budget_Bps": 100000000,
+          "transfer_seconds": 0.02650624,
+          "compute_seconds": 0.0576,
+          "capture_seconds": 0.01663306451612903,
+          "optimistic_overlap_seconds": 0.07423306451612903,
+          "serialized_estimate_seconds": 0.10073930451612903,
+          "guaranteed_wall_clock_bound": false
+        }
+      ]
+    },
+    {
+      "name": "ring",
+      "scans": 4,
+      "pairs": 2,
+      "job_bytes": 2650624,
+      "jacobi_job_bytes": 919642624,
+      "jacobi_compute_seconds": 19.1616,
+      "targets": [
+        {
+          "fps": 1,
+          "global_Bps": 2650624,
+          "global_over_nominal_video_fraction": 0.023967592592592592,
+          "global_over_physical_peak_fraction": 0.0017256666666666666
+        },
+        {
+          "fps": 2,
+          "global_Bps": 5301248,
+          "global_over_nominal_video_fraction": 0.047935185185185185,
+          "global_over_physical_peak_fraction": 0.003451333333333333
+        },
+        {
+          "fps": 5,
+          "global_Bps": 13253120,
+          "global_over_nominal_video_fraction": 0.11983796296296297,
+          "global_over_physical_peak_fraction": 0.008628333333333333
+        }
+      ],
+      "time_scenarios": [
+        {
+          "assumed_global_budget_Bps": 25000000,
+          "transfer_seconds": 0.10602496,
+          "compute_seconds": 0.0576,
+          "capture_seconds": 0.01663306451612903,
+          "optimistic_overlap_seconds": 0.12265802451612903,
+          "serialized_estimate_seconds": 0.18025802451612902,
+          "guaranteed_wall_clock_bound": false
+        },
+        {
+          "assumed_global_budget_Bps": 50000000,
+          "transfer_seconds": 0.05301248,
+          "compute_seconds": 0.0576,
+          "capture_seconds": 0.01663306451612903,
+          "optimistic_overlap_seconds": 0.07423306451612903,
+          "serialized_estimate_seconds": 0.12724554451612902,
+          "guaranteed_wall_clock_bound": false
+        },
+        {
+          "assumed_global_budget_Bps": 100000000,
+          "transfer_seconds": 0.02650624,
+          "compute_seconds": 0.0576,
+          "capture_seconds": 0.01663306451612903,
+          "optimistic_overlap_seconds": 0.07423306451612903,
+          "serialized_estimate_seconds": 0.10073930451612903,
+          "guaranteed_wall_clock_bound": false
+        }
+      ]
+    },
+    {
+      "name": "tree",
+      "scans": 4,
+      "pairs": 2,
+      "job_bytes": 2650624,
+      "jacobi_job_bytes": 625652224,
+      "jacobi_compute_seconds": 13.0368,
+      "targets": [
+        {
+          "fps": 1,
+          "global_Bps": 2650624,
+          "global_over_nominal_video_fraction": 0.023967592592592592,
+          "global_over_physical_peak_fraction": 0.0017256666666666666
+        },
+        {
+          "fps": 2,
+          "global_Bps": 5301248,
+          "global_over_nominal_video_fraction": 0.047935185185185185,
+          "global_over_physical_peak_fraction": 0.003451333333333333
+        },
+        {
+          "fps": 5,
+          "global_Bps": 13253120,
+          "global_over_nominal_video_fraction": 0.11983796296296297,
+          "global_over_physical_peak_fraction": 0.008628333333333333
+        }
+      ],
+      "time_scenarios": [
+        {
+          "assumed_global_budget_Bps": 25000000,
+          "transfer_seconds": 0.10602496,
+          "compute_seconds": 0.0576,
+          "capture_seconds": 0.01663306451612903,
+          "optimistic_overlap_seconds": 0.12265802451612903,
+          "serialized_estimate_seconds": 0.18025802451612902,
+          "guaranteed_wall_clock_bound": false
+        },
+        {
+          "assumed_global_budget_Bps": 50000000,
+          "transfer_seconds": 0.05301248,
+          "compute_seconds": 0.0576,
+          "capture_seconds": 0.01663306451612903,
+          "optimistic_overlap_seconds": 0.07423306451612903,
+          "serialized_estimate_seconds": 0.12724554451612902,
+          "guaranteed_wall_clock_bound": false
+        },
+        {
+          "assumed_global_budget_Bps": 100000000,
+          "transfer_seconds": 0.02650624,
+          "compute_seconds": 0.0576,
+          "capture_seconds": 0.01663306451612903,
+          "optimistic_overlap_seconds": 0.07423306451612903,
+          "serialized_estimate_seconds": 0.10073930451612903,
+          "guaranteed_wall_clock_bound": false
+        }
+      ]
+    },
+    {
+      "name": "snake",
+      "scans": 362,
+      "pairs": 181,
+      "job_bytes": 167617024,
+      "jacobi_job_bytes": 212172020224,
+      "jacobi_compute_seconds": 4420.2528,
+      "targets": [
+        {
+          "fps": 1,
+          "global_Bps": 167617024,
+          "global_over_nominal_video_fraction": 1.5156342592592593,
+          "global_over_physical_peak_fraction": 0.10912566666666666
+        },
+        {
+          "fps": 2,
+          "global_Bps": 335234048,
+          "global_over_nominal_video_fraction": 3.0312685185185186,
+          "global_over_physical_peak_fraction": 0.21825133333333332
+        },
+        {
+          "fps": 5,
+          "global_Bps": 838085120,
+          "global_over_nominal_video_fraction": 7.578171296296296,
+          "global_over_physical_peak_fraction": 0.5456283333333334
+        }
+      ],
+      "time_scenarios": [
+        {
+          "assumed_global_budget_Bps": 25000000,
+          "transfer_seconds": 6.70468096,
+          "compute_seconds": 3.4944,
+          "capture_seconds": 0.01663306451612903,
+          "optimistic_overlap_seconds": 6.721314024516129,
+          "serialized_estimate_seconds": 10.21571402451613,
+          "guaranteed_wall_clock_bound": false
+        },
+        {
+          "assumed_global_budget_Bps": 50000000,
+          "transfer_seconds": 3.35234048,
+          "compute_seconds": 3.4944,
+          "capture_seconds": 0.01663306451612903,
+          "optimistic_overlap_seconds": 3.511033064516129,
+          "serialized_estimate_seconds": 6.863373544516129,
+          "guaranteed_wall_clock_bound": false
+        },
+        {
+          "assumed_global_budget_Bps": 100000000,
+          "transfer_seconds": 1.67617024,
+          "compute_seconds": 3.4944,
+          "capture_seconds": 0.01663306451612903,
+          "optimistic_overlap_seconds": 3.511033064516129,
+          "serialized_estimate_seconds": 5.187203304516129,
+          "guaranteed_wall_clock_bound": false
+        }
+      ]
+    },
+    {
+      "name": "snake_vertical",
+      "scans": 642,
+      "pairs": 321,
+      "job_bytes": 296641024,
+      "jacobi_job_bytes": 212042996224,
+      "jacobi_compute_seconds": 4417.5648,
+      "targets": [
+        {
+          "fps": 1,
+          "global_Bps": 296641024,
+          "global_over_nominal_video_fraction": 2.682300925925926,
+          "global_over_physical_peak_fraction": 0.19312566666666667
+        },
+        {
+          "fps": 2,
+          "global_Bps": 593282048,
+          "global_over_nominal_video_fraction": 5.364601851851852,
+          "global_over_physical_peak_fraction": 0.38625133333333334
+        },
+        {
+          "fps": 5,
+          "global_Bps": 1483205120,
+          "global_over_nominal_video_fraction": 13.41150462962963,
+          "global_over_physical_peak_fraction": 0.9656283333333333
+        }
+      ],
+      "time_scenarios": [
+        {
+          "assumed_global_budget_Bps": 25000000,
+          "transfer_seconds": 11.86564096,
+          "compute_seconds": 6.1824,
+          "capture_seconds": 0.01663306451612903,
+          "optimistic_overlap_seconds": 11.88227402451613,
+          "serialized_estimate_seconds": 18.06467402451613,
+          "guaranteed_wall_clock_bound": false
+        },
+        {
+          "assumed_global_budget_Bps": 50000000,
+          "transfer_seconds": 5.93282048,
+          "compute_seconds": 6.1824,
+          "capture_seconds": 0.01663306451612903,
+          "optimistic_overlap_seconds": 6.199033064516129,
+          "serialized_estimate_seconds": 12.131853544516131,
+          "guaranteed_wall_clock_bound": false
+        },
+        {
+          "assumed_global_budget_Bps": 100000000,
+          "transfer_seconds": 2.96641024,
+          "compute_seconds": 6.1824,
+          "capture_seconds": 0.01663306451612903,
+          "optimistic_overlap_seconds": 6.199033064516129,
+          "serialized_estimate_seconds": 9.16544330451613,
+          "guaranteed_wall_clock_bound": false
+        }
+      ]
+    },
+    {
+      "name": "checkerboard",
+      "scans": 6,
+      "pairs": 3,
+      "job_bytes": 3572224,
+      "jacobi_job_bytes": 590631424,
+      "jacobi_compute_seconds": 12.3072,
+      "targets": [
+        {
+          "fps": 1,
+          "global_Bps": 3572224,
+          "global_over_nominal_video_fraction": 0.03230092592592593,
+          "global_over_physical_peak_fraction": 0.002325666666666667
+        },
+        {
+          "fps": 2,
+          "global_Bps": 7144448,
+          "global_over_nominal_video_fraction": 0.06460185185185185,
+          "global_over_physical_peak_fraction": 0.004651333333333334
+        },
+        {
+          "fps": 5,
+          "global_Bps": 17861120,
+          "global_over_nominal_video_fraction": 0.16150462962962964,
+          "global_over_physical_peak_fraction": 0.011628333333333333
+        }
+      ],
+      "time_scenarios": [
+        {
+          "assumed_global_budget_Bps": 25000000,
+          "transfer_seconds": 0.14288896,
+          "compute_seconds": 0.0768,
+          "capture_seconds": 0.01663306451612903,
+          "optimistic_overlap_seconds": 0.15952202451612904,
+          "serialized_estimate_seconds": 0.23632202451612902,
+          "guaranteed_wall_clock_bound": false
+        },
+        {
+          "assumed_global_budget_Bps": 50000000,
+          "transfer_seconds": 0.07144448,
+          "compute_seconds": 0.0768,
+          "capture_seconds": 0.01663306451612903,
+          "optimistic_overlap_seconds": 0.09343306451612902,
+          "serialized_estimate_seconds": 0.16487754451612904,
+          "guaranteed_wall_clock_bound": false
+        },
+        {
+          "assumed_global_budget_Bps": 100000000,
+          "transfer_seconds": 0.03572224,
+          "compute_seconds": 0.0768,
+          "capture_seconds": 0.01663306451612903,
+          "optimistic_overlap_seconds": 0.09343306451612902,
+          "serialized_estimate_seconds": 0.12915530451612903,
+          "guaranteed_wall_clock_bound": false
+        }
+      ]
+    },
+    {
+      "name": "all_strong",
+      "scans": 2,
+      "pairs": 1,
+      "job_bytes": 1729024,
+      "jacobi_job_bytes": 1268224,
+      "jacobi_compute_seconds": 0.0288,
+      "targets": [
+        {
+          "fps": 1,
+          "global_Bps": 1729024,
+          "global_over_nominal_video_fraction": 0.01563425925925926,
+          "global_over_physical_peak_fraction": 0.0011256666666666667
+        },
+        {
+          "fps": 2,
+          "global_Bps": 3458048,
+          "global_over_nominal_video_fraction": 0.03126851851851852,
+          "global_over_physical_peak_fraction": 0.0022513333333333335
+        },
+        {
+          "fps": 5,
+          "global_Bps": 8645120,
+          "global_over_nominal_video_fraction": 0.0781712962962963,
+          "global_over_physical_peak_fraction": 0.005628333333333333
+        }
+      ],
+      "time_scenarios": [
+        {
+          "assumed_global_budget_Bps": 25000000,
+          "transfer_seconds": 0.06916096,
+          "compute_seconds": 0.0384,
+          "capture_seconds": 0.01663306451612903,
+          "optimistic_overlap_seconds": 0.08579402451612902,
+          "serialized_estimate_seconds": 0.12419402451612901,
+          "guaranteed_wall_clock_bound": false
+        },
+        {
+          "assumed_global_budget_Bps": 50000000,
+          "transfer_seconds": 0.03458048,
+          "compute_seconds": 0.0384,
+          "capture_seconds": 0.01663306451612903,
+          "optimistic_overlap_seconds": 0.05503306451612903,
+          "serialized_estimate_seconds": 0.08961354451612902,
+          "guaranteed_wall_clock_bound": false
+        },
+        {
+          "assumed_global_budget_Bps": 100000000,
+          "transfer_seconds": 0.01729024,
+          "compute_seconds": 0.0384,
+          "capture_seconds": 0.01663306451612903,
+          "optimistic_overlap_seconds": 0.05503306451612903,
+          "serialized_estimate_seconds": 0.07232330451612903,
+          "guaranteed_wall_clock_bound": false
+        }
+      ]
+    },
+    {
+      "name": "all_weak",
+      "scans": 2,
+      "pairs": 1,
+      "job_bytes": 1729024,
+      "jacobi_job_bytes": 1268224,
+      "jacobi_compute_seconds": 0.0288,
+      "targets": [
+        {
+          "fps": 1,
+          "global_Bps": 1729024,
+          "global_over_nominal_video_fraction": 0.01563425925925926,
+          "global_over_physical_peak_fraction": 0.0011256666666666667
+        },
+        {
+          "fps": 2,
+          "global_Bps": 3458048,
+          "global_over_nominal_video_fraction": 0.03126851851851852,
+          "global_over_physical_peak_fraction": 0.0022513333333333335
+        },
+        {
+          "fps": 5,
+          "global_Bps": 8645120,
+          "global_over_nominal_video_fraction": 0.0781712962962963,
+          "global_over_physical_peak_fraction": 0.005628333333333333
+        }
+      ],
+      "time_scenarios": [
+        {
+          "assumed_global_budget_Bps": 25000000,
+          "transfer_seconds": 0.06916096,
+          "compute_seconds": 0.0384,
+          "capture_seconds": 0.01663306451612903,
+          "optimistic_overlap_seconds": 0.08579402451612902,
+          "serialized_estimate_seconds": 0.12419402451612901,
+          "guaranteed_wall_clock_bound": false
+        },
+        {
+          "assumed_global_budget_Bps": 50000000,
+          "transfer_seconds": 0.03458048,
+          "compute_seconds": 0.0384,
+          "capture_seconds": 0.01663306451612903,
+          "optimistic_overlap_seconds": 0.05503306451612903,
+          "serialized_estimate_seconds": 0.08961354451612902,
+          "guaranteed_wall_clock_bound": false
+        },
+        {
+          "assumed_global_budget_Bps": 100000000,
+          "transfer_seconds": 0.01729024,
+          "compute_seconds": 0.0384,
+          "capture_seconds": 0.01663306451612903,
+          "optimistic_overlap_seconds": 0.05503306451612903,
+          "serialized_estimate_seconds": 0.07232330451612903,
+          "guaranteed_wall_clock_bound": false
+        }
+      ]
+    },
+    {
+      "name": "all_zero",
+      "scans": 2,
+      "pairs": 1,
+      "job_bytes": 1729024,
+      "jacobi_job_bytes": 1268224,
+      "jacobi_compute_seconds": 0.0288,
+      "targets": [
+        {
+          "fps": 1,
+          "global_Bps": 1729024,
+          "global_over_nominal_video_fraction": 0.01563425925925926,
+          "global_over_physical_peak_fraction": 0.0011256666666666667
+        },
+        {
+          "fps": 2,
+          "global_Bps": 3458048,
+          "global_over_nominal_video_fraction": 0.03126851851851852,
+          "global_over_physical_peak_fraction": 0.0022513333333333335
+        },
+        {
+          "fps": 5,
+          "global_Bps": 8645120,
+          "global_over_nominal_video_fraction": 0.0781712962962963,
+          "global_over_physical_peak_fraction": 0.005628333333333333
+        }
+      ],
+      "time_scenarios": [
+        {
+          "assumed_global_budget_Bps": 25000000,
+          "transfer_seconds": 0.06916096,
+          "compute_seconds": 0.0384,
+          "capture_seconds": 0.01663306451612903,
+          "optimistic_overlap_seconds": 0.08579402451612902,
+          "serialized_estimate_seconds": 0.12419402451612901,
+          "guaranteed_wall_clock_bound": false
+        },
+        {
+          "assumed_global_budget_Bps": 50000000,
+          "transfer_seconds": 0.03458048,
+          "compute_seconds": 0.0384,
+          "capture_seconds": 0.01663306451612903,
+          "optimistic_overlap_seconds": 0.05503306451612903,
+          "serialized_estimate_seconds": 0.08961354451612902,
+          "guaranteed_wall_clock_bound": false
+        },
+        {
+          "assumed_global_budget_Bps": 100000000,
+          "transfer_seconds": 0.01729024,
+          "compute_seconds": 0.0384,
+          "capture_seconds": 0.01663306451612903,
+          "optimistic_overlap_seconds": 0.05503306451612903,
+          "serialized_estimate_seconds": 0.07232330451612903,
+          "guaranteed_wall_clock_bound": false
+        }
+      ]
+    },
+    {
+      "name": "random_sparse",
+      "scans": 8,
+      "pairs": 4,
+      "job_bytes": 4493824,
+      "jacobi_job_bytes": 6797824,
+      "jacobi_compute_seconds": 0.144,
+      "targets": [
+        {
+          "fps": 1,
+          "global_Bps": 4493824,
+          "global_over_nominal_video_fraction": 0.04063425925925926,
+          "global_over_physical_peak_fraction": 0.0029256666666666667
+        },
+        {
+          "fps": 2,
+          "global_Bps": 8987648,
+          "global_over_nominal_video_fraction": 0.08126851851851852,
+          "global_over_physical_peak_fraction": 0.005851333333333333
+        },
+        {
+          "fps": 5,
+          "global_Bps": 22469120,
+          "global_over_nominal_video_fraction": 0.2031712962962963,
+          "global_over_physical_peak_fraction": 0.014628333333333333
+        }
+      ],
+      "time_scenarios": [
+        {
+          "assumed_global_budget_Bps": 25000000,
+          "transfer_seconds": 0.17975296,
+          "compute_seconds": 0.096,
+          "capture_seconds": 0.01663306451612903,
+          "optimistic_overlap_seconds": 0.19638602451612902,
+          "serialized_estimate_seconds": 0.29238602451612905,
+          "guaranteed_wall_clock_bound": false
+        },
+        {
+          "assumed_global_budget_Bps": 50000000,
+          "transfer_seconds": 0.08987648,
+          "compute_seconds": 0.096,
+          "capture_seconds": 0.01663306451612903,
+          "optimistic_overlap_seconds": 0.11263306451612903,
+          "serialized_estimate_seconds": 0.20250954451612904,
+          "guaranteed_wall_clock_bound": false
+        },
+        {
+          "assumed_global_budget_Bps": 100000000,
+          "transfer_seconds": 0.04493824,
+          "compute_seconds": 0.096,
+          "capture_seconds": 0.01663306451612903,
+          "optimistic_overlap_seconds": 0.11263306451612903,
+          "serialized_estimate_seconds": 0.15757130451612902,
+          "guaranteed_wall_clock_bound": false
+        }
+      ]
+    },
+    {
+      "name": "random_dense",
+      "scans": 6,
+      "pairs": 3,
+      "job_bytes": 3572224,
+      "jacobi_job_bytes": 12788224,
+      "jacobi_compute_seconds": 0.2688,
+      "targets": [
+        {
+          "fps": 1,
+          "global_Bps": 3572224,
+          "global_over_nominal_video_fraction": 0.03230092592592593,
+          "global_over_physical_peak_fraction": 0.002325666666666667
+        },
+        {
+          "fps": 2,
+          "global_Bps": 7144448,
+          "global_over_nominal_video_fraction": 0.06460185185185185,
+          "global_over_physical_peak_fraction": 0.004651333333333334
+        },
+        {
+          "fps": 5,
+          "global_Bps": 17861120,
+          "global_over_nominal_video_fraction": 0.16150462962962964,
+          "global_over_physical_peak_fraction": 0.011628333333333333
+        }
+      ],
+      "time_scenarios": [
+        {
+          "assumed_global_budget_Bps": 25000000,
+          "transfer_seconds": 0.14288896,
+          "compute_seconds": 0.0768,
+          "capture_seconds": 0.01663306451612903,
+          "optimistic_overlap_seconds": 0.15952202451612904,
+          "serialized_estimate_seconds": 0.23632202451612902,
+          "guaranteed_wall_clock_bound": false
+        },
+        {
+          "assumed_global_budget_Bps": 50000000,
+          "transfer_seconds": 0.07144448,
+          "compute_seconds": 0.0768,
+          "capture_seconds": 0.01663306451612903,
+          "optimistic_overlap_seconds": 0.09343306451612902,
+          "serialized_estimate_seconds": 0.16487754451612904,
+          "guaranteed_wall_clock_bound": false
+        },
+        {
+          "assumed_global_budget_Bps": 100000000,
+          "transfer_seconds": 0.03572224,
+          "compute_seconds": 0.0768,
+          "capture_seconds": 0.01663306451612903,
+          "optimistic_overlap_seconds": 0.09343306451612902,
+          "serialized_estimate_seconds": 0.12915530451612903,
+          "guaranteed_wall_clock_bound": false
+        }
+      ]
+    }
+  ],
+  "invalid_camera_rate_rejections": 3,
+  "algorithm_bound": {
+    "weak_pixels_max": 921599,
+    "jacobi_scans_bound": 921600,
+    "raster_pairs_bound": 921600,
+    "raster_scans_bound": 1843200,
+    "kind": "loose finite monotonic bound, not achievable-FPS claim"
+  }
+}
