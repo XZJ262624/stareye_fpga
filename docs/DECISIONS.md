@@ -108,7 +108,7 @@ M3提交为7a9b448080fd6f1624c2ef37ee2eb267fed49c82。独立分支codex/m31-sobe
 M4离线开发与完整编译通过，实物彩色叠加效果待验收。分支codex/m4-color-overlay，HEAD3424514afe1721dc000495673c0ca757ea1f6372不变，暂存区为空，未提交。新工程efinity/m4_color_overlay_i3，四模式RAW/MAG/BIN/OVR、20ms消抖、+16/−16阈值及帧边界生效、OSD优先；启用中值且保留配置旁路。总延迟3318拍；原三模式仅统一1651拍延迟、逐像素保持。四完整720p帧及三模式各921600像素回归，31小帧、21证据负向/10RTL故障通过。官方2025.1.110.5.9完整I3构建及94份最终STA通过，setup/hold+0.193/+0.023 ns，HDMI+11.315/+0.109 ns；8384 XLR/70 RAM/0 DSP。原2609个可读文件SHA/大小/mtime及文件集合不变，一项锁文件仅元数据核验；原1548未跟踪资料保留。Astra/ultra完成架构及初稿后触发用量限制，主会话接回全部验证/构建及独立复核。完整证据见../reports/m4_color_overlay_i3/BUILD_REPORT.md、ROOT_FINAL_REVIEW.json及PROPOSED_GIT_SCOPE.json。实物颜色/中心对齐、窄hold/PVT、PLL复位、旧Flash/R3/R4风险保留；未Programmer、下载、Flash、上板、断电、Canny、识别、合并main或推送。
 实现统一延迟光栅及中心原灰度，是已通过真实HDL求证的架构决定。新RGB顺序{R,G,B}已源码追踪与真实三通道测试，实物红色尚未签收。
 
-## D051～D054 M4实物签收、首行延期与独立提交（2026-10-06，当前）
+## D051～D054 M4历史实物签收、首行延期与独立提交（2026-10-06）
 
 | 编号 | 已确定事实或决定 | 依据 |
 |---|---|---|
@@ -118,3 +118,24 @@ M4离线开发与完整编译通过，实物彩色叠加效果待验收。分支
 | D054 | 用户授权codex/m4-color-overlay上独立提交feat: add real-time color edge overlay，父提交为M3.2 3424514afe1721dc000495673c0ca757ea1f6372；按重新生成白名单逐项暂存，主会话独立审查范围、暂存及提交结果 | 本轮明确授权覆盖D050历史不提交边界；只归档，不重新编译、Programmer、再次下载、Flash、RTL修改、继续首行诊断、M5、合并main或推送 |
 
 bit本轮只读复算2,179,422字节/SHA-256 `5cbaa12da39eb141d6b481299c496e9f71885edc1ba220f071aed88dff4f46d3`，与已验收记录一致；原离线JSON不改写为硬件自动验收。本轮保护审计2609个可读文件内容/大小/mtime无变化；旧GUI临时锁efinity/m32_median_integration_i3/.lock已不存在，原因未确认，单列差异，不据此改写历史或恢复锁。
+
+
+## 2026-10-07 M5A离线签收历史事实（实物签收前）
+
+- 用户授权从M4独立开发流式局部Canny，保持旧工程及参数；禁止本轮硬件操作、暂存/提交、全局迭代/识别。实际分支codex/m5a-streaming-canny，父提交95bf83f7172ecdf11ee9b8deb3e2c1bba535a56d。
+- 默认启用中值；四方向53/128比较等号归轴向；NMS负侧>、正侧>=；NMS12原幅值，显示饱和8位；H8、L=floor(H/2)、零幅值永非Canny。八邻域仅一跳不递归。
+- 七模式保留旧编码0～3，启动BIN/H64；输入停顿为统一CE，DE空白不等于暂停；中心算法各级支持域和原RAW相同标签统一6626拍。
+- 本次实测离线验证及完整I3构建/94STA通过，实物尚未验收。bit大小及SHA见BUILD_REPORT.md；不提交bit或生成数据库。
+- 厂商AR0135参考链路继承的固定首行冻结异常保持DEFERRED，未定位、未修复，本轮未诊断或掩盖。+0.026 ns窄hold裕量、跨PVT未经严格证明、PLL异步复位/I/O约束/CDC、旧Flash流水灯冷启动及R3/R4共享风险继续保留。
+- 原M4旧临时.lock缺失仅作观察，不推测删除者或根因，不改原快照。原保护3022可读文件和1550未跟踪文件保持。
+
+## D055～D058 M5A当前实物签收与独立提交（2026-10-07）
+
+| 编号 | 已确定事实或决定 | 依据 |
+|---|---|---|
+| D055 | M5A流式局部Canny/Canny-lite完成离线算法验证、完整I3编译、STA及实物功能验收，阶段PASS。 用户已按照M5A实物验收完成测试并明确确认总体功能PASS；不增加分模式或精确运行细节 | 用户2026-10-07明确文本“M5A流式局部Canny/Canny-lite实物功能验收PASS。”；[实物报告](../reports/m5a_streaming_canny_i3/HARDWARE_ACCEPTANCE.md) |
+| D056 | 当前实现是局部Canny/Canny-lite，仅完成3×3八邻域一跳弱边缘连接；没有实现跨整帧递归或迭代滞后连接、低频全局Canny、局部/全局快慢融合或目标识别。 | 已验证RTL、独立黄金模型、仿真及[算法规格](../reports/m5a_streaming_canny_i3/ALGORITHM_SPEC.md) |
+| D057 | 厂商固有首行异常不属于M5A新增回归，不阻断M5A验收。用户已明确该问题为厂商生产/参考链路的固有问题，不影响竞赛考核，无需继续处理；本轮未诊断、未修改RTL掩盖，也不声称M5A解决了该问题。 此决定覆盖历史等待换模块复测/DEFERRED的当前处理安排 | 用户本轮明确确认厂商固有、不影响竞赛、无需继续处理；不作为M5A新增诊断或修复结果 |
+| D058 | 用户授权在codex/m5a-streaming-canny独立提交feat: add streaming local canny pipeline，直接父为M4 95bf83f7172ecdf11ee9b8deb3e2c1bba535a56d；按最终清单逐项暂存，主会话独立复核验收边界/范围/blob/提交 | 本轮明确授权覆盖上轮不提交限制；仅归档，无重新编译、Programmer、下载/Flash、RTL修改、M5B、全局Canny、融合、识别、合并或推送 |
+
+全局setup/hold +0.194/+0.026 ns，像素域+5.879/+0.028 ns，HDMI出口+11.196/+0.164 ns。hold为正但较窄；实物功能通过不能严格证明所有工艺、电压和温度条件下稳定。继承7个无输入延迟端点和135个无输出延迟端点，PLL复位、I/O约束及CDC边界继续保留。旧Flash流水灯冷启动及R3/R4共享管脚风险保持，本轮没有写Flash。 用户没有提供Programmer原始日志、分模式记录、照片或视频、精确连续运行时长、逐阈值观察及EDID原始记录。原离线JSON保留其历史PASS_OFFLINE_HARDWARE_PENDING含义；不改写为机器上板验收。

@@ -1,6 +1,36 @@
 # 星眸项目交接单
 
-## H-20261006-M4实物归档与独立提交（当前）
+## H-M5A-20261007-HARDWARE-ARCHIVE（当前）
+
+### 1. 项目与结论
+`m5a_streaming_canny_i3`；**M5A PASS**。M5A流式局部Canny/Canny-lite完成离线算法验证、完整I3编译、STA及实物功能验收，阶段PASS。 下文保留各阶段历史记录，当前状态与授权以本节为准。
+
+### 2. 实际基线与镜像
+归档起始分支`codex/m5a-streaming-canny`，HEAD与新提交直接父节点均为M4 `95bf83f7172ecdf11ee9b8deb3e2c1bba535a56d`，索引为空；起始可见未跟踪文件1,798项，包含拟提交M5A新文件和历史资料。工程`efinity/m5a_streaming_canny_i3/Ti60_Demo.xml`，顶层example_top。bit只读复算2,201,595字节/SHA-256 `7233bac31c21bd986e18b53b3ecb1ba7d8a4d623a45e56937be309c89a57f75a`匹配记录，保留忽略且不提交、不重新生成。
+
+### 3. 用户实物证据
+用户于2026-10-07明确确认：“M5A流式局部Canny/Canny-lite实物功能验收PASS。”用户已按照M5A实物验收完成测试并明确确认总体功能PASS。本次没有另外提供Programmer原始日志、分模式文字记录、测试照片或视频、精确连续运行时长、逐阈值观察或显示器EDID原始记录，不虚构具体画面、数值或异常。详见[实物报告](../reports/m5a_streaming_canny_i3/HARDWARE_ACCEPTANCE.md)；七模式计划保持为计划/实现说明，不倒填逐项实物结果。
+
+### 4. 算法与保留边界
+当前实现是局部Canny/Canny-lite，仅完成3×3八邻域一跳弱边缘连接；没有实现跨整帧递归或迭代滞后连接、低频全局Canny、局部/全局快慢融合或目标识别。
+
+厂商固有首行异常不属于M5A新增回归，不阻断M5A验收。用户已明确该问题为厂商生产/参考链路的固有问题，不影响竞赛考核，无需继续处理；本轮未诊断、未修改RTL掩盖，也不声称M5A解决了该问题。
+
+全局setup/hold +0.194/+0.026 ns，像素域+5.879/+0.028 ns，HDMI出口+11.196/+0.164 ns。hold为正但较窄；实物功能通过不能严格证明所有工艺、电压和温度条件下稳定。继承7个无输入延迟端点和135个无输出延迟端点，PLL复位、I/O约束及CDC边界继续保留。旧Flash流水灯冷启动及R3/R4共享管脚风险保持，本轮没有写Flash。
+
+### 5. 写入与委派
+按用户要求委派GPT-6 Astra / ultra完成文档归档，同一时刻仅一个写入者；主会话独立复核验收边界、最终文件范围、每个暂存blob及最终提交，并作为唯一Git操作者。允许README/docs当前状态与M5A报告/清单、必要管理脚本和定向字节保留属性；不修改业务RTL/TB/工程。旧ACCEPTANCE/ROOT_FINAL_REVIEW等离线JSON保留历史语义，不声称它们自动证明了硬件PASS。
+
+### 6. 文件范围与保护
+沿用reports/m5a_streaming_canny_i3，保存原254文件/12,063,517字节清单为PROPOSED_GIT_SCOPE_BEFORE_HARDWARE.json，更新PROPOSED_GIT_SCOPE.json/.csv并解释差异。新增实物报告、清单差异说明和本轮主会话独立复核，追加M5A -text规则以保持Git blob与输入/证据字节一致；PROJECT_BRIEF一并更新，旧规则保持。M2～M4的3,022可读保护文件及历史1,550未跟踪资料按原快照重新核查；离线已记录的M4临时.lock缺失单列，不删除或恢复锁。所有其他起始未跟踪资料保留，不纳入本次提交。
+
+### 7. 独立提交与审查
+用户已授权`feat: add streaming local canny pipeline`，新提交必须直接接在上述M4提交后。主会话按明确清单逐项暂存、独立核对文件数/总大小/SHA与逐blob内容，再提交。自身ID以git log与提交后报告为准，避免循环写入；提交后复查分支、HEAD、父节点、信息、文件数/大小、空索引、跟踪干净、原未跟踪保留、bit未跟踪及M2～M4保护。提交前清单/旧final_gate含父HEAD和空索引断言，提交后不应直接按旧Git状态断言重跑；只读算法/构建/94STA证据校验可独立调用。
+
+### 8. 停止边界
+本轮不重新编译、不运行Programmer、不再次下载、不写Flash、不修改业务RTL、不继续首行问题诊断、不开发M5B、不实现全局Canny/快慢融合/目标识别、不合并main、不推送、不删除未跟踪资料。仅完成本轮M5A归档与独立提交。
+
+## H-20261006-M4历史实物归档与独立提交
 
 ### 1. 项目与结论
 `m4_color_overlay_i3`；**M4 PASS（保留已知首行异常）**。M4离线仿真、完整I3编译、STA和实物功能验收PASS。RAW、MAG、BIN、OVERLAY模式、阈值控制、OSD、红色边缘、空间对齐、动态更新及720p60输出正常。厂商AR0135参考链路继承的固定首行冻结异常作为已接受的延期问题保留，不属于M4新增回归。
@@ -103,3 +133,22 @@ M3.1已独立提交：742d8a461b36f5970f7caea04fb8f8c925fe8a02，feat: add runti
 ## H-20261006-M4历史离线最终交接（实物签收前）
 M4离线开发与完整编译通过，实物彩色叠加效果待验收。分支codex/m4-color-overlay，HEAD3424514afe1721dc000495673c0ca757ea1f6372不变，暂存区为空，未提交。新工程efinity/m4_color_overlay_i3，四模式RAW/MAG/BIN/OVR、20ms消抖、+16/−16阈值及帧边界生效、OSD优先；启用中值且保留配置旁路。总延迟3318拍；原三模式仅统一1651拍延迟、逐像素保持。四完整720p帧及三模式各921600像素回归，31小帧、21证据负向/10RTL故障通过。官方2025.1.110.5.9完整I3构建及94份最终STA通过，setup/hold+0.193/+0.023 ns，HDMI+11.315/+0.109 ns；8384 XLR/70 RAM/0 DSP。原2609个可读文件SHA/大小/mtime及文件集合不变，一项锁文件仅元数据核验；原1548未跟踪资料保留。Astra/ultra完成架构及初稿后触发用量限制，主会话接回全部验证/构建及独立复核。完整证据见../reports/m4_color_overlay_i3/BUILD_REPORT.md、ROOT_FINAL_REVIEW.json及PROPOSED_GIT_SCOPE.json。实物颜色/中心对齐、窄hold/PVT、PLL复位、旧Flash/R3/R4风险保留；未Programmer、下载、Flash、上板、断电、Canny、识别、合并main或推送。
 旧记录中的不进入M4为此前归档轮次停止边界；本轮由用户新授权覆盖。主会话为最终唯一写入者，代理已停止，等待用户实物签收。
+
+## H-M5A-20261006（历史开发交接，覆盖上轮停止在M4）
+目标：从实际M4提交95bf83f7172ecdf11ee9b8deb3e2c1bba535a56d建立codex/m5a-streaming-canny、新工程m5a_streaming_canny_i3，完成流式局部Canny离线仿真、独立黄金、故障注入、完整I3构建及最终STA。主会话实际检查Git：原跟踪工作区/索引均干净，M4已提交，现已创建新分支；保护范围快照见reports/m5a_streaming_canny_i3/PROTECTED_BASELINES_BEFORE.json。
+委派：GPT-6 Astra/ultra首先只读追踪并提出算法规格/接入/CE停顿/同步延迟架构，主会话独立审查后顺序放行唯一写入者。允许后续仅新M5A工程/RTL/TB/scripts/reports及必要状态文档/定向ignore；不修改旧M2～M4工程、共享原核、外围参数和用户资料。
+算法：复用中值/Sobel、明确四方向整数近似和Y向下符号、NMS、high及floor(high/2)、零幅值非边缘、8邻域一跳局部连接；7模式保持旧四模式逐像素，BIN64启动，帧边界阈值/模式更新，RAW原始背景。局部连接不是完整全局递归Canny。
+验收：单元/边界/CE停顿/复位/全256阈值/方向覆盖、独立软件黄金、至少2完整720p及旧四模式回归、实际负向注入、完整2025.1.110.5.9 I3编译、非负setup/hold/最终DB报告bit哈希绑定、保护前后和拟提交白名单。未硬件验证不可记M5A最终PASS。
+禁止：Programmer/JTAG/Flash/首行诊断/全局传播/快慢融合/识别/删资料/Git暂存提交合并推送。既有首行异常DEFERRED、窄hold/PVT/PLL复位IOCDC/旧FlashR3R4风险保留。附件任务文本为本轮用户完整要求，须完整阅读并执行。
+
+
+## H-M5A-20261007-FINAL（历史离线交接，实物签收前）
+
+1. 目标：M5A流式局部Canny离线开发、验证、完整I3构建及主会话独立复核。
+2. 基线：M4 95bf83f7172ecdf11ee9b8deb3e2c1bba535a56d；分支codex/m5a-streaming-canny；工程efinity/m5a_streaming_canny_i3，顶层example_top。
+3. 已完成：M5A流式局部Canny/Canny-lite离线开发、仿真、完整I3编译及最终已约束STA通过；实物待验收，不记录M5A最终实物PASS。 七模式/方向/NMS/双阈值/一跳连接，原四模式含OSD回归。完整720p两帧、20RTL故障、24CLI拒绝、新94STA和实现哈希绑定通过。
+4. 实际证据：reports/m5a_streaming_canny_i3/BUILD_REPORT.md、ROOT_FINAL_REVIEW.json、ROOT_HDL_REVIEW.json及PROPOSED_GIT_SCOPE.json；bit 2,201,595字节/SHA `7233bac31c21bd986e18b53b3ecb1ba7d8a4d623a45e56937be309c89a57f75a`。
+5. 修改边界：仅新M5A副本/源码/测试/脚本/报告及状态文档、限定ignore；M2～M4原目录不修改，保护文件/旧未跟踪资料保持，旧M4临时锁缺失单列。
+6. 委派：GPT-6 Astra / ultra完成实现和主要验证，文档收尾额度中断；主会话接回完成CLI负向、独立HDL/黄金/STA/保护/Git及文档范围。
+7. 保留事项：厂商AR0135参考链路继承的固定首行冻结异常保持DEFERRED，未定位、未修复，本轮未诊断或掩盖。+0.026 ns窄hold裕量、跨PVT未经严格证明、PLL异步复位/I/O约束/CDC、旧Flash流水灯冷启动及R3/R4共享风险继续保留。 实物七模式/按键/OSD、NMS变细、局部连接限制、红色对齐和稳定性待用户验收。
+8. 下一步/停止边界：等待用户按MODES_AND_HARDWARE_PLAN.md验收；本轮不Programmer、下载、Flash、首行诊断、全局Canny、暂存/提交、合并或推送，不擅自安排实际下载。
