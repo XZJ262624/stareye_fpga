@@ -1,5 +1,38 @@
 # 星眸项目交接单
 
+## H-M5B0R-20261008-REVIEW-FAIL-FIX（当前修复任务）
+
+### 目标与基线
+
+Codex A已于2026-10-08 18:43完成固定candidate审查，结论`FAIL`。审查对象为分支`codex/m5b0r-ddr-admission`、candidate `6c44df8c5edc10c45a59c4c867e3fc44a6e7456d`、parent `ba28397cc5f0d4b34ed06b803c8e5af067c9ca98`。当前修复必须以`6c44df8c5edc10c45a59c4c867e3fc44a6e7456d`为直接父提交追加新candidate，不rebase、不amend、不改写旧candidate。
+
+### 必须修复
+
+1. `ddr_reset_ack`有效期间禁止任何客户端地址请求握手，保证`c_avalid && c_aready`绝不在时序逻辑优先执行ACK清理时被漏记。
+2. 仲裁TB增加ACK与VALID重叠、ACK保持多周期、ACK撤销后恢复的定向测试；独立断言ACK期间不得接受请求，并确保`accepted=completed+cancelled`能够覆盖该边界。
+3. 诊断TB增加独立于RTL内部计数的完整计划验收。健康流程须核对预期事务数9,967、写拍356,927、读拍357,128，并独立覆盖地址/模式/守卫复测；增加跳过关键阶段或缩短计划时必定失败的负向验收，最终精确计数须从当前规格和循环结构复算确认。
+4. 修正文档中53/54例不一致；将提交前Git状态检查与可在固定candidate上执行的证据复验分离，支持显式candidate/parent或等价的提交后只读复验方式。
+
+### 允许范围
+
+`rtl/m5b0r_ddr_admission/m5b0r_arbiter.sv`、`tb/m5b0r_ddr_admission/tb_m5b0r_arbiter.sv`、`tb/m5b0r_ddr_admission/tb_m5b0r_diagnostic.sv`、必要的`scripts/m5b0r*`、`reports/m5b0r_ddr_admission`及必要管理文档。Work已先行写入本轮Codex A归档、双审查长期规则和本交接单，这些文件纳入新candidate范围。
+
+### 禁止范围
+
+不得修改M2～M5A受保护工程、M5B.0模型/报告、诊断顶层接口、DDR IP参数、管脚、时钟、视频分辨率或生产视频链路；不得运行Programmer、JTAG下载、SPI Active或写Flash；不得删除或清理未跟踪文件；不得提交bitstream、outflow、work、数据库、缓存、锁、波形、原始日志、reference、tools或用户资料；不得使用`git add .`或`git add -A`；不得合并main、rebase、改写历史或推送。
+
+### 验证与Git要求
+
+重跑受影响的全部仲裁仿真和诊断仿真，运行新增正向/负向验收及现有范围/证据检查；若Efinity诊断工程未引用仲裁器且诊断RTL/工程输入未改变，可复用既有完整构建与112份STA，但必须明确说明未重编译的理由并重新核对绑定。保护10,469个既有文件和历史1,550个未跟踪路径。按精确清单逐文件暂存，核对工作区、索引blob、清单及提交内容一致后创建追加candidate commit。提交后报告branch、candidate、parent、范围、测试、构建/STA复用边界、bitstream元数据、已知限制和工作区状态。
+
+### Codex exec交回摘要
+
+修复内容、独立计划复算、9项负向验收及构建复用依据见 `reports/m5b0r_ddr_admission/REVIEW_FIX_REPORT.md`。新candidate必须直接以旧candidate为parent，具体ID由提交后Git报告；不将开发验证记为独立复审结果。用户双审查规则及旧FAIL归档一并纳入。
+
+### 停止边界
+
+新candidate提交后立即停止写入。Work复核并冻结后，自动发送经验证的隔离快照给DeepSeek B，并向用户提供Codex A复审提示词。双审查结束前不进入实物验收或M5B.1。
+
 ## H-M5B0-20261007-ARCHIVE-FINAL（当前归档）
 
 目标：归档M5B.0，保持NO-GO，按明确范围独立提交`docs: assess global canny architecture feasibility`，直接父4e0496e8a36f53dcfffa9e9564ffbf0f780a55ba。GPT-6 Astra / ultra只读审查，主会话负责文档、范围、换行、暂存blob、保护及提交结果。

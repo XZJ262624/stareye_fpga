@@ -16,6 +16,54 @@ module tb_m5b0r_diagnostic;
  integer state=0,index=0,beats=0,waits=0,stalls=0,expect_reason=0,expect_status=0;
  reg [31:0] base;reg [7:0] owner;reg [127:0] oldw,oldr;reg [49:0] olda;
  reg astall=0,wstall=0,rstall=0;
+ // Independent bus-level plan, built from the frozen specification, never DUT state.
+ reg [31:0] probes[0:37],walk_addr[0:7],plan_addr[0:9966];
+ integer plan_len[0:9966],plan_mode[0:9966],plan_bit[0:9966];
+ reg plan_write[0:9966];
+ integer plan_n=0,plan_w=0,plan_r=0,pp,mm,bb,aa,ww;
+ wire healthy=fault==0||fault==23||fault==26;
+ function automatic [127:0] golden(input [31:0] a,input integer m,input integer b);
+ reg [127:0] value;
+ begin
+  value={a^32'hfedcba98,a^32'h89abcdef,a^32'h76543210,a^32'h01234567};
+  case(m)
+   0:golden=value;1:golden=~value;2:golden=0;3:golden='1;
+   4:golden={16{8'haa}};5:golden={16{8'h55}};
+   6:golden=128'b1<<b;7:golden=~(128'b1<<b);
+   default:$fatal(1,"invalid golden pattern");
+  endcase
+ end endfunction
+ task automatic append_plan(input [31:0] a,input integer n,input bit wr,input integer m,input integer b);
+ begin
+  if(plan_n>=9967)$fatal(1,"plan overflow");
+  plan_addr[plan_n]=a;plan_len[plan_n]=n;plan_write[plan_n]=wr;
+  plan_mode[plan_n]=m;plan_bit[plan_n]=b;plan_n=plan_n+1;
+  if(wr)plan_w=plan_w+n;else plan_r=plan_r+n;
+ end endtask
+ task automatic append_guards;
+ begin for(integer g=0;g<38;g=g+1)if(probes[g]<32'h01000000)append_plan(probes[g],1,0,1,0);end endtask
+ initial begin
+  probes[0]=0;for(pp=1;pp<=25;pp=pp+1)probes[pp]=32'b1<<(pp+3);
+  probes[26]=32'h00fffff0;probes[27]=32'h01073800;probes[28]=32'h010e6ff0;
+  probes[29]=32'h00073800;probes[30]=32'h000e6ff0;probes[31]=32'h01400000;
+  probes[32]=32'h01c00000;probes[33]=32'h1ffffff0;probes[34]=32'h00c00000;
+  probes[35]=32'h010007f0;probes[36]=32'h01000800;probes[37]=32'h01000ff0;
+  walk_addr[0]=32'h01000000;walk_addr[1]=32'h01000010;walk_addr[2]=32'h010007f0;
+  walk_addr[3]=32'h01000800;walk_addr[4]=32'h01000ff0;walk_addr[5]=32'h01001000;
+  walk_addr[6]=32'h01073800;walk_addr[7]=32'h010e6ff0;
+  for(pp=0;pp<4;pp=pp+1)for(aa=0;aa<38;aa=aa+1)
+   append_plan(probes[aa],1,pp==0||(pp==2&&probes[aa]<32'h01000000),
+               pp>=2&&probes[aa]<32'h01000000 ? 1 : 0,0);
+  for(mm=0;mm<6;mm=mm+1)begin
+   for(ww=1;ww>=0;ww=ww-1)for(aa=0;aa<462;aa=aa+1)
+    append_plan(32'h01000000+(((mm%2)==ww)?461-aa:aa)*2048,128,ww,mm,0);
+   append_guards();
+  end
+  for(mm=6;mm<=7;mm=mm+1)for(bb=0;bb<128;bb=bb+1)
+   for(ww=1;ww>=0;ww=ww-1)for(aa=0;aa<8;aa=aa+1)append_plan(walk_addr[aa],1,ww,mm,bb);
+  append_guards();
+  if(plan_n!=9967||plan_w!=356927||plan_r!=357128)$fatal(1,"golden plan totals");
+ end
  function automatic [31:0] mapped(input [31:0] a,input bit reading);
  reg [31:0] x;
  begin
@@ -67,10 +115,15 @@ module tb_m5b0r_diagnostic;
     if(asize!=4||aburst!=1||alock!=0||aaddr[3:0]!=0||alen>127||
        aaddr>=32'h20000000||(aaddr&4095)+(alen+1)*16>4096)$fatal(1,"illegal command");
     if(state!=0)$fatal(1,"multiple outstanding");
+    if(healthy&&(commands>=9967||aaddr!==plan_addr[commands]||
+       alen+1!=plan_len[commands]||atype!==plan_write[commands]))
+     $fatal(1,"diagnostic plan command mismatch index=%0d addr=%h",commands,aaddr);
     base=aaddr;owner=aid;beats=alen+1;index=0;state=atype?1:2;commands=commands+1;
    end
    if(wvalid&&wready)begin
     if(state!=1||wid!=owner||wstrb!=16'hffff||wlast!=(index==beats-1))$fatal(1,"write protocol");
+    if(healthy&&wdata!==golden(base+index*16,plan_mode[commands-1],plan_bit[commands-1]))
+     $fatal(1,"diagnostic plan pattern mismatch");
     memory[mapped(base+index*16,0)]=wdata;wbeats=wbeats+1;
     if(index==beats-1)state=3;else index=index+1;
    end
@@ -94,6 +147,9 @@ module tb_m5b0r_diagnostic;
   if(fault==0||fault==23||fault==26)begin
    if(status!=6||!alias_pass||!range_pass||commands!=transaction_count||wbeats+rbeats!=beat_count)
     $fatal(1,"healthy diagnostic failed status=%d reason=%d addr=%h stage=%d commands=%d tx=%d beats=%d/%d",status,reason,failure_address,failure_stage,commands,transaction_count,wbeats+rbeats,beat_count);
+   if(commands!=9967||wbeats!=356927||rbeats!=357128)
+    $fatal(1,"diagnostic plan incomplete commands=%0d write=%0d read=%0d",commands,wbeats,rbeats);
+   $display("DIAGNOSTIC_PLAN_PASS alias=152 range=5544 walking=4096 guards=175 commands=9967 writes=356927 reads=357128");
    // A successful test is invalidated by a subsequent loss of calibration.
    cal_pass=0;repeat(3)@(negedge clk);if(status!=3||range_pass||alias_pass)$fatal(1,"stale PASS");
   end else begin

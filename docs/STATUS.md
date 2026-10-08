@@ -1,5 +1,15 @@
 # 星眸项目状态
 
+## 2026-10-08 M5B.0R修复candidate（当前）
+
+Codex exec已修复ACK期间虚假握手，加入ACK持续重叠/恢复检查与独立9967事务完整诊断计划。54例诊断、六种子仲裁、monitor和9项负向验收的最终证据见 `reports/m5b0r_ddr_admission/REVIEW_FIX_REPORT.md` 及对应机器报告。独立诊断构建输入未改变，复用并复核原112份STA与bit；隔离仲裁器尚未综合。追加candidate以6c44df8为直接parent，提交后停止写入，等待Work核验、DeepSeek B及用户独立Codex A复审。M5B.0R/M5B.1仍NO_GO，无硬件操作。
+
+## 2026-10-08 M5B.0R独立审查失败与修复依据
+
+固定candidate `6c44df8c5edc10c45a59c4c867e3fc44a6e7456d`已由用户委派的Codex A于18:43完成只读审查，最终结论`FAIL`。阻断问题为`ddr_reset_ack`有效期间仲裁器仍可能对新请求给出READY，但时序逻辑优先执行ACK清理而不锁存该请求；仲裁TB没有覆盖ACK/VALID重叠与多周期ACK。诊断TB另缺独立完整计划计数/模式/守卫覆盖，提交后证据复验和53/54例文档口径需同时修正。详见[Codex A归档](../reports/m5b0r_ddr_admission/CODEX_A_REVIEW_6C44DF8.md)。
+
+当前不进入实物验收，M5B.0R及M5B.1继续`NO_GO`。修复以旧candidate为直接父提交追加新candidate，不改写历史；完成后由Work自动向DeepSeek B发送经验证的只读隔离快照，并再次停在用户委派Codex A复审节点。用户已长期授权每个candidate节点自动发送DeepSeek B快照，排除`.git`、未提交文件、密钥、`.env`、工具包、原始未跟踪资料和用户私人文件。
+
 ## 2026-10-07 M5B.0归档状态（当前）
 
 M5B.0分析完成，最终结论保持 **NO-GO**：全局Canny算法软件可行性通过，M5B.1生产RTL和整机DDR接入不放行。用户本轮授权独立归档提交`docs: assess global canny architecture feasibility`，直接父提交为`4e0496e8a36f53dcfffa9e9564ffbf0f780a55ba`。分支`codex/m5b0-global-canny-architecture`；新提交ID及提交后状态以实际Git复核为准，避免循环记录自身哈希。

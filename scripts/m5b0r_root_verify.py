@@ -11,6 +11,11 @@ def negatives():
  R.mkdir(parents=True,exist_ok=True);out=[]
  cases=[('diagnostic','m5b0r_transaction.sv','rdata!=data_pattern','1\'b0 && rdata!=data_pattern','tb_m5b0r_diagnostic',['+FAULT=1'], 'wrong detection'),
  ('arbiter','m5b0r_arbiter.sv','c_bid[owner*8+:8]=local_id','c_bid[owner*8+:8]=local_id^8\'h80','tb_m5b0r_arbiter',[], 'B misroute'),
+ ('ack','m5b0r_arbiter.sv','!ddr_reset_ack&&!discard','!discard','tb_m5b0r_arbiter',[], 'ACK accepted request'),
+ ('skip_walking','m5b0r_diagnostic.sv','else if(mode==5) begin mode<=6;phase<=6;walk<=0;end','else if(mode==5) begin range_pass<=1;status<=6;end','tb_m5b0r_diagnostic',[], 'diagnostic plan incomplete'),
+ ('skip_guard','m5b0r_diagnostic.sv','phase<=7;point<=0;end','phase<=7;point<=1;end','tb_m5b0r_diagnostic',[], 'diagnostic plan command mismatch'),
+ ('short_range','m5b0r_diagnostic.sv','RANGE_END-2048','RANGE_END-4096','tb_m5b0r_diagnostic',[], 'diagnostic plan command mismatch'),
+ ('wrong_pattern','m5b0r_transaction.sv',"4:data_pattern={16{8'haa}}","4:data_pattern={16{8'h55}}",'tb_m5b0r_diagnostic',[], 'diagnostic plan pattern mismatch'),
  ('monitor','m5b0r_monitor.sv','actual,expected,failure_address','expected,actual,failure_address','tb_m5b0r_monitor',[], 'LED payload corruption')]
  for name,filename,old,new,top,plus,expected in cases:
   w=R/('negative_'+name);w.mkdir(exist_ok=True)

@@ -25,6 +25,8 @@ module tb_m5b0r_arbiter;
  reg astall=0,wstall=0,rstall=0,bstall=0;reg [52:0] aheld;reg [152:0] wheld;
  reg [138:0] rheld;reg [9:0] bheld;
  reg stop_new=0;reg directed=0;
+ integer ack_overlap_cycles=0,ack_before=0,ack_done=0;
+ reg hold_ack_requests=0;
  function automatic [127:0] token(input [31:0] a,input integer b,input integer own);
  begin token={a^32'hac1dface,32'hb5b00000|own,32'h76543210^b,a+b*16};end endfunction
  task automatic new_command(input integer n);
@@ -69,9 +71,14 @@ module tb_m5b0r_arbiter;
  end
  always @(posedge clk)begin
   cycle=cycle+1;
+  // Independent of reset bookkeeping: never hide an ACK handshake.
+  if(rst_n&&ddr_reset_ack)begin
+   if(c_aready!==0)$fatal(1,"ACK accepted request");
+   if(c_avalid!=0)ack_overlap_cycles=ack_overlap_cycles+1;
+  end
   if(!rst_n||ddr_reset_ack)begin
    ms=0;rvalid=0;bvalid=0;astall=0;wstall=0;rstall=0;bstall=0;cb_stall=0;cr_stall=0;
-   for(j=0;j<3;j=j+1)begin if(phase[j]>=2)cancelled=cancelled+1;phase[j]=0;c_wvalid[j]=0;end
+   for(j=0;j<3;j=j+1)begin if(phase[j]>=2)cancelled=cancelled+1;if(!hold_ack_requests||phase[j]!=1)phase[j]=0;c_wvalid[j]=0;end
   end else begin
    if(astall&&{aid,aaddr,alen,asize,atype,avalid}!==aheld)$fatal(1,"DDR A unstable");
    if(wstall&&{wid,wstrb,wlast,wvalid,wdata}!==wheld)$fatal(1,"DDR W unstable");
@@ -140,6 +147,16 @@ module tb_m5b0r_arbiter;
   wait(!busy);repeat(5)@(negedge clk);
   // Cancel any unaccepted requests before the directed reset epoch.
   directed=1;soft_reset=1;hard_reset();
+  // Keep all three requests asserted through four ACK clocks and then recover.
+  @(negedge clk);ddr_reset_ack=1;hold_ack_requests=1;
+  urgent=0;safe_window=1;prev_bg=-10000;
+  new_command(0);new_command(1);new_command(2);
+  ack_before=accepted;ack_done=completed;
+  repeat(5)@(negedge clk);
+  if(accepted!=ack_before||ack_overlap_cycles<4)$fatal(1,"ACK overlap coverage");
+  ddr_reset_ack=0;hold_ack_requests=0;
+  wait(completed==ack_done+3);
+  if(accepted!=ack_before+3||accepted!=completed+cancelled)$fatal(1,"ACK recovery accounting");
   // Reset in A/W/R/B, including DDR backpressure. Stalled buses remain stable.
   for(case_id=1;case_id<=9;case_id=case_id+1)begin
    inject=case_id;urgent=0;safe_window=1;
@@ -161,7 +178,7 @@ module tb_m5b0r_arbiter;
   wait(!busy);repeat(10)@(negedge clk);soft_reset=1;hard_reset();
   if(accepted!=completed+cancelled)$fatal(1,"lost/duplicate transaction accepted=%d completed=%d cancelled=%d",accepted,completed,cancelled);
   if(served[0]<1000||served[1]<1000||served[2]<100||err_count==0||queue_full_cycles==0||urgent_blocks==0)$fatal(1,"coverage shortfall");
-  $display("M5B0R_ARBITER_PASS cycles=%0d accepted=%0d completed=%0d cancelled=%0d DDR_commands=%0d services=%0d,%0d,%0d maxwait=%0d,%0d,%0d errors=%0d resets=%0d queue_full_cycles=%0d urgent_blocks=%0d",cycle,accepted,completed,cancelled,ddr_commands,served[0],served[1],served[2],maxwait[0],maxwait[1],maxwait[2],err_count,reset_count,queue_full_cycles,urgent_blocks);$finish;
+  $display("M5B0R_ARBITER_PASS cycles=%0d accepted=%0d completed=%0d cancelled=%0d DDR_commands=%0d services=%0d,%0d,%0d maxwait=%0d,%0d,%0d errors=%0d resets=%0d ACK_overlap_cycles=%0d queue_full_cycles=%0d urgent_blocks=%0d",cycle,accepted,completed,cancelled,ddr_commands,served[0],served[1],served[2],maxwait[0],maxwait[1],maxwait[2],err_count,reset_count,ack_overlap_cycles,queue_full_cycles,urgent_blocks);$finish;
  end
  initial begin repeat(20000000)@(posedge clk);$fatal(1,"arbiter test watchdog");end
 endmodule

@@ -47,7 +47,7 @@ module m5b0r_arbiter #(
   else if(c_avalid[0]&&(!c_avalid[1]||!rt_turn))begin choice=0;choose_valid=1;end
   else if(c_avalid[1])begin choice=1;choose_valid=1;end
   else if(c_avalid[2]&&safe_window&&urgent==0&&credit)begin choice=2;choose_valid=1;end
-  if(state==IDLE&&!discard&&choose_valid)c_aready[choice]=1;
+  if(state==IDLE&&!ddr_reset_ack&&!discard&&choose_valid)c_aready[choice]=1;
  end
  assign aid={6'b0,owner}+8'd1;assign wid=aid;assign aaddr=address;assign alen=len;
  assign asize=4;assign aburst=1;assign alock=0;assign atype=write_op;
