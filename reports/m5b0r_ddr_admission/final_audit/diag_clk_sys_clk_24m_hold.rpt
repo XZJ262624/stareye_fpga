@@ -1,0 +1,502 @@
+
+Efinix Timing Path Constraint Report
+Version: 2025.1.110.5.9
+Date: Thu Oct  8 13:56:07 2026
+
+Copyright (C) 2013 - 2025 Efinix, Inc. All rights reserved.
+
+User command: report_timing -from_clock {clk_sys} -to_clock {clk_24m} -npaths 10 -nworst 1 -hold -detail full_path -file {diag_clk_sys_clk_24m_hold.rpt}
+
+Timing Model: I3
+	process : typical
+	temperature : -40C to 100C
+	voltage : 0.95 +/-30mV
+	speedgrade : 3
+	technology : t16ff
+	status : final
+
+Summary:
+
+ Path #  | Slack (ns) | Delay (ns) |         Start Pin         |            End Pin            | Launch Clk  | Capture Clk
+==========================================================================================================================
+  1      |  0.021     |  0.128     | transaction_count[4]~FF|Q | u_monitor/telemetry[304]~FF|D | clk_sys (R) | clk_24m (R)
+  2      |  0.022     |  0.129     | expected[31]~FF|Q         | u_monitor/telemetry[75]~FF|D  | clk_sys (R) | clk_24m (R)
+  3      |  0.023     |  0.130     | actual[106]~FF|Q          | u_monitor/telemetry[278]~FF|D | clk_sys (R) | clk_24m (R)
+  4      |  0.023     |  0.130     | failure_address[11]~FF|Q  | u_monitor/telemetry[23]~FF|D  | clk_sys (R) | clk_24m (R)
+  5      |  0.023     |  0.207     | actual[71]~FF|Q           | u_monitor/telemetry[243]~FF|D | clk_sys (R) | clk_24m (R)
+  6      |  0.025     |  0.132     | actual[95]~FF|Q           | u_monitor/telemetry[267]~FF|D | clk_sys (R) | clk_24m (R)
+  7      |  0.026     |  0.298     | actual[83]~FF|Q           | u_monitor/telemetry[255]~FF|D | clk_sys (R) | clk_24m (R)
+  8      |  0.027     |  0.218     | failure_address[1]~FF|Q   | u_monitor/telemetry[13]~FF|D  | clk_sys (R) | clk_24m (R)
+  9      |  0.027     |  0.134     | beat_count[22]~FF|Q       | u_monitor/telemetry[354]~FF|D | clk_sys (R) | clk_24m (R)
+ 10      |  0.028     |  0.135     | expected[65]~FF|Q         | u_monitor/telemetry[109]~FF|D | clk_sys (R) | clk_24m (R)
+
+++++ Path 1 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : transaction_count[4]~FF|CLK         
+Path End      : u_monitor/telemetry[304]~FF|D       
+Launch Clock  : clk_sys (RISE)                      
+Capture Clock : clk_24m (RISE)                      
+Slack         : 0.021 (arrival time - required time)
+Delay         : 0.128                               
+
+Logic Level             : 0
+Non-global nets on path : 1
+Global nets on path     : 0
+
+Launch Clock Path Delay        : 1.607
++ Clock To Q + Data Path Delay : 0.200
+--------------------------------------
+End-of-path arrival time       : 1.807
+
+Constraint                     : 0.000
++ Capture Clock Path Delay     : 1.716
++ Clock Uncertainty            : 0.070
+--------------------------------------
+End-of-path required time      : 1.786
+
+Launch Clock Path
+           name              model name   delay (ns)  cumulative delay (ns) pins on net    location
+=====================================================================================================
+clk_sys                        inpad        0.000             0.000                0       (0,162)
+clk_sys                        inpad        0.070             0.070             1747       (0,162)
+clk_sys                        net          1.537             1.607             1747       (0,162)
+transaction_count[4]~FF|CLK    ff           0.000             1.607             1747       (67,87)
+
+Data Path
+            name               model name   delay (ns)  cumulative delay (ns) pins on net    location
+=======================================================================================================
+transaction_count[4]~FF|Q         ff          0.072             0.072              3         (67,87)
+transaction_count[4]              net         0.128             0.200              3         (67,87)
+u_monitor/telemetry[304]~FF|D     ff          0.000             0.200              3         (67,79)
+
+Capture Clock Path
+             name                model name   delay (ns)  cumulative delay (ns) pins on net    location
+=========================================================================================================
+clk_24m                            inpad        0.000             0.000               0        (0,313)
+clk_24m                            inpad        0.070             0.070             522        (0,313)
+clk_24m                            net          1.646             1.716             522        (0,313)
+u_monitor/telemetry[304]~FF|CLK    ff           0.000             1.716             522        (67,79)
+
+++++ Path 2 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : expected[31]~FF|CLK                 
+Path End      : u_monitor/telemetry[75]~FF|D        
+Launch Clock  : clk_sys (RISE)                      
+Capture Clock : clk_24m (RISE)                      
+Slack         : 0.022 (arrival time - required time)
+Delay         : 0.129                               
+
+Logic Level             : 0
+Non-global nets on path : 1
+Global nets on path     : 0
+
+Launch Clock Path Delay        : 1.607
++ Clock To Q + Data Path Delay : 0.201
+--------------------------------------
+End-of-path arrival time       : 1.808
+
+Constraint                     : 0.000
++ Capture Clock Path Delay     : 1.716
++ Clock Uncertainty            : 0.070
+--------------------------------------
+End-of-path required time      : 1.786
+
+Launch Clock Path
+       name          model name   delay (ns)  cumulative delay (ns) pins on net    location
+=============================================================================================
+clk_sys                inpad        0.000             0.000                0       (0,162)
+clk_sys                inpad        0.070             0.070             1747       (0,162)
+clk_sys                net          1.537             1.607             1747       (0,162)
+expected[31]~FF|CLK    ff           0.000             1.607             1747       (70,76)
+
+Data Path
+            name              model name   delay (ns)  cumulative delay (ns) pins on net    location
+======================================================================================================
+expected[31]~FF|Q                ff          0.072             0.072              3         (70,76)
+expected[31]                     net         0.129             0.201              3         (70,76)
+u_monitor/telemetry[75]~FF|D     ff          0.000             0.201              3         (69,76)
+
+Capture Clock Path
+             name               model name   delay (ns)  cumulative delay (ns) pins on net    location
+========================================================================================================
+clk_24m                           inpad        0.000             0.000               0        (0,313)
+clk_24m                           inpad        0.070             0.070             522        (0,313)
+clk_24m                           net          1.646             1.716             522        (0,313)
+u_monitor/telemetry[75]~FF|CLK    ff           0.000             1.716             522        (69,76)
+
+++++ Path 3 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : actual[106]~FF|CLK                  
+Path End      : u_monitor/telemetry[278]~FF|D       
+Launch Clock  : clk_sys (RISE)                      
+Capture Clock : clk_24m (RISE)                      
+Slack         : 0.023 (arrival time - required time)
+Delay         : 0.130                               
+
+Logic Level             : 0
+Non-global nets on path : 1
+Global nets on path     : 0
+
+Launch Clock Path Delay        : 1.607
++ Clock To Q + Data Path Delay : 0.202
+--------------------------------------
+End-of-path arrival time       : 1.809
+
+Constraint                     : 0.000
++ Capture Clock Path Delay     : 1.716
++ Clock Uncertainty            : 0.070
+--------------------------------------
+End-of-path required time      : 1.786
+
+Launch Clock Path
+       name         model name   delay (ns)  cumulative delay (ns) pins on net    location
+============================================================================================
+clk_sys               inpad        0.000             0.000                0       (0,162)
+clk_sys               inpad        0.070             0.070             1747       (0,162)
+clk_sys               net          1.537             1.607             1747       (0,162)
+actual[106]~FF|CLK    ff           0.000             1.607             1747       (76,49)
+
+Data Path
+            name               model name   delay (ns)  cumulative delay (ns) pins on net    location
+=======================================================================================================
+actual[106]~FF|Q                  ff          0.072             0.072              3         (76,49)
+actual[106]                       net         0.130             0.202              3         (76,49)
+u_monitor/telemetry[278]~FF|D     ff          0.000             0.202              3         (75,49)
+
+Capture Clock Path
+             name                model name   delay (ns)  cumulative delay (ns) pins on net    location
+=========================================================================================================
+clk_24m                            inpad        0.000             0.000               0        (0,313)
+clk_24m                            inpad        0.070             0.070             522        (0,313)
+clk_24m                            net          1.646             1.716             522        (0,313)
+u_monitor/telemetry[278]~FF|CLK    ff           0.000             1.716             522        (75,49)
+
+++++ Path 4 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : failure_address[11]~FF|CLK          
+Path End      : u_monitor/telemetry[23]~FF|D        
+Launch Clock  : clk_sys (RISE)                      
+Capture Clock : clk_24m (RISE)                      
+Slack         : 0.023 (arrival time - required time)
+Delay         : 0.130                               
+
+Logic Level             : 0
+Non-global nets on path : 1
+Global nets on path     : 0
+
+Launch Clock Path Delay        : 1.607
++ Clock To Q + Data Path Delay : 0.202
+--------------------------------------
+End-of-path arrival time       : 1.809
+
+Constraint                     : 0.000
++ Capture Clock Path Delay     : 1.716
++ Clock Uncertainty            : 0.070
+--------------------------------------
+End-of-path required time      : 1.786
+
+Launch Clock Path
+           name             model name   delay (ns)  cumulative delay (ns) pins on net    location
+====================================================================================================
+clk_sys                       inpad        0.000             0.000                0      (0,162)  
+clk_sys                       inpad        0.070             0.070             1747      (0,162)  
+clk_sys                       net          1.537             1.607             1747      (0,162)  
+failure_address[11]~FF|CLK    ff           0.000             1.607             1747      (112,102)
+
+Data Path
+            name              model name   delay (ns)  cumulative delay (ns) pins on net    location
+======================================================================================================
+failure_address[11]~FF|Q         ff          0.072             0.072              3        (112,102)
+failure_address[11]              net         0.130             0.202              3        (112,102)
+u_monitor/telemetry[23]~FF|D     ff          0.000             0.202              3        (111,102)
+
+Capture Clock Path
+             name               model name   delay (ns)  cumulative delay (ns) pins on net    location
+========================================================================================================
+clk_24m                           inpad        0.000             0.000               0       (0,313)  
+clk_24m                           inpad        0.070             0.070             522       (0,313)  
+clk_24m                           net          1.646             1.716             522       (0,313)  
+u_monitor/telemetry[23]~FF|CLK    ff           0.000             1.716             522       (111,102)
+
+++++ Path 5 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : actual[71]~FF|CLK                   
+Path End      : u_monitor/telemetry[243]~FF|D       
+Launch Clock  : clk_sys (RISE)                      
+Capture Clock : clk_24m (RISE)                      
+Slack         : 0.023 (arrival time - required time)
+Delay         : 0.207                               
+
+Logic Level             : 0
+Non-global nets on path : 1
+Global nets on path     : 0
+
+Launch Clock Path Delay        : 1.530
++ Clock To Q + Data Path Delay : 0.279
+--------------------------------------
+End-of-path arrival time       : 1.809
+
+Constraint                     : 0.000
++ Capture Clock Path Delay     : 1.716
++ Clock Uncertainty            : 0.070
+--------------------------------------
+End-of-path required time      : 1.786
+
+Launch Clock Path
+      name         model name   delay (ns)  cumulative delay (ns) pins on net    location
+===========================================================================================
+clk_sys              inpad        0.000             0.000                0       (0,162) 
+clk_sys              inpad        0.070             0.070             1747       (0,162) 
+clk_sys              net          1.460             1.530             1747       (0,162) 
+actual[71]~FF|CLK    ff           0.000             1.530             1747       (125,57)
+
+Data Path
+            name               model name   delay (ns)  cumulative delay (ns) pins on net    location
+=======================================================================================================
+actual[71]~FF|Q                   ff          0.072             0.072              3         (125,57)
+actual[71]                        net         0.207             0.279              3         (125,57)
+u_monitor/telemetry[243]~FF|D     ff          0.000             0.279              3         (125,58)
+
+Capture Clock Path
+             name                model name   delay (ns)  cumulative delay (ns) pins on net    location
+=========================================================================================================
+clk_24m                            inpad        0.000             0.000               0        (0,313) 
+clk_24m                            inpad        0.070             0.070             522        (0,313) 
+clk_24m                            net          1.646             1.716             522        (0,313) 
+u_monitor/telemetry[243]~FF|CLK    ff           0.000             1.716             522        (125,58)
+
+++++ Path 6 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : actual[95]~FF|CLK                   
+Path End      : u_monitor/telemetry[267]~FF|D       
+Launch Clock  : clk_sys (RISE)                      
+Capture Clock : clk_24m (RISE)                      
+Slack         : 0.025 (arrival time - required time)
+Delay         : 0.132                               
+
+Logic Level             : 0
+Non-global nets on path : 1
+Global nets on path     : 0
+
+Launch Clock Path Delay        : 1.607
++ Clock To Q + Data Path Delay : 0.204
+--------------------------------------
+End-of-path arrival time       : 1.811
+
+Constraint                     : 0.000
++ Capture Clock Path Delay     : 1.716
++ Clock Uncertainty            : 0.070
+--------------------------------------
+End-of-path required time      : 1.786
+
+Launch Clock Path
+      name         model name   delay (ns)  cumulative delay (ns) pins on net    location
+===========================================================================================
+clk_sys              inpad        0.000             0.000                0       (0,162)
+clk_sys              inpad        0.070             0.070             1747       (0,162)
+clk_sys              net          1.537             1.607             1747       (0,162)
+actual[95]~FF|CLK    ff           0.000             1.607             1747       (71,64)
+
+Data Path
+            name               model name   delay (ns)  cumulative delay (ns) pins on net    location
+=======================================================================================================
+actual[95]~FF|Q                   ff          0.072             0.072              3         (71,64)
+actual[95]                        net         0.132             0.204              3         (71,64)
+u_monitor/telemetry[267]~FF|D     ff          0.000             0.204              3         (71,70)
+
+Capture Clock Path
+             name                model name   delay (ns)  cumulative delay (ns) pins on net    location
+=========================================================================================================
+clk_24m                            inpad        0.000             0.000               0        (0,313)
+clk_24m                            inpad        0.070             0.070             522        (0,313)
+clk_24m                            net          1.646             1.716             522        (0,313)
+u_monitor/telemetry[267]~FF|CLK    ff           0.000             1.716             522        (71,70)
+
+++++ Path 7 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : actual[83]~FF|CLK                   
+Path End      : u_monitor/telemetry[255]~FF|D       
+Launch Clock  : clk_sys (RISE)                      
+Capture Clock : clk_24m (RISE)                      
+Slack         : 0.026 (arrival time - required time)
+Delay         : 0.298                               
+
+Logic Level             : 0
+Non-global nets on path : 1
+Global nets on path     : 0
+
+Launch Clock Path Delay        : 1.442
++ Clock To Q + Data Path Delay : 0.370
+--------------------------------------
+End-of-path arrival time       : 1.812
+
+Constraint                     : 0.000
++ Capture Clock Path Delay     : 1.716
++ Clock Uncertainty            : 0.070
+--------------------------------------
+End-of-path required time      : 1.786
+
+Launch Clock Path
+      name         model name   delay (ns)  cumulative delay (ns) pins on net    location
+===========================================================================================
+clk_sys              inpad        0.000             0.000                0       (0,162) 
+clk_sys              inpad        0.070             0.070             1747       (0,162) 
+clk_sys              net          1.372             1.442             1747       (0,162) 
+actual[83]~FF|CLK    ff           0.000             1.442             1747       (130,54)
+
+Data Path
+            name               model name   delay (ns)  cumulative delay (ns) pins on net    location
+=======================================================================================================
+actual[83]~FF|Q                   ff          0.072             0.072              3         (130,54)
+actual[83]                        net         0.298             0.370              3         (130,54)
+u_monitor/telemetry[255]~FF|D     ff          0.000             0.370              3         (131,58)
+
+Capture Clock Path
+             name                model name   delay (ns)  cumulative delay (ns) pins on net    location
+=========================================================================================================
+clk_24m                            inpad        0.000             0.000               0        (0,313) 
+clk_24m                            inpad        0.070             0.070             522        (0,313) 
+clk_24m                            net          1.646             1.716             522        (0,313) 
+u_monitor/telemetry[255]~FF|CLK    ff           0.000             1.716             522        (131,58)
+
+++++ Path 8 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : failure_address[1]~FF|CLK           
+Path End      : u_monitor/telemetry[13]~FF|D        
+Launch Clock  : clk_sys (RISE)                      
+Capture Clock : clk_24m (RISE)                      
+Slack         : 0.027 (arrival time - required time)
+Delay         : 0.218                               
+
+Logic Level             : 0
+Non-global nets on path : 1
+Global nets on path     : 0
+
+Launch Clock Path Delay        : 1.530
++ Clock To Q + Data Path Delay : 0.290
+--------------------------------------
+End-of-path arrival time       : 1.820
+
+Constraint                     : 0.000
++ Capture Clock Path Delay     : 1.723
++ Clock Uncertainty            : 0.070
+--------------------------------------
+End-of-path required time      : 1.793
+
+Launch Clock Path
+          name             model name   delay (ns)  cumulative delay (ns) pins on net    location
+===================================================================================================
+clk_sys                      inpad        0.000             0.000                0      (0,162)  
+clk_sys                      inpad        0.070             0.070             1747      (0,162)  
+clk_sys                      net          1.460             1.530             1747      (0,162)  
+failure_address[1]~FF|CLK    ff           0.000             1.530             1747      (116,100)
+
+Data Path
+            name              model name   delay (ns)  cumulative delay (ns) pins on net    location
+======================================================================================================
+failure_address[1]~FF|Q          ff          0.072             0.072              3        (116,100)
+failure_address[1]               net         0.218             0.290              3        (116,100)
+u_monitor/telemetry[13]~FF|D     ff          0.000             0.290              3        (116,99) 
+
+Capture Clock Path
+             name               model name   delay (ns)  cumulative delay (ns) pins on net    location
+========================================================================================================
+clk_24m                           inpad        0.000             0.000               0        (0,313) 
+clk_24m                           inpad        0.070             0.070             522        (0,313) 
+clk_24m                           net          1.653             1.723             522        (0,313) 
+u_monitor/telemetry[13]~FF|CLK    ff           0.000             1.723             522        (116,99)
+
+++++ Path 9 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : beat_count[22]~FF|CLK               
+Path End      : u_monitor/telemetry[354]~FF|D       
+Launch Clock  : clk_sys (RISE)                      
+Capture Clock : clk_24m (RISE)                      
+Slack         : 0.027 (arrival time - required time)
+Delay         : 0.134                               
+
+Logic Level             : 0
+Non-global nets on path : 1
+Global nets on path     : 0
+
+Launch Clock Path Delay        : 1.607
++ Clock To Q + Data Path Delay : 0.206
+--------------------------------------
+End-of-path arrival time       : 1.813
+
+Constraint                     : 0.000
++ Capture Clock Path Delay     : 1.716
++ Clock Uncertainty            : 0.070
+--------------------------------------
+End-of-path required time      : 1.786
+
+Launch Clock Path
+        name           model name   delay (ns)  cumulative delay (ns) pins on net    location
+===============================================================================================
+clk_sys                  inpad        0.000             0.000                0       (0,162) 
+clk_sys                  inpad        0.070             0.070             1747       (0,162) 
+clk_sys                  net          1.537             1.607             1747       (0,162) 
+beat_count[22]~FF|CLK    ff           0.000             1.607             1747       (80,115)
+
+Data Path
+            name               model name   delay (ns)  cumulative delay (ns) pins on net    location
+=======================================================================================================
+beat_count[22]~FF|Q               ff          0.072             0.072              3         (80,115)
+beat_count[22]                    net         0.134             0.206              3         (80,115)
+u_monitor/telemetry[354]~FF|D     ff          0.000             0.206              3         (79,110)
+
+Capture Clock Path
+             name                model name   delay (ns)  cumulative delay (ns) pins on net    location
+=========================================================================================================
+clk_24m                            inpad        0.000             0.000               0        (0,313) 
+clk_24m                            inpad        0.070             0.070             522        (0,313) 
+clk_24m                            net          1.646             1.716             522        (0,313) 
+u_monitor/telemetry[354]~FF|CLK    ff           0.000             1.716             522        (79,110)
+
+++++ Path 10 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : expected[65]~FF|CLK                 
+Path End      : u_monitor/telemetry[109]~FF|D       
+Launch Clock  : clk_sys (RISE)                      
+Capture Clock : clk_24m (RISE)                      
+Slack         : 0.028 (arrival time - required time)
+Delay         : 0.135                               
+
+Logic Level             : 0
+Non-global nets on path : 1
+Global nets on path     : 0
+
+Launch Clock Path Delay        : 1.607
++ Clock To Q + Data Path Delay : 0.207
+--------------------------------------
+End-of-path arrival time       : 1.814
+
+Constraint                     : 0.000
++ Capture Clock Path Delay     : 1.716
++ Clock Uncertainty            : 0.070
+--------------------------------------
+End-of-path required time      : 1.786
+
+Launch Clock Path
+       name          model name   delay (ns)  cumulative delay (ns) pins on net    location
+=============================================================================================
+clk_sys                inpad        0.000             0.000                0       (0,162)
+clk_sys                inpad        0.070             0.070             1747       (0,162)
+clk_sys                net          1.537             1.607             1747       (0,162)
+expected[65]~FF|CLK    ff           0.000             1.607             1747       (62,66)
+
+Data Path
+            name               model name   delay (ns)  cumulative delay (ns) pins on net    location
+=======================================================================================================
+expected[65]~FF|Q                 ff          0.072             0.072              3         (62,66)
+expected[65]                      net         0.135             0.207              3         (62,66)
+u_monitor/telemetry[109]~FF|D     ff          0.000             0.207              3         (62,71)
+
+Capture Clock Path
+             name                model name   delay (ns)  cumulative delay (ns) pins on net    location
+=========================================================================================================
+clk_24m                            inpad        0.000             0.000               0        (0,313)
+clk_24m                            inpad        0.070             0.070             522        (0,313)
+clk_24m                            net          1.646             1.716             522        (0,313)
+u_monitor/telemetry[109]~FF|CLK    ff           0.000             1.716             522        (62,71)
+

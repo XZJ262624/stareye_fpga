@@ -326,3 +326,18 @@ M4离线仿真、完整I3编译、STA和实物功能验收PASS。RAW、MAG、BIN
 - 分支`codex/m5a-streaming-canny`；本次归档起始HEAD及新提交直接父节点为M4 `95bf83f7172ecdf11ee9b8deb3e2c1bba535a56d`，起始索引为空。用户授权独立提交`feat: add streaming local canny pipeline`；提交自身ID、最终文件数/字节数及提交后状态以主会话实际Git核查为准，避免在提交内容中循环写入自身哈希。
 - 按重新生成的[明确范围清单](../reports/m5a_streaming_canny_i3/PROPOSED_GIT_SCOPE.json)逐项暂存，主会话独立核对blob与M2～M4保护范围。历史254文件/12,063,517字节是实物归档前清单，不作为当前固定目标。
 - 本轮仅实物归档与独立提交，未重新编译、未运行Programmer、未再次下载、未写Flash、未修改业务RTL、未继续首行诊断、未进入M5B、未合并main、未推送。M5B及其余后续阶段未开始。
+
+
+## 2026-10-08 M5B.0R离线工作收尾（当前）
+项目m5b0r_ddr_admission；分支codex/m5b0r-ddr-admission，HEAD仍为ba28397cc5f0d4b34ed06b803c8e5af067c9ca98。M5B.0分析保持NO-GO；M5B.0R完成独立诊断和隔离原型的离线验证准备，当前闸门NO_GO，实际阻断项尚未全部关闭。M5B.1未启动、无全局Canny生产RTL/视频DDR接入/融合。
+用户指定GPT-6 Astra/ultra完成架构及初稿，后续代理限额时主会话接管实现、构建、仿真和独立复核；Astra恢复后进行只读最终复核，主会话处理LED总体超时编码、QoS持续吞吐及取消协议问题。
+独立工程efinity/m5b0r_ddr_address_diag_i3：DDR v5.14参数/源码/ROM与M2匹配、调试插入关闭，仅DDR和LED0～5；24MHz普通core入口及sysPLL CORE参考的建模边界保留。完整I3构建及112份最终STA通过，7391 XLR/30 RAM10/0 DSP，最小setup/hold +0.100/+0.021ns。0无时钟/内部未约束/多时钟，2无输入延迟及17无输出延迟保留；仅20个网表确认的复位链异步SR例外，不广泛切断DDR/monitor数据。受约束时序通过不能证明全部PVT、电气或物理高地址安全。
+HDL诊断54例、monitor6情形、仲裁六种子合计123000完成事务、主会话四个验收负向用例通过。软件28个可检测地址映射故障及11个协议规格案例通过；共同比例/双向一致重映射仍可能不可观测，不能认证真实映射。QoS读/写停服预算54.14/60.75us为条件示例；持续恢复约束比单次停服更严，17us反例不安全，实际Lmax及水位/CDC/预填充未证明。全仓94图像候选无已认证真实分类帧，仅性能统计方案，不虚构fps。
+高地址/校准保留区仍需厂商依据与受控实物诊断；真实DDR仲裁、epoch取消桥接、FIFO服务上界和720p60共存压力未验证。未来诊断相机须物理断开，仅JTAG临时，禁止Flash；本轮未Programmer、下载、Flash或生产接入。旧Flash流水灯冷启动和R3/R4共享风险继续保留。
+报告见../reports/m5b0r_ddr_admission/M5B0R_GATE.md、BUILD_REPORT.md、ROOT_REVIEW.md及PROPOSED_GIT_SCOPE.json。本轮不暂存、不提交、不合并main、不推送；历史未跟踪文件全部保留。
+
+## 2026-10-08 M5B.0R candidate归档（当前，覆盖上文离线停止边界）
+
+本轮仅固化三角色流程与现有离线成果，按 H-M5B0R-20261008-CANDIDATE 创建 `feat: add isolated DDR admission diagnostics`；分支 `codex/m5b0r-ddr-admission`，直接父提交 `ba28397cc5f0d4b34ed06b803c8e5af067c9ca98`。candidate自身哈希以Git和提交后交接为准，避免循环记录。M5B.0R继续 **NO_GO**；未上板、未启动M5B.1。
+
+新增纳入AGENTS.md、AI_WORKFLOW.md、REVIEW_PROTOCOL.md及M5B.0R专属字节保留属性；精确提交范围为PROPOSED_GIT_SCOPE.json的files加该清单自身。既有构建、仿真和112份STA只读复核，不重编译。提交后由Work复核并冻结，等待用户在独立Codex A对话审查；不得将内部复核当作Codex A审查。见[本轮归档说明](../reports/m5b0r_ddr_admission/CANDIDATE_ARCHIVE.md)。

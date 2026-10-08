@@ -1,0 +1,510 @@
+
+Efinix Timing Path Constraint Report
+Version: 2025.1.110.5.9
+Date: Thu Oct  8 13:56:07 2026
+
+Copyright (C) 2013 - 2025 Efinix, Inc. All rights reserved.
+
+User command: report_timing -from_clock {core_clk} -to_clock {core_clk} -npaths 10 -nworst 1 -hold -detail full_path -file {diag_core_clk_core_clk_hold.rpt}
+
+Timing Model: I3
+	process : typical
+	temperature : -40C to 100C
+	voltage : 0.95 +/-30mV
+	speedgrade : 3
+	technology : t16ff
+	status : final
+
+Summary:
+
+ Path #  | Slack (ns) | Delay (ns) |                                                      Start Pin                                                       |                                                         End Pin                                                         |  Launch Clk  | Capture Clk
+=================================================================================================================================================================================================================================================================================================================
+  1      |  0.034     |  0.089     | u_ddr/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/controller_main/ddrA_addr_p[8]~FF|Q      | u_ddr/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/i_phy_ddrA_addr[8]~FF|D                     | core_clk (R) | core_clk (R)
+  2      |  0.071     |  0.180     | u_ddr/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/i_phy_ddrA_addr[13]~FF|Q                 | u_ddr/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/ac_fifo/ram__D$b1|WDATA[1]                  | core_clk (R) | core_clk (R)
+  3      |  0.076     |  0.169     | u_ddr/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/controller_main/ram_raddr[4]~FF|Q        | u_ddr/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/controller_main/map_ram/ram__D$2|RADDR[3]   | core_clk (R) | core_clk (R)
+  4      |  0.080     |  0.139     | u_ddr/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/i_phy_ddrA_we~FF|Q                       | u_ddr/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/ac_fifo/ram__D$b1|WDATA[5]                  | core_clk (R) | core_clk (R)
+  5      |  0.089     |  0.087     | u_ddr/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/controller_main/arbiter_counter[1]~FF|Q  | u_ddr/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/controller_main/arbiter_counter[2]~FF|D     | core_clk (R) | core_clk (R)
+  6      |  0.092     |  0.090     | u_ddr/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/controller_main/row_activated[5][3]~FF|Q | u_ddr/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/controller_main/row_activated_p0[5][3]~FF|D | core_clk (R) | core_clk (R)
+  7      |  0.092     |  0.090     | u_ddr/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/controller_main/row_activated[2][4]~FF|Q | u_ddr/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/controller_main/row_activated_p0[2][4]~FF|D | core_clk (R) | core_clk (R)
+  8      |  0.094     |  0.092     | u_ddr/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/controller_main/rd_bank_p1[2]~FF|Q       | u_ddr/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/controller_main/ddrB_ba_p[2]~FF|D           | core_clk (R) | core_clk (R)
+  9      |  0.094     |  0.092     | u_ddr/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/controller_main/rd_bank_p1[1]~FF|Q       | u_ddr/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/controller_main/ddrB_ba_p[1]~FF|D           | core_clk (R) | core_clk (R)
+ 10      |  0.094     |  0.092     | u_ddr/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/controller_main/row_activated[6][6]~FF|Q | u_ddr/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/controller_main/row_activated_p0[6][6]~FF|D | core_clk (R) | core_clk (R)
+
+++++ Path 1 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : u_ddr/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/controller_main/ddrA_addr_p[8]~FF|CLK
+Path End      : u_ddr/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/i_phy_ddrA_addr[8]~FF|D              
+Launch Clock  : core_clk (RISE)                                                                                                  
+Capture Clock : core_clk (RISE)                                                                                                  
+Slack         : 0.034 (arrival time - required time)                                                                             
+Delay         : 0.089                                                                                                            
+
+Logic Level             : 1
+Non-global nets on path : 1
+Global nets on path     : 0
+
+Launch Clock Path Delay        : 1.239
++ Clock To Q + Data Path Delay : 0.154
+--------------------------------------
+End-of-path arrival time       : 1.393
+
+Constraint                     : 0.000
++ Capture Clock Path Delay     : 1.289
++ Clock Uncertainty            : 0.070
+--------------------------------------
+End-of-path required time      : 1.359
+
+Launch Clock Path
+                                                      name                                                         model name   delay (ns)  cumulative delay (ns) pins on net    location
+===========================================================================================================================================================================================
+core_clk                                                                                                             inpad        0.000             0.000               0        (107,0) 
+core_clk                                                                                                             inpad        0.070             0.070             811        (107,0) 
+core_clk                                                                                                             net          1.169             1.239             811        (107,0) 
+u_ddr/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/controller_main/ddrA_addr_p[8]~FF|CLK    ff           0.000             1.239             811        (161,68)
+
+Data Path
+                                                     name                                                        model name   delay (ns)  cumulative delay (ns) pins on net    location
+=========================================================================================================================================================================================
+u_ddr/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/controller_main/ddrA_addr_p[8]~FF|Q     ff           0.072            0.072              2         (161,68)
+u_ddr/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/controller_main/ddrA_addr_p[8]          net          0.054            0.126              2         (161,68)
+LUT__22972|in[1]                                                                                                    lut          0.035            0.161              2         (159,68)
+LUT__22972|out                                                                                                      lut          0.000            0.161              2         (159,68)
+u_ddr/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/i_phy_ddrA_addr[8]~FF|D                 ff          -0.007            0.154              2         (159,68)
+
+Capture Clock Path
+                                                name                                                   model name   delay (ns)  cumulative delay (ns) pins on net    location
+===============================================================================================================================================================================
+core_clk                                                                                                 inpad        0.000             0.000               0        (107,0) 
+core_clk                                                                                                 inpad        0.070             0.070             811        (107,0) 
+core_clk                                                                                                 net          1.219             1.289             811        (107,0) 
+u_ddr/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/i_phy_ddrA_addr[8]~FF|CLK    ff           0.000             1.289             811        (159,68)
+
+++++ Path 2 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : u_ddr/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/i_phy_ddrA_addr[13]~FF|CLK
+Path End      : u_ddr/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/ac_fifo/ram__D$b1|WDATA[1]
+Launch Clock  : core_clk (RISE)                                                                                       
+Capture Clock : core_clk (RISE)                                                                                       
+Slack         : 0.071 (arrival time - required time)                                                                  
+Delay         : 0.180                                                                                                 
+
+Logic Level             : 0
+Non-global nets on path : 1
+Global nets on path     : 0
+
+Launch Clock Path Delay        : 1.239
++ Clock To Q + Data Path Delay : 0.141
+--------------------------------------
+End-of-path arrival time       : 1.380
+
+Constraint                     : 0.000
++ Capture Clock Path Delay     : 1.239
++ Clock Uncertainty            : 0.070
+--------------------------------------
+End-of-path required time      : 1.309
+
+Launch Clock Path
+                                                 name                                                   model name   delay (ns)  cumulative delay (ns) pins on net    location
+================================================================================================================================================================================
+core_clk                                                                                                  inpad        0.000             0.000               0        (107,0) 
+core_clk                                                                                                  inpad        0.070             0.070             811        (107,0) 
+core_clk                                                                                                  net          1.169             1.239             811        (107,0) 
+u_ddr/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/i_phy_ddrA_addr[13]~FF|CLK    ff           0.000             1.239             811        (161,44)
+
+Data Path
+                                                 name                                                   model name   delay (ns)  cumulative delay (ns) pins on net    location
+================================================================================================================================================================================
+u_ddr/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/i_phy_ddrA_addr[13]~FF|Q   ff               0.072            0.072              2         (161,44)
+u_ddr/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/i_phy_ddrA_addr[13]        net              0.180            0.252              2         (161,44)
+u_ddr/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/ac_fifo/ram__D$b1|WDATA[1] ram_8192x20     -0.111            0.141              2         (156,42)
+
+Capture Clock Path
+                                               name                                                 model name   delay (ns)  cumulative delay (ns) pins on net    location
+============================================================================================================================================================================
+core_clk                                                                                           inpad           0.000             0.000               0        (107,0) 
+core_clk                                                                                           inpad           0.070             0.070             811        (107,0) 
+core_clk                                                                                           net             1.169             1.239             811        (107,0) 
+u_ddr/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/ac_fifo/ram__D$b1|WCLK ram_8192x20     0.000             1.239             811        (156,42)
+
+++++ Path 3 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : u_ddr/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/controller_main/ram_raddr[4]~FF|CLK      
+Path End      : u_ddr/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/controller_main/map_ram/ram__D$2|RADDR[3]
+Launch Clock  : core_clk (RISE)                                                                                                      
+Capture Clock : core_clk (RISE)                                                                                                      
+Slack         : 0.076 (arrival time - required time)                                                                                 
+Delay         : 0.169                                                                                                                
+
+Logic Level             : 0
+Non-global nets on path : 1
+Global nets on path     : 0
+
+Launch Clock Path Delay        : 1.239
++ Clock To Q + Data Path Delay : 0.146
+--------------------------------------
+End-of-path arrival time       : 1.385
+
+Constraint                     : 0.000
++ Capture Clock Path Delay     : 1.239
++ Clock Uncertainty            : 0.070
+--------------------------------------
+End-of-path required time      : 1.309
+
+Launch Clock Path
+                                                     name                                                        model name   delay (ns)  cumulative delay (ns) pins on net    location
+=========================================================================================================================================================================================
+core_clk                                                                                                           inpad        0.000             0.000               0       (107,0)  
+core_clk                                                                                                           inpad        0.070             0.070             811       (107,0)  
+core_clk                                                                                                           net          1.169             1.239             811       (107,0)  
+u_ddr/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/controller_main/ram_raddr[4]~FF|CLK    ff           0.000             1.239             811       (148,114)
+
+Data Path
+                                                        name                                                           model name   delay (ns)  cumulative delay (ns) pins on net    location
+===============================================================================================================================================================================================
+u_ddr/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/controller_main/ram_raddr[4]~FF|Q         ff               0.072            0.072              8        (148,114)
+u_ddr/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/controller_main/ram_raddr[4]              net              0.169            0.241              8        (148,114)
+u_ddr/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/controller_main/map_ram/ram__D$2|RADDR[3] ram_8192x20     -0.095            0.146              8        (156,102)
+
+Capture Clock Path
+                                                      name                                                         model name   delay (ns)  cumulative delay (ns) pins on net    location
+===========================================================================================================================================================================================
+core_clk                                                                                                          inpad           0.000             0.000               0       (107,0)  
+core_clk                                                                                                          inpad           0.070             0.070             811       (107,0)  
+core_clk                                                                                                          net             1.169             1.239             811       (107,0)  
+u_ddr/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/controller_main/map_ram/ram__D$2|RCLK ram_8192x20     0.000             1.239             811       (156,102)
+
+++++ Path 4 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : u_ddr/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/i_phy_ddrA_we~FF|CLK      
+Path End      : u_ddr/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/ac_fifo/ram__D$b1|WDATA[5]
+Launch Clock  : core_clk (RISE)                                                                                       
+Capture Clock : core_clk (RISE)                                                                                       
+Slack         : 0.080 (arrival time - required time)                                                                  
+Delay         : 0.139                                                                                                 
+
+Logic Level             : 0
+Non-global nets on path : 1
+Global nets on path     : 0
+
+Launch Clock Path Delay        : 1.289
++ Clock To Q + Data Path Delay : 0.100
+--------------------------------------
+End-of-path arrival time       : 1.389
+
+Constraint                     : 0.000
++ Capture Clock Path Delay     : 1.239
++ Clock Uncertainty            : 0.070
+--------------------------------------
+End-of-path required time      : 1.309
+
+Launch Clock Path
+                                              name                                                model name   delay (ns)  cumulative delay (ns) pins on net    location
+==========================================================================================================================================================================
+core_clk                                                                                            inpad        0.000             0.000               0        (107,0) 
+core_clk                                                                                            inpad        0.070             0.070             811        (107,0) 
+core_clk                                                                                            net          1.219             1.289             811        (107,0) 
+u_ddr/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/i_phy_ddrA_we~FF|CLK    ff           0.000             1.289             811        (159,47)
+
+Data Path
+                                                 name                                                   model name   delay (ns)  cumulative delay (ns) pins on net    location
+================================================================================================================================================================================
+u_ddr/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/i_phy_ddrA_we~FF|Q         ff               0.072            0.072              2         (159,47)
+u_ddr/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/i_phy_ddrA_we              net              0.139            0.211              2         (159,47)
+u_ddr/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/ac_fifo/ram__D$b1|WDATA[5] ram_8192x20     -0.111            0.100              2         (156,42)
+
+Capture Clock Path
+                                               name                                                 model name   delay (ns)  cumulative delay (ns) pins on net    location
+============================================================================================================================================================================
+core_clk                                                                                           inpad           0.000             0.000               0        (107,0) 
+core_clk                                                                                           inpad           0.070             0.070             811        (107,0) 
+core_clk                                                                                           net             1.169             1.239             811        (107,0) 
+u_ddr/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/ac_fifo/ram__D$b1|WCLK ram_8192x20     0.000             1.239             811        (156,42)
+
+++++ Path 5 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : u_ddr/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/controller_main/arbiter_counter[1]~FF|CLK
+Path End      : u_ddr/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/controller_main/arbiter_counter[2]~FF|D  
+Launch Clock  : core_clk (RISE)                                                                                                      
+Capture Clock : core_clk (RISE)                                                                                                      
+Slack         : 0.089 (arrival time - required time)                                                                                 
+Delay         : 0.087                                                                                                                
+
+Logic Level             : 1
+Non-global nets on path : 1
+Global nets on path     : 0
+
+Launch Clock Path Delay        : 1.239
++ Clock To Q + Data Path Delay : 0.159
+--------------------------------------
+End-of-path arrival time       : 1.398
+
+Constraint                     : 0.000
++ Capture Clock Path Delay     : 1.239
++ Clock Uncertainty            : 0.070
+--------------------------------------
+End-of-path required time      : 1.309
+
+Launch Clock Path
+                                                        name                                                           model name   delay (ns)  cumulative delay (ns) pins on net    location
+===============================================================================================================================================================================================
+core_clk                                                                                                                 inpad        0.000             0.000               0       (107,0)  
+core_clk                                                                                                                 inpad        0.070             0.070             811       (107,0)  
+core_clk                                                                                                                 net          1.169             1.239             811       (107,0)  
+u_ddr/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/controller_main/arbiter_counter[1]~FF|CLK    ff           0.000             1.239             811       (144,110)
+
+Data Path
+                                                       name                                                          model name   delay (ns)  cumulative delay (ns) pins on net    location
+=============================================================================================================================================================================================
+u_ddr/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/controller_main/arbiter_counter[1]~FF|Q     ff          0.072             0.072              3        (144,110)
+u_ddr/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/controller_main/arbiter_counter[1]          net         0.053             0.125              3        (144,110)
+LUT__22877|in[1]                                                                                                        lut         0.034             0.159              3        (142,110)
+LUT__22877|out                                                                                                          lut         0.000             0.159              2        (142,110)
+u_ddr/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/controller_main/arbiter_counter[2]~FF|D     ff          0.000             0.159              2        (142,110)
+
+Capture Clock Path
+                                                        name                                                           model name   delay (ns)  cumulative delay (ns) pins on net    location
+===============================================================================================================================================================================================
+core_clk                                                                                                                 inpad        0.000             0.000               0       (107,0)  
+core_clk                                                                                                                 inpad        0.070             0.070             811       (107,0)  
+core_clk                                                                                                                 net          1.169             1.239             811       (107,0)  
+u_ddr/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/controller_main/arbiter_counter[2]~FF|CLK    ff           0.000             1.239             811       (142,110)
+
+++++ Path 6 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : u_ddr/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/controller_main/row_activated[5][3]~FF|CLK 
+Path End      : u_ddr/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/controller_main/row_activated_p0[5][3]~FF|D
+Launch Clock  : core_clk (RISE)                                                                                                        
+Capture Clock : core_clk (RISE)                                                                                                        
+Slack         : 0.092 (arrival time - required time)                                                                                   
+Delay         : 0.090                                                                                                                  
+
+Logic Level             : 0
+Non-global nets on path : 1
+Global nets on path     : 0
+
+Launch Clock Path Delay        : 1.239
++ Clock To Q + Data Path Delay : 0.162
+--------------------------------------
+End-of-path arrival time       : 1.401
+
+Constraint                     : 0.000
++ Capture Clock Path Delay     : 1.239
++ Clock Uncertainty            : 0.070
+--------------------------------------
+End-of-path required time      : 1.309
+
+Launch Clock Path
+                                                         name                                                           model name   delay (ns)  cumulative delay (ns) pins on net    location
+================================================================================================================================================================================================
+core_clk                                                                                                                  inpad        0.000             0.000               0       (107,0)  
+core_clk                                                                                                                  inpad        0.070             0.070             811       (107,0)  
+core_clk                                                                                                                  net          1.169             1.239             811       (107,0)  
+u_ddr/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/controller_main/row_activated[5][3]~FF|CLK    ff           0.000             1.239             811       (151,134)
+
+Data Path
+                                                         name                                                            model name   delay (ns)  cumulative delay (ns) pins on net    location
+=================================================================================================================================================================================================
+u_ddr/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/controller_main/row_activated[5][3]~FF|Q        ff          0.072             0.072              2        (151,134)
+u_ddr/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/controller_main/row_activated[5][3]             net         0.090             0.162              2        (151,134)
+u_ddr/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/controller_main/row_activated_p0[5][3]~FF|D     ff          0.000             0.162              2        (155,134)
+
+Capture Clock Path
+                                                          name                                                             model name   delay (ns)  cumulative delay (ns) pins on net    location
+===================================================================================================================================================================================================
+core_clk                                                                                                                     inpad        0.000             0.000               0       (107,0)  
+core_clk                                                                                                                     inpad        0.070             0.070             811       (107,0)  
+core_clk                                                                                                                     net          1.169             1.239             811       (107,0)  
+u_ddr/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/controller_main/row_activated_p0[5][3]~FF|CLK    ff           0.000             1.239             811       (155,134)
+
+++++ Path 7 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : u_ddr/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/controller_main/row_activated[2][4]~FF|CLK 
+Path End      : u_ddr/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/controller_main/row_activated_p0[2][4]~FF|D
+Launch Clock  : core_clk (RISE)                                                                                                        
+Capture Clock : core_clk (RISE)                                                                                                        
+Slack         : 0.092 (arrival time - required time)                                                                                   
+Delay         : 0.090                                                                                                                  
+
+Logic Level             : 0
+Non-global nets on path : 1
+Global nets on path     : 0
+
+Launch Clock Path Delay        : 1.239
++ Clock To Q + Data Path Delay : 0.162
+--------------------------------------
+End-of-path arrival time       : 1.401
+
+Constraint                     : 0.000
++ Capture Clock Path Delay     : 1.239
++ Clock Uncertainty            : 0.070
+--------------------------------------
+End-of-path required time      : 1.309
+
+Launch Clock Path
+                                                         name                                                           model name   delay (ns)  cumulative delay (ns) pins on net    location
+================================================================================================================================================================================================
+core_clk                                                                                                                  inpad        0.000             0.000               0       (107,0)  
+core_clk                                                                                                                  inpad        0.070             0.070             811       (107,0)  
+core_clk                                                                                                                  net          1.169             1.239             811       (107,0)  
+u_ddr/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/controller_main/row_activated[2][4]~FF|CLK    ff           0.000             1.239             811       (151,118)
+
+Data Path
+                                                         name                                                            model name   delay (ns)  cumulative delay (ns) pins on net    location
+=================================================================================================================================================================================================
+u_ddr/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/controller_main/row_activated[2][4]~FF|Q        ff          0.072             0.072              2        (151,118)
+u_ddr/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/controller_main/row_activated[2][4]             net         0.090             0.162              2        (151,118)
+u_ddr/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/controller_main/row_activated_p0[2][4]~FF|D     ff          0.000             0.162              2        (155,118)
+
+Capture Clock Path
+                                                          name                                                             model name   delay (ns)  cumulative delay (ns) pins on net    location
+===================================================================================================================================================================================================
+core_clk                                                                                                                     inpad        0.000             0.000               0       (107,0)  
+core_clk                                                                                                                     inpad        0.070             0.070             811       (107,0)  
+core_clk                                                                                                                     net          1.169             1.239             811       (107,0)  
+u_ddr/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/controller_main/row_activated_p0[2][4]~FF|CLK    ff           0.000             1.239             811       (155,118)
+
+++++ Path 8 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : u_ddr/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/controller_main/rd_bank_p1[2]~FF|CLK
+Path End      : u_ddr/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/controller_main/ddrB_ba_p[2]~FF|D   
+Launch Clock  : core_clk (RISE)                                                                                                 
+Capture Clock : core_clk (RISE)                                                                                                 
+Slack         : 0.094 (arrival time - required time)                                                                            
+Delay         : 0.092                                                                                                           
+
+Logic Level             : 1
+Non-global nets on path : 1
+Global nets on path     : 0
+
+Launch Clock Path Delay        : 1.239
++ Clock To Q + Data Path Delay : 0.164
+--------------------------------------
+End-of-path arrival time       : 1.403
+
+Constraint                     : 0.000
++ Capture Clock Path Delay     : 1.239
++ Clock Uncertainty            : 0.070
+--------------------------------------
+End-of-path required time      : 1.309
+
+Launch Clock Path
+                                                      name                                                        model name   delay (ns)  cumulative delay (ns) pins on net    location
+==========================================================================================================================================================================================
+core_clk                                                                                                            inpad        0.000             0.000               0       (107,0)  
+core_clk                                                                                                            inpad        0.070             0.070             811       (107,0)  
+core_clk                                                                                                            net          1.169             1.239             811       (107,0)  
+u_ddr/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/controller_main/rd_bank_p1[2]~FF|CLK    ff           0.000             1.239             811       (166,104)
+
+Data Path
+                                                     name                                                       model name   delay (ns)  cumulative delay (ns) pins on net    location
+========================================================================================================================================================================================
+u_ddr/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/controller_main/rd_bank_p1[2]~FF|Q     ff          0.072             0.072              2        (166,104)
+u_ddr/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/controller_main/rd_bank_p1[2]          net         0.058             0.130              2        (166,104)
+LUT__23038|in[0]                                                                                                   lut         0.034             0.164              2        (164,104)
+LUT__23038|out                                                                                                     lut         0.000             0.164              2        (164,104)
+u_ddr/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/controller_main/ddrB_ba_p[2]~FF|D      ff          0.000             0.164              2        (164,104)
+
+Capture Clock Path
+                                                     name                                                        model name   delay (ns)  cumulative delay (ns) pins on net    location
+=========================================================================================================================================================================================
+core_clk                                                                                                           inpad        0.000             0.000               0       (107,0)  
+core_clk                                                                                                           inpad        0.070             0.070             811       (107,0)  
+core_clk                                                                                                           net          1.169             1.239             811       (107,0)  
+u_ddr/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/controller_main/ddrB_ba_p[2]~FF|CLK    ff           0.000             1.239             811       (164,104)
+
+++++ Path 9 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : u_ddr/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/controller_main/rd_bank_p1[1]~FF|CLK
+Path End      : u_ddr/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/controller_main/ddrB_ba_p[1]~FF|D   
+Launch Clock  : core_clk (RISE)                                                                                                 
+Capture Clock : core_clk (RISE)                                                                                                 
+Slack         : 0.094 (arrival time - required time)                                                                            
+Delay         : 0.092                                                                                                           
+
+Logic Level             : 1
+Non-global nets on path : 1
+Global nets on path     : 0
+
+Launch Clock Path Delay        : 1.239
++ Clock To Q + Data Path Delay : 0.164
+--------------------------------------
+End-of-path arrival time       : 1.403
+
+Constraint                     : 0.000
++ Capture Clock Path Delay     : 1.239
++ Clock Uncertainty            : 0.070
+--------------------------------------
+End-of-path required time      : 1.309
+
+Launch Clock Path
+                                                      name                                                        model name   delay (ns)  cumulative delay (ns) pins on net    location
+==========================================================================================================================================================================================
+core_clk                                                                                                            inpad        0.000             0.000               0       (107,0)  
+core_clk                                                                                                            inpad        0.070             0.070             811       (107,0)  
+core_clk                                                                                                            net          1.169             1.239             811       (107,0)  
+u_ddr/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/controller_main/rd_bank_p1[1]~FF|CLK    ff           0.000             1.239             811       (166,109)
+
+Data Path
+                                                     name                                                       model name   delay (ns)  cumulative delay (ns) pins on net    location
+========================================================================================================================================================================================
+u_ddr/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/controller_main/rd_bank_p1[1]~FF|Q     ff          0.072             0.072              2        (166,109)
+u_ddr/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/controller_main/rd_bank_p1[1]          net         0.058             0.130              2        (166,109)
+LUT__23037|in[0]                                                                                                   lut         0.034             0.164              2        (167,109)
+LUT__23037|out                                                                                                     lut         0.000             0.164              2        (167,109)
+u_ddr/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/controller_main/ddrB_ba_p[1]~FF|D      ff          0.000             0.164              2        (167,109)
+
+Capture Clock Path
+                                                     name                                                        model name   delay (ns)  cumulative delay (ns) pins on net    location
+=========================================================================================================================================================================================
+core_clk                                                                                                           inpad        0.000             0.000               0       (107,0)  
+core_clk                                                                                                           inpad        0.070             0.070             811       (107,0)  
+core_clk                                                                                                           net          1.169             1.239             811       (107,0)  
+u_ddr/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/controller_main/ddrB_ba_p[1]~FF|CLK    ff           0.000             1.239             811       (167,109)
+
+++++ Path 10 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : u_ddr/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/controller_main/row_activated[6][6]~FF|CLK 
+Path End      : u_ddr/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/controller_main/row_activated_p0[6][6]~FF|D
+Launch Clock  : core_clk (RISE)                                                                                                        
+Capture Clock : core_clk (RISE)                                                                                                        
+Slack         : 0.094 (arrival time - required time)                                                                                   
+Delay         : 0.092                                                                                                                  
+
+Logic Level             : 0
+Non-global nets on path : 1
+Global nets on path     : 0
+
+Launch Clock Path Delay        : 1.239
++ Clock To Q + Data Path Delay : 0.164
+--------------------------------------
+End-of-path arrival time       : 1.403
+
+Constraint                     : 0.000
++ Capture Clock Path Delay     : 1.239
++ Clock Uncertainty            : 0.070
+--------------------------------------
+End-of-path required time      : 1.309
+
+Launch Clock Path
+                                                         name                                                           model name   delay (ns)  cumulative delay (ns) pins on net    location
+================================================================================================================================================================================================
+core_clk                                                                                                                  inpad        0.000             0.000               0       (107,0)  
+core_clk                                                                                                                  inpad        0.070             0.070             811       (107,0)  
+core_clk                                                                                                                  net          1.169             1.239             811       (107,0)  
+u_ddr/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/controller_main/row_activated[6][6]~FF|CLK    ff           0.000             1.239             811       (154,129)
+
+Data Path
+                                                         name                                                            model name   delay (ns)  cumulative delay (ns) pins on net    location
+=================================================================================================================================================================================================
+u_ddr/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/controller_main/row_activated[6][6]~FF|Q        ff          0.072             0.072              2        (154,129)
+u_ddr/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/controller_main/row_activated[6][6]             net         0.092             0.164              2        (154,129)
+u_ddr/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/controller_main/row_activated_p0[6][6]~FF|D     ff          0.000             0.164              2        (155,129)
+
+Capture Clock Path
+                                                          name                                                             model name   delay (ns)  cumulative delay (ns) pins on net    location
+===================================================================================================================================================================================================
+core_clk                                                                                                                     inpad        0.000             0.000               0       (107,0)  
+core_clk                                                                                                                     inpad        0.070             0.070             811       (107,0)  
+core_clk                                                                                                                     net          1.169             1.239             811       (107,0)  
+u_ddr/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/controller_main/row_activated_p0[6][6]~FF|CLK    ff           0.000             1.239             811       (155,129)
+

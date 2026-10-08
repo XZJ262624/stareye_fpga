@@ -196,3 +196,33 @@ M4离线开发与完整编译通过，实物彩色叠加效果待验收。分支
 
 ## H-M5B0-20261007-ARCHIVE（本轮授权）
 目标：保持NO-GO，归档M5B.0并独立提交docs: assess global canny architecture feasibility，直接父4e0496e8a36f53dcfffa9e9564ffbf0f780a55ba。GPT-6 Astra / ultra只读审查文档、清单、软件证据及归档边界；主会话唯一写入，负责最终范围、暂存blob、保护与提交复核。允许管理文档及本阶段归档证据；禁止生产RTL、新Efinity工程、编译、bit、下载、Flash、候选地址测试、仲裁实现、融合、M5B.1、删除历史资料、合并或推送。此前不暂存/提交的停止限制属于上轮分析，本轮用户明确授权按清单归档提交。验收：范围及换行可解释、暂存blob哈希一致、父节点正确、NO-GO不变、M2～M5A保护与1550历史未跟踪保留。
+
+## H-M5B0R-20261007-OFFLINE（当前任务）
+基线ba28397cc5f0d4b34ed06b803c8e5af067c9ca98；目标为独立DDR诊断与隔离仲裁/QoS原型离线开发，禁止接入生产视频或全局Canny。委派GPT-6 Astra / ultra，先只读官方证据/现有IP/测试工程审查并提交架构方案，主会话独立复核后授权新路径写入；同一时刻唯一写入者。必须完整读取用户附件e2c108f5-67d9-4c89-83a3-e871a1b8baa9/已粘贴的文本.txt。允许reports/m5b0r_ddr_admission、efinity/m5b0r_ddr_address_diag_i3、专用diagnostic/prototype/tb/scripts及必要当前管理文档；保护M2～M5A所有文件与M5B.0报告/模型/脚本，历史1550未跟踪保留。不暂存/提交/合并/推送；不Programmer/下载/Flash；完整Efinity编译只针对诊断工程。Ti60F225I3及DDR参数与M2一致、debug关闭；从M0核LED脚/极性，未来实物相机必须断开。本轮无实物DDR证明，新闸门只允许GO_FOR_M5B1_PROTOTYPE/CONDITIONAL_GO_PENDING_HARDWARE_DIAG/NO_GO，未实测不得完整GO。验收包含负向地址故障模型、真实响应隔离/复位/超时/公平性随机HDL验证、有条件QoS推导、真实帧证据或缺口、诊断完整STA及最终实现哈希绑定；主会话独立复核后离线暂停。
+
+
+## 2026-10-08 M5B.0R离线工作收尾（当前）
+项目m5b0r_ddr_admission；分支codex/m5b0r-ddr-admission，HEAD仍为ba28397cc5f0d4b34ed06b803c8e5af067c9ca98。M5B.0分析保持NO-GO；M5B.0R完成独立诊断和隔离原型的离线验证准备，当前闸门NO_GO，实际阻断项尚未全部关闭。M5B.1未启动、无全局Canny生产RTL/视频DDR接入/融合。
+用户指定GPT-6 Astra/ultra完成架构及初稿，后续代理限额时主会话接管实现、构建、仿真和独立复核；Astra恢复后进行只读最终复核，主会话处理LED总体超时编码、QoS持续吞吐及取消协议问题。
+独立工程efinity/m5b0r_ddr_address_diag_i3：DDR v5.14参数/源码/ROM与M2匹配、调试插入关闭，仅DDR和LED0～5；24MHz普通core入口及sysPLL CORE参考的建模边界保留。完整I3构建及112份最终STA通过，7391 XLR/30 RAM10/0 DSP，最小setup/hold +0.100/+0.021ns。0无时钟/内部未约束/多时钟，2无输入延迟及17无输出延迟保留；仅20个网表确认的复位链异步SR例外，不广泛切断DDR/monitor数据。受约束时序通过不能证明全部PVT、电气或物理高地址安全。
+HDL诊断54例、monitor6情形、仲裁六种子合计123000完成事务、主会话四个验收负向用例通过。软件28个可检测地址映射故障及11个协议规格案例通过；共同比例/双向一致重映射仍可能不可观测，不能认证真实映射。QoS读/写停服预算54.14/60.75us为条件示例；持续恢复约束比单次停服更严，17us反例不安全，实际Lmax及水位/CDC/预填充未证明。全仓94图像候选无已认证真实分类帧，仅性能统计方案，不虚构fps。
+高地址/校准保留区仍需厂商依据与受控实物诊断；真实DDR仲裁、epoch取消桥接、FIFO服务上界和720p60共存压力未验证。未来诊断相机须物理断开，仅JTAG临时，禁止Flash；本轮未Programmer、下载、Flash或生产接入。旧Flash流水灯冷启动和R3/R4共享风险继续保留。
+报告见../reports/m5b0r_ddr_admission/M5B0R_GATE.md、BUILD_REPORT.md、ROOT_REVIEW.md及PROPOSED_GIT_SCOPE.json。本轮不暂存、不提交、不合并main、不推送；历史未跟踪文件全部保留。
+
+## H-M5B0R-20261008-CANDIDATE（当前授权）
+
+目标：在现有离线成果不改变功能结论的前提下，固化三角色流程，复核M5B.0R最终证据和精确范围，并创建固定candidate commit。基线分支`codex/m5b0r-ddr-admission`，父提交必须为`ba28397cc5f0d4b34ed06b803c8e5af067c9ca98`；candidate信息建议为`feat: add isolated DDR admission diagnostics`。
+
+角色：Codex exec为本阶段唯一Writer，按L3使用GPT-6 Astra/Medium；Work负责最终复核。Codex A不在当前对话中调用。candidate冻结后必须停止，由Work把固定commit及审查提示词交给用户，由用户在独立可见Codex对话委派Codex A。
+
+允许：既有`reports/m5b0r_ddr_admission`、`efinity/m5b0r_ddr_address_diag_i3`必要源输入、`rtl/m5b0r_ddr_admission`、`tb/m5b0r_ddr_admission`、`scripts/m5b0r*`、四份既有管理文档，以及本轮明确新增的`AGENTS.md`、`docs/AI_WORKFLOW.md`和`docs/REVIEW_PROTOCOL.md`。允许更新精确提交清单及只读验收报告以反映最终candidate范围。
+
+禁止：修改M2～M5A受保护工程或M5B.0模型/报告；接入生产视频或全局Canny；重新设计已冻结诊断功能；Programmer、JTAG下载、SPI Active、Flash；提交bitstream、outflow、work、数据库、缓存、锁、波形、原始日志、工具包、reference或历史未跟踪资料；使用`git add .`或`git add -A`；合并main、rebase、改写历史或推送。
+
+验收：最终证据验收器和范围验收器通过；10,469个受保护文件及历史1,550个未跟踪路径保持；精确暂存blob与清单一致；candidate直接以指定基线为parent；提交后暂存区为空；M5B.0R闸门继续为`NO_GO`，不得写成实物通过或M5B.1放行。提交完成后冻结并停止在用户委派Codex A审查节点。
+
+### H-M5B0R-20261008-CANDIDATE 范围补充与交回约定
+
+Work额外授权根 `.gitattributes` 仅追加M5B.0R工程、RTL、TB、报告与scripts/m5b0r*的 `-text` 规则；原阶段规则保持。理由：现有 core.autocrlf=true 会使已验收输入/证据在暂存或checkout时发生换行转换，须保持其逐字哈希。管理文档及AGENTS随精确路径用命令级 core.autocrlf=false 暂存，不改Git配置；所有暂存blob逐字核对。
+
+最终candidate范围为PROPOSED_GIT_SCOPE.json中files加清单自身；清单自身不自哈希。candidate ID、parent和最终文件数/字节数由提交后Git读取交给Work，不在提交内循环引用自身。证据验收器为提交前专用，包含父HEAD和空索引断言；提交后不能直接把该Git状态断言当当前验收。范围验收器仍可只读复核。完成提交后停止写入，Work复核后把固定candidate交给用户委派Codex A。

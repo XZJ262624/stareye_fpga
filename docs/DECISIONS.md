@@ -153,3 +153,16 @@ bit本轮只读复算2,179,422字节/SHA-256 `5cbaa12da39eb141d6b481299c496e9f71
 ## 2026-10-07 M5B.0归档授权
 
 D063：用户明确授权本轮按最终清单独立提交`docs: assess global canny architecture feasibility`，直接父为M5A 4e0496e8a36f53dcfffa9e9564ffbf0f780a55ba。NO-GO结论与六项阻断不变；只归档，无生产RTL、新工程、编译、bitstream、下载/Flash、M5B.1、融合、合并或推送。先前禁止提交规则为历史分析轮次，本轮授权仅覆盖归档提交。
+
+
+## 2026-10-08 M5B.0R离线工作收尾（当前）
+项目m5b0r_ddr_admission；分支codex/m5b0r-ddr-admission，HEAD仍为ba28397cc5f0d4b34ed06b803c8e5af067c9ca98。M5B.0分析保持NO-GO；M5B.0R完成独立诊断和隔离原型的离线验证准备，当前闸门NO_GO，实际阻断项尚未全部关闭。M5B.1未启动、无全局Canny生产RTL/视频DDR接入/融合。
+用户指定GPT-6 Astra/ultra完成架构及初稿，后续代理限额时主会话接管实现、构建、仿真和独立复核；Astra恢复后进行只读最终复核，主会话处理LED总体超时编码、QoS持续吞吐及取消协议问题。
+独立工程efinity/m5b0r_ddr_address_diag_i3：DDR v5.14参数/源码/ROM与M2匹配、调试插入关闭，仅DDR和LED0～5；24MHz普通core入口及sysPLL CORE参考的建模边界保留。完整I3构建及112份最终STA通过，7391 XLR/30 RAM10/0 DSP，最小setup/hold +0.100/+0.021ns。0无时钟/内部未约束/多时钟，2无输入延迟及17无输出延迟保留；仅20个网表确认的复位链异步SR例外，不广泛切断DDR/monitor数据。受约束时序通过不能证明全部PVT、电气或物理高地址安全。
+HDL诊断54例、monitor6情形、仲裁六种子合计123000完成事务、主会话四个验收负向用例通过。软件28个可检测地址映射故障及11个协议规格案例通过；共同比例/双向一致重映射仍可能不可观测，不能认证真实映射。QoS读/写停服预算54.14/60.75us为条件示例；持续恢复约束比单次停服更严，17us反例不安全，实际Lmax及水位/CDC/预填充未证明。全仓94图像候选无已认证真实分类帧，仅性能统计方案，不虚构fps。
+高地址/校准保留区仍需厂商依据与受控实物诊断；真实DDR仲裁、epoch取消桥接、FIFO服务上界和720p60共存压力未验证。未来诊断相机须物理断开，仅JTAG临时，禁止Flash；本轮未Programmer、下载、Flash或生产接入。旧Flash流水灯冷启动和R3/R4共享风险继续保留。
+报告见../reports/m5b0r_ddr_admission/M5B0R_GATE.md、BUILD_REPORT.md、ROOT_REVIEW.md及PROPOSED_GIT_SCOPE.json。本轮不暂存、不提交、不合并main、不推送；历史未跟踪文件全部保留。
+
+## 2026-10-08 M5B.0R candidate归档授权
+
+本轮授权Codex exec按冻结清单创建独立candidate，父提交ba28397cc5f0d4b34ed06b803c8e5af067c9ca98，消息feat: add isolated DDR admission diagnostics。Work授权追加M5B.0R专属 -text 属性以保持源和证据字节；不改变旧规则。本轮覆盖先前不暂存/不提交的离线限制，仅归档现有成果和三角色流程，不重编译、不操作硬件、不合并/推送。NO_GO保持，提交后停在用户委派独立Codex A节点。

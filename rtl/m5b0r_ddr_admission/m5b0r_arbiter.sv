@@ -1,0 +1,116 @@
+// Isolated prototype. One owner slot over the actual combined A/W/B/R interface.
+// Client 0 camera W, client 1 HDMI R, client 2 background R/W.
+// soft_reset QUIESCES; it does not reset this module or the DDR bus.
+// ddr_reset_ack is trusted only after actual DDR reset and client epoch flush.
+module m5b0r_arbiter #(
+ parameter integer TX_LIMIT=2048,
+ parameter integer BG_REFILL=512,
+ parameter integer BG_MAX_BEATS=32
+)(input clk,input rst_n,input soft_reset,input ddr_reset_ack,
+ input [1:0] urgent,input safe_window,
+ input [2:0] c_avalid,output reg [2:0] c_aready,
+ input [95:0] c_aaddr,input [23:0] c_alen,c_aid,input [2:0] c_atype,
+ input [2:0] c_wvalid,c_wlast,output reg [2:0] c_wready,
+ input [383:0] c_wdata,input [47:0] c_wstrb,
+ output reg [2:0] c_bvalid,input [2:0] c_bready,
+ output reg [23:0] c_bid,output reg [5:0] c_bresp,
+ output reg [2:0] c_rvalid,c_rlast,input [2:0] c_rready,
+ output reg [383:0] c_rdata,output reg [23:0] c_rid,output reg [5:0] c_rresp,
+ output reg [2:0] rejected,output reg quarantine,output reg reset_request,
+ output reg [3:0] error_reason,output busy,
+ output [7:0] aid,alen,wid,output [31:0] aaddr,output [2:0] asize,
+ output [1:0] aburst,alock,output avalid,atype,input aready,
+ output [127:0] wdata,output [15:0] wstrb,output wlast,wvalid,input wready,
+ input [7:0] bid,input [1:0] bresp,input bvalid,output bready,
+ input [7:0] rid,input [1:0] rresp,input [127:0] rdata,input rlast,rvalid,output rready
+);
+ localparam IDLE=0,A=1,W=2,B=3,R=4;
+ reg [2:0] state;reg [1:0] owner;reg [7:0] local_id,len,beat;
+ reg [31:0] address,age,refill;reg write_op,rt_turn,credit;
+ reg [1:0] rt_served;reg [1:0] choice;reg choose_valid;
+ wire discard=quarantine||soft_reset||reset_request;
+ wire [31:0] selected_address=c_aaddr[choice*32+:32];
+ wire [7:0] selected_len=c_alen[choice*8+:8];
+ wire [32:0] selected_end={1'b0,selected_address}+(({25'b0,selected_len}+33'd1)<<4);
+ wire selected_legal=selected_address[3:0]==0 && selected_len<128 &&
+  (selected_address[11:0]+(({5'b0,selected_len}+13'd1)<<4))<=4096 &&
+  ((choice==0&&c_atype[0]&&selected_end<=33'h001000000)||
+   (choice==1&&!c_atype[1]&&selected_end<=33'h001000000)||
+   (choice==2&&selected_len<BG_MAX_BEATS&&selected_address>=32'h01000000&&selected_end<=33'h0010e7000));
+ assign busy=state!=IDLE;
+ always @* begin
+  choose_valid=0;choice=0;c_aready=0;
+  // Urgent RT always wins, then eligible BG after two RT grants, then RT RR.
+  if(c_avalid[0]&&urgent[0]&&!(c_avalid[1]&&urgent[1]&&rt_turn))begin choice=0;choose_valid=1;end
+  else if(c_avalid[1]&&urgent[1])begin choice=1;choose_valid=1;end
+  else if(c_avalid[2]&&safe_window&&urgent==0&&credit&&rt_served==2)begin choice=2;choose_valid=1;end
+  else if(c_avalid[0]&&(!c_avalid[1]||!rt_turn))begin choice=0;choose_valid=1;end
+  else if(c_avalid[1])begin choice=1;choose_valid=1;end
+  else if(c_avalid[2]&&safe_window&&urgent==0&&credit)begin choice=2;choose_valid=1;end
+  if(state==IDLE&&!discard&&choose_valid)c_aready[choice]=1;
+ end
+ assign aid={6'b0,owner}+8'd1;assign wid=aid;assign aaddr=address;assign alen=len;
+ assign asize=4;assign aburst=1;assign alock=0;assign atype=write_op;
+ assign avalid=state==A; // Never withdraw a stalled A except real DDR reset ack.
+ assign wvalid=state==W&&c_wvalid[owner];
+ assign wdata=c_wdata[owner*128+:128];assign wstrb=c_wstrb[owner*16+:16];
+ assign wlast=c_wlast[owner];
+ assign bready=state==B&&(discard||bid!=aid||c_bready[owner]);
+ assign rready=state==R&&(discard||rid!=aid||rlast!=(beat==len)||c_rready[owner]);
+ always @* begin
+  c_wready=0;c_bvalid=0;c_bid=0;c_bresp=0;c_rvalid=0;c_rlast=0;c_rdata=0;c_rid=0;c_rresp=0;
+  if(state==W)c_wready[owner]=wready;
+  if(state==B&&!discard&&bid==aid)begin
+   c_bvalid[owner]=bvalid;c_bid[owner*8+:8]=local_id;c_bresp[owner*2+:2]=bresp;
+  end
+  if(state==R&&!discard&&rid==aid&&rlast==(beat==len))begin
+   c_rvalid[owner]=rvalid;c_rlast[owner]=rlast;c_rid[owner*8+:8]=local_id;
+   c_rdata[owner*128+:128]=rdata;c_rresp[owner*2+:2]=rresp;
+  end
+ end
+ always @(posedge clk or negedge rst_n)begin
+  if(!rst_n)begin
+   state<=IDLE;owner<=0;local_id<=0;len<=0;beat<=0;address<=0;age<=0;write_op<=0;
+   rt_turn<=0;credit<=1;refill<=0;rt_served<=0;rejected<=0;quarantine<=0;reset_request<=0;error_reason<=0;
+  end else if(ddr_reset_ack)begin
+   state<=IDLE;quarantine<=0;reset_request<=0;error_reason<=0;age<=0;beat<=0;
+   rejected<=0;credit<=1;refill<=0;rt_served<=0;
+  end else begin
+   rejected<=0;
+   if(soft_reset)quarantine<=1;
+   if(refill==BG_REFILL-1)begin refill<=0;credit<=1;end else refill<=refill+1'b1;
+   if(state!=IDLE&&age<TX_LIMIT)age<=age+1'b1;
+   if(state!=IDLE&&age==TX_LIMIT-1)begin quarantine<=1;reset_request<=1;error_reason<=1;end
+   case(state)
+    IDLE:begin
+     age<=0;
+     if(choose_valid&&c_aready[choice])begin
+      if(!selected_legal)rejected[choice]<=1;
+      else begin
+       owner<=choice;local_id<=c_aid[choice*8+:8];address<=selected_address;len<=selected_len;
+       write_op<=c_atype[choice];beat<=0;state<=A;
+       if(choice==2)begin credit<=0;refill<=0;rt_served<=0;end
+       else begin rt_turn<=choice==0;if(rt_served<2)rt_served<=rt_served+1'b1;end
+      end
+     end
+    end
+    A:if(aready)state<=write_op?W:R;
+    W:if(wvalid&&wready)begin
+     if(wlast!=(beat==len))begin quarantine<=1;reset_request<=1;error_reason<=2;end
+     if(beat==len)state<=B;else beat<=beat+1'b1;
+    end
+    B:if(bvalid&&bready)begin
+     if(bid!=aid)begin quarantine<=1;reset_request<=1;error_reason<=3;end
+     state<=IDLE;
+    end
+    R:if(rvalid&&rready)begin
+     if(rid!=aid||rlast!=(beat==len))begin quarantine<=1;reset_request<=1;error_reason<=4;end
+     if(rlast)state<=IDLE;
+     else if(beat!=255)beat<=beat+1'b1;
+     else begin quarantine<=1;reset_request<=1;error_reason<=5;end
+    end
+    default:begin quarantine<=1;reset_request<=1;error_reason<=6;end
+   endcase
+  end
+ end
+endmodule
