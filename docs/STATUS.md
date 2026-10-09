@@ -1,6 +1,14 @@
 # 星眸项目状态
 
-## 2026-10-09 M5B.0R双审查与DDR实物验收PASS（当前）
+## 2026-10-09 M5B.1规格冻结与开发启动（当前）
+
+M5B.0R双审查与DDR实物验收已经归档为`85727319be83f49e81b17d91a310ba0175b37319`。当前分支为`codex/m5b1-global-canny-prototype`，M5B.1隔离原型规格已由Work结合Astra只读分析冻结，详见`reports/m5b1_global_canny_i3/SPEC_FREEZE.md`。
+
+冻结方案为三客户端单事务owner、单job不重叠、2bit分类快照、正反向全帧八连通传播、1bit工作/结果双缓冲、64pair或1秒安全超时、真实B/R栅栏和epoch复位。沿用已实物诊断地址`[0x01000000,0x010e7000)`，结果暂不接实时显示，原七模式保持。现有UART TX固定460800-8-N-1用于每job统计和复位后首个成功job的单次分类/结果+CRC导出，以补齐真实帧证据。
+
+本轮进入Codex exec/Astra独占实现。尚无M5B.1 RTL、仿真、完整构建、STA、资源或bit结果，也未进行新硬件操作；4us服务只是条件验证目标，真实性能和1～2fps均未确认。实现candidate后必须停止进行DeepSeek B与用户委派Codex A双独立审查，通过后才进入实物共存压力验收。
+
+## 2026-10-09 M5B.0R双审查与DDR实物验收PASS（历史）
 
 固定candidate `e734d527a149e318ac5009257dab90642c19cb59`、parent `02841e20e297e4e6fdd14db0762a91d7089232fb`已完成双独立复审。Codex A与DeepSeek B均为`PASS_WITH_FINDINGS`且无阻断项；上一轮ACK孤立握手、TB边沿观察和Git实际差异scope问题均已关闭。审查原文见`CODEX_A_REVIEW_E734D527.md`与`DEEPSEEK_B_REVIEW_E734D527.md`。
 

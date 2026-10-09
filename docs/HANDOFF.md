@@ -1,30 +1,33 @@
 # 星眸项目交接单
 
-## H-M5B1-20261009-PROTOTYPE（当前任务）
+## H-M5B1-20261009-IMPLEMENT（当前任务）
 
-### 已完成闸门
+### 目标与基线
 
-M5B.0R固定candidate `e734d527a149e318ac5009257dab90642c19cb59`、parent `02841e20e297e4e6fdd14db0762a91d7089232fb`。Codex A与DeepSeek B独立复审均为`PASS_WITH_FINDINGS`且无阻断项。用户随后用绑定bit完成受控JTAG实物诊断：AR0135断开，未SPI Active/Flash；LED0闪烁、LED1～5常亮约5分钟且无异常。M5B.0R实物诊断PASS，闸门为`GO_FOR_M5B1_PROTOTYPE`。
+M5B.0R固定candidate `e734d527a149e318ac5009257dab90642c19cb59`完成双审查和用户实物PASS；归档提交为`85727319be83f49e81b17d91a310ba0175b37319`。当前分支`codex/m5b1-global-canny-prototype`。M5B.1规格已冻结于`reports/m5b1_global_canny_i3/SPEC_FREEZE.md`，本轮由Codex exec按L3/Astra独占实现、验证并创建candidate。
 
-### 下一任务
+### 必须实现
 
-先冻结M5B.1隔离原型规格，再由Codex exec独占实现。该任务涉及真实DDR多主事务、FIFO/QoS、复位/epoch、全帧迭代和视频时序，按L3使用GPT-6 Astra。规格阶段必须追踪M5A分类tap、现有modified AXI唯一用户口、相机写/显示读FIFO接口与时钟域，明确新增客户端、仲裁owner/ID、取消与恢复、地址区间、水位/预填充、最大服务延迟测量、后台帧状态机和原子发布。
+1. 从M5A实际编译输入创建`efinity/m5b1_global_canny_i3`，保留管脚、PLL、DDR IP、720p和七模式；新分类tap来自`nms_packet`对应的强/弱分类。
+2. 三客户端单owner真实modified AXI：相机写、显示读、后台C2。事务到真实B或最后R才结束；8bit ID、RESP/LAST、地址权限、4KiB和payload边界完整检查。
+3. 替换旧视频事务适配层，关闭写B栅栏、读R排空、视频槽生命周期、真实FIFO水位、预填充、校准done+pass和epoch复位问题。
+4. 实现分类CDC/捕获、前反向全帧传播、工作/结果双缓冲、64pair/1s安全超时、copy前reserve及metadata原子发布；初版单job，结果不接实时显示。
+5. 复用既有地址图`[0x01000000,0x010e7000)`，不得重新分配或借用视频槽尾；BG burst≤512B、RT burst≤2048B。
+6. 使用现有`uart_tx_o` 460800-8-N-1输出每job统计；冷复位后首个成功job单次导出230400B分类图与115200B结果图，包头、长度、身份和CRC32可由仓库工具校验。
 
-### 放行范围
+### 验证与构建
 
-允许创建独立M5B.1分支和新工程副本，新增专用RTL/TB/脚本/报告，并在冻结规格后完成真实HDL验证、故障注入、完整I3综合/P&R/STA、资源和bit绑定。必须保持M5A现有七模式、720p60、管脚、时钟、DDR IP参数和旧工程不变；候选地址固定在已诊断区间`[0x01000000,0x010e7000)`内，任何重新分配需重新过闸门。
+必须完成冻结规格第9节全部验收：分类与算法黄金、真实B/R协议、CDC/复位、六种子QoS压力、17us反例、保护突变、七模式显示回归、UART解包、完整Efinity map/P&R/bit、全部要求角点STA、资源与输入到bit绑定。384 UI周期/4us只是条件验证目标；不得把仿真边界写成硬件保证，不得承诺1～2fps。
 
-### 必须继续关闭的事项
+完整构建必须包含新仲裁器、视频DMA、分类CDC和全局引擎；不得复用M5B.0R诊断资源/STA。setup/hold必须非负，新增内部无时钟/未约束/多时钟端点为0。若XLR>48640、RAM10>204或DSP>128，停止交Work决定。
 
-1. 隔离仲裁器接入真实生产DDR拓扑，并验证B/R响应归属、背压、超时、真实DDR复位和客户端epoch取消桥接。
-2. 从实际FIFO深度、水位、CDC和初始预填充推导并测量服务上界；压力仿真必须包含相机写、显示读、刷新/背压和后台客户端，不能用平均带宽替代最坏停服。
-3. 完整M5B.1工程重新综合、P&R和STA；M5B.0R诊断工程的7391 XLR、30 RAM10和+0.100/+0.021ns不得复用为生产结果。
-4. 采集真实M5A分类帧并统计收敛轮次与后台帧率；在取得证据前不得承诺1～2fps。
-5. 离线candidate完成后再次执行Work复核、DeepSeek B净化快照盲审、用户委派Codex A审查；到实物共存压力节点必须再次停止并提供验收清单。
+### 允许与禁止范围
 
-### 禁止范围
+允许新建`efinity/m5b1_global_canny_i3`、`rtl/m5b1_global_canny`、`tb/m5b1_global_canny`、`scripts/m5b1_*`、`reports/m5b1_global_canny_i3`以及必要管理文档/属性规则。旧M2～M5A、M5B.0/R源码与证据只读；不得改DDR IP参数、ROM、管脚、PLL、分辨率或七模式语义，不得清理历史未跟踪资料、合并main、推送、rebase、改写历史或使用`git add .`/`git add -A`。不得运行Programmer、下载、SPI Active或写Flash。
 
-规格未冻结前不编写生产RTL。不得修改或清理M2～M5A及M5B.0R历史工程/证据，不得合并main、推送、rebase或改写历史，不得使用`git add .`/`git add -A`。在下一实物闸门前不运行Programmer、不下载、不执行SPI Active、不写Flash。
+### Git与停止边界
+
+实现完成后按精确scope逐文件暂存，核对index blob和parent→candidate差异，创建candidate并报告branch、candidate、parent、范围、测试、构建、STA/资源、bit元数据、限制及工作区。candidate提交后立即停止写入交Work；Work复核并自动发送DeepSeek B隔离快照，然后停止向用户提供独立Codex A提示词。双审查完成前不得进入实物验收。
 
 ## H-M5B0R-20261009-ACK-EDGE-FIX（历史修复任务）
 
