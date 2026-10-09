@@ -1,5 +1,9 @@
 # 星眸项目背景
 
+## 2026-10-09 M5B.0R闸门更新（优先于下方历史NO-GO描述）
+
+M5B.0R固定candidate已完成Codex A与DeepSeek B双独立复审，均为`PASS_WITH_FINDINGS`且无阻断项。用户随后用绑定诊断bit完成JTAG实物验收：AR0135断开、未写Flash，DDR校准、候选地址别名和范围诊断PASS并稳定观察约5分钟。闸门现为`GO_FOR_M5B1_PROTOTYPE`，只允许下一阶段隔离原型规格、实现和验证；M5B.1尚未完成。全容量/跨PVT、生产多主仲裁与复位桥、FIFO服务上界、720p60共存和真实帧性能仍须后续闭环。
+
 ## 2026-10-07 M5B.0当前补充（优先于历史“未开始”描述）
 
 M5B.0架构与可行性分析完成，硬件尚未实现。选择M5A NMS双阈值分类快照作为输入，软件验证完整任意长度八连通全局滞后；推荐前反向传播并仅在完整收敛后发布。候选新增DDR地址无算术冲突，但实际安全地址/多主事务与实时QoS/真实场景有效输出率未验证，**M5B.1实施NO-GO**。不承诺1～2fps或对实时720p60无影响；不实现M5C static_mask/融合或识别。报告见[架构](../reports/m5b0_global_canny_architecture/M5B0_ARCHITECTURE.md)、[闸门](../reports/m5b0_global_canny_architecture/GO_NO_GO.md)。M5A PASS与既有保护边界保持。

@@ -2,6 +2,15 @@
 
 记录日期：2026-10-03。仅记录已确定事实和明确授权，不将建议与待确认配置写成决定。
 
+## 2026-10-09 M5B.0R最终闸门与后续调度
+
+| 编号 | 已确定事实或决定 | 依据 |
+| --- | --- | --- |
+| D-064 | M5B.0R固定candidate `e734d527a149e318ac5009257dab90642c19cb59`的Codex A与DeepSeek B独立复审均为`PASS_WITH_FINDINGS`且无阻断项；上一轮三项阻断已关闭 | `CODEX_A_REVIEW_E734D527.md`、`DEEPSEEK_B_REVIEW_E734D527.md`及Work candidate复验 |
+| D-065 | 用户使用绑定bit经JTAG临时配置完成独立DDR诊断；AR0135断开、未SPI Active/Flash，LED0闪烁且LED1～5常亮约5分钟，无熄灭、重启、回退或异常；M5B.0R实物诊断PASS | 用户2026-10-09逐项反馈；`reports/m5b0r_ddr_admission/HARDWARE_ACCEPTANCE.md` |
+| D-066 | 闸门更新为`GO_FOR_M5B1_PROTOTYPE`，只放行隔离原型规格、实现与验证；不等于M5B.1完成或生产放行。全容量/跨PVT、真实仲裁复位桥、FIFO服务上界、720p60共存及真实帧性能继续保留 | 当前板卡候选地址准入已实测，其他缺口仍无端到端证据；`M5B0R_GATE.md` |
+| D-067 | DeepSeek B后续默认模型改为DeepSeek V4.1 Flash、推理等级max；旧审查记录保持原模型与原结论，不追溯改写 | 用户明确要求；OpenCode用户配置与独立冒烟测试通过 |
+
 | 编号 | 已确定事实或决定 | 依据 |
 | --- | --- | --- |
 | D-001 | 项目为星眸多算子边缘感知系统；比赛为2026全国大学生嵌入式芯片与系统设计竞赛FPGA赛道；目标平台为易灵思VF-Ti60F225 | 用户指定；实际板卡配置仍待确认 |

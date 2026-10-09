@@ -1,16 +1,24 @@
 # 星眸项目状态
 
+## 2026-10-09 M5B.0R双审查与DDR实物验收PASS（当前）
+
+固定candidate `e734d527a149e318ac5009257dab90642c19cb59`、parent `02841e20e297e4e6fdd14db0762a91d7089232fb`已完成双独立复审。Codex A与DeepSeek B均为`PASS_WITH_FINDINGS`且无阻断项；上一轮ACK孤立握手、TB边沿观察和Git实际差异scope问题均已关闭。审查原文见`CODEX_A_REVIEW_E734D527.md`与`DEEPSEEK_B_REVIEW_E734D527.md`。
+
+用户使用绑定bit通过JTAG临时配置完成独立DDR实物诊断：SHA-256为`249b4b5e4095da1e7466f94d510c17de4588161c37de484a0eff427304cef3f3`，AR0135已断开，未SPI Active/Flash；Programmer报告`finished with JTAG programming`。LED0闪烁、LED1～5常亮，几乎立即达到最终状态并连续观察约5分钟，无熄灭、重启、回退或异常。M5B.0R实物诊断PASS，详见`HARDWARE_ACCEPTANCE.md`。
+
+Work将闸门更新为`GO_FOR_M5B1_PROTOTYPE`：只允许M5B.1隔离原型的规格冻结、实现、仿真、完整构建、STA及后续受控压力验证。512MiB全容量、跨PVT/冷启动、生产多主复位/epoch桥接、实际FIFO服务上界、720p60共存和真实帧性能仍未闭环；M5B.1尚未完成，也未放行生产部署或Flash。
+
 ## 2026-10-09 M5B.0R ACK边沿修复candidate（开发验证）
 
 Codex exec已隔离真实DDR reset ACK同拍的A/W/B/R及客户端数据握手，四状态定向覆盖与普通soft_reset回归通过。54诊断、monitor、六仲裁种子、13项突变负向及7项真实Git范围验收完成；构建输入不变，复用并复核原112份STA与bit，仲裁器仍未综合/STA。详见 `reports/m5b0r_ddr_admission/ACK_EDGE_FIX_REPORT.md`。新candidate直接父为02841e20，提交后停止写入，等待Work与独立双审查；M5B.0R/M5B.1继续NO_GO，无硬件操作。
 
-## 2026-10-09 M5B.0R第二次独立审查FAIL（当前）
+## 2026-10-09 M5B.0R第二次独立审查FAIL（历史）
 
 Codex A对candidate `02841e20e297e4e6fdd14db0762a91d7089232fb`复审结论为`FAIL`：客户端ACK期间READY丢请求问题已关闭，但仲裁器已在A状态时，`avalid`未受`ddr_reset_ack`抑制，若DDR `aready`同拍为高，可能产生下游已接受而仲裁器随ACK清除的孤立命令；现有TB从IDLE开始且ACK期间跳过DDR握手记账，无法检出该风险。candidate证据复验还缺少实际parent→candidate差异全部属于scope的断言。
 
 DeepSeek B净化隔离快照盲审为`PASS_WITH_FINDINGS`，也识别出A状态ACK首拍暴露并建议定向覆盖。Work采用Codex A的阻断定级，已冻结追加修复：隔离DDR侧ACK握手、审计W/B/R边界、增加真实定向/负向测试并强化Git差异scope检查。M5B.0R与M5B.1继续`NO_GO`，不进入实物验收，无硬件操作。详见`CODEX_A_REVIEW_02841E20.md`、`DEEPSEEK_B_REVIEW_02841E20.md`及当前HANDOFF。
 
-## 2026-10-08 M5B.0R修复candidate（当前）
+## 2026-10-08 M5B.0R修复candidate（历史）
 
 Codex exec已修复ACK期间虚假握手，加入ACK持续重叠/恢复检查与独立9967事务完整诊断计划。54例诊断、六种子仲裁、monitor和9项负向验收的最终证据见 `reports/m5b0r_ddr_admission/REVIEW_FIX_REPORT.md` 及对应机器报告。独立诊断构建输入未改变，复用并复核原112份STA与bit；隔离仲裁器尚未综合。追加candidate以6c44df8为直接parent，提交后停止写入，等待Work核验、DeepSeek B及用户独立Codex A复审。M5B.0R/M5B.1仍NO_GO，无硬件操作。
 
@@ -20,7 +28,7 @@ Codex exec已修复ACK期间虚假握手，加入ACK持续重叠/恢复检查与
 
 当前不进入实物验收，M5B.0R及M5B.1继续`NO_GO`。修复以旧candidate为直接父提交追加新candidate，不改写历史；完成后由Work自动向DeepSeek B发送经验证的只读隔离快照，并再次停在用户委派Codex A复审节点。用户已长期授权每个candidate节点自动发送DeepSeek B快照，排除`.git`、未提交文件、密钥、`.env`、工具包、原始未跟踪资料和用户私人文件。
 
-## 2026-10-07 M5B.0归档状态（当前）
+## 2026-10-07 M5B.0归档状态（历史）
 
 M5B.0分析完成，最终结论保持 **NO-GO**：全局Canny算法软件可行性通过，M5B.1生产RTL和整机DDR接入不放行。用户本轮授权独立归档提交`docs: assess global canny architecture feasibility`，直接父提交为`4e0496e8a36f53dcfffa9e9564ffbf0f780a55ba`。分支`codex/m5b0-global-canny-architecture`；新提交ID及提交后状态以实际Git复核为准，避免循环记录自身哈希。
 
