@@ -1,5 +1,38 @@
 # 星眸项目交接单
 
+## H-M5B0R-20261009-ACK-EDGE-FIX（当前修复任务）
+
+### Codex exec交回摘要
+
+A/W/B/R及客户端数据接口已在真实ACK同拍隔离，四状态定向覆盖1111及六种子通过；普通soft_reset保持stalled VALID语义。54诊断、monitor、13项负向及7项真实Git范围验收通过。新candidate直接parent为02841e20，提交后ID由Git报告。细节、复验及未综合仲裁器边界见 `reports/m5b0r_ddr_admission/ACK_EDGE_FIX_REPORT.md`；保持NO_GO，提交后停止写入交Work，不能把开发测试视作独立复审PASS。
+
+### 审查结果与基线
+
+Codex A已完成candidate `02841e20e297e4e6fdd14db0762a91d7089232fb`的独立复审，唯一parent为`6c44df8c5edc10c45a59c4c867e3fc44a6e7456d`，最终结论`FAIL`。DeepSeek B净化快照盲审结论为`PASS_WITH_FINDINGS`，但同样指出A状态ACK首拍的下游握手暴露。Work采用更严格的Codex A结论。本轮必须以`02841e20e297e4e6fdd14db0762a91d7089232fb`为直接父提交追加新candidate，不amend、不rebase、不改写历史。
+
+### 冻结修复规格
+
+1. 关闭`ddr_reset_ack`边界上的全部DDR侧孤立握手风险。至少覆盖A通道；必须同步审查W/B/R通道在ACK有效同拍的VALID/READY行为，并以明确协议说明或RTL隔离关闭风险。只允许真实`ddr_reset_ack`撤销/屏蔽在途握手，不得破坏普通`soft_reset`期间保持stalled VALID的既有要求。
+2. 仲裁TB增加`state==A`、`ddr_reset_ack==1`、DDR `aready==1`同拍的定向测试，直接断言DDR侧不得产生地址握手；ACK清账不得跳过该观察。同步增加W/B/R边界检查或可执行证明。加入能恢复旧漏洞且必被真实验收器拒绝的负向突变。
+3. `m5b0r_evidence_verify.py --candidate`增加parent→candidate实际Git差异对scope白名单的覆盖检查，处理新增、删除和重命名，拒绝任何scope外提交路径；增加“额外提交文件”负向验收。不得放宽现有candidate、唯一parent、空索引、干净跟踪工作区和blob一致性检查。
+4. 归档本轮Codex A与DeepSeek B报告；重跑受影响仲裁、根级正向/负向及证据验收，更新绑定、范围清单和修复报告。诊断RTL/工程13项输入未改变时可复用原构建、112份STA和bit，但必须重新验证输入与绑定，并明确仲裁器仍未综合/STA。
+
+### 允许范围
+
+`rtl/m5b0r_ddr_admission/m5b0r_arbiter.sv`、`tb/m5b0r_ddr_admission/tb_m5b0r_arbiter.sv`、必要的`scripts/m5b0r*`、`reports/m5b0r_ddr_admission`、本交接涉及的必要管理文档与范围清单。除非验证证明必需，不修改诊断RTL、诊断顶层或Efinity工程输入。
+
+### 禁止范围
+
+不得修改M2～M5A、M5B.0模型/报告、DDR IP参数、管脚、时钟、分辨率、生产视频链路；不得运行Programmer、JTAG下载、SPI Active或写Flash；不得删除历史未跟踪资料；不得提交bitstream、outflow/work数据库、缓存、锁、波形、原始日志、reference、tools或用户私人文件；禁止`git add .`、`git add -A`、合并main、推送、rebase或改写历史。
+
+### 验收与Git要求
+
+修复必须用正向和反向证据证明：ACK与DDR READY重叠时无孤立A握手，普通soft_reset stalled VALID语义保持，W/B/R边界结论明确，旧漏洞突变被拒绝，scope外提交负向被拒绝。保持现有54例诊断、monitor、六仲裁种子与其他九项负向不回退。保护既有文件和历史未跟踪路径。按精确清单逐文件暂存，核对索引blob后创建提交`fix: isolate DDR reset ACK downstream handshakes`，parent必须为`02841e20e297e4e6fdd14db0762a91d7089232fb`。
+
+### 停止边界
+
+新candidate提交后立即停止写入并交回Work。Work复核、冻结并自动向DeepSeek B发送净化快照，再停止向用户提供Codex A复审提示词。双审查结束前不进入实物验收或M5B.1。
+
 ## H-M5B0R-20261008-REVIEW-FAIL-FIX（当前修复任务）
 
 ### 目标与基线

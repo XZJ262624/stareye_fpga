@@ -15,7 +15,7 @@ def paths():
  items += [R/'build'/n for n in ('inputs_before.json','inputs_after.json','result.json')]
  items += list((R/'final_audit').glob('*.rpt'))+[R/'final_audit/binding.json']
  items += [R/'sim'/(name+'_results.json') for name in ('diagnostic','arbiter','monitor')]
- items += [R/'root_review'/n for n in ('REPLAY_RESULTS.json','NEGATIVE_RESULTS.json')]
+ items += [R/'root_review'/n for n in ('REPLAY_RESULTS.json','NEGATIVE_RESULTS.json','SCOPE_GIT_RESULTS.json')]
  return sorted(set(items))
 def rec(p):return dict(path=p.relative_to(ROOT).as_posix(),bytes=p.stat().st_size,sha256=hashlib.sha256(p.read_bytes()).hexdigest())
 def main():
@@ -30,6 +30,6 @@ def main():
   assert not set(parts)&{'outflow','work','work_pnr','work_syn','reference','tools','negative_cases','cache','.git'}
   assert Path(v['path']).suffix.lower() not in {'.bit','.zip','.log','.lock','.wlf','.vcd','.fst','.db','.vdb'}
   if Path(v['path']).suffix=='.bin':assert v['path'].endswith('/ip/DdrCtrl/ddr3_controller.bin')
- result=dict(status='FROZEN_CANDIDATE_PAYLOAD',head='6c44df8c5edc10c45a59c4c867e3fc44a6e7456d',branch='codex/m5b0r-ddr-admission',file_count=len(records),total_workspace_bytes=sum(x['bytes'] for x in records),files=records,manifest_policy='This manifest is committed in addition to the listed payload; excluded from its own hash/count/bytes to avoid a circular hash claim. Commit scope is files plus this manifest.',bin_exception='DDR IP source ROM, identical to M2, not bitstream or generated database',excluded_local_evidence='outflow/work databases, raw logs, negative clones, first failed build, temporary STA selector helper; retained locally, never deleted',line_endings='SHA256 and sizes describe exact workspace bytes. M5B.0R paths have -text attributes. Stage explicit paths with command-local core.autocrlf=false; verify every staged blob equals these bytes before commit. No repository/global Git config change.')
+ result=dict(status='FROZEN_CANDIDATE_PAYLOAD',head='02841e20e297e4e6fdd14db0762a91d7089232fb',branch='codex/m5b0r-ddr-admission',file_count=len(records),total_workspace_bytes=sum(x['bytes'] for x in records),files=records,manifest_policy='This manifest is committed in addition to the listed payload; excluded from its own hash/count/bytes to avoid a circular hash claim. Commit scope is files plus this manifest.',bin_exception='DDR IP source ROM, identical to M2, not bitstream or generated database',excluded_local_evidence='outflow/work databases, raw logs, negative clones, first failed build, temporary STA selector helper; retained locally, never deleted',line_endings='SHA256 and sizes describe exact workspace bytes. M5B.0R paths have -text attributes. Stage explicit paths with command-local core.autocrlf=false; verify every staged blob equals these bytes before commit. No repository/global Git config change.')
  MANIFEST.write_text(json.dumps(result,indent=2));print('PROPOSED_SCOPE',len(records),result['total_workspace_bytes'])
 if __name__=='__main__':main()

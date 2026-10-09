@@ -41,6 +41,7 @@
 | --- | --- | --- |
 | D-049 | 用户长期授权Work在每个candidate审查节点自动把固定commit的隔离快照发送给DeepSeek B进行只读第二审查；不得发送未提交文件、密钥、`.env`、工具包、原始未跟踪资料或用户私人文件 | 用户2026-10-08明确授权；Work负责快照与candidate一致性及Git元数据验证 |
 | D-050 | Codex A对M5B.0R candidate `6c44df8c5edc10c45a59c4c867e3fc44a6e7456d`的最终结论为`FAIL`；必须先修复ACK期间虚假握手、仲裁TB盲区和诊断计划独立覆盖，再追加新candidate并重新执行双审查 | 用户委派的独立Codex A于2026-10-08 18:43完成审查；`reports/m5b0r_ddr_admission/CODEX_A_REVIEW_6C44DF8.md` |
+| D-051 | Codex A对candidate `02841e20e297e4e6fdd14db0762a91d7089232fb`复审为`FAIL`，A状态ACK同拍仍可能产生DDR侧孤立地址握手；DeepSeek B净化盲审为`PASS_WITH_FINDINGS`并识别同一暴露。采用较严格结论，先追加修复、定向/负向验证和scope差异覆盖检查，再创建新candidate双审查 | 2026-10-09两份独立审查；`CODEX_A_REVIEW_02841E20.md`、`DEEPSEEK_B_REVIEW_02841E20.md` |
 
 
 ## M2已确认事实与授权

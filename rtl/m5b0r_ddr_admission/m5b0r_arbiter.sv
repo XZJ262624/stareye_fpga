@@ -51,19 +51,21 @@ module m5b0r_arbiter #(
  end
  assign aid={6'b0,owner}+8'd1;assign wid=aid;assign aaddr=address;assign alen=len;
  assign asize=4;assign aburst=1;assign alock=0;assign atype=write_op;
- assign avalid=state==A; // Never withdraw a stalled A except real DDR reset ack.
- assign wvalid=state==W&&c_wvalid[owner];
+ // Real reset ACK cancels this epoch on both interfaces, including this edge.
+ // soft_reset alone must preserve stalled A/W until drained or real ACK.
+ assign avalid=state==A&&!ddr_reset_ack;
+ assign wvalid=state==W&&!ddr_reset_ack&&c_wvalid[owner];
  assign wdata=c_wdata[owner*128+:128];assign wstrb=c_wstrb[owner*16+:16];
  assign wlast=c_wlast[owner];
- assign bready=state==B&&(discard||bid!=aid||c_bready[owner]);
- assign rready=state==R&&(discard||rid!=aid||rlast!=(beat==len)||c_rready[owner]);
+ assign bready=state==B&&!ddr_reset_ack&&(discard||bid!=aid||c_bready[owner]);
+ assign rready=state==R&&!ddr_reset_ack&&(discard||rid!=aid||rlast!=(beat==len)||c_rready[owner]);
  always @* begin
   c_wready=0;c_bvalid=0;c_bid=0;c_bresp=0;c_rvalid=0;c_rlast=0;c_rdata=0;c_rid=0;c_rresp=0;
-  if(state==W)c_wready[owner]=wready;
-  if(state==B&&!discard&&bid==aid)begin
+  if(state==W&&!ddr_reset_ack)c_wready[owner]=wready;
+  if(state==B&&!ddr_reset_ack&&!discard&&bid==aid)begin
    c_bvalid[owner]=bvalid;c_bid[owner*8+:8]=local_id;c_bresp[owner*2+:2]=bresp;
   end
-  if(state==R&&!discard&&rid==aid&&rlast==(beat==len))begin
+  if(state==R&&!ddr_reset_ack&&!discard&&rid==aid&&rlast==(beat==len))begin
    c_rvalid[owner]=rvalid;c_rlast[owner]=rlast;c_rid[owner*8+:8]=local_id;
    c_rdata[owner*128+:128]=rdata;c_rresp[owner*2+:2]=rresp;
   end

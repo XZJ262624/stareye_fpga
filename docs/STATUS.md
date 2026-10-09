@@ -1,5 +1,15 @@
 # 星眸项目状态
 
+## 2026-10-09 M5B.0R ACK边沿修复candidate（开发验证）
+
+Codex exec已隔离真实DDR reset ACK同拍的A/W/B/R及客户端数据握手，四状态定向覆盖与普通soft_reset回归通过。54诊断、monitor、六仲裁种子、13项突变负向及7项真实Git范围验收完成；构建输入不变，复用并复核原112份STA与bit，仲裁器仍未综合/STA。详见 `reports/m5b0r_ddr_admission/ACK_EDGE_FIX_REPORT.md`。新candidate直接父为02841e20，提交后停止写入，等待Work与独立双审查；M5B.0R/M5B.1继续NO_GO，无硬件操作。
+
+## 2026-10-09 M5B.0R第二次独立审查FAIL（当前）
+
+Codex A对candidate `02841e20e297e4e6fdd14db0762a91d7089232fb`复审结论为`FAIL`：客户端ACK期间READY丢请求问题已关闭，但仲裁器已在A状态时，`avalid`未受`ddr_reset_ack`抑制，若DDR `aready`同拍为高，可能产生下游已接受而仲裁器随ACK清除的孤立命令；现有TB从IDLE开始且ACK期间跳过DDR握手记账，无法检出该风险。candidate证据复验还缺少实际parent→candidate差异全部属于scope的断言。
+
+DeepSeek B净化隔离快照盲审为`PASS_WITH_FINDINGS`，也识别出A状态ACK首拍暴露并建议定向覆盖。Work采用Codex A的阻断定级，已冻结追加修复：隔离DDR侧ACK握手、审计W/B/R边界、增加真实定向/负向测试并强化Git差异scope检查。M5B.0R与M5B.1继续`NO_GO`，不进入实物验收，无硬件操作。详见`CODEX_A_REVIEW_02841E20.md`、`DEEPSEEK_B_REVIEW_02841E20.md`及当前HANDOFF。
+
 ## 2026-10-08 M5B.0R修复candidate（当前）
 
 Codex exec已修复ACK期间虚假握手，加入ACK持续重叠/恢复检查与独立9967事务完整诊断计划。54例诊断、六种子仲裁、monitor和9项负向验收的最终证据见 `reports/m5b0r_ddr_admission/REVIEW_FIX_REPORT.md` 及对应机器报告。独立诊断构建输入未改变，复用并复核原112份STA与bit；隔离仲裁器尚未综合。追加candidate以6c44df8为直接parent，提交后停止写入，等待Work核验、DeepSeek B及用户独立Codex A复审。M5B.0R/M5B.1仍NO_GO，无硬件操作。

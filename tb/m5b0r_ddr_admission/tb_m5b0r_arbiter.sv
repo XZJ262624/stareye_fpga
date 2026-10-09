@@ -27,6 +27,7 @@ module tb_m5b0r_arbiter;
  reg stop_new=0;reg directed=0;
  integer ack_overlap_cycles=0,ack_before=0,ack_done=0;
  reg hold_ack_requests=0;
+ integer ack_edge_case=0;reg [3:0] ack_edge_seen=0;
  function automatic [127:0] token(input [31:0] a,input integer b,input integer own);
  begin token={a^32'hac1dface,32'hb5b00000|own,32'h76543210^b,a+b*16};end endfunction
  task automatic new_command(input integer n);
@@ -74,6 +75,21 @@ module tb_m5b0r_arbiter;
   // Independent of reset bookkeeping: never hide an ACK handshake.
   if(rst_n&&ddr_reset_ack)begin
    if(c_aready!==0)$fatal(1,"ACK accepted request");
+   if(avalid&&aready)$fatal(1,"ACK DDR A handshake");
+   if(wvalid&&wready)$fatal(1,"ACK DDR W handshake");
+   if(bvalid&&bready)$fatal(1,"ACK DDR B handshake");
+   if(rvalid&&rready)$fatal(1,"ACK DDR R handshake");
+   if(c_wready!=0||c_bvalid!=0||c_rvalid!=0)$fatal(1,"ACK client data handshake exposure");
+   if(ack_edge_case!=0)begin
+    if(dut.state!=ack_edge_case)$fatal(1,"ACK directed state not reached");
+    case(ack_edge_case)
+     1:if(!aready)$fatal(1,"ACK A READY coverage");
+     2:if(!wready||!c_wvalid[0])$fatal(1,"ACK W READY VALID coverage");
+     3:if(!bvalid||!c_bready[0]||bid!=aid)$fatal(1,"ACK B VALID READY coverage");
+     4:if(!rvalid||!c_rready[1]||rid!=aid)$fatal(1,"ACK R VALID READY coverage");
+    endcase
+    ack_edge_seen[ack_edge_case-1]=1;
+   end
    if(c_avalid!=0)ack_overlap_cycles=ack_overlap_cycles+1;
   end
   if(!rst_n||ddr_reset_ack)begin
@@ -157,6 +173,27 @@ module tb_m5b0r_arbiter;
   ddr_reset_ack=0;hold_ack_requests=0;
   wait(completed==ack_done+3);
   if(accepted!=ack_before+3||accepted!=completed+cancelled)$fatal(1,"ACK recovery accounting");
+  // Pending A/W/B/R against a receptive peer at the ACK edge.
+  // Offset from the negedge driver; observe before ACK clears the books.
+  for(case_id=1;case_id<=4;case_id=case_id+1)begin
+   @(negedge clk);#1;
+   inject=case_id==1?1:(case_id==2?2:(case_id==3?9:8));
+   if(case_id==4)new_command(1);else new_command(0);
+   wait(dut.state==case_id);
+   if(case_id==2)wait(c_wvalid[0]);
+   if(case_id==3)wait(bvalid);
+   if(case_id==4)wait(rvalid);
+   @(negedge clk);#1;
+   if(dut.state!=case_id)$fatal(1,"ACK preparation state escaped");
+   aready=1;wready=1;c_bready=7;c_rready=7;
+   ddr_reset_ack=1;ack_edge_case=case_id;
+   @(posedge clk);#1;ack_edge_case=0;
+   @(negedge clk);#1;ddr_reset_ack=0;inject=0;
+   repeat(3)@(negedge clk);
+   if(accepted!=completed+cancelled)$fatal(1,"ACK edge accounting");
+  end
+  if(ack_edge_seen!=4'b1111)$fatal(1,"ACK A W B R edge coverage");
+  $display("ACK_EDGE_COVERAGE A W B R = %b",ack_edge_seen);
   // Reset in A/W/R/B, including DDR backpressure. Stalled buses remain stable.
   for(case_id=1;case_id<=9;case_id=case_id+1)begin
    inject=case_id;urgent=0;safe_window=1;
