@@ -1,0 +1,70 @@
+
+Efinix Timing Path Constraint Report
+Version: 2025.1.110.5.9
+Date: Sat Oct 10 13:16:53 2026
+
+Copyright (C) 2013 - 2025 Efinix, Inc. All rights reserved.
+
+User command: report_timing -from {u_m5b1/bridge/ds[0]~FF|CLK} -to {u_m5b1/bridge/ds[1]~FF|D} -npaths 1 -setup -detail full_path -file {m5b1_bridge_ds_setup.rpt}
+
+Timing Model: I3
+	process : typical
+	temperature : -40C to 100C
+	voltage : 0.95 +/-30mV
+	speedgrade : 3
+	technology : t16ff
+	status : final
+
+Summary:
+
+ Path #  | Slack (ns) | Delay (ns) |        Start Pin         |         End Pin          | Launch Clk  | Capture Clk
+====================================================================================================================
+ 1       |  9.963     |  0.194     | u_m5b1/bridge/ds[0]~FF|Q | u_m5b1/bridge/ds[1]~FF|D | clk_sys (R) | clk_sys (R)
+
+++++ Path 1 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : u_m5b1/bridge/ds[0]~FF|CLK          
+Path End      : u_m5b1/bridge/ds[1]~FF|D            
+Launch Clock  : clk_sys (RISE)                      
+Capture Clock : clk_sys (RISE)                      
+Slack         : 9.963 (required time - arrival time)
+Delay         : 0.194                               
+
+Logic Level             : 0
+Non-global nets on path : 1
+Global nets on path     : 0
+
+Launch Clock Path Delay        : 2.104
++ Clock To Q + Data Path Delay : 0.327
+--------------------------------------
+End-of-path arrival time       : 2.431
+
+Constraint                     : 10.416
++ Capture Clock Path Delay     :  2.104
+- Clock Uncertainty            :  0.126
+---------------------------------------
+End-of-path required time      : 12.394
+
+Launch Clock Path
+           name             model name   delay (ns)  cumulative delay (ns) pins on net    location
+====================================================================================================
+clk_sys                       inpad        0.000             0.000                0      (0,162)  
+clk_sys                       inpad        0.126             0.126            14133      (0,162)  
+clk_sys                       net          1.978             2.104            14133      (0,162)  
+u_m5b1/bridge/ds[0]~FF|CLK    ff           0.000             2.104            14133      (162,182)
+
+Data Path
+          name            model name   delay (ns)  cumulative delay (ns) pins on net    location
+==================================================================================================
+u_m5b1/bridge/ds[0]~FF|Q     ff          0.130             0.130              2        (162,182)
+u_m5b1/bridge/ds[0]          net         0.194             0.324              2        (162,182)
+u_m5b1/bridge/ds[1]~FF|D     ff          0.003             0.327              2        (162,183)
+
+Capture Clock Path
+           name             model name   delay (ns)  cumulative delay (ns) pins on net    location
+====================================================================================================
+clk_sys                       inpad        0.000             0.000                0      (0,162)  
+clk_sys                       inpad        0.126             0.126            14133      (0,162)  
+clk_sys                       net          1.978             2.104            14133      (0,162)  
+u_m5b1/bridge/ds[1]~FF|CLK    ff           0.000             2.104            14133      (162,183)
+

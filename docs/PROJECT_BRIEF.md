@@ -1,5 +1,9 @@
 # 星眸项目背景
 
+## 2026-10-10当前阶段
+
+M5B.1隔离全局Canny原型冻结离线门通过，固定candidate待双独立审查与用户实物验收。新工程从M5A输入闭包复制，后台结果暂不接入实时显示。真实DDR事务/lease、分类捕获、全局双向收敛与单次UART导出已离线验证；4us仅服务条件，64pair/1s超时安全不发布，生产fail-stop需冷重新配置，不承诺fps。最终构建43227 XLR/124 RAM10/0 DSP，setup/hold +0.190/+0.024ns。详见STATUS和reports/m5b1_global_canny_i3/OFFLINE_ACCEPTANCE.json；下文早期阶段描述保留历史时点含义。
+
 ## 2026-10-09 M5B.0R闸门更新（优先于下方历史NO-GO描述）
 
 M5B.0R固定candidate已完成Codex A与DeepSeek B双独立复审，均为`PASS_WITH_FINDINGS`且无阻断项。用户随后用绑定诊断bit完成JTAG实物验收：AR0135断开、未写Flash，DDR校准、候选地址别名和范围诊断PASS并稳定观察约5分钟。闸门现为`GO_FOR_M5B1_PROTOTYPE`，只允许下一阶段隔离原型规格、实现和验证；M5B.1尚未完成。全容量/跨PVT、生产多主仲裁与复位桥、FIFO服务上界、720p60共存和真实帧性能仍须后续闭环。

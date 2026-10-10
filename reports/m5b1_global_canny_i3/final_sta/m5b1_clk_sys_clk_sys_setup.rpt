@@ -1,0 +1,1229 @@
+
+Efinix Timing Path Constraint Report
+Version: 2025.1.110.5.9
+Date: Sat Oct 10 13:15:35 2026
+
+Copyright (C) 2013 - 2025 Efinix, Inc. All rights reserved.
+
+User command: report_timing -from_clock {clk_sys} -to_clock {clk_sys} -npaths 10 -nworst 1 -setup -detail full_path -file {m5b1_clk_sys_clk_sys_setup.rpt}
+
+Timing Model: I3
+	process : typical
+	temperature : -40C to 100C
+	voltage : 0.95 +/-30mV
+	speedgrade : 3
+	technology : t16ff
+	status : final
+
+Summary:
+
+ Path #  | Slack (ns) | Delay (ns) |                                                              Start Pin                                                               |                      End Pin                       | Launch Clk  | Capture Clk
+==========================================================================================================================================================================================================================================================
+  1      |  1.393     |  8.735     | ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/popToPushGray_buffercc_io_dataOut[6]~FF|Q | u_m5b1/background/capture/fifo/mem__D$b12|RADDR[6] | clk_sys (R) | clk_sys (R)
+  2      |  1.440     |  8.688     | ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/popToPushGray_buffercc_io_dataOut[6]~FF|Q | u_m5b1/background/capture/fifo/mem__D$b12|RADDR[7] | clk_sys (R) | clk_sys (R)
+  3      |  1.463     |  8.694     | ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/popToPushGray_buffercc_io_dataOut[6]~FF|Q | u_m5b1/background/capture/fifo/rg[5]~FF|D          | clk_sys (R) | clk_sys (R)
+  4      |  1.484     |  8.644     | ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/popToPushGray_buffercc_io_dataOut[6]~FF|Q | u_m5b1/background/capture/fifo/mem__D$2|RADDR[7]   | clk_sys (R) | clk_sys (R)
+  5      |  1.484     |  8.644     | ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/popToPushGray_buffercc_io_dataOut[6]~FF|Q | u_m5b1/background/capture/fifo/mem__D$b12|RADDR[5] | clk_sys (R) | clk_sys (R)
+  6      |  1.487     |  8.670     | ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/popToPushGray_buffercc_io_dataOut[6]~FF|Q | u_m5b1/background/capture/fifo/rg[4]~FF|D          | clk_sys (R) | clk_sys (R)
+  7      |  1.505     |  8.623     | ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/popToPushGray_buffercc_io_dataOut[6]~FF|Q | u_m5b1/background/capture/fifo/mem__D$2|RADDR[4]   | clk_sys (R) | clk_sys (R)
+  8      |  1.506     |  8.622     | ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/popToPushGray_buffercc_io_dataOut[6]~FF|Q | u_m5b1/background/capture/fifo/mem__D$2|RADDR[6]   | clk_sys (R) | clk_sys (R)
+  9      |  1.508     |  8.620     | ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/popToPushGray_buffercc_io_dataOut[6]~FF|Q | u_m5b1/background/capture/fifo/mem__D$b12|RADDR[4] | clk_sys (R) | clk_sys (R)
+ 10      |  1.518     |  8.610     | ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/popToPushGray_buffercc_io_dataOut[6]~FF|Q | u_m5b1/background/capture/fifo/mem__D$2|RADDR[3]   | clk_sys (R) | clk_sys (R)
+
+++++ Path 1 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/popToPushGray_buffercc_io_dataOut[6]~FF|CLK
+Path End      : u_m5b1/background/capture/fifo/mem__D$b12|RADDR[6]                                                                                    
+Launch Clock  : clk_sys (RISE)                                                                                                                        
+Capture Clock : clk_sys (RISE)                                                                                                                        
+Slack         : 1.393 (required time - arrival time)                                                                                                  
+Delay         : 8.735                                                                                                                                 
+
+Logic Level             : 25
+Non-global nets on path : 26
+Global nets on path     :  0
+
+Launch Clock Path Delay        :  2.104
++ Clock To Q + Data Path Delay :  8.897
+---------------------------------------
+End-of-path arrival time       : 11.001
+
+Constraint                     : 10.416
++ Capture Clock Path Delay     :  2.104
+- Clock Uncertainty            :  0.126
+---------------------------------------
+End-of-path required time      : 12.394
+
+Launch Clock Path
+                                                                 name                                                                   model name   delay (ns)  cumulative delay (ns) pins on net    location
+================================================================================================================================================================================================================
+clk_sys                                                                                                                                   inpad        0.000             0.000                0       (0,162)
+clk_sys                                                                                                                                   inpad        0.126             0.126            14133       (0,162)
+clk_sys                                                                                                                                   net          1.978             2.104            14133       (0,162)
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/popToPushGray_buffercc_io_dataOut[6]~FF|CLK    ff           0.000             2.104            14133       (97,72)
+
+Data Path
+                                                                name                                                                  model name   delay (ns)  cumulative delay (ns) pins on net    location
+==============================================================================================================================================================================================================
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/popToPushGray_buffercc_io_dataOut[6]~FF|Q ff              0.130             0.130               4       (97,72)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/popToPushGray_buffercc_io_dataOut[6]      net             0.678             0.808               4       (97,72)  
+LUT__78243|in[1]                                                                                                                     lut             0.061             0.869               4       (38,70)  
+LUT__78243|out                                                                                                                       lut             0.000             0.869               3       (38,70)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/sub_31/n3                                 net             0.439             1.308               3       (38,70)  
+LUT__78244|in[1]                                                                                                                     lut             0.061             1.369               3       (41,68)  
+LUT__78244|out                                                                                                                       lut             0.000             1.369               3       (41,68)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/sub_31/n4                                 net             0.331             1.700               3       (41,68)  
+LUT__78245|in[1]                                                                                                                     lut             0.061             1.761               3       (40,65)  
+LUT__78245|out                                                                                                                       lut             0.000             1.761               3       (40,65)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/sub_31/n5                                 net             0.190             1.951               3       (40,65)  
+LUT__78246|in[1]                                                                                                                     lut             0.063             2.014               3       (42,65)  
+LUT__78246|out                                                                                                                       lut             0.000             2.014               3       (42,65)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/sub_31/n6                                 net             0.234             2.248               3       (42,65)  
+LUT__78247|in[1]                                                                                                                     lut             0.061             2.309               3       (43,68)  
+LUT__78247|out                                                                                                                       lut             0.000             2.309               3       (43,68)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/sub_31/n7                                 net             0.190             2.499               3       (43,68)  
+LUT__78248|in[1]                                                                                                                     lut             0.063             2.562               3       (42,67)  
+LUT__78248|out                                                                                                                       lut             0.000             2.562               2       (42,67)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/sub_31/n8                                 net             0.209             2.771               2       (42,67)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/sub_31/add_2/i1|I1                        adder           0.057             2.828               2       (37,62)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/sub_31/add_2/i1|CO                        adder           0.000             2.828               2       (37,62)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/sub_31/add_2/n2                           net             0.000             2.828               2       (37,62)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/sub_31/add_2/i2|CI                        adder           0.024             2.852               2       (37,63)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/sub_31/add_2/i2|CO                        adder           0.000             2.852               2       (37,63)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/sub_31/add_2/n4                           net             0.000             2.852               2       (37,63)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/sub_31/add_2/i3|CI                        adder           0.024             2.876               2       (37,64)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/sub_31/add_2/i3|CO                        adder           0.000             2.876               2       (37,64)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/sub_31/add_2/n6                           net             0.000             2.876               2       (37,64)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/sub_31/add_2/i4|CI                        adder           0.097             2.973               2       (37,65)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/sub_31/add_2/i4|O                         adder           0.000             2.973               2       (37,65)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr_io_pushOccupancy[3]                       net             0.293             3.266               2       (37,65)  
+LUT__75710|in[2]                                                                                                                     lut             0.061             3.327               2       (37,70)  
+LUT__75710|out                                                                                                                       lut             0.000             3.327               2       (37,70)  
+n40877                                                                                                                               net             1.293             4.620               2       (37,70)  
+LUT__75712|in[2]                                                                                                                     lut             0.061             4.681               2       (211,101)
+LUT__75712|out                                                                                                                       lut             0.000             4.681              20       (211,101)
+n40879                                                                                                                               net             0.632             5.313              20       (211,101)
+LUT__75713|in[3]                                                                                                                     lut             0.061             5.374              20       (208,173)
+LUT__75713|out                                                                                                                       lut             0.000             5.374               4       (208,173)
+n40880                                                                                                                               net             0.502             5.876               4       (208,173)
+LUT__80583|in[1]                                                                                                                     lut             0.061             5.937               4       (181,175)
+LUT__80583|out                                                                                                                       lut             0.000             5.937               3       (181,175)
+n43920                                                                                                                               net             0.095             6.032               3       (181,175)
+LUT__82426|in[2]                                                                                                                     lut             0.061             6.093               3       (181,178)
+LUT__82426|out                                                                                                                       lut             0.000             6.093               5       (181,178)
+n44976                                                                                                                               net             0.461             6.554               5       (181,178)
+LUT__82427|in[0]                                                                                                                     lut             0.061             6.615               5       (176,221)
+LUT__82427|out                                                                                                                       lut             0.000             6.615               3       (176,221)
+n44977                                                                                                                               net             0.337             6.952               3       (176,221)
+LUT__82428|in[1]                                                                                                                     lut             0.061             7.013               3       (166,226)
+LUT__82428|out                                                                                                                       lut             0.000             7.013               3       (166,226)
+u_m5b1/background/capture/fifo/take_r                                                                                                net             0.821             7.834               3       (166,226)
+u_m5b1/background/capture/fifo/add_46/i1|I1                                                                                          adder           0.055             7.889               3       (78,195) 
+u_m5b1/background/capture/fifo/add_46/i1|CO                                                                                          adder           0.000             7.889               2       (78,195) 
+u_m5b1/background/capture/fifo/add_46/n2                                                                                             net             0.000             7.889               2       (78,195) 
+u_m5b1/background/capture/fifo/add_46/i2|CI                                                                                          adder           0.025             7.914               2       (78,196) 
+u_m5b1/background/capture/fifo/add_46/i2|CO                                                                                          adder           0.000             7.914               2       (78,196) 
+u_m5b1/background/capture/fifo/add_46/n4                                                                                             net             0.000             7.914               2       (78,196) 
+u_m5b1/background/capture/fifo/add_46/i3|CI                                                                                          adder           0.025             7.939               2       (78,197) 
+u_m5b1/background/capture/fifo/add_46/i3|CO                                                                                          adder           0.000             7.939               2       (78,197) 
+u_m5b1/background/capture/fifo/add_46/n6                                                                                             net             0.000             7.939               2       (78,197) 
+u_m5b1/background/capture/fifo/add_46/i4|CI                                                                                          adder           0.025             7.964               2       (78,198) 
+u_m5b1/background/capture/fifo/add_46/i4|CO                                                                                          adder           0.000             7.964               2       (78,198) 
+u_m5b1/background/capture/fifo/add_46/n8                                                                                             net             0.000             7.964               2       (78,198) 
+u_m5b1/background/capture/fifo/add_46/i5|CI                                                                                          adder           0.025             7.989               2       (78,199) 
+u_m5b1/background/capture/fifo/add_46/i5|CO                                                                                          adder           0.000             7.989               2       (78,199) 
+u_m5b1/background/capture/fifo/add_46/n10                                                                                            net             0.000             7.989               2       (78,199) 
+u_m5b1/background/capture/fifo/add_46/i6|CI                                                                                          adder           0.025             8.014               2       (78,200) 
+u_m5b1/background/capture/fifo/add_46/i6|CO                                                                                          adder           0.000             8.014               2       (78,200) 
+u_m5b1/background/capture/fifo/add_46/n12                                                                                            net             0.000             8.014               2       (78,200) 
+u_m5b1/background/capture/fifo/add_46/i7|CI                                                                                          adder           0.025             8.039               2       (78,201) 
+u_m5b1/background/capture/fifo/add_46/i7|CO                                                                                          adder           0.000             8.039               2       (78,201) 
+u_m5b1/background/capture/fifo/add_46/n14                                                                                            net             0.000             8.039               2       (78,201) 
+u_m5b1/background/capture/fifo/add_46/i8|CI                                                                                          adder           0.097             8.136               2       (78,202) 
+u_m5b1/background/capture/fifo/add_46/i8|O                                                                                           adder           0.000             8.136              11       (78,202) 
+u_m5b1/background/capture/fifo/next_r[7]                                                                                             net             0.729             8.865              11       (78,202) 
+u_m5b1/background/capture/fifo/mem__D$b12|RADDR[6]                                                                                   ram_8192x20     0.032             8.897              11       (63,162) 
+
+Capture Clock Path
+                     name                       model name   delay (ns)  cumulative delay (ns) pins on net    location
+========================================================================================================================
+clk_sys                                        inpad           0.000             0.000                0       (0,162) 
+clk_sys                                        inpad           0.126             0.126            14133       (0,162) 
+clk_sys                                        net             1.978             2.104            14133       (0,162) 
+u_m5b1/background/capture/fifo/mem__D$b12|RCLK ram_8192x20     0.000             2.104            14133       (63,162)
+
+++++ Path 2 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/popToPushGray_buffercc_io_dataOut[6]~FF|CLK
+Path End      : u_m5b1/background/capture/fifo/mem__D$b12|RADDR[7]                                                                                    
+Launch Clock  : clk_sys (RISE)                                                                                                                        
+Capture Clock : clk_sys (RISE)                                                                                                                        
+Slack         : 1.440 (required time - arrival time)                                                                                                  
+Delay         : 8.688                                                                                                                                 
+
+Logic Level             : 26
+Non-global nets on path : 27
+Global nets on path     :  0
+
+Launch Clock Path Delay        :  2.104
++ Clock To Q + Data Path Delay :  8.850
+---------------------------------------
+End-of-path arrival time       : 10.954
+
+Constraint                     : 10.416
++ Capture Clock Path Delay     :  2.104
+- Clock Uncertainty            :  0.126
+---------------------------------------
+End-of-path required time      : 12.394
+
+Launch Clock Path
+                                                                 name                                                                   model name   delay (ns)  cumulative delay (ns) pins on net    location
+================================================================================================================================================================================================================
+clk_sys                                                                                                                                   inpad        0.000             0.000                0       (0,162)
+clk_sys                                                                                                                                   inpad        0.126             0.126            14133       (0,162)
+clk_sys                                                                                                                                   net          1.978             2.104            14133       (0,162)
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/popToPushGray_buffercc_io_dataOut[6]~FF|CLK    ff           0.000             2.104            14133       (97,72)
+
+Data Path
+                                                                name                                                                  model name   delay (ns)  cumulative delay (ns) pins on net    location
+==============================================================================================================================================================================================================
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/popToPushGray_buffercc_io_dataOut[6]~FF|Q ff              0.130             0.130               4       (97,72)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/popToPushGray_buffercc_io_dataOut[6]      net             0.678             0.808               4       (97,72)  
+LUT__78243|in[1]                                                                                                                     lut             0.061             0.869               4       (38,70)  
+LUT__78243|out                                                                                                                       lut             0.000             0.869               3       (38,70)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/sub_31/n3                                 net             0.439             1.308               3       (38,70)  
+LUT__78244|in[1]                                                                                                                     lut             0.061             1.369               3       (41,68)  
+LUT__78244|out                                                                                                                       lut             0.000             1.369               3       (41,68)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/sub_31/n4                                 net             0.331             1.700               3       (41,68)  
+LUT__78245|in[1]                                                                                                                     lut             0.061             1.761               3       (40,65)  
+LUT__78245|out                                                                                                                       lut             0.000             1.761               3       (40,65)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/sub_31/n5                                 net             0.190             1.951               3       (40,65)  
+LUT__78246|in[1]                                                                                                                     lut             0.063             2.014               3       (42,65)  
+LUT__78246|out                                                                                                                       lut             0.000             2.014               3       (42,65)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/sub_31/n6                                 net             0.234             2.248               3       (42,65)  
+LUT__78247|in[1]                                                                                                                     lut             0.061             2.309               3       (43,68)  
+LUT__78247|out                                                                                                                       lut             0.000             2.309               3       (43,68)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/sub_31/n7                                 net             0.190             2.499               3       (43,68)  
+LUT__78248|in[1]                                                                                                                     lut             0.063             2.562               3       (42,67)  
+LUT__78248|out                                                                                                                       lut             0.000             2.562               2       (42,67)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/sub_31/n8                                 net             0.209             2.771               2       (42,67)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/sub_31/add_2/i1|I1                        adder           0.057             2.828               2       (37,62)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/sub_31/add_2/i1|CO                        adder           0.000             2.828               2       (37,62)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/sub_31/add_2/n2                           net             0.000             2.828               2       (37,62)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/sub_31/add_2/i2|CI                        adder           0.024             2.852               2       (37,63)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/sub_31/add_2/i2|CO                        adder           0.000             2.852               2       (37,63)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/sub_31/add_2/n4                           net             0.000             2.852               2       (37,63)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/sub_31/add_2/i3|CI                        adder           0.024             2.876               2       (37,64)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/sub_31/add_2/i3|CO                        adder           0.000             2.876               2       (37,64)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/sub_31/add_2/n6                           net             0.000             2.876               2       (37,64)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/sub_31/add_2/i4|CI                        adder           0.097             2.973               2       (37,65)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/sub_31/add_2/i4|O                         adder           0.000             2.973               2       (37,65)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr_io_pushOccupancy[3]                       net             0.293             3.266               2       (37,65)  
+LUT__75710|in[2]                                                                                                                     lut             0.061             3.327               2       (37,70)  
+LUT__75710|out                                                                                                                       lut             0.000             3.327               2       (37,70)  
+n40877                                                                                                                               net             1.293             4.620               2       (37,70)  
+LUT__75712|in[2]                                                                                                                     lut             0.061             4.681               2       (211,101)
+LUT__75712|out                                                                                                                       lut             0.000             4.681              20       (211,101)
+n40879                                                                                                                               net             0.632             5.313              20       (211,101)
+LUT__75713|in[3]                                                                                                                     lut             0.061             5.374              20       (208,173)
+LUT__75713|out                                                                                                                       lut             0.000             5.374               4       (208,173)
+n40880                                                                                                                               net             0.502             5.876               4       (208,173)
+LUT__80583|in[1]                                                                                                                     lut             0.061             5.937               4       (181,175)
+LUT__80583|out                                                                                                                       lut             0.000             5.937               3       (181,175)
+n43920                                                                                                                               net             0.095             6.032               3       (181,175)
+LUT__82426|in[2]                                                                                                                     lut             0.061             6.093               3       (181,178)
+LUT__82426|out                                                                                                                       lut             0.000             6.093               5       (181,178)
+n44976                                                                                                                               net             0.461             6.554               5       (181,178)
+LUT__82427|in[0]                                                                                                                     lut             0.061             6.615               5       (176,221)
+LUT__82427|out                                                                                                                       lut             0.000             6.615               3       (176,221)
+n44977                                                                                                                               net             0.337             6.952               3       (176,221)
+LUT__82428|in[1]                                                                                                                     lut             0.061             7.013               3       (166,226)
+LUT__82428|out                                                                                                                       lut             0.000             7.013               3       (166,226)
+u_m5b1/background/capture/fifo/take_r                                                                                                net             0.821             7.834               3       (166,226)
+u_m5b1/background/capture/fifo/add_46/i1|I1                                                                                          adder           0.055             7.889               3       (78,195) 
+u_m5b1/background/capture/fifo/add_46/i1|CO                                                                                          adder           0.000             7.889               2       (78,195) 
+u_m5b1/background/capture/fifo/add_46/n2                                                                                             net             0.000             7.889               2       (78,195) 
+u_m5b1/background/capture/fifo/add_46/i2|CI                                                                                          adder           0.025             7.914               2       (78,196) 
+u_m5b1/background/capture/fifo/add_46/i2|CO                                                                                          adder           0.000             7.914               2       (78,196) 
+u_m5b1/background/capture/fifo/add_46/n4                                                                                             net             0.000             7.914               2       (78,196) 
+u_m5b1/background/capture/fifo/add_46/i3|CI                                                                                          adder           0.025             7.939               2       (78,197) 
+u_m5b1/background/capture/fifo/add_46/i3|CO                                                                                          adder           0.000             7.939               2       (78,197) 
+u_m5b1/background/capture/fifo/add_46/n6                                                                                             net             0.000             7.939               2       (78,197) 
+u_m5b1/background/capture/fifo/add_46/i4|CI                                                                                          adder           0.025             7.964               2       (78,198) 
+u_m5b1/background/capture/fifo/add_46/i4|CO                                                                                          adder           0.000             7.964               2       (78,198) 
+u_m5b1/background/capture/fifo/add_46/n8                                                                                             net             0.000             7.964               2       (78,198) 
+u_m5b1/background/capture/fifo/add_46/i5|CI                                                                                          adder           0.025             7.989               2       (78,199) 
+u_m5b1/background/capture/fifo/add_46/i5|CO                                                                                          adder           0.000             7.989               2       (78,199) 
+u_m5b1/background/capture/fifo/add_46/n10                                                                                            net             0.000             7.989               2       (78,199) 
+u_m5b1/background/capture/fifo/add_46/i6|CI                                                                                          adder           0.025             8.014               2       (78,200) 
+u_m5b1/background/capture/fifo/add_46/i6|CO                                                                                          adder           0.000             8.014               2       (78,200) 
+u_m5b1/background/capture/fifo/add_46/n12                                                                                            net             0.000             8.014               2       (78,200) 
+u_m5b1/background/capture/fifo/add_46/i7|CI                                                                                          adder           0.025             8.039               2       (78,201) 
+u_m5b1/background/capture/fifo/add_46/i7|CO                                                                                          adder           0.000             8.039               2       (78,201) 
+u_m5b1/background/capture/fifo/add_46/n14                                                                                            net             0.000             8.039               2       (78,201) 
+u_m5b1/background/capture/fifo/add_46/i8|CI                                                                                          adder           0.025             8.064               2       (78,202) 
+u_m5b1/background/capture/fifo/add_46/i8|CO                                                                                          adder           0.000             8.064               2       (78,202) 
+u_m5b1/background/capture/fifo/add_46/n16                                                                                            net             0.000             8.064               2       (78,202) 
+u_m5b1/background/capture/fifo/add_46/i9|CI                                                                                          adder           0.097             8.161               2       (78,203) 
+u_m5b1/background/capture/fifo/add_46/i9|O                                                                                           adder           0.000             8.161              11       (78,203) 
+u_m5b1/background/capture/fifo/next_r[8]                                                                                             net             0.657             8.818              11       (78,203) 
+u_m5b1/background/capture/fifo/mem__D$b12|RADDR[7]                                                                                   ram_8192x20     0.032             8.850              11       (63,162) 
+
+Capture Clock Path
+                     name                       model name   delay (ns)  cumulative delay (ns) pins on net    location
+========================================================================================================================
+clk_sys                                        inpad           0.000             0.000                0       (0,162) 
+clk_sys                                        inpad           0.126             0.126            14133       (0,162) 
+clk_sys                                        net             1.978             2.104            14133       (0,162) 
+u_m5b1/background/capture/fifo/mem__D$b12|RCLK ram_8192x20     0.000             2.104            14133       (63,162)
+
+++++ Path 3 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/popToPushGray_buffercc_io_dataOut[6]~FF|CLK
+Path End      : u_m5b1/background/capture/fifo/rg[5]~FF|D                                                                                             
+Launch Clock  : clk_sys (RISE)                                                                                                                        
+Capture Clock : clk_sys (RISE)                                                                                                                        
+Slack         : 1.463 (required time - arrival time)                                                                                                  
+Delay         : 8.694                                                                                                                                 
+
+Logic Level             : 25
+Non-global nets on path : 25
+Global nets on path     :  0
+
+Launch Clock Path Delay        :  2.104
++ Clock To Q + Data Path Delay :  8.827
+---------------------------------------
+End-of-path arrival time       : 10.931
+
+Constraint                     : 10.416
++ Capture Clock Path Delay     :  2.104
+- Clock Uncertainty            :  0.126
+---------------------------------------
+End-of-path required time      : 12.394
+
+Launch Clock Path
+                                                                 name                                                                   model name   delay (ns)  cumulative delay (ns) pins on net    location
+================================================================================================================================================================================================================
+clk_sys                                                                                                                                   inpad        0.000             0.000                0       (0,162)
+clk_sys                                                                                                                                   inpad        0.126             0.126            14133       (0,162)
+clk_sys                                                                                                                                   net          1.978             2.104            14133       (0,162)
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/popToPushGray_buffercc_io_dataOut[6]~FF|CLK    ff           0.000             2.104            14133       (97,72)
+
+Data Path
+                                                                name                                                                  model name   delay (ns)  cumulative delay (ns) pins on net    location
+==============================================================================================================================================================================================================
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/popToPushGray_buffercc_io_dataOut[6]~FF|Q    ff           0.130             0.130               4       (97,72)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/popToPushGray_buffercc_io_dataOut[6]         net          0.678             0.808               4       (97,72)  
+LUT__78243|in[1]                                                                                                                        lut          0.061             0.869               4       (38,70)  
+LUT__78243|out                                                                                                                          lut          0.000             0.869               3       (38,70)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/sub_31/n3                                    net          0.439             1.308               3       (38,70)  
+LUT__78244|in[1]                                                                                                                        lut          0.061             1.369               3       (41,68)  
+LUT__78244|out                                                                                                                          lut          0.000             1.369               3       (41,68)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/sub_31/n4                                    net          0.331             1.700               3       (41,68)  
+LUT__78245|in[1]                                                                                                                        lut          0.061             1.761               3       (40,65)  
+LUT__78245|out                                                                                                                          lut          0.000             1.761               3       (40,65)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/sub_31/n5                                    net          0.190             1.951               3       (40,65)  
+LUT__78246|in[1]                                                                                                                        lut          0.063             2.014               3       (42,65)  
+LUT__78246|out                                                                                                                          lut          0.000             2.014               3       (42,65)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/sub_31/n6                                    net          0.234             2.248               3       (42,65)  
+LUT__78247|in[1]                                                                                                                        lut          0.061             2.309               3       (43,68)  
+LUT__78247|out                                                                                                                          lut          0.000             2.309               3       (43,68)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/sub_31/n7                                    net          0.190             2.499               3       (43,68)  
+LUT__78248|in[1]                                                                                                                        lut          0.063             2.562               3       (42,67)  
+LUT__78248|out                                                                                                                          lut          0.000             2.562               2       (42,67)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/sub_31/n8                                    net          0.209             2.771               2       (42,67)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/sub_31/add_2/i1|I1                           adder        0.057             2.828               2       (37,62)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/sub_31/add_2/i1|CO                           adder        0.000             2.828               2       (37,62)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/sub_31/add_2/n2                              net          0.000             2.828               2       (37,62)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/sub_31/add_2/i2|CI                           adder        0.024             2.852               2       (37,63)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/sub_31/add_2/i2|CO                           adder        0.000             2.852               2       (37,63)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/sub_31/add_2/n4                              net          0.000             2.852               2       (37,63)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/sub_31/add_2/i3|CI                           adder        0.024             2.876               2       (37,64)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/sub_31/add_2/i3|CO                           adder        0.000             2.876               2       (37,64)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/sub_31/add_2/n6                              net          0.000             2.876               2       (37,64)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/sub_31/add_2/i4|CI                           adder        0.097             2.973               2       (37,65)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/sub_31/add_2/i4|O                            adder        0.000             2.973               2       (37,65)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr_io_pushOccupancy[3]                          net          0.293             3.266               2       (37,65)  
+LUT__75710|in[2]                                                                                                                        lut          0.061             3.327               2       (37,70)  
+LUT__75710|out                                                                                                                          lut          0.000             3.327               2       (37,70)  
+n40877                                                                                                                                  net          1.293             4.620               2       (37,70)  
+LUT__75712|in[2]                                                                                                                        lut          0.061             4.681               2       (211,101)
+LUT__75712|out                                                                                                                          lut          0.000             4.681              20       (211,101)
+n40879                                                                                                                                  net          0.632             5.313              20       (211,101)
+LUT__75713|in[3]                                                                                                                        lut          0.061             5.374              20       (208,173)
+LUT__75713|out                                                                                                                          lut          0.000             5.374               4       (208,173)
+n40880                                                                                                                                  net          0.502             5.876               4       (208,173)
+LUT__80583|in[1]                                                                                                                        lut          0.061             5.937               4       (181,175)
+LUT__80583|out                                                                                                                          lut          0.000             5.937               3       (181,175)
+n43920                                                                                                                                  net          0.095             6.032               3       (181,175)
+LUT__82426|in[2]                                                                                                                        lut          0.061             6.093               3       (181,178)
+LUT__82426|out                                                                                                                          lut          0.000             6.093               5       (181,178)
+n44976                                                                                                                                  net          0.461             6.554               5       (181,178)
+LUT__82427|in[0]                                                                                                                        lut          0.061             6.615               5       (176,221)
+LUT__82427|out                                                                                                                          lut          0.000             6.615               3       (176,221)
+n44977                                                                                                                                  net          0.337             6.952               3       (176,221)
+LUT__82428|in[1]                                                                                                                        lut          0.061             7.013               3       (166,226)
+LUT__82428|out                                                                                                                          lut          0.000             7.013               3       (166,226)
+u_m5b1/background/capture/fifo/take_r                                                                                                   net          0.821             7.834               3       (166,226)
+u_m5b1/background/capture/fifo/add_46/i1|I1                                                                                             adder        0.055             7.889               3       (78,195) 
+u_m5b1/background/capture/fifo/add_46/i1|CO                                                                                             adder        0.000             7.889               2       (78,195) 
+u_m5b1/background/capture/fifo/add_46/n2                                                                                                net          0.000             7.889               2       (78,195) 
+u_m5b1/background/capture/fifo/add_46/i2|CI                                                                                             adder        0.025             7.914               2       (78,196) 
+u_m5b1/background/capture/fifo/add_46/i2|CO                                                                                             adder        0.000             7.914               2       (78,196) 
+u_m5b1/background/capture/fifo/add_46/n4                                                                                                net          0.000             7.914               2       (78,196) 
+u_m5b1/background/capture/fifo/add_46/i3|CI                                                                                             adder        0.025             7.939               2       (78,197) 
+u_m5b1/background/capture/fifo/add_46/i3|CO                                                                                             adder        0.000             7.939               2       (78,197) 
+u_m5b1/background/capture/fifo/add_46/n6                                                                                                net          0.000             7.939               2       (78,197) 
+u_m5b1/background/capture/fifo/add_46/i4|CI                                                                                             adder        0.025             7.964               2       (78,198) 
+u_m5b1/background/capture/fifo/add_46/i4|CO                                                                                             adder        0.000             7.964               2       (78,198) 
+u_m5b1/background/capture/fifo/add_46/n8                                                                                                net          0.000             7.964               2       (78,198) 
+u_m5b1/background/capture/fifo/add_46/i5|CI                                                                                             adder        0.025             7.989               2       (78,199) 
+u_m5b1/background/capture/fifo/add_46/i5|CO                                                                                             adder        0.000             7.989               2       (78,199) 
+u_m5b1/background/capture/fifo/add_46/n10                                                                                               net          0.000             7.989               2       (78,199) 
+u_m5b1/background/capture/fifo/add_46/i6|CI                                                                                             adder        0.025             8.014               2       (78,200) 
+u_m5b1/background/capture/fifo/add_46/i6|CO                                                                                             adder        0.000             8.014               2       (78,200) 
+u_m5b1/background/capture/fifo/add_46/n12                                                                                               net          0.000             8.014               2       (78,200) 
+u_m5b1/background/capture/fifo/add_46/i7|CI                                                                                             adder        0.097             8.111               2       (78,201) 
+u_m5b1/background/capture/fifo/add_46/i7|O                                                                                              adder        0.000             8.111              11       (78,201) 
+u_m5b1/background/capture/fifo/next_r[6]                                                                                                net          0.652             8.763              11       (78,201) 
+LUT__82498|in[0]                                                                                                                        lut          0.061             8.824              11       (65,178) 
+LUT__82498|out                                                                                                                          lut          0.000             8.824               2       (65,178) 
+u_m5b1/background/capture/fifo/rg[5]~FF|D                                                                                               ff           0.003             8.827               2       (65,178) 
+
+Capture Clock Path
+                   name                      model name   delay (ns)  cumulative delay (ns) pins on net    location
+=====================================================================================================================
+clk_sys                                        inpad        0.000             0.000                0       (0,162) 
+clk_sys                                        inpad        0.126             0.126            14133       (0,162) 
+clk_sys                                        net          1.978             2.104            14133       (0,162) 
+u_m5b1/background/capture/fifo/rg[5]~FF|CLK    ff           0.000             2.104            14133       (65,178)
+
+++++ Path 4 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/popToPushGray_buffercc_io_dataOut[6]~FF|CLK
+Path End      : u_m5b1/background/capture/fifo/mem__D$2|RADDR[7]                                                                                      
+Launch Clock  : clk_sys (RISE)                                                                                                                        
+Capture Clock : clk_sys (RISE)                                                                                                                        
+Slack         : 1.484 (required time - arrival time)                                                                                                  
+Delay         : 8.644                                                                                                                                 
+
+Logic Level             : 26
+Non-global nets on path : 27
+Global nets on path     :  0
+
+Launch Clock Path Delay        :  2.104
++ Clock To Q + Data Path Delay :  8.806
+---------------------------------------
+End-of-path arrival time       : 10.910
+
+Constraint                     : 10.416
++ Capture Clock Path Delay     :  2.104
+- Clock Uncertainty            :  0.126
+---------------------------------------
+End-of-path required time      : 12.394
+
+Launch Clock Path
+                                                                 name                                                                   model name   delay (ns)  cumulative delay (ns) pins on net    location
+================================================================================================================================================================================================================
+clk_sys                                                                                                                                   inpad        0.000             0.000                0       (0,162)
+clk_sys                                                                                                                                   inpad        0.126             0.126            14133       (0,162)
+clk_sys                                                                                                                                   net          1.978             2.104            14133       (0,162)
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/popToPushGray_buffercc_io_dataOut[6]~FF|CLK    ff           0.000             2.104            14133       (97,72)
+
+Data Path
+                                                                name                                                                  model name   delay (ns)  cumulative delay (ns) pins on net    location
+==============================================================================================================================================================================================================
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/popToPushGray_buffercc_io_dataOut[6]~FF|Q ff              0.130             0.130               4       (97,72)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/popToPushGray_buffercc_io_dataOut[6]      net             0.678             0.808               4       (97,72)  
+LUT__78243|in[1]                                                                                                                     lut             0.061             0.869               4       (38,70)  
+LUT__78243|out                                                                                                                       lut             0.000             0.869               3       (38,70)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/sub_31/n3                                 net             0.439             1.308               3       (38,70)  
+LUT__78244|in[1]                                                                                                                     lut             0.061             1.369               3       (41,68)  
+LUT__78244|out                                                                                                                       lut             0.000             1.369               3       (41,68)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/sub_31/n4                                 net             0.331             1.700               3       (41,68)  
+LUT__78245|in[1]                                                                                                                     lut             0.061             1.761               3       (40,65)  
+LUT__78245|out                                                                                                                       lut             0.000             1.761               3       (40,65)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/sub_31/n5                                 net             0.190             1.951               3       (40,65)  
+LUT__78246|in[1]                                                                                                                     lut             0.063             2.014               3       (42,65)  
+LUT__78246|out                                                                                                                       lut             0.000             2.014               3       (42,65)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/sub_31/n6                                 net             0.234             2.248               3       (42,65)  
+LUT__78247|in[1]                                                                                                                     lut             0.061             2.309               3       (43,68)  
+LUT__78247|out                                                                                                                       lut             0.000             2.309               3       (43,68)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/sub_31/n7                                 net             0.190             2.499               3       (43,68)  
+LUT__78248|in[1]                                                                                                                     lut             0.063             2.562               3       (42,67)  
+LUT__78248|out                                                                                                                       lut             0.000             2.562               2       (42,67)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/sub_31/n8                                 net             0.209             2.771               2       (42,67)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/sub_31/add_2/i1|I1                        adder           0.057             2.828               2       (37,62)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/sub_31/add_2/i1|CO                        adder           0.000             2.828               2       (37,62)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/sub_31/add_2/n2                           net             0.000             2.828               2       (37,62)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/sub_31/add_2/i2|CI                        adder           0.024             2.852               2       (37,63)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/sub_31/add_2/i2|CO                        adder           0.000             2.852               2       (37,63)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/sub_31/add_2/n4                           net             0.000             2.852               2       (37,63)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/sub_31/add_2/i3|CI                        adder           0.024             2.876               2       (37,64)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/sub_31/add_2/i3|CO                        adder           0.000             2.876               2       (37,64)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/sub_31/add_2/n6                           net             0.000             2.876               2       (37,64)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/sub_31/add_2/i4|CI                        adder           0.097             2.973               2       (37,65)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/sub_31/add_2/i4|O                         adder           0.000             2.973               2       (37,65)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr_io_pushOccupancy[3]                       net             0.293             3.266               2       (37,65)  
+LUT__75710|in[2]                                                                                                                     lut             0.061             3.327               2       (37,70)  
+LUT__75710|out                                                                                                                       lut             0.000             3.327               2       (37,70)  
+n40877                                                                                                                               net             1.293             4.620               2       (37,70)  
+LUT__75712|in[2]                                                                                                                     lut             0.061             4.681               2       (211,101)
+LUT__75712|out                                                                                                                       lut             0.000             4.681              20       (211,101)
+n40879                                                                                                                               net             0.632             5.313              20       (211,101)
+LUT__75713|in[3]                                                                                                                     lut             0.061             5.374              20       (208,173)
+LUT__75713|out                                                                                                                       lut             0.000             5.374               4       (208,173)
+n40880                                                                                                                               net             0.502             5.876               4       (208,173)
+LUT__80583|in[1]                                                                                                                     lut             0.061             5.937               4       (181,175)
+LUT__80583|out                                                                                                                       lut             0.000             5.937               3       (181,175)
+n43920                                                                                                                               net             0.095             6.032               3       (181,175)
+LUT__82426|in[2]                                                                                                                     lut             0.061             6.093               3       (181,178)
+LUT__82426|out                                                                                                                       lut             0.000             6.093               5       (181,178)
+n44976                                                                                                                               net             0.461             6.554               5       (181,178)
+LUT__82427|in[0]                                                                                                                     lut             0.061             6.615               5       (176,221)
+LUT__82427|out                                                                                                                       lut             0.000             6.615               3       (176,221)
+n44977                                                                                                                               net             0.337             6.952               3       (176,221)
+LUT__82428|in[1]                                                                                                                     lut             0.061             7.013               3       (166,226)
+LUT__82428|out                                                                                                                       lut             0.000             7.013               3       (166,226)
+u_m5b1/background/capture/fifo/take_r                                                                                                net             0.821             7.834               3       (166,226)
+u_m5b1/background/capture/fifo/add_46/i1|I1                                                                                          adder           0.055             7.889               3       (78,195) 
+u_m5b1/background/capture/fifo/add_46/i1|CO                                                                                          adder           0.000             7.889               2       (78,195) 
+u_m5b1/background/capture/fifo/add_46/n2                                                                                             net             0.000             7.889               2       (78,195) 
+u_m5b1/background/capture/fifo/add_46/i2|CI                                                                                          adder           0.025             7.914               2       (78,196) 
+u_m5b1/background/capture/fifo/add_46/i2|CO                                                                                          adder           0.000             7.914               2       (78,196) 
+u_m5b1/background/capture/fifo/add_46/n4                                                                                             net             0.000             7.914               2       (78,196) 
+u_m5b1/background/capture/fifo/add_46/i3|CI                                                                                          adder           0.025             7.939               2       (78,197) 
+u_m5b1/background/capture/fifo/add_46/i3|CO                                                                                          adder           0.000             7.939               2       (78,197) 
+u_m5b1/background/capture/fifo/add_46/n6                                                                                             net             0.000             7.939               2       (78,197) 
+u_m5b1/background/capture/fifo/add_46/i4|CI                                                                                          adder           0.025             7.964               2       (78,198) 
+u_m5b1/background/capture/fifo/add_46/i4|CO                                                                                          adder           0.000             7.964               2       (78,198) 
+u_m5b1/background/capture/fifo/add_46/n8                                                                                             net             0.000             7.964               2       (78,198) 
+u_m5b1/background/capture/fifo/add_46/i5|CI                                                                                          adder           0.025             7.989               2       (78,199) 
+u_m5b1/background/capture/fifo/add_46/i5|CO                                                                                          adder           0.000             7.989               2       (78,199) 
+u_m5b1/background/capture/fifo/add_46/n10                                                                                            net             0.000             7.989               2       (78,199) 
+u_m5b1/background/capture/fifo/add_46/i6|CI                                                                                          adder           0.025             8.014               2       (78,200) 
+u_m5b1/background/capture/fifo/add_46/i6|CO                                                                                          adder           0.000             8.014               2       (78,200) 
+u_m5b1/background/capture/fifo/add_46/n12                                                                                            net             0.000             8.014               2       (78,200) 
+u_m5b1/background/capture/fifo/add_46/i7|CI                                                                                          adder           0.025             8.039               2       (78,201) 
+u_m5b1/background/capture/fifo/add_46/i7|CO                                                                                          adder           0.000             8.039               2       (78,201) 
+u_m5b1/background/capture/fifo/add_46/n14                                                                                            net             0.000             8.039               2       (78,201) 
+u_m5b1/background/capture/fifo/add_46/i8|CI                                                                                          adder           0.025             8.064               2       (78,202) 
+u_m5b1/background/capture/fifo/add_46/i8|CO                                                                                          adder           0.000             8.064               2       (78,202) 
+u_m5b1/background/capture/fifo/add_46/n16                                                                                            net             0.000             8.064               2       (78,202) 
+u_m5b1/background/capture/fifo/add_46/i9|CI                                                                                          adder           0.097             8.161               2       (78,203) 
+u_m5b1/background/capture/fifo/add_46/i9|O                                                                                           adder           0.000             8.161              11       (78,203) 
+u_m5b1/background/capture/fifo/next_r[8]                                                                                             net             0.613             8.774              11       (78,203) 
+u_m5b1/background/capture/fifo/mem__D$2|RADDR[7]                                                                                     ram_8192x20     0.032             8.806              11       (72,162) 
+
+Capture Clock Path
+                    name                      model name   delay (ns)  cumulative delay (ns) pins on net    location
+======================================================================================================================
+clk_sys                                      inpad           0.000             0.000                0       (0,162) 
+clk_sys                                      inpad           0.126             0.126            14133       (0,162) 
+clk_sys                                      net             1.978             2.104            14133       (0,162) 
+u_m5b1/background/capture/fifo/mem__D$2|RCLK ram_8192x20     0.000             2.104            14133       (72,162)
+
+++++ Path 5 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/popToPushGray_buffercc_io_dataOut[6]~FF|CLK
+Path End      : u_m5b1/background/capture/fifo/mem__D$b12|RADDR[5]                                                                                    
+Launch Clock  : clk_sys (RISE)                                                                                                                        
+Capture Clock : clk_sys (RISE)                                                                                                                        
+Slack         : 1.484 (required time - arrival time)                                                                                                  
+Delay         : 8.644                                                                                                                                 
+
+Logic Level             : 24
+Non-global nets on path : 25
+Global nets on path     :  0
+
+Launch Clock Path Delay        :  2.104
++ Clock To Q + Data Path Delay :  8.806
+---------------------------------------
+End-of-path arrival time       : 10.910
+
+Constraint                     : 10.416
++ Capture Clock Path Delay     :  2.104
+- Clock Uncertainty            :  0.126
+---------------------------------------
+End-of-path required time      : 12.394
+
+Launch Clock Path
+                                                                 name                                                                   model name   delay (ns)  cumulative delay (ns) pins on net    location
+================================================================================================================================================================================================================
+clk_sys                                                                                                                                   inpad        0.000             0.000                0       (0,162)
+clk_sys                                                                                                                                   inpad        0.126             0.126            14133       (0,162)
+clk_sys                                                                                                                                   net          1.978             2.104            14133       (0,162)
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/popToPushGray_buffercc_io_dataOut[6]~FF|CLK    ff           0.000             2.104            14133       (97,72)
+
+Data Path
+                                                                name                                                                  model name   delay (ns)  cumulative delay (ns) pins on net    location
+==============================================================================================================================================================================================================
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/popToPushGray_buffercc_io_dataOut[6]~FF|Q ff              0.130             0.130               4       (97,72)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/popToPushGray_buffercc_io_dataOut[6]      net             0.678             0.808               4       (97,72)  
+LUT__78243|in[1]                                                                                                                     lut             0.061             0.869               4       (38,70)  
+LUT__78243|out                                                                                                                       lut             0.000             0.869               3       (38,70)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/sub_31/n3                                 net             0.439             1.308               3       (38,70)  
+LUT__78244|in[1]                                                                                                                     lut             0.061             1.369               3       (41,68)  
+LUT__78244|out                                                                                                                       lut             0.000             1.369               3       (41,68)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/sub_31/n4                                 net             0.331             1.700               3       (41,68)  
+LUT__78245|in[1]                                                                                                                     lut             0.061             1.761               3       (40,65)  
+LUT__78245|out                                                                                                                       lut             0.000             1.761               3       (40,65)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/sub_31/n5                                 net             0.190             1.951               3       (40,65)  
+LUT__78246|in[1]                                                                                                                     lut             0.063             2.014               3       (42,65)  
+LUT__78246|out                                                                                                                       lut             0.000             2.014               3       (42,65)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/sub_31/n6                                 net             0.234             2.248               3       (42,65)  
+LUT__78247|in[1]                                                                                                                     lut             0.061             2.309               3       (43,68)  
+LUT__78247|out                                                                                                                       lut             0.000             2.309               3       (43,68)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/sub_31/n7                                 net             0.190             2.499               3       (43,68)  
+LUT__78248|in[1]                                                                                                                     lut             0.063             2.562               3       (42,67)  
+LUT__78248|out                                                                                                                       lut             0.000             2.562               2       (42,67)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/sub_31/n8                                 net             0.209             2.771               2       (42,67)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/sub_31/add_2/i1|I1                        adder           0.057             2.828               2       (37,62)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/sub_31/add_2/i1|CO                        adder           0.000             2.828               2       (37,62)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/sub_31/add_2/n2                           net             0.000             2.828               2       (37,62)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/sub_31/add_2/i2|CI                        adder           0.024             2.852               2       (37,63)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/sub_31/add_2/i2|CO                        adder           0.000             2.852               2       (37,63)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/sub_31/add_2/n4                           net             0.000             2.852               2       (37,63)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/sub_31/add_2/i3|CI                        adder           0.024             2.876               2       (37,64)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/sub_31/add_2/i3|CO                        adder           0.000             2.876               2       (37,64)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/sub_31/add_2/n6                           net             0.000             2.876               2       (37,64)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/sub_31/add_2/i4|CI                        adder           0.097             2.973               2       (37,65)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/sub_31/add_2/i4|O                         adder           0.000             2.973               2       (37,65)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr_io_pushOccupancy[3]                       net             0.293             3.266               2       (37,65)  
+LUT__75710|in[2]                                                                                                                     lut             0.061             3.327               2       (37,70)  
+LUT__75710|out                                                                                                                       lut             0.000             3.327               2       (37,70)  
+n40877                                                                                                                               net             1.293             4.620               2       (37,70)  
+LUT__75712|in[2]                                                                                                                     lut             0.061             4.681               2       (211,101)
+LUT__75712|out                                                                                                                       lut             0.000             4.681              20       (211,101)
+n40879                                                                                                                               net             0.632             5.313              20       (211,101)
+LUT__75713|in[3]                                                                                                                     lut             0.061             5.374              20       (208,173)
+LUT__75713|out                                                                                                                       lut             0.000             5.374               4       (208,173)
+n40880                                                                                                                               net             0.502             5.876               4       (208,173)
+LUT__80583|in[1]                                                                                                                     lut             0.061             5.937               4       (181,175)
+LUT__80583|out                                                                                                                       lut             0.000             5.937               3       (181,175)
+n43920                                                                                                                               net             0.095             6.032               3       (181,175)
+LUT__82426|in[2]                                                                                                                     lut             0.061             6.093               3       (181,178)
+LUT__82426|out                                                                                                                       lut             0.000             6.093               5       (181,178)
+n44976                                                                                                                               net             0.461             6.554               5       (181,178)
+LUT__82427|in[0]                                                                                                                     lut             0.061             6.615               5       (176,221)
+LUT__82427|out                                                                                                                       lut             0.000             6.615               3       (176,221)
+n44977                                                                                                                               net             0.337             6.952               3       (176,221)
+LUT__82428|in[1]                                                                                                                     lut             0.061             7.013               3       (166,226)
+LUT__82428|out                                                                                                                       lut             0.000             7.013               3       (166,226)
+u_m5b1/background/capture/fifo/take_r                                                                                                net             0.821             7.834               3       (166,226)
+u_m5b1/background/capture/fifo/add_46/i1|I1                                                                                          adder           0.055             7.889               3       (78,195) 
+u_m5b1/background/capture/fifo/add_46/i1|CO                                                                                          adder           0.000             7.889               2       (78,195) 
+u_m5b1/background/capture/fifo/add_46/n2                                                                                             net             0.000             7.889               2       (78,195) 
+u_m5b1/background/capture/fifo/add_46/i2|CI                                                                                          adder           0.025             7.914               2       (78,196) 
+u_m5b1/background/capture/fifo/add_46/i2|CO                                                                                          adder           0.000             7.914               2       (78,196) 
+u_m5b1/background/capture/fifo/add_46/n4                                                                                             net             0.000             7.914               2       (78,196) 
+u_m5b1/background/capture/fifo/add_46/i3|CI                                                                                          adder           0.025             7.939               2       (78,197) 
+u_m5b1/background/capture/fifo/add_46/i3|CO                                                                                          adder           0.000             7.939               2       (78,197) 
+u_m5b1/background/capture/fifo/add_46/n6                                                                                             net             0.000             7.939               2       (78,197) 
+u_m5b1/background/capture/fifo/add_46/i4|CI                                                                                          adder           0.025             7.964               2       (78,198) 
+u_m5b1/background/capture/fifo/add_46/i4|CO                                                                                          adder           0.000             7.964               2       (78,198) 
+u_m5b1/background/capture/fifo/add_46/n8                                                                                             net             0.000             7.964               2       (78,198) 
+u_m5b1/background/capture/fifo/add_46/i5|CI                                                                                          adder           0.025             7.989               2       (78,199) 
+u_m5b1/background/capture/fifo/add_46/i5|CO                                                                                          adder           0.000             7.989               2       (78,199) 
+u_m5b1/background/capture/fifo/add_46/n10                                                                                            net             0.000             7.989               2       (78,199) 
+u_m5b1/background/capture/fifo/add_46/i6|CI                                                                                          adder           0.025             8.014               2       (78,200) 
+u_m5b1/background/capture/fifo/add_46/i6|CO                                                                                          adder           0.000             8.014               2       (78,200) 
+u_m5b1/background/capture/fifo/add_46/n12                                                                                            net             0.000             8.014               2       (78,200) 
+u_m5b1/background/capture/fifo/add_46/i7|CI                                                                                          adder           0.097             8.111               2       (78,201) 
+u_m5b1/background/capture/fifo/add_46/i7|O                                                                                           adder           0.000             8.111              11       (78,201) 
+u_m5b1/background/capture/fifo/next_r[6]                                                                                             net             0.663             8.774              11       (78,201) 
+u_m5b1/background/capture/fifo/mem__D$b12|RADDR[5]                                                                                   ram_8192x20     0.032             8.806              11       (63,162) 
+
+Capture Clock Path
+                     name                       model name   delay (ns)  cumulative delay (ns) pins on net    location
+========================================================================================================================
+clk_sys                                        inpad           0.000             0.000                0       (0,162) 
+clk_sys                                        inpad           0.126             0.126            14133       (0,162) 
+clk_sys                                        net             1.978             2.104            14133       (0,162) 
+u_m5b1/background/capture/fifo/mem__D$b12|RCLK ram_8192x20     0.000             2.104            14133       (63,162)
+
+++++ Path 6 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/popToPushGray_buffercc_io_dataOut[6]~FF|CLK
+Path End      : u_m5b1/background/capture/fifo/rg[4]~FF|D                                                                                             
+Launch Clock  : clk_sys (RISE)                                                                                                                        
+Capture Clock : clk_sys (RISE)                                                                                                                        
+Slack         : 1.487 (required time - arrival time)                                                                                                  
+Delay         : 8.670                                                                                                                                 
+
+Logic Level             : 24
+Non-global nets on path : 24
+Global nets on path     :  0
+
+Launch Clock Path Delay        :  2.104
++ Clock To Q + Data Path Delay :  8.803
+---------------------------------------
+End-of-path arrival time       : 10.907
+
+Constraint                     : 10.416
++ Capture Clock Path Delay     :  2.104
+- Clock Uncertainty            :  0.126
+---------------------------------------
+End-of-path required time      : 12.394
+
+Launch Clock Path
+                                                                 name                                                                   model name   delay (ns)  cumulative delay (ns) pins on net    location
+================================================================================================================================================================================================================
+clk_sys                                                                                                                                   inpad        0.000             0.000                0       (0,162)
+clk_sys                                                                                                                                   inpad        0.126             0.126            14133       (0,162)
+clk_sys                                                                                                                                   net          1.978             2.104            14133       (0,162)
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/popToPushGray_buffercc_io_dataOut[6]~FF|CLK    ff           0.000             2.104            14133       (97,72)
+
+Data Path
+                                                                name                                                                  model name   delay (ns)  cumulative delay (ns) pins on net    location
+==============================================================================================================================================================================================================
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/popToPushGray_buffercc_io_dataOut[6]~FF|Q    ff           0.130             0.130               4       (97,72)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/popToPushGray_buffercc_io_dataOut[6]         net          0.678             0.808               4       (97,72)  
+LUT__78243|in[1]                                                                                                                        lut          0.061             0.869               4       (38,70)  
+LUT__78243|out                                                                                                                          lut          0.000             0.869               3       (38,70)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/sub_31/n3                                    net          0.439             1.308               3       (38,70)  
+LUT__78244|in[1]                                                                                                                        lut          0.061             1.369               3       (41,68)  
+LUT__78244|out                                                                                                                          lut          0.000             1.369               3       (41,68)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/sub_31/n4                                    net          0.331             1.700               3       (41,68)  
+LUT__78245|in[1]                                                                                                                        lut          0.061             1.761               3       (40,65)  
+LUT__78245|out                                                                                                                          lut          0.000             1.761               3       (40,65)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/sub_31/n5                                    net          0.190             1.951               3       (40,65)  
+LUT__78246|in[1]                                                                                                                        lut          0.063             2.014               3       (42,65)  
+LUT__78246|out                                                                                                                          lut          0.000             2.014               3       (42,65)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/sub_31/n6                                    net          0.234             2.248               3       (42,65)  
+LUT__78247|in[1]                                                                                                                        lut          0.061             2.309               3       (43,68)  
+LUT__78247|out                                                                                                                          lut          0.000             2.309               3       (43,68)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/sub_31/n7                                    net          0.190             2.499               3       (43,68)  
+LUT__78248|in[1]                                                                                                                        lut          0.063             2.562               3       (42,67)  
+LUT__78248|out                                                                                                                          lut          0.000             2.562               2       (42,67)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/sub_31/n8                                    net          0.209             2.771               2       (42,67)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/sub_31/add_2/i1|I1                           adder        0.057             2.828               2       (37,62)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/sub_31/add_2/i1|CO                           adder        0.000             2.828               2       (37,62)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/sub_31/add_2/n2                              net          0.000             2.828               2       (37,62)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/sub_31/add_2/i2|CI                           adder        0.024             2.852               2       (37,63)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/sub_31/add_2/i2|CO                           adder        0.000             2.852               2       (37,63)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/sub_31/add_2/n4                              net          0.000             2.852               2       (37,63)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/sub_31/add_2/i3|CI                           adder        0.024             2.876               2       (37,64)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/sub_31/add_2/i3|CO                           adder        0.000             2.876               2       (37,64)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/sub_31/add_2/n6                              net          0.000             2.876               2       (37,64)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/sub_31/add_2/i4|CI                           adder        0.097             2.973               2       (37,65)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/sub_31/add_2/i4|O                            adder        0.000             2.973               2       (37,65)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr_io_pushOccupancy[3]                          net          0.293             3.266               2       (37,65)  
+LUT__75710|in[2]                                                                                                                        lut          0.061             3.327               2       (37,70)  
+LUT__75710|out                                                                                                                          lut          0.000             3.327               2       (37,70)  
+n40877                                                                                                                                  net          1.293             4.620               2       (37,70)  
+LUT__75712|in[2]                                                                                                                        lut          0.061             4.681               2       (211,101)
+LUT__75712|out                                                                                                                          lut          0.000             4.681              20       (211,101)
+n40879                                                                                                                                  net          0.632             5.313              20       (211,101)
+LUT__75713|in[3]                                                                                                                        lut          0.061             5.374              20       (208,173)
+LUT__75713|out                                                                                                                          lut          0.000             5.374               4       (208,173)
+n40880                                                                                                                                  net          0.502             5.876               4       (208,173)
+LUT__80583|in[1]                                                                                                                        lut          0.061             5.937               4       (181,175)
+LUT__80583|out                                                                                                                          lut          0.000             5.937               3       (181,175)
+n43920                                                                                                                                  net          0.095             6.032               3       (181,175)
+LUT__82426|in[2]                                                                                                                        lut          0.061             6.093               3       (181,178)
+LUT__82426|out                                                                                                                          lut          0.000             6.093               5       (181,178)
+n44976                                                                                                                                  net          0.461             6.554               5       (181,178)
+LUT__82427|in[0]                                                                                                                        lut          0.061             6.615               5       (176,221)
+LUT__82427|out                                                                                                                          lut          0.000             6.615               3       (176,221)
+n44977                                                                                                                                  net          0.337             6.952               3       (176,221)
+LUT__82428|in[1]                                                                                                                        lut          0.061             7.013               3       (166,226)
+LUT__82428|out                                                                                                                          lut          0.000             7.013               3       (166,226)
+u_m5b1/background/capture/fifo/take_r                                                                                                   net          0.821             7.834               3       (166,226)
+u_m5b1/background/capture/fifo/add_46/i1|I1                                                                                             adder        0.055             7.889               3       (78,195) 
+u_m5b1/background/capture/fifo/add_46/i1|CO                                                                                             adder        0.000             7.889               2       (78,195) 
+u_m5b1/background/capture/fifo/add_46/n2                                                                                                net          0.000             7.889               2       (78,195) 
+u_m5b1/background/capture/fifo/add_46/i2|CI                                                                                             adder        0.025             7.914               2       (78,196) 
+u_m5b1/background/capture/fifo/add_46/i2|CO                                                                                             adder        0.000             7.914               2       (78,196) 
+u_m5b1/background/capture/fifo/add_46/n4                                                                                                net          0.000             7.914               2       (78,196) 
+u_m5b1/background/capture/fifo/add_46/i3|CI                                                                                             adder        0.025             7.939               2       (78,197) 
+u_m5b1/background/capture/fifo/add_46/i3|CO                                                                                             adder        0.000             7.939               2       (78,197) 
+u_m5b1/background/capture/fifo/add_46/n6                                                                                                net          0.000             7.939               2       (78,197) 
+u_m5b1/background/capture/fifo/add_46/i4|CI                                                                                             adder        0.025             7.964               2       (78,198) 
+u_m5b1/background/capture/fifo/add_46/i4|CO                                                                                             adder        0.000             7.964               2       (78,198) 
+u_m5b1/background/capture/fifo/add_46/n8                                                                                                net          0.000             7.964               2       (78,198) 
+u_m5b1/background/capture/fifo/add_46/i5|CI                                                                                             adder        0.025             7.989               2       (78,199) 
+u_m5b1/background/capture/fifo/add_46/i5|CO                                                                                             adder        0.000             7.989               2       (78,199) 
+u_m5b1/background/capture/fifo/add_46/n10                                                                                               net          0.000             7.989               2       (78,199) 
+u_m5b1/background/capture/fifo/add_46/i6|CI                                                                                             adder        0.097             8.086               2       (78,200) 
+u_m5b1/background/capture/fifo/add_46/i6|O                                                                                              adder        0.000             8.086              11       (78,200) 
+u_m5b1/background/capture/fifo/next_r[5]                                                                                                net          0.653             8.739              11       (78,200) 
+LUT__82497|in[0]                                                                                                                        lut          0.061             8.800              11       (65,182) 
+LUT__82497|out                                                                                                                          lut          0.000             8.800               2       (65,182) 
+u_m5b1/background/capture/fifo/rg[4]~FF|D                                                                                               ff           0.003             8.803               2       (65,182) 
+
+Capture Clock Path
+                   name                      model name   delay (ns)  cumulative delay (ns) pins on net    location
+=====================================================================================================================
+clk_sys                                        inpad        0.000             0.000                0       (0,162) 
+clk_sys                                        inpad        0.126             0.126            14133       (0,162) 
+clk_sys                                        net          1.978             2.104            14133       (0,162) 
+u_m5b1/background/capture/fifo/rg[4]~FF|CLK    ff           0.000             2.104            14133       (65,182)
+
+++++ Path 7 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/popToPushGray_buffercc_io_dataOut[6]~FF|CLK
+Path End      : u_m5b1/background/capture/fifo/mem__D$2|RADDR[4]                                                                                      
+Launch Clock  : clk_sys (RISE)                                                                                                                        
+Capture Clock : clk_sys (RISE)                                                                                                                        
+Slack         : 1.505 (required time - arrival time)                                                                                                  
+Delay         : 8.623                                                                                                                                 
+
+Logic Level             : 23
+Non-global nets on path : 24
+Global nets on path     :  0
+
+Launch Clock Path Delay        :  2.104
++ Clock To Q + Data Path Delay :  8.785
+---------------------------------------
+End-of-path arrival time       : 10.889
+
+Constraint                     : 10.416
++ Capture Clock Path Delay     :  2.104
+- Clock Uncertainty            :  0.126
+---------------------------------------
+End-of-path required time      : 12.394
+
+Launch Clock Path
+                                                                 name                                                                   model name   delay (ns)  cumulative delay (ns) pins on net    location
+================================================================================================================================================================================================================
+clk_sys                                                                                                                                   inpad        0.000             0.000                0       (0,162)
+clk_sys                                                                                                                                   inpad        0.126             0.126            14133       (0,162)
+clk_sys                                                                                                                                   net          1.978             2.104            14133       (0,162)
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/popToPushGray_buffercc_io_dataOut[6]~FF|CLK    ff           0.000             2.104            14133       (97,72)
+
+Data Path
+                                                                name                                                                  model name   delay (ns)  cumulative delay (ns) pins on net    location
+==============================================================================================================================================================================================================
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/popToPushGray_buffercc_io_dataOut[6]~FF|Q ff              0.130             0.130               4       (97,72)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/popToPushGray_buffercc_io_dataOut[6]      net             0.678             0.808               4       (97,72)  
+LUT__78243|in[1]                                                                                                                     lut             0.061             0.869               4       (38,70)  
+LUT__78243|out                                                                                                                       lut             0.000             0.869               3       (38,70)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/sub_31/n3                                 net             0.439             1.308               3       (38,70)  
+LUT__78244|in[1]                                                                                                                     lut             0.061             1.369               3       (41,68)  
+LUT__78244|out                                                                                                                       lut             0.000             1.369               3       (41,68)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/sub_31/n4                                 net             0.331             1.700               3       (41,68)  
+LUT__78245|in[1]                                                                                                                     lut             0.061             1.761               3       (40,65)  
+LUT__78245|out                                                                                                                       lut             0.000             1.761               3       (40,65)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/sub_31/n5                                 net             0.190             1.951               3       (40,65)  
+LUT__78246|in[1]                                                                                                                     lut             0.063             2.014               3       (42,65)  
+LUT__78246|out                                                                                                                       lut             0.000             2.014               3       (42,65)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/sub_31/n6                                 net             0.234             2.248               3       (42,65)  
+LUT__78247|in[1]                                                                                                                     lut             0.061             2.309               3       (43,68)  
+LUT__78247|out                                                                                                                       lut             0.000             2.309               3       (43,68)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/sub_31/n7                                 net             0.190             2.499               3       (43,68)  
+LUT__78248|in[1]                                                                                                                     lut             0.063             2.562               3       (42,67)  
+LUT__78248|out                                                                                                                       lut             0.000             2.562               2       (42,67)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/sub_31/n8                                 net             0.209             2.771               2       (42,67)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/sub_31/add_2/i1|I1                        adder           0.057             2.828               2       (37,62)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/sub_31/add_2/i1|CO                        adder           0.000             2.828               2       (37,62)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/sub_31/add_2/n2                           net             0.000             2.828               2       (37,62)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/sub_31/add_2/i2|CI                        adder           0.024             2.852               2       (37,63)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/sub_31/add_2/i2|CO                        adder           0.000             2.852               2       (37,63)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/sub_31/add_2/n4                           net             0.000             2.852               2       (37,63)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/sub_31/add_2/i3|CI                        adder           0.024             2.876               2       (37,64)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/sub_31/add_2/i3|CO                        adder           0.000             2.876               2       (37,64)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/sub_31/add_2/n6                           net             0.000             2.876               2       (37,64)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/sub_31/add_2/i4|CI                        adder           0.097             2.973               2       (37,65)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/sub_31/add_2/i4|O                         adder           0.000             2.973               2       (37,65)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr_io_pushOccupancy[3]                       net             0.293             3.266               2       (37,65)  
+LUT__75710|in[2]                                                                                                                     lut             0.061             3.327               2       (37,70)  
+LUT__75710|out                                                                                                                       lut             0.000             3.327               2       (37,70)  
+n40877                                                                                                                               net             1.293             4.620               2       (37,70)  
+LUT__75712|in[2]                                                                                                                     lut             0.061             4.681               2       (211,101)
+LUT__75712|out                                                                                                                       lut             0.000             4.681              20       (211,101)
+n40879                                                                                                                               net             0.632             5.313              20       (211,101)
+LUT__75713|in[3]                                                                                                                     lut             0.061             5.374              20       (208,173)
+LUT__75713|out                                                                                                                       lut             0.000             5.374               4       (208,173)
+n40880                                                                                                                               net             0.502             5.876               4       (208,173)
+LUT__80583|in[1]                                                                                                                     lut             0.061             5.937               4       (181,175)
+LUT__80583|out                                                                                                                       lut             0.000             5.937               3       (181,175)
+n43920                                                                                                                               net             0.095             6.032               3       (181,175)
+LUT__82426|in[2]                                                                                                                     lut             0.061             6.093               3       (181,178)
+LUT__82426|out                                                                                                                       lut             0.000             6.093               5       (181,178)
+n44976                                                                                                                               net             0.461             6.554               5       (181,178)
+LUT__82427|in[0]                                                                                                                     lut             0.061             6.615               5       (176,221)
+LUT__82427|out                                                                                                                       lut             0.000             6.615               3       (176,221)
+n44977                                                                                                                               net             0.337             6.952               3       (176,221)
+LUT__82428|in[1]                                                                                                                     lut             0.061             7.013               3       (166,226)
+LUT__82428|out                                                                                                                       lut             0.000             7.013               3       (166,226)
+u_m5b1/background/capture/fifo/take_r                                                                                                net             0.821             7.834               3       (166,226)
+u_m5b1/background/capture/fifo/add_46/i1|I1                                                                                          adder           0.055             7.889               3       (78,195) 
+u_m5b1/background/capture/fifo/add_46/i1|CO                                                                                          adder           0.000             7.889               2       (78,195) 
+u_m5b1/background/capture/fifo/add_46/n2                                                                                             net             0.000             7.889               2       (78,195) 
+u_m5b1/background/capture/fifo/add_46/i2|CI                                                                                          adder           0.025             7.914               2       (78,196) 
+u_m5b1/background/capture/fifo/add_46/i2|CO                                                                                          adder           0.000             7.914               2       (78,196) 
+u_m5b1/background/capture/fifo/add_46/n4                                                                                             net             0.000             7.914               2       (78,196) 
+u_m5b1/background/capture/fifo/add_46/i3|CI                                                                                          adder           0.025             7.939               2       (78,197) 
+u_m5b1/background/capture/fifo/add_46/i3|CO                                                                                          adder           0.000             7.939               2       (78,197) 
+u_m5b1/background/capture/fifo/add_46/n6                                                                                             net             0.000             7.939               2       (78,197) 
+u_m5b1/background/capture/fifo/add_46/i4|CI                                                                                          adder           0.025             7.964               2       (78,198) 
+u_m5b1/background/capture/fifo/add_46/i4|CO                                                                                          adder           0.000             7.964               2       (78,198) 
+u_m5b1/background/capture/fifo/add_46/n8                                                                                             net             0.000             7.964               2       (78,198) 
+u_m5b1/background/capture/fifo/add_46/i5|CI                                                                                          adder           0.025             7.989               2       (78,199) 
+u_m5b1/background/capture/fifo/add_46/i5|CO                                                                                          adder           0.000             7.989               2       (78,199) 
+u_m5b1/background/capture/fifo/add_46/n10                                                                                            net             0.000             7.989               2       (78,199) 
+u_m5b1/background/capture/fifo/add_46/i6|CI                                                                                          adder           0.097             8.086               2       (78,200) 
+u_m5b1/background/capture/fifo/add_46/i6|O                                                                                           adder           0.000             8.086              11       (78,200) 
+u_m5b1/background/capture/fifo/next_r[5]                                                                                             net             0.667             8.753              11       (78,200) 
+u_m5b1/background/capture/fifo/mem__D$2|RADDR[4]                                                                                     ram_8192x20     0.032             8.785              11       (72,162) 
+
+Capture Clock Path
+                    name                      model name   delay (ns)  cumulative delay (ns) pins on net    location
+======================================================================================================================
+clk_sys                                      inpad           0.000             0.000                0       (0,162) 
+clk_sys                                      inpad           0.126             0.126            14133       (0,162) 
+clk_sys                                      net             1.978             2.104            14133       (0,162) 
+u_m5b1/background/capture/fifo/mem__D$2|RCLK ram_8192x20     0.000             2.104            14133       (72,162)
+
+++++ Path 8 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/popToPushGray_buffercc_io_dataOut[6]~FF|CLK
+Path End      : u_m5b1/background/capture/fifo/mem__D$2|RADDR[6]                                                                                      
+Launch Clock  : clk_sys (RISE)                                                                                                                        
+Capture Clock : clk_sys (RISE)                                                                                                                        
+Slack         : 1.506 (required time - arrival time)                                                                                                  
+Delay         : 8.622                                                                                                                                 
+
+Logic Level             : 25
+Non-global nets on path : 26
+Global nets on path     :  0
+
+Launch Clock Path Delay        :  2.104
++ Clock To Q + Data Path Delay :  8.784
+---------------------------------------
+End-of-path arrival time       : 10.888
+
+Constraint                     : 10.416
++ Capture Clock Path Delay     :  2.104
+- Clock Uncertainty            :  0.126
+---------------------------------------
+End-of-path required time      : 12.394
+
+Launch Clock Path
+                                                                 name                                                                   model name   delay (ns)  cumulative delay (ns) pins on net    location
+================================================================================================================================================================================================================
+clk_sys                                                                                                                                   inpad        0.000             0.000                0       (0,162)
+clk_sys                                                                                                                                   inpad        0.126             0.126            14133       (0,162)
+clk_sys                                                                                                                                   net          1.978             2.104            14133       (0,162)
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/popToPushGray_buffercc_io_dataOut[6]~FF|CLK    ff           0.000             2.104            14133       (97,72)
+
+Data Path
+                                                                name                                                                  model name   delay (ns)  cumulative delay (ns) pins on net    location
+==============================================================================================================================================================================================================
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/popToPushGray_buffercc_io_dataOut[6]~FF|Q ff              0.130             0.130               4       (97,72)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/popToPushGray_buffercc_io_dataOut[6]      net             0.678             0.808               4       (97,72)  
+LUT__78243|in[1]                                                                                                                     lut             0.061             0.869               4       (38,70)  
+LUT__78243|out                                                                                                                       lut             0.000             0.869               3       (38,70)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/sub_31/n3                                 net             0.439             1.308               3       (38,70)  
+LUT__78244|in[1]                                                                                                                     lut             0.061             1.369               3       (41,68)  
+LUT__78244|out                                                                                                                       lut             0.000             1.369               3       (41,68)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/sub_31/n4                                 net             0.331             1.700               3       (41,68)  
+LUT__78245|in[1]                                                                                                                     lut             0.061             1.761               3       (40,65)  
+LUT__78245|out                                                                                                                       lut             0.000             1.761               3       (40,65)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/sub_31/n5                                 net             0.190             1.951               3       (40,65)  
+LUT__78246|in[1]                                                                                                                     lut             0.063             2.014               3       (42,65)  
+LUT__78246|out                                                                                                                       lut             0.000             2.014               3       (42,65)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/sub_31/n6                                 net             0.234             2.248               3       (42,65)  
+LUT__78247|in[1]                                                                                                                     lut             0.061             2.309               3       (43,68)  
+LUT__78247|out                                                                                                                       lut             0.000             2.309               3       (43,68)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/sub_31/n7                                 net             0.190             2.499               3       (43,68)  
+LUT__78248|in[1]                                                                                                                     lut             0.063             2.562               3       (42,67)  
+LUT__78248|out                                                                                                                       lut             0.000             2.562               2       (42,67)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/sub_31/n8                                 net             0.209             2.771               2       (42,67)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/sub_31/add_2/i1|I1                        adder           0.057             2.828               2       (37,62)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/sub_31/add_2/i1|CO                        adder           0.000             2.828               2       (37,62)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/sub_31/add_2/n2                           net             0.000             2.828               2       (37,62)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/sub_31/add_2/i2|CI                        adder           0.024             2.852               2       (37,63)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/sub_31/add_2/i2|CO                        adder           0.000             2.852               2       (37,63)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/sub_31/add_2/n4                           net             0.000             2.852               2       (37,63)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/sub_31/add_2/i3|CI                        adder           0.024             2.876               2       (37,64)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/sub_31/add_2/i3|CO                        adder           0.000             2.876               2       (37,64)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/sub_31/add_2/n6                           net             0.000             2.876               2       (37,64)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/sub_31/add_2/i4|CI                        adder           0.097             2.973               2       (37,65)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/sub_31/add_2/i4|O                         adder           0.000             2.973               2       (37,65)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr_io_pushOccupancy[3]                       net             0.293             3.266               2       (37,65)  
+LUT__75710|in[2]                                                                                                                     lut             0.061             3.327               2       (37,70)  
+LUT__75710|out                                                                                                                       lut             0.000             3.327               2       (37,70)  
+n40877                                                                                                                               net             1.293             4.620               2       (37,70)  
+LUT__75712|in[2]                                                                                                                     lut             0.061             4.681               2       (211,101)
+LUT__75712|out                                                                                                                       lut             0.000             4.681              20       (211,101)
+n40879                                                                                                                               net             0.632             5.313              20       (211,101)
+LUT__75713|in[3]                                                                                                                     lut             0.061             5.374              20       (208,173)
+LUT__75713|out                                                                                                                       lut             0.000             5.374               4       (208,173)
+n40880                                                                                                                               net             0.502             5.876               4       (208,173)
+LUT__80583|in[1]                                                                                                                     lut             0.061             5.937               4       (181,175)
+LUT__80583|out                                                                                                                       lut             0.000             5.937               3       (181,175)
+n43920                                                                                                                               net             0.095             6.032               3       (181,175)
+LUT__82426|in[2]                                                                                                                     lut             0.061             6.093               3       (181,178)
+LUT__82426|out                                                                                                                       lut             0.000             6.093               5       (181,178)
+n44976                                                                                                                               net             0.461             6.554               5       (181,178)
+LUT__82427|in[0]                                                                                                                     lut             0.061             6.615               5       (176,221)
+LUT__82427|out                                                                                                                       lut             0.000             6.615               3       (176,221)
+n44977                                                                                                                               net             0.337             6.952               3       (176,221)
+LUT__82428|in[1]                                                                                                                     lut             0.061             7.013               3       (166,226)
+LUT__82428|out                                                                                                                       lut             0.000             7.013               3       (166,226)
+u_m5b1/background/capture/fifo/take_r                                                                                                net             0.821             7.834               3       (166,226)
+u_m5b1/background/capture/fifo/add_46/i1|I1                                                                                          adder           0.055             7.889               3       (78,195) 
+u_m5b1/background/capture/fifo/add_46/i1|CO                                                                                          adder           0.000             7.889               2       (78,195) 
+u_m5b1/background/capture/fifo/add_46/n2                                                                                             net             0.000             7.889               2       (78,195) 
+u_m5b1/background/capture/fifo/add_46/i2|CI                                                                                          adder           0.025             7.914               2       (78,196) 
+u_m5b1/background/capture/fifo/add_46/i2|CO                                                                                          adder           0.000             7.914               2       (78,196) 
+u_m5b1/background/capture/fifo/add_46/n4                                                                                             net             0.000             7.914               2       (78,196) 
+u_m5b1/background/capture/fifo/add_46/i3|CI                                                                                          adder           0.025             7.939               2       (78,197) 
+u_m5b1/background/capture/fifo/add_46/i3|CO                                                                                          adder           0.000             7.939               2       (78,197) 
+u_m5b1/background/capture/fifo/add_46/n6                                                                                             net             0.000             7.939               2       (78,197) 
+u_m5b1/background/capture/fifo/add_46/i4|CI                                                                                          adder           0.025             7.964               2       (78,198) 
+u_m5b1/background/capture/fifo/add_46/i4|CO                                                                                          adder           0.000             7.964               2       (78,198) 
+u_m5b1/background/capture/fifo/add_46/n8                                                                                             net             0.000             7.964               2       (78,198) 
+u_m5b1/background/capture/fifo/add_46/i5|CI                                                                                          adder           0.025             7.989               2       (78,199) 
+u_m5b1/background/capture/fifo/add_46/i5|CO                                                                                          adder           0.000             7.989               2       (78,199) 
+u_m5b1/background/capture/fifo/add_46/n10                                                                                            net             0.000             7.989               2       (78,199) 
+u_m5b1/background/capture/fifo/add_46/i6|CI                                                                                          adder           0.025             8.014               2       (78,200) 
+u_m5b1/background/capture/fifo/add_46/i6|CO                                                                                          adder           0.000             8.014               2       (78,200) 
+u_m5b1/background/capture/fifo/add_46/n12                                                                                            net             0.000             8.014               2       (78,200) 
+u_m5b1/background/capture/fifo/add_46/i7|CI                                                                                          adder           0.025             8.039               2       (78,201) 
+u_m5b1/background/capture/fifo/add_46/i7|CO                                                                                          adder           0.000             8.039               2       (78,201) 
+u_m5b1/background/capture/fifo/add_46/n14                                                                                            net             0.000             8.039               2       (78,201) 
+u_m5b1/background/capture/fifo/add_46/i8|CI                                                                                          adder           0.097             8.136               2       (78,202) 
+u_m5b1/background/capture/fifo/add_46/i8|O                                                                                           adder           0.000             8.136              11       (78,202) 
+u_m5b1/background/capture/fifo/next_r[7]                                                                                             net             0.616             8.752              11       (78,202) 
+u_m5b1/background/capture/fifo/mem__D$2|RADDR[6]                                                                                     ram_8192x20     0.032             8.784              11       (72,162) 
+
+Capture Clock Path
+                    name                      model name   delay (ns)  cumulative delay (ns) pins on net    location
+======================================================================================================================
+clk_sys                                      inpad           0.000             0.000                0       (0,162) 
+clk_sys                                      inpad           0.126             0.126            14133       (0,162) 
+clk_sys                                      net             1.978             2.104            14133       (0,162) 
+u_m5b1/background/capture/fifo/mem__D$2|RCLK ram_8192x20     0.000             2.104            14133       (72,162)
+
+++++ Path 9 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/popToPushGray_buffercc_io_dataOut[6]~FF|CLK
+Path End      : u_m5b1/background/capture/fifo/mem__D$b12|RADDR[4]                                                                                    
+Launch Clock  : clk_sys (RISE)                                                                                                                        
+Capture Clock : clk_sys (RISE)                                                                                                                        
+Slack         : 1.508 (required time - arrival time)                                                                                                  
+Delay         : 8.620                                                                                                                                 
+
+Logic Level             : 23
+Non-global nets on path : 24
+Global nets on path     :  0
+
+Launch Clock Path Delay        :  2.104
++ Clock To Q + Data Path Delay :  8.782
+---------------------------------------
+End-of-path arrival time       : 10.886
+
+Constraint                     : 10.416
++ Capture Clock Path Delay     :  2.104
+- Clock Uncertainty            :  0.126
+---------------------------------------
+End-of-path required time      : 12.394
+
+Launch Clock Path
+                                                                 name                                                                   model name   delay (ns)  cumulative delay (ns) pins on net    location
+================================================================================================================================================================================================================
+clk_sys                                                                                                                                   inpad        0.000             0.000                0       (0,162)
+clk_sys                                                                                                                                   inpad        0.126             0.126            14133       (0,162)
+clk_sys                                                                                                                                   net          1.978             2.104            14133       (0,162)
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/popToPushGray_buffercc_io_dataOut[6]~FF|CLK    ff           0.000             2.104            14133       (97,72)
+
+Data Path
+                                                                name                                                                  model name   delay (ns)  cumulative delay (ns) pins on net    location
+==============================================================================================================================================================================================================
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/popToPushGray_buffercc_io_dataOut[6]~FF|Q ff              0.130             0.130               4       (97,72)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/popToPushGray_buffercc_io_dataOut[6]      net             0.678             0.808               4       (97,72)  
+LUT__78243|in[1]                                                                                                                     lut             0.061             0.869               4       (38,70)  
+LUT__78243|out                                                                                                                       lut             0.000             0.869               3       (38,70)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/sub_31/n3                                 net             0.439             1.308               3       (38,70)  
+LUT__78244|in[1]                                                                                                                     lut             0.061             1.369               3       (41,68)  
+LUT__78244|out                                                                                                                       lut             0.000             1.369               3       (41,68)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/sub_31/n4                                 net             0.331             1.700               3       (41,68)  
+LUT__78245|in[1]                                                                                                                     lut             0.061             1.761               3       (40,65)  
+LUT__78245|out                                                                                                                       lut             0.000             1.761               3       (40,65)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/sub_31/n5                                 net             0.190             1.951               3       (40,65)  
+LUT__78246|in[1]                                                                                                                     lut             0.063             2.014               3       (42,65)  
+LUT__78246|out                                                                                                                       lut             0.000             2.014               3       (42,65)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/sub_31/n6                                 net             0.234             2.248               3       (42,65)  
+LUT__78247|in[1]                                                                                                                     lut             0.061             2.309               3       (43,68)  
+LUT__78247|out                                                                                                                       lut             0.000             2.309               3       (43,68)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/sub_31/n7                                 net             0.190             2.499               3       (43,68)  
+LUT__78248|in[1]                                                                                                                     lut             0.063             2.562               3       (42,67)  
+LUT__78248|out                                                                                                                       lut             0.000             2.562               2       (42,67)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/sub_31/n8                                 net             0.209             2.771               2       (42,67)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/sub_31/add_2/i1|I1                        adder           0.057             2.828               2       (37,62)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/sub_31/add_2/i1|CO                        adder           0.000             2.828               2       (37,62)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/sub_31/add_2/n2                           net             0.000             2.828               2       (37,62)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/sub_31/add_2/i2|CI                        adder           0.024             2.852               2       (37,63)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/sub_31/add_2/i2|CO                        adder           0.000             2.852               2       (37,63)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/sub_31/add_2/n4                           net             0.000             2.852               2       (37,63)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/sub_31/add_2/i3|CI                        adder           0.024             2.876               2       (37,64)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/sub_31/add_2/i3|CO                        adder           0.000             2.876               2       (37,64)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/sub_31/add_2/n6                           net             0.000             2.876               2       (37,64)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/sub_31/add_2/i4|CI                        adder           0.097             2.973               2       (37,65)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/sub_31/add_2/i4|O                         adder           0.000             2.973               2       (37,65)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr_io_pushOccupancy[3]                       net             0.293             3.266               2       (37,65)  
+LUT__75710|in[2]                                                                                                                     lut             0.061             3.327               2       (37,70)  
+LUT__75710|out                                                                                                                       lut             0.000             3.327               2       (37,70)  
+n40877                                                                                                                               net             1.293             4.620               2       (37,70)  
+LUT__75712|in[2]                                                                                                                     lut             0.061             4.681               2       (211,101)
+LUT__75712|out                                                                                                                       lut             0.000             4.681              20       (211,101)
+n40879                                                                                                                               net             0.632             5.313              20       (211,101)
+LUT__75713|in[3]                                                                                                                     lut             0.061             5.374              20       (208,173)
+LUT__75713|out                                                                                                                       lut             0.000             5.374               4       (208,173)
+n40880                                                                                                                               net             0.502             5.876               4       (208,173)
+LUT__80583|in[1]                                                                                                                     lut             0.061             5.937               4       (181,175)
+LUT__80583|out                                                                                                                       lut             0.000             5.937               3       (181,175)
+n43920                                                                                                                               net             0.095             6.032               3       (181,175)
+LUT__82426|in[2]                                                                                                                     lut             0.061             6.093               3       (181,178)
+LUT__82426|out                                                                                                                       lut             0.000             6.093               5       (181,178)
+n44976                                                                                                                               net             0.461             6.554               5       (181,178)
+LUT__82427|in[0]                                                                                                                     lut             0.061             6.615               5       (176,221)
+LUT__82427|out                                                                                                                       lut             0.000             6.615               3       (176,221)
+n44977                                                                                                                               net             0.337             6.952               3       (176,221)
+LUT__82428|in[1]                                                                                                                     lut             0.061             7.013               3       (166,226)
+LUT__82428|out                                                                                                                       lut             0.000             7.013               3       (166,226)
+u_m5b1/background/capture/fifo/take_r                                                                                                net             0.821             7.834               3       (166,226)
+u_m5b1/background/capture/fifo/add_46/i1|I1                                                                                          adder           0.055             7.889               3       (78,195) 
+u_m5b1/background/capture/fifo/add_46/i1|CO                                                                                          adder           0.000             7.889               2       (78,195) 
+u_m5b1/background/capture/fifo/add_46/n2                                                                                             net             0.000             7.889               2       (78,195) 
+u_m5b1/background/capture/fifo/add_46/i2|CI                                                                                          adder           0.025             7.914               2       (78,196) 
+u_m5b1/background/capture/fifo/add_46/i2|CO                                                                                          adder           0.000             7.914               2       (78,196) 
+u_m5b1/background/capture/fifo/add_46/n4                                                                                             net             0.000             7.914               2       (78,196) 
+u_m5b1/background/capture/fifo/add_46/i3|CI                                                                                          adder           0.025             7.939               2       (78,197) 
+u_m5b1/background/capture/fifo/add_46/i3|CO                                                                                          adder           0.000             7.939               2       (78,197) 
+u_m5b1/background/capture/fifo/add_46/n6                                                                                             net             0.000             7.939               2       (78,197) 
+u_m5b1/background/capture/fifo/add_46/i4|CI                                                                                          adder           0.025             7.964               2       (78,198) 
+u_m5b1/background/capture/fifo/add_46/i4|CO                                                                                          adder           0.000             7.964               2       (78,198) 
+u_m5b1/background/capture/fifo/add_46/n8                                                                                             net             0.000             7.964               2       (78,198) 
+u_m5b1/background/capture/fifo/add_46/i5|CI                                                                                          adder           0.025             7.989               2       (78,199) 
+u_m5b1/background/capture/fifo/add_46/i5|CO                                                                                          adder           0.000             7.989               2       (78,199) 
+u_m5b1/background/capture/fifo/add_46/n10                                                                                            net             0.000             7.989               2       (78,199) 
+u_m5b1/background/capture/fifo/add_46/i6|CI                                                                                          adder           0.097             8.086               2       (78,200) 
+u_m5b1/background/capture/fifo/add_46/i6|O                                                                                           adder           0.000             8.086              11       (78,200) 
+u_m5b1/background/capture/fifo/next_r[5]                                                                                             net             0.664             8.750              11       (78,200) 
+u_m5b1/background/capture/fifo/mem__D$b12|RADDR[4]                                                                                   ram_8192x20     0.032             8.782              11       (63,162) 
+
+Capture Clock Path
+                     name                       model name   delay (ns)  cumulative delay (ns) pins on net    location
+========================================================================================================================
+clk_sys                                        inpad           0.000             0.000                0       (0,162) 
+clk_sys                                        inpad           0.126             0.126            14133       (0,162) 
+clk_sys                                        net             1.978             2.104            14133       (0,162) 
+u_m5b1/background/capture/fifo/mem__D$b12|RCLK ram_8192x20     0.000             2.104            14133       (63,162)
+
+++++ Path 10 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/popToPushGray_buffercc_io_dataOut[6]~FF|CLK
+Path End      : u_m5b1/background/capture/fifo/mem__D$2|RADDR[3]                                                                                      
+Launch Clock  : clk_sys (RISE)                                                                                                                        
+Capture Clock : clk_sys (RISE)                                                                                                                        
+Slack         : 1.518 (required time - arrival time)                                                                                                  
+Delay         : 8.610                                                                                                                                 
+
+Logic Level             : 22
+Non-global nets on path : 23
+Global nets on path     :  0
+
+Launch Clock Path Delay        :  2.104
++ Clock To Q + Data Path Delay :  8.772
+---------------------------------------
+End-of-path arrival time       : 10.876
+
+Constraint                     : 10.416
++ Capture Clock Path Delay     :  2.104
+- Clock Uncertainty            :  0.126
+---------------------------------------
+End-of-path required time      : 12.394
+
+Launch Clock Path
+                                                                 name                                                                   model name   delay (ns)  cumulative delay (ns) pins on net    location
+================================================================================================================================================================================================================
+clk_sys                                                                                                                                   inpad        0.000             0.000                0       (0,162)
+clk_sys                                                                                                                                   inpad        0.126             0.126            14133       (0,162)
+clk_sys                                                                                                                                   net          1.978             2.104            14133       (0,162)
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/popToPushGray_buffercc_io_dataOut[6]~FF|CLK    ff           0.000             2.104            14133       (97,72)
+
+Data Path
+                                                                name                                                                  model name   delay (ns)  cumulative delay (ns) pins on net    location
+==============================================================================================================================================================================================================
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/popToPushGray_buffercc_io_dataOut[6]~FF|Q ff              0.130             0.130               4       (97,72)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/popToPushGray_buffercc_io_dataOut[6]      net             0.678             0.808               4       (97,72)  
+LUT__78243|in[1]                                                                                                                     lut             0.061             0.869               4       (38,70)  
+LUT__78243|out                                                                                                                       lut             0.000             0.869               3       (38,70)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/sub_31/n3                                 net             0.439             1.308               3       (38,70)  
+LUT__78244|in[1]                                                                                                                     lut             0.061             1.369               3       (41,68)  
+LUT__78244|out                                                                                                                       lut             0.000             1.369               3       (41,68)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/sub_31/n4                                 net             0.331             1.700               3       (41,68)  
+LUT__78245|in[1]                                                                                                                     lut             0.061             1.761               3       (40,65)  
+LUT__78245|out                                                                                                                       lut             0.000             1.761               3       (40,65)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/sub_31/n5                                 net             0.190             1.951               3       (40,65)  
+LUT__78246|in[1]                                                                                                                     lut             0.063             2.014               3       (42,65)  
+LUT__78246|out                                                                                                                       lut             0.000             2.014               3       (42,65)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/sub_31/n6                                 net             0.234             2.248               3       (42,65)  
+LUT__78247|in[1]                                                                                                                     lut             0.061             2.309               3       (43,68)  
+LUT__78247|out                                                                                                                       lut             0.000             2.309               3       (43,68)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/sub_31/n7                                 net             0.190             2.499               3       (43,68)  
+LUT__78248|in[1]                                                                                                                     lut             0.063             2.562               3       (42,67)  
+LUT__78248|out                                                                                                                       lut             0.000             2.562               2       (42,67)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/sub_31/n8                                 net             0.209             2.771               2       (42,67)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/sub_31/add_2/i1|I1                        adder           0.057             2.828               2       (37,62)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/sub_31/add_2/i1|CO                        adder           0.000             2.828               2       (37,62)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/sub_31/add_2/n2                           net             0.000             2.828               2       (37,62)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/sub_31/add_2/i2|CI                        adder           0.024             2.852               2       (37,63)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/sub_31/add_2/i2|CO                        adder           0.000             2.852               2       (37,63)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/sub_31/add_2/n4                           net             0.000             2.852               2       (37,63)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/sub_31/add_2/i3|CI                        adder           0.024             2.876               2       (37,64)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/sub_31/add_2/i3|CO                        adder           0.000             2.876               2       (37,64)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/sub_31/add_2/n6                           net             0.000             2.876               2       (37,64)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/sub_31/add_2/i4|CI                        adder           0.097             2.973               2       (37,65)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr/sub_31/add_2/i4|O                         adder           0.000             2.973               2       (37,65)  
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_wr_io_pushOccupancy[3]                       net             0.293             3.266               2       (37,65)  
+LUT__75710|in[2]                                                                                                                     lut             0.061             3.327               2       (37,70)  
+LUT__75710|out                                                                                                                       lut             0.000             3.327               2       (37,70)  
+n40877                                                                                                                               net             1.293             4.620               2       (37,70)  
+LUT__75712|in[2]                                                                                                                     lut             0.061             4.681               2       (211,101)
+LUT__75712|out                                                                                                                       lut             0.000             4.681              20       (211,101)
+n40879                                                                                                                               net             0.632             5.313              20       (211,101)
+LUT__75713|in[3]                                                                                                                     lut             0.061             5.374              20       (208,173)
+LUT__75713|out                                                                                                                       lut             0.000             5.374               4       (208,173)
+n40880                                                                                                                               net             0.502             5.876               4       (208,173)
+LUT__80583|in[1]                                                                                                                     lut             0.061             5.937               4       (181,175)
+LUT__80583|out                                                                                                                       lut             0.000             5.937               3       (181,175)
+n43920                                                                                                                               net             0.095             6.032               3       (181,175)
+LUT__82426|in[2]                                                                                                                     lut             0.061             6.093               3       (181,178)
+LUT__82426|out                                                                                                                       lut             0.000             6.093               5       (181,178)
+n44976                                                                                                                               net             0.461             6.554               5       (181,178)
+LUT__82427|in[0]                                                                                                                     lut             0.061             6.615               5       (176,221)
+LUT__82427|out                                                                                                                       lut             0.000             6.615               3       (176,221)
+n44977                                                                                                                               net             0.337             6.952               3       (176,221)
+LUT__82428|in[1]                                                                                                                     lut             0.061             7.013               3       (166,226)
+LUT__82428|out                                                                                                                       lut             0.000             7.013               3       (166,226)
+u_m5b1/background/capture/fifo/take_r                                                                                                net             0.821             7.834               3       (166,226)
+u_m5b1/background/capture/fifo/add_46/i1|I1                                                                                          adder           0.055             7.889               3       (78,195) 
+u_m5b1/background/capture/fifo/add_46/i1|CO                                                                                          adder           0.000             7.889               2       (78,195) 
+u_m5b1/background/capture/fifo/add_46/n2                                                                                             net             0.000             7.889               2       (78,195) 
+u_m5b1/background/capture/fifo/add_46/i2|CI                                                                                          adder           0.025             7.914               2       (78,196) 
+u_m5b1/background/capture/fifo/add_46/i2|CO                                                                                          adder           0.000             7.914               2       (78,196) 
+u_m5b1/background/capture/fifo/add_46/n4                                                                                             net             0.000             7.914               2       (78,196) 
+u_m5b1/background/capture/fifo/add_46/i3|CI                                                                                          adder           0.025             7.939               2       (78,197) 
+u_m5b1/background/capture/fifo/add_46/i3|CO                                                                                          adder           0.000             7.939               2       (78,197) 
+u_m5b1/background/capture/fifo/add_46/n6                                                                                             net             0.000             7.939               2       (78,197) 
+u_m5b1/background/capture/fifo/add_46/i4|CI                                                                                          adder           0.025             7.964               2       (78,198) 
+u_m5b1/background/capture/fifo/add_46/i4|CO                                                                                          adder           0.000             7.964               2       (78,198) 
+u_m5b1/background/capture/fifo/add_46/n8                                                                                             net             0.000             7.964               2       (78,198) 
+u_m5b1/background/capture/fifo/add_46/i5|CI                                                                                          adder           0.097             8.061               2       (78,199) 
+u_m5b1/background/capture/fifo/add_46/i5|O                                                                                           adder           0.000             8.061              11       (78,199) 
+u_m5b1/background/capture/fifo/next_r[4]                                                                                             net             0.679             8.740              11       (78,199) 
+u_m5b1/background/capture/fifo/mem__D$2|RADDR[3]                                                                                     ram_8192x20     0.032             8.772              11       (72,162) 
+
+Capture Clock Path
+                    name                      model name   delay (ns)  cumulative delay (ns) pins on net    location
+======================================================================================================================
+clk_sys                                      inpad           0.000             0.000                0       (0,162) 
+clk_sys                                      inpad           0.126             0.126            14133       (0,162) 
+clk_sys                                      net             1.978             2.104            14133       (0,162) 
+u_m5b1/background/capture/fifo/mem__D$2|RCLK ram_8192x20     0.000             2.104            14133       (72,162)
+

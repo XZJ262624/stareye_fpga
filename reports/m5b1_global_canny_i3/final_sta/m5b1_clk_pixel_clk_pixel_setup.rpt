@@ -1,0 +1,682 @@
+
+Efinix Timing Path Constraint Report
+Version: 2025.1.110.5.9
+Date: Sat Oct 10 13:15:31 2026
+
+Copyright (C) 2013 - 2025 Efinix, Inc. All rights reserved.
+
+User command: report_timing -from_clock {clk_pixel} -to_clock {clk_pixel} -npaths 10 -nworst 1 -setup -detail full_path -file {m5b1_clk_pixel_clk_pixel_setup.rpt}
+
+Timing Model: I3
+	process : typical
+	temperature : -40C to 100C
+	voltage : 0.95 +/-30mV
+	speedgrade : 3
+	technology : t16ff
+	status : final
+
+Summary:
+
+ Path #  | Slack (ns) | Delay (ns) |                     Start Pin                     |                    End Pin                    |  Launch Clk   |  Capture Clk
+======================================================================================================================================================================
+  1      |  4.818     |  7.133     | u_m5a_stream/u_nms_packet/storage__D$c12|RDATA[0] | u_m5b1/background/capture/pack_data[29]~FF|D  | clk_pixel (R) | clk_pixel (R)
+  2      |  4.873     |  7.128     | u_m5a_stream/u_nms_packet/storage__D$c12|RDATA[0] | u_m5b1/background/capture/pack_data[102]~FF|D | clk_pixel (R) | clk_pixel (R)
+  3      |  4.883     |  7.068     | u_m5a_stream/u_nms_packet/storage__D$c12|RDATA[0] | u_m5b1/background/capture/pack_data[79]~FF|D  | clk_pixel (R) | clk_pixel (R)
+  4      |  4.931     |  7.020     | u_m5a_stream/u_nms_packet/storage__D$c12|RDATA[0] | u_m5b1/background/capture/pack_data[122]~FF|D | clk_pixel (R) | clk_pixel (R)
+  5      |  4.932     |  7.019     | u_m5a_stream/u_nms_packet/storage__D$c12|RDATA[0] | u_m5b1/background/capture/pack_data[88]~FF|D  | clk_pixel (R) | clk_pixel (R)
+  6      |  4.935     |  7.016     | u_m5a_stream/u_nms_packet/storage__D$c12|RDATA[0] | u_m5b1/background/capture/pack_data[93]~FF|D  | clk_pixel (R) | clk_pixel (R)
+  7      |  4.954     |  6.997     | u_m5a_stream/u_nms_packet/storage__D$c12|RDATA[0] | u_m5b1/background/capture/pack_data[104]~FF|D | clk_pixel (R) | clk_pixel (R)
+  8      |  4.966     |  6.985     | u_m5a_stream/u_nms_packet/storage__D$c12|RDATA[0] | u_m5b1/background/capture/pack_data[121]~FF|D | clk_pixel (R) | clk_pixel (R)
+  9      |  4.968     |  6.983     | u_m5a_stream/u_nms_packet/storage__D$c12|RDATA[0] | u_m5b1/background/capture/pack_data[123]~FF|D | clk_pixel (R) | clk_pixel (R)
+ 10      |  4.992     |  6.959     | u_m5a_stream/u_nms_packet/storage__D$c12|RDATA[0] | u_m5b1/background/capture/pack_data[74]~FF|D  | clk_pixel (R) | clk_pixel (R)
+
+++++ Path 1 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : u_m5a_stream/u_nms_packet/storage__D$c12|RCLK
+Path End      : u_m5b1/background/capture/pack_data[29]~FF|D 
+Launch Clock  : clk_pixel (RISE)                             
+Capture Clock : clk_pixel (RISE)                             
+Slack         : 4.818 (required time - arrival time)         
+Delay         : 7.133                                        
+
+Logic Level             : 6
+Non-global nets on path : 7
+Global nets on path     : 0
+
+Launch Clock Path Delay        :  2.095
++ Clock To Q + Data Path Delay :  8.497
+---------------------------------------
+End-of-path arrival time       : 10.592
+
+Constraint                     : 13.441
++ Capture Clock Path Delay     :  2.095
+- Clock Uncertainty            :  0.126
+---------------------------------------
+End-of-path required time      : 15.410
+
+Launch Clock Path
+                    name                       model name   delay (ns)  cumulative delay (ns) pins on net    location
+=======================================================================================================================
+clk_pixel                                     inpad           0.000             0.000                0       (0,159) 
+clk_pixel                                     inpad           0.126             0.126             4092       (0,159) 
+clk_pixel                                     net             1.969             2.095             4092       (0,159) 
+u_m5a_stream/u_nms_packet/storage__D$c12|RCLK ram_8192x20     0.000             2.095             4092       (48,222)
+
+Data Path
+                      name                         model name   delay (ns)  cumulative delay (ns) pins on net    location
+===========================================================================================================================
+u_m5a_stream/u_nms_packet/storage__D$c12|RDATA[0] ram_8192x20     1.361             1.361               3        (48,222)
+u_m5a_stream/u_nms_packet/read_data[13]           net             0.659             2.020               3        (48,222)
+LUT__81903|in[1]                                  lut             0.061             2.081               3        (50,276)
+LUT__81903|out                                    lut             0.000             2.081               5        (50,276)
+tap_x[1]                                          net             0.782             2.863               5        (50,276)
+LUT__81906|in[1]                                  lut             0.061             2.924               5        (32,278)
+LUT__81906|out                                    lut             0.000             2.924               2        (32,278)
+n44508                                            net             0.538             3.462               2        (32,278)
+LUT__81907|in[3]                                  lut             0.063             3.525               2        (57,244)
+LUT__81907|out                                    lut             0.000             3.525               2        (57,244)
+n44509                                            net             0.757             4.282               2        (57,244)
+LUT__81908|in[3]                                  lut             0.061             4.343               2        (20,262)
+LUT__81908|out                                    lut             0.000             4.343               3        (20,262)
+n44510                                            net             0.550             4.893               3        (20,262)
+LUT__81922|in[1]                                  lut             0.063             4.956               3        (51,249)
+LUT__81922|out                                    lut             0.000             4.956             234        (51,249)
+u_m5b1/background/capture/n2947                   net             2.267             7.223             233        (51,249)
+LUT__82548|in[0]                                  lut             0.061             7.284             234        (67,186)
+LUT__82548|out                                    lut             0.000             7.284              63        (67,186)
+u_m5b1/background/capture/n2358                   net             1.210             8.494              62        (67,186)
+u_m5b1/background/capture/pack_data[29]~FF|D      ff              0.003             8.497              63        (84,169)
+
+Capture Clock Path
+                     name                       model name   delay (ns)  cumulative delay (ns) pins on net    location
+========================================================================================================================
+clk_pixel                                         inpad        0.000             0.000                0       (0,159) 
+clk_pixel                                         inpad        0.126             0.126             4092       (0,159) 
+clk_pixel                                         net          1.969             2.095             4092       (0,159) 
+u_m5b1/background/capture/pack_data[29]~FF|CLK    ff           0.000             2.095             4092       (84,169)
+
+++++ Path 2 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : u_m5a_stream/u_nms_packet/storage__D$c12|RCLK
+Path End      : u_m5b1/background/capture/pack_data[102]~FF|D
+Launch Clock  : clk_pixel (RISE)                             
+Capture Clock : clk_pixel (RISE)                             
+Slack         : 4.873 (required time - arrival time)         
+Delay         : 7.128                                        
+
+Logic Level             : 6
+Non-global nets on path : 7
+Global nets on path     : 0
+
+Launch Clock Path Delay        :  2.095
++ Clock To Q + Data Path Delay :  8.492
+---------------------------------------
+End-of-path arrival time       : 10.587
+
+Constraint                     : 13.441
++ Capture Clock Path Delay     :  2.145
+- Clock Uncertainty            :  0.126
+---------------------------------------
+End-of-path required time      : 15.460
+
+Launch Clock Path
+                    name                       model name   delay (ns)  cumulative delay (ns) pins on net    location
+=======================================================================================================================
+clk_pixel                                     inpad           0.000             0.000                0       (0,159) 
+clk_pixel                                     inpad           0.126             0.126             4092       (0,159) 
+clk_pixel                                     net             1.969             2.095             4092       (0,159) 
+u_m5a_stream/u_nms_packet/storage__D$c12|RCLK ram_8192x20     0.000             2.095             4092       (48,222)
+
+Data Path
+                      name                         model name   delay (ns)  cumulative delay (ns) pins on net    location
+===========================================================================================================================
+u_m5a_stream/u_nms_packet/storage__D$c12|RDATA[0] ram_8192x20     1.361             1.361               3       (48,222) 
+u_m5a_stream/u_nms_packet/read_data[13]           net             0.659             2.020               3       (48,222) 
+LUT__81903|in[1]                                  lut             0.061             2.081               3       (50,276) 
+LUT__81903|out                                    lut             0.000             2.081               5       (50,276) 
+tap_x[1]                                          net             0.782             2.863               5       (50,276) 
+LUT__81906|in[1]                                  lut             0.061             2.924               5       (32,278) 
+LUT__81906|out                                    lut             0.000             2.924               2       (32,278) 
+n44508                                            net             0.538             3.462               2       (32,278) 
+LUT__81907|in[3]                                  lut             0.063             3.525               2       (57,244) 
+LUT__81907|out                                    lut             0.000             3.525               2       (57,244) 
+n44509                                            net             0.757             4.282               2       (57,244) 
+LUT__81908|in[3]                                  lut             0.061             4.343               2       (20,262) 
+LUT__81908|out                                    lut             0.000             4.343               3       (20,262) 
+n44510                                            net             0.550             4.893               3       (20,262) 
+LUT__81922|in[1]                                  lut             0.063             4.956               3       (51,249) 
+LUT__81922|out                                    lut             0.000             4.956             234       (51,249) 
+u_m5b1/background/capture/n2947                   net             2.285             7.241             233       (51,249) 
+LUT__82544|in[0]                                  lut             0.061             7.302             234       (67,182) 
+LUT__82544|out                                    lut             0.000             7.302              63       (67,182) 
+u_m5b1/background/capture/n2359                   net             1.187             8.489              62       (67,182) 
+u_m5b1/background/capture/pack_data[102]~FF|D     ff              0.003             8.492              63       (111,206)
+
+Capture Clock Path
+                     name                        model name   delay (ns)  cumulative delay (ns) pins on net    location
+=========================================================================================================================
+clk_pixel                                          inpad        0.000             0.000                0      (0,159)  
+clk_pixel                                          inpad        0.126             0.126             4092      (0,159)  
+clk_pixel                                          net          2.019             2.145             4092      (0,159)  
+u_m5b1/background/capture/pack_data[102]~FF|CLK    ff           0.000             2.145             4092      (111,206)
+
+++++ Path 3 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : u_m5a_stream/u_nms_packet/storage__D$c12|RCLK
+Path End      : u_m5b1/background/capture/pack_data[79]~FF|D 
+Launch Clock  : clk_pixel (RISE)                             
+Capture Clock : clk_pixel (RISE)                             
+Slack         : 4.883 (required time - arrival time)         
+Delay         : 7.068                                        
+
+Logic Level             : 6
+Non-global nets on path : 7
+Global nets on path     : 0
+
+Launch Clock Path Delay        :  2.095
++ Clock To Q + Data Path Delay :  8.432
+---------------------------------------
+End-of-path arrival time       : 10.527
+
+Constraint                     : 13.441
++ Capture Clock Path Delay     :  2.095
+- Clock Uncertainty            :  0.126
+---------------------------------------
+End-of-path required time      : 15.410
+
+Launch Clock Path
+                    name                       model name   delay (ns)  cumulative delay (ns) pins on net    location
+=======================================================================================================================
+clk_pixel                                     inpad           0.000             0.000                0       (0,159) 
+clk_pixel                                     inpad           0.126             0.126             4092       (0,159) 
+clk_pixel                                     net             1.969             2.095             4092       (0,159) 
+u_m5a_stream/u_nms_packet/storage__D$c12|RCLK ram_8192x20     0.000             2.095             4092       (48,222)
+
+Data Path
+                      name                         model name   delay (ns)  cumulative delay (ns) pins on net    location
+===========================================================================================================================
+u_m5a_stream/u_nms_packet/storage__D$c12|RDATA[0] ram_8192x20     1.361             1.361               3        (48,222)
+u_m5a_stream/u_nms_packet/read_data[13]           net             0.659             2.020               3        (48,222)
+LUT__81903|in[1]                                  lut             0.061             2.081               3        (50,276)
+LUT__81903|out                                    lut             0.000             2.081               5        (50,276)
+tap_x[1]                                          net             0.782             2.863               5        (50,276)
+LUT__81906|in[1]                                  lut             0.061             2.924               5        (32,278)
+LUT__81906|out                                    lut             0.000             2.924               2        (32,278)
+n44508                                            net             0.538             3.462               2        (32,278)
+LUT__81907|in[3]                                  lut             0.063             3.525               2        (57,244)
+LUT__81907|out                                    lut             0.000             3.525               2        (57,244)
+n44509                                            net             0.757             4.282               2        (57,244)
+LUT__81908|in[3]                                  lut             0.061             4.343               2        (20,262)
+LUT__81908|out                                    lut             0.000             4.343               3        (20,262)
+n44510                                            net             0.550             4.893               3        (20,262)
+LUT__81922|in[1]                                  lut             0.063             4.956               3        (51,249)
+LUT__81922|out                                    lut             0.000             4.956             234        (51,249)
+u_m5b1/background/capture/n2947                   net             2.267             7.223             233        (51,249)
+LUT__82548|in[0]                                  lut             0.061             7.284             234        (67,186)
+LUT__82548|out                                    lut             0.000             7.284              63        (67,186)
+u_m5b1/background/capture/n2358                   net             1.145             8.429              62        (67,186)
+u_m5b1/background/capture/pack_data[79]~FF|D      ff              0.003             8.432              63        (70,218)
+
+Capture Clock Path
+                     name                       model name   delay (ns)  cumulative delay (ns) pins on net    location
+========================================================================================================================
+clk_pixel                                         inpad        0.000             0.000                0       (0,159) 
+clk_pixel                                         inpad        0.126             0.126             4092       (0,159) 
+clk_pixel                                         net          1.969             2.095             4092       (0,159) 
+u_m5b1/background/capture/pack_data[79]~FF|CLK    ff           0.000             2.095             4092       (70,218)
+
+++++ Path 4 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : u_m5a_stream/u_nms_packet/storage__D$c12|RCLK
+Path End      : u_m5b1/background/capture/pack_data[122]~FF|D
+Launch Clock  : clk_pixel (RISE)                             
+Capture Clock : clk_pixel (RISE)                             
+Slack         : 4.931 (required time - arrival time)         
+Delay         : 7.020                                        
+
+Logic Level             : 6
+Non-global nets on path : 7
+Global nets on path     : 0
+
+Launch Clock Path Delay        :  2.095
++ Clock To Q + Data Path Delay :  8.384
+---------------------------------------
+End-of-path arrival time       : 10.479
+
+Constraint                     : 13.441
++ Capture Clock Path Delay     :  2.095
+- Clock Uncertainty            :  0.126
+---------------------------------------
+End-of-path required time      : 15.410
+
+Launch Clock Path
+                    name                       model name   delay (ns)  cumulative delay (ns) pins on net    location
+=======================================================================================================================
+clk_pixel                                     inpad           0.000             0.000                0       (0,159) 
+clk_pixel                                     inpad           0.126             0.126             4092       (0,159) 
+clk_pixel                                     net             1.969             2.095             4092       (0,159) 
+u_m5a_stream/u_nms_packet/storage__D$c12|RCLK ram_8192x20     0.000             2.095             4092       (48,222)
+
+Data Path
+                      name                         model name   delay (ns)  cumulative delay (ns) pins on net    location
+===========================================================================================================================
+u_m5a_stream/u_nms_packet/storage__D$c12|RDATA[0] ram_8192x20     1.361             1.361               3        (48,222)
+u_m5a_stream/u_nms_packet/read_data[13]           net             0.659             2.020               3        (48,222)
+LUT__81903|in[1]                                  lut             0.061             2.081               3        (50,276)
+LUT__81903|out                                    lut             0.000             2.081               5        (50,276)
+tap_x[1]                                          net             0.782             2.863               5        (50,276)
+LUT__81906|in[1]                                  lut             0.061             2.924               5        (32,278)
+LUT__81906|out                                    lut             0.000             2.924               2        (32,278)
+n44508                                            net             0.538             3.462               2        (32,278)
+LUT__81907|in[3]                                  lut             0.063             3.525               2        (57,244)
+LUT__81907|out                                    lut             0.000             3.525               2        (57,244)
+n44509                                            net             0.757             4.282               2        (57,244)
+LUT__81908|in[3]                                  lut             0.061             4.343               2        (20,262)
+LUT__81908|out                                    lut             0.000             4.343               3        (20,262)
+n44510                                            net             0.550             4.893               3        (20,262)
+LUT__81922|in[1]                                  lut             0.063             4.956               3        (51,249)
+LUT__81922|out                                    lut             0.000             4.956             234        (51,249)
+u_m5b1/background/capture/n2947                   net             2.285             7.241             233        (51,249)
+LUT__82544|in[0]                                  lut             0.061             7.302             234        (67,182)
+LUT__82544|out                                    lut             0.000             7.302              63        (67,182)
+u_m5b1/background/capture/n2359                   net             1.079             8.381              62        (67,182)
+u_m5b1/background/capture/pack_data[122]~FF|D     ff              0.003             8.384              63        (84,184)
+
+Capture Clock Path
+                     name                        model name   delay (ns)  cumulative delay (ns) pins on net    location
+=========================================================================================================================
+clk_pixel                                          inpad        0.000             0.000                0       (0,159) 
+clk_pixel                                          inpad        0.126             0.126             4092       (0,159) 
+clk_pixel                                          net          1.969             2.095             4092       (0,159) 
+u_m5b1/background/capture/pack_data[122]~FF|CLK    ff           0.000             2.095             4092       (84,184)
+
+++++ Path 5 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : u_m5a_stream/u_nms_packet/storage__D$c12|RCLK
+Path End      : u_m5b1/background/capture/pack_data[88]~FF|D 
+Launch Clock  : clk_pixel (RISE)                             
+Capture Clock : clk_pixel (RISE)                             
+Slack         : 4.932 (required time - arrival time)         
+Delay         : 7.019                                        
+
+Logic Level             : 6
+Non-global nets on path : 7
+Global nets on path     : 0
+
+Launch Clock Path Delay        :  2.095
++ Clock To Q + Data Path Delay :  8.383
+---------------------------------------
+End-of-path arrival time       : 10.478
+
+Constraint                     : 13.441
++ Capture Clock Path Delay     :  2.095
+- Clock Uncertainty            :  0.126
+---------------------------------------
+End-of-path required time      : 15.410
+
+Launch Clock Path
+                    name                       model name   delay (ns)  cumulative delay (ns) pins on net    location
+=======================================================================================================================
+clk_pixel                                     inpad           0.000             0.000                0       (0,159) 
+clk_pixel                                     inpad           0.126             0.126             4092       (0,159) 
+clk_pixel                                     net             1.969             2.095             4092       (0,159) 
+u_m5a_stream/u_nms_packet/storage__D$c12|RCLK ram_8192x20     0.000             2.095             4092       (48,222)
+
+Data Path
+                      name                         model name   delay (ns)  cumulative delay (ns) pins on net    location
+===========================================================================================================================
+u_m5a_stream/u_nms_packet/storage__D$c12|RDATA[0] ram_8192x20     1.361             1.361               3        (48,222)
+u_m5a_stream/u_nms_packet/read_data[13]           net             0.659             2.020               3        (48,222)
+LUT__81903|in[1]                                  lut             0.061             2.081               3        (50,276)
+LUT__81903|out                                    lut             0.000             2.081               5        (50,276)
+tap_x[1]                                          net             0.782             2.863               5        (50,276)
+LUT__81906|in[1]                                  lut             0.061             2.924               5        (32,278)
+LUT__81906|out                                    lut             0.000             2.924               2        (32,278)
+n44508                                            net             0.538             3.462               2        (32,278)
+LUT__81907|in[3]                                  lut             0.063             3.525               2        (57,244)
+LUT__81907|out                                    lut             0.000             3.525               2        (57,244)
+n44509                                            net             0.757             4.282               2        (57,244)
+LUT__81908|in[3]                                  lut             0.061             4.343               2        (20,262)
+LUT__81908|out                                    lut             0.000             4.343               3        (20,262)
+n44510                                            net             0.550             4.893               3        (20,262)
+LUT__81922|in[1]                                  lut             0.063             4.956               3        (51,249)
+LUT__81922|out                                    lut             0.000             4.956             234        (51,249)
+u_m5b1/background/capture/n2947                   net             2.285             7.241             233        (51,249)
+LUT__82544|in[0]                                  lut             0.061             7.302             234        (67,182)
+LUT__82544|out                                    lut             0.000             7.302              63        (67,182)
+u_m5b1/background/capture/n2359                   net             1.078             8.380              62        (67,182)
+u_m5b1/background/capture/pack_data[88]~FF|D      ff              0.003             8.383              63        (86,202)
+
+Capture Clock Path
+                     name                       model name   delay (ns)  cumulative delay (ns) pins on net    location
+========================================================================================================================
+clk_pixel                                         inpad        0.000             0.000                0       (0,159) 
+clk_pixel                                         inpad        0.126             0.126             4092       (0,159) 
+clk_pixel                                         net          1.969             2.095             4092       (0,159) 
+u_m5b1/background/capture/pack_data[88]~FF|CLK    ff           0.000             2.095             4092       (86,202)
+
+++++ Path 6 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : u_m5a_stream/u_nms_packet/storage__D$c12|RCLK
+Path End      : u_m5b1/background/capture/pack_data[93]~FF|D 
+Launch Clock  : clk_pixel (RISE)                             
+Capture Clock : clk_pixel (RISE)                             
+Slack         : 4.935 (required time - arrival time)         
+Delay         : 7.016                                        
+
+Logic Level             : 6
+Non-global nets on path : 7
+Global nets on path     : 0
+
+Launch Clock Path Delay        :  2.095
++ Clock To Q + Data Path Delay :  8.380
+---------------------------------------
+End-of-path arrival time       : 10.475
+
+Constraint                     : 13.441
++ Capture Clock Path Delay     :  2.095
+- Clock Uncertainty            :  0.126
+---------------------------------------
+End-of-path required time      : 15.410
+
+Launch Clock Path
+                    name                       model name   delay (ns)  cumulative delay (ns) pins on net    location
+=======================================================================================================================
+clk_pixel                                     inpad           0.000             0.000                0       (0,159) 
+clk_pixel                                     inpad           0.126             0.126             4092       (0,159) 
+clk_pixel                                     net             1.969             2.095             4092       (0,159) 
+u_m5a_stream/u_nms_packet/storage__D$c12|RCLK ram_8192x20     0.000             2.095             4092       (48,222)
+
+Data Path
+                      name                         model name   delay (ns)  cumulative delay (ns) pins on net    location
+===========================================================================================================================
+u_m5a_stream/u_nms_packet/storage__D$c12|RDATA[0] ram_8192x20     1.361             1.361               3        (48,222)
+u_m5a_stream/u_nms_packet/read_data[13]           net             0.659             2.020               3        (48,222)
+LUT__81903|in[1]                                  lut             0.061             2.081               3        (50,276)
+LUT__81903|out                                    lut             0.000             2.081               5        (50,276)
+tap_x[1]                                          net             0.782             2.863               5        (50,276)
+LUT__81906|in[1]                                  lut             0.061             2.924               5        (32,278)
+LUT__81906|out                                    lut             0.000             2.924               2        (32,278)
+n44508                                            net             0.538             3.462               2        (32,278)
+LUT__81907|in[3]                                  lut             0.063             3.525               2        (57,244)
+LUT__81907|out                                    lut             0.000             3.525               2        (57,244)
+n44509                                            net             0.757             4.282               2        (57,244)
+LUT__81908|in[3]                                  lut             0.061             4.343               2        (20,262)
+LUT__81908|out                                    lut             0.000             4.343               3        (20,262)
+n44510                                            net             0.550             4.893               3        (20,262)
+LUT__81922|in[1]                                  lut             0.063             4.956               3        (51,249)
+LUT__81922|out                                    lut             0.000             4.956             234        (51,249)
+u_m5b1/background/capture/n2947                   net             2.267             7.223             233        (51,249)
+LUT__82548|in[0]                                  lut             0.061             7.284             234        (67,186)
+LUT__82548|out                                    lut             0.000             7.284              63        (67,186)
+u_m5b1/background/capture/n2358                   net             1.093             8.377              62        (67,186)
+u_m5b1/background/capture/pack_data[93]~FF|D      ff              0.003             8.380              63        (84,198)
+
+Capture Clock Path
+                     name                       model name   delay (ns)  cumulative delay (ns) pins on net    location
+========================================================================================================================
+clk_pixel                                         inpad        0.000             0.000                0       (0,159) 
+clk_pixel                                         inpad        0.126             0.126             4092       (0,159) 
+clk_pixel                                         net          1.969             2.095             4092       (0,159) 
+u_m5b1/background/capture/pack_data[93]~FF|CLK    ff           0.000             2.095             4092       (84,198)
+
+++++ Path 7 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : u_m5a_stream/u_nms_packet/storage__D$c12|RCLK
+Path End      : u_m5b1/background/capture/pack_data[104]~FF|D
+Launch Clock  : clk_pixel (RISE)                             
+Capture Clock : clk_pixel (RISE)                             
+Slack         : 4.954 (required time - arrival time)         
+Delay         : 6.997                                        
+
+Logic Level             : 6
+Non-global nets on path : 7
+Global nets on path     : 0
+
+Launch Clock Path Delay        :  2.095
++ Clock To Q + Data Path Delay :  8.361
+---------------------------------------
+End-of-path arrival time       : 10.456
+
+Constraint                     : 13.441
++ Capture Clock Path Delay     :  2.095
+- Clock Uncertainty            :  0.126
+---------------------------------------
+End-of-path required time      : 15.410
+
+Launch Clock Path
+                    name                       model name   delay (ns)  cumulative delay (ns) pins on net    location
+=======================================================================================================================
+clk_pixel                                     inpad           0.000             0.000                0       (0,159) 
+clk_pixel                                     inpad           0.126             0.126             4092       (0,159) 
+clk_pixel                                     net             1.969             2.095             4092       (0,159) 
+u_m5a_stream/u_nms_packet/storage__D$c12|RCLK ram_8192x20     0.000             2.095             4092       (48,222)
+
+Data Path
+                      name                         model name   delay (ns)  cumulative delay (ns) pins on net    location
+===========================================================================================================================
+u_m5a_stream/u_nms_packet/storage__D$c12|RDATA[0] ram_8192x20     1.361             1.361               3        (48,222)
+u_m5a_stream/u_nms_packet/read_data[13]           net             0.659             2.020               3        (48,222)
+LUT__81903|in[1]                                  lut             0.061             2.081               3        (50,276)
+LUT__81903|out                                    lut             0.000             2.081               5        (50,276)
+tap_x[1]                                          net             0.782             2.863               5        (50,276)
+LUT__81906|in[1]                                  lut             0.061             2.924               5        (32,278)
+LUT__81906|out                                    lut             0.000             2.924               2        (32,278)
+n44508                                            net             0.538             3.462               2        (32,278)
+LUT__81907|in[3]                                  lut             0.063             3.525               2        (57,244)
+LUT__81907|out                                    lut             0.000             3.525               2        (57,244)
+n44509                                            net             0.757             4.282               2        (57,244)
+LUT__81908|in[3]                                  lut             0.061             4.343               2        (20,262)
+LUT__81908|out                                    lut             0.000             4.343               3        (20,262)
+n44510                                            net             0.550             4.893               3        (20,262)
+LUT__81922|in[1]                                  lut             0.063             4.956               3        (51,249)
+LUT__81922|out                                    lut             0.000             4.956             234        (51,249)
+u_m5b1/background/capture/n2947                   net             2.285             7.241             233        (51,249)
+LUT__82544|in[0]                                  lut             0.061             7.302             234        (67,182)
+LUT__82544|out                                    lut             0.000             7.302              63        (67,182)
+u_m5b1/background/capture/n2359                   net             1.056             8.358              62        (67,182)
+u_m5b1/background/capture/pack_data[104]~FF|D     ff              0.003             8.361              63        (84,185)
+
+Capture Clock Path
+                     name                        model name   delay (ns)  cumulative delay (ns) pins on net    location
+=========================================================================================================================
+clk_pixel                                          inpad        0.000             0.000                0       (0,159) 
+clk_pixel                                          inpad        0.126             0.126             4092       (0,159) 
+clk_pixel                                          net          1.969             2.095             4092       (0,159) 
+u_m5b1/background/capture/pack_data[104]~FF|CLK    ff           0.000             2.095             4092       (84,185)
+
+++++ Path 8 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : u_m5a_stream/u_nms_packet/storage__D$c12|RCLK
+Path End      : u_m5b1/background/capture/pack_data[121]~FF|D
+Launch Clock  : clk_pixel (RISE)                             
+Capture Clock : clk_pixel (RISE)                             
+Slack         : 4.966 (required time - arrival time)         
+Delay         : 6.985                                        
+
+Logic Level             : 6
+Non-global nets on path : 7
+Global nets on path     : 0
+
+Launch Clock Path Delay        :  2.095
++ Clock To Q + Data Path Delay :  8.349
+---------------------------------------
+End-of-path arrival time       : 10.444
+
+Constraint                     : 13.441
++ Capture Clock Path Delay     :  2.095
+- Clock Uncertainty            :  0.126
+---------------------------------------
+End-of-path required time      : 15.410
+
+Launch Clock Path
+                    name                       model name   delay (ns)  cumulative delay (ns) pins on net    location
+=======================================================================================================================
+clk_pixel                                     inpad           0.000             0.000                0       (0,159) 
+clk_pixel                                     inpad           0.126             0.126             4092       (0,159) 
+clk_pixel                                     net             1.969             2.095             4092       (0,159) 
+u_m5a_stream/u_nms_packet/storage__D$c12|RCLK ram_8192x20     0.000             2.095             4092       (48,222)
+
+Data Path
+                      name                         model name   delay (ns)  cumulative delay (ns) pins on net    location
+===========================================================================================================================
+u_m5a_stream/u_nms_packet/storage__D$c12|RDATA[0] ram_8192x20     1.361             1.361               3        (48,222)
+u_m5a_stream/u_nms_packet/read_data[13]           net             0.659             2.020               3        (48,222)
+LUT__81903|in[1]                                  lut             0.061             2.081               3        (50,276)
+LUT__81903|out                                    lut             0.000             2.081               5        (50,276)
+tap_x[1]                                          net             0.782             2.863               5        (50,276)
+LUT__81906|in[1]                                  lut             0.061             2.924               5        (32,278)
+LUT__81906|out                                    lut             0.000             2.924               2        (32,278)
+n44508                                            net             0.538             3.462               2        (32,278)
+LUT__81907|in[3]                                  lut             0.063             3.525               2        (57,244)
+LUT__81907|out                                    lut             0.000             3.525               2        (57,244)
+n44509                                            net             0.757             4.282               2        (57,244)
+LUT__81908|in[3]                                  lut             0.061             4.343               2        (20,262)
+LUT__81908|out                                    lut             0.000             4.343               3        (20,262)
+n44510                                            net             0.550             4.893               3        (20,262)
+LUT__81922|in[1]                                  lut             0.063             4.956               3        (51,249)
+LUT__81922|out                                    lut             0.000             4.956             234        (51,249)
+u_m5b1/background/capture/n2947                   net             2.267             7.223             233        (51,249)
+LUT__82548|in[0]                                  lut             0.061             7.284             234        (67,186)
+LUT__82548|out                                    lut             0.000             7.284              63        (67,186)
+u_m5b1/background/capture/n2358                   net             1.062             8.346              62        (67,186)
+u_m5b1/background/capture/pack_data[121]~FF|D     ff              0.003             8.349              63        (84,193)
+
+Capture Clock Path
+                     name                        model name   delay (ns)  cumulative delay (ns) pins on net    location
+=========================================================================================================================
+clk_pixel                                          inpad        0.000             0.000                0       (0,159) 
+clk_pixel                                          inpad        0.126             0.126             4092       (0,159) 
+clk_pixel                                          net          1.969             2.095             4092       (0,159) 
+u_m5b1/background/capture/pack_data[121]~FF|CLK    ff           0.000             2.095             4092       (84,193)
+
+++++ Path 9 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : u_m5a_stream/u_nms_packet/storage__D$c12|RCLK
+Path End      : u_m5b1/background/capture/pack_data[123]~FF|D
+Launch Clock  : clk_pixel (RISE)                             
+Capture Clock : clk_pixel (RISE)                             
+Slack         : 4.968 (required time - arrival time)         
+Delay         : 6.983                                        
+
+Logic Level             : 6
+Non-global nets on path : 7
+Global nets on path     : 0
+
+Launch Clock Path Delay        :  2.095
++ Clock To Q + Data Path Delay :  8.347
+---------------------------------------
+End-of-path arrival time       : 10.442
+
+Constraint                     : 13.441
++ Capture Clock Path Delay     :  2.095
+- Clock Uncertainty            :  0.126
+---------------------------------------
+End-of-path required time      : 15.410
+
+Launch Clock Path
+                    name                       model name   delay (ns)  cumulative delay (ns) pins on net    location
+=======================================================================================================================
+clk_pixel                                     inpad           0.000             0.000                0       (0,159) 
+clk_pixel                                     inpad           0.126             0.126             4092       (0,159) 
+clk_pixel                                     net             1.969             2.095             4092       (0,159) 
+u_m5a_stream/u_nms_packet/storage__D$c12|RCLK ram_8192x20     0.000             2.095             4092       (48,222)
+
+Data Path
+                      name                         model name   delay (ns)  cumulative delay (ns) pins on net    location
+===========================================================================================================================
+u_m5a_stream/u_nms_packet/storage__D$c12|RDATA[0] ram_8192x20     1.361             1.361               3        (48,222)
+u_m5a_stream/u_nms_packet/read_data[13]           net             0.659             2.020               3        (48,222)
+LUT__81903|in[1]                                  lut             0.061             2.081               3        (50,276)
+LUT__81903|out                                    lut             0.000             2.081               5        (50,276)
+tap_x[1]                                          net             0.782             2.863               5        (50,276)
+LUT__81906|in[1]                                  lut             0.061             2.924               5        (32,278)
+LUT__81906|out                                    lut             0.000             2.924               2        (32,278)
+n44508                                            net             0.538             3.462               2        (32,278)
+LUT__81907|in[3]                                  lut             0.063             3.525               2        (57,244)
+LUT__81907|out                                    lut             0.000             3.525               2        (57,244)
+n44509                                            net             0.757             4.282               2        (57,244)
+LUT__81908|in[3]                                  lut             0.061             4.343               2        (20,262)
+LUT__81908|out                                    lut             0.000             4.343               3        (20,262)
+n44510                                            net             0.550             4.893               3        (20,262)
+LUT__81922|in[1]                                  lut             0.063             4.956               3        (51,249)
+LUT__81922|out                                    lut             0.000             4.956             234        (51,249)
+u_m5b1/background/capture/n2947                   net             2.267             7.223             233        (51,249)
+LUT__82548|in[0]                                  lut             0.061             7.284             234        (67,186)
+LUT__82548|out                                    lut             0.000             7.284              63        (67,186)
+u_m5b1/background/capture/n2358                   net             1.060             8.344              62        (67,186)
+u_m5b1/background/capture/pack_data[123]~FF|D     ff              0.003             8.347              63        (84,188)
+
+Capture Clock Path
+                     name                        model name   delay (ns)  cumulative delay (ns) pins on net    location
+=========================================================================================================================
+clk_pixel                                          inpad        0.000             0.000                0       (0,159) 
+clk_pixel                                          inpad        0.126             0.126             4092       (0,159) 
+clk_pixel                                          net          1.969             2.095             4092       (0,159) 
+u_m5b1/background/capture/pack_data[123]~FF|CLK    ff           0.000             2.095             4092       (84,188)
+
+++++ Path 10 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : u_m5a_stream/u_nms_packet/storage__D$c12|RCLK
+Path End      : u_m5b1/background/capture/pack_data[74]~FF|D 
+Launch Clock  : clk_pixel (RISE)                             
+Capture Clock : clk_pixel (RISE)                             
+Slack         : 4.992 (required time - arrival time)         
+Delay         : 6.959                                        
+
+Logic Level             : 6
+Non-global nets on path : 7
+Global nets on path     : 0
+
+Launch Clock Path Delay        :  2.095
++ Clock To Q + Data Path Delay :  8.323
+---------------------------------------
+End-of-path arrival time       : 10.418
+
+Constraint                     : 13.441
++ Capture Clock Path Delay     :  2.095
+- Clock Uncertainty            :  0.126
+---------------------------------------
+End-of-path required time      : 15.410
+
+Launch Clock Path
+                    name                       model name   delay (ns)  cumulative delay (ns) pins on net    location
+=======================================================================================================================
+clk_pixel                                     inpad           0.000             0.000                0       (0,159) 
+clk_pixel                                     inpad           0.126             0.126             4092       (0,159) 
+clk_pixel                                     net             1.969             2.095             4092       (0,159) 
+u_m5a_stream/u_nms_packet/storage__D$c12|RCLK ram_8192x20     0.000             2.095             4092       (48,222)
+
+Data Path
+                      name                         model name   delay (ns)  cumulative delay (ns) pins on net    location
+===========================================================================================================================
+u_m5a_stream/u_nms_packet/storage__D$c12|RDATA[0] ram_8192x20     1.361             1.361               3        (48,222)
+u_m5a_stream/u_nms_packet/read_data[13]           net             0.659             2.020               3        (48,222)
+LUT__81903|in[1]                                  lut             0.061             2.081               3        (50,276)
+LUT__81903|out                                    lut             0.000             2.081               5        (50,276)
+tap_x[1]                                          net             0.782             2.863               5        (50,276)
+LUT__81906|in[1]                                  lut             0.061             2.924               5        (32,278)
+LUT__81906|out                                    lut             0.000             2.924               2        (32,278)
+n44508                                            net             0.538             3.462               2        (32,278)
+LUT__81907|in[3]                                  lut             0.063             3.525               2        (57,244)
+LUT__81907|out                                    lut             0.000             3.525               2        (57,244)
+n44509                                            net             0.757             4.282               2        (57,244)
+LUT__81908|in[3]                                  lut             0.061             4.343               2        (20,262)
+LUT__81908|out                                    lut             0.000             4.343               3        (20,262)
+n44510                                            net             0.550             4.893               3        (20,262)
+LUT__81922|in[1]                                  lut             0.063             4.956               3        (51,249)
+LUT__81922|out                                    lut             0.000             4.956             234        (51,249)
+u_m5b1/background/capture/n2947                   net             2.285             7.241             233        (51,249)
+LUT__82544|in[0]                                  lut             0.061             7.302             234        (67,182)
+LUT__82544|out                                    lut             0.000             7.302              63        (67,182)
+u_m5b1/background/capture/n2359                   net             1.018             8.320              62        (67,182)
+u_m5b1/background/capture/pack_data[74]~FF|D      ff              0.003             8.323              63        (75,190)
+
+Capture Clock Path
+                     name                       model name   delay (ns)  cumulative delay (ns) pins on net    location
+========================================================================================================================
+clk_pixel                                         inpad        0.000             0.000                0       (0,159) 
+clk_pixel                                         inpad        0.126             0.126             4092       (0,159) 
+clk_pixel                                         net          1.969             2.095             4092       (0,159) 
+u_m5b1/background/capture/pack_data[74]~FF|CLK    ff           0.000             2.095             4092       (75,190)
+

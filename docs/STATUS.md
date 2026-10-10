@@ -1,6 +1,26 @@
 # 星眸项目状态
 
-## 2026-10-09 M5B.1规格冻结与开发启动（当前）
+## 2026-10-10 M5B.1离线candidate节点（当前，覆盖旧进度）
+
+M5B.1完成冻结离线验收，待固定candidate的Codex A与DeepSeek B独立审查及用户实物验收。分支codex/m5b1-global-canny-prototype；candidate直接parent必须为c0102ee1c9a0a8aa802c398755d4a7b3139c7ffd，自身ID由Git交接。
+
+算法30图/15完整720p/19683穷举/642扫描BFS、两个默认上限安全不发布、真实B/R协议、CDC/复位、六随机相位完整capture/export与CRC+BFS、10突变、半包恢复与第二job lease、tap两个完整720p及七模式回归均通过，最终源码绑定通过。Efinity全流程exit0：43227 XLR/124 RAM10/0 DSP；I3 setup/hold +0.190/+0.024ns，新增内部无时钟/未约束/多时钟0/0/0。134份报告是clock/端点覆盖，不是134个PVT角点。
+
+bit：efinity/m5b1_global_canny_i3/outflow/Ti60_Demo.bit，2881269B，SHA256 de1d9c565459e0cce4d4de37bc88a9616e99ac78fc0e27a785b5693da707f645。详见reports/m5b1_global_canny_i3/BUILD_REPORT.md、IMPLEMENTATION.md、REPLAY.md、OFFLINE_ACCEPTANCE.json。
+
+4us仅为模型条件，不是硬件保证；真实帧/发布率/30分钟稳定性待实测。生产fail-stop不伪造ACK，故障后需冷重新配置；后台结果不进入七模式显示，不承诺fps。本轮无Programmer/JTAG/SPI/Flash，无合并main或推送。candidate提交后Codex exec立即停写，Work复核并进入双审查。
+
+## 2026-10-10 M5B.1实现与离线验收续做（当前）
+
+当前分支`codex/m5b1-global-canny-prototype`，HEAD仍为冻结规格提交`c0102ee1c9a0a8aa802c398755d4a7b3139c7ffd`；尚无candidate。新增RTL、工程和验证资料存在工作区，先前“尚无RTL/构建”的记录仅为开发起点。
+
+首轮57,635 XLR超出48,640闸门并路由失败；Work授权保持原闸门进行RAM化资源优化。`build_20261009_193101`完整map/interface/P&R/bit生成exit 0；资源42,456 XLR、124 RAM10、0 DSP。默认I3报告setup/hold关系表非负，但全部要求角点及新增内部约束端点尚待验收，不能据此宣布STA完成。`DEVELOPMENT_CHECKPOINT.json`中的资源阻断是旧快照。
+
+已有15幅完整720p算法/BFS、3×3穷举、642扫蛇形、分类tap/七模式、六种子QoS及4us条件环境等开发证据。仍须核对最终源码绑定并补齐协议/CDC/故障/突变、默认超时、capture与QoS共存、UART端到端/lease及全部STA、保护与Git范围验证。DDR warm reset未获厂商证明，生产采用fail-stop且不伪造reset ACK；限制须进入交付报告。未下载、未运行Programmer、未写Flash。
+
+Codex exec/Astra继续独占开发与验证。完成固定candidate后Work复核、自动发送DeepSeek B快照并停止提供Codex A提示词；双审查通过后才交用户实物清单。
+
+## 2026-10-09 M5B.1规格冻结与开发启动（历史起点）
 
 M5B.0R双审查与DDR实物验收已经归档为`85727319be83f49e81b17d91a310ba0175b37319`。当前分支为`codex/m5b1-global-canny-prototype`，M5B.1隔离原型规格已由Work结合Astra只读分析冻结，详见`reports/m5b1_global_canny_i3/SPEC_FREEZE.md`。
 

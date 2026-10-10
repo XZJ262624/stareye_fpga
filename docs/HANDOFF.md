@@ -1,6 +1,26 @@
 # 星眸项目交接单
 
+## 2026-10-10 Codex exec离线完成交Work（最新）
+
+冻结规格与硬件限制保持，离线全门已通过。精确candidate自身ID由提交后Git交回；唯一parent为c0102ee1c9a0a8aa802c398755d4a7b3139c7ffd。范围为新M5B1工程/RTL/TB/scripts/reports，管理文档四份以及根.gitignore和.gitattributes（仅追加M5B1规则，旧字节前缀保留）。
+
+build_20261010_130312全流程成功，43227 XLR/124 RAM10/0 DSP；I3 final模型typical、−40至100°C、0.95V±30mV、grade3，134份覆盖报告setup/hold +0.190/+0.024ns，内部检查0/0/0。940精确CDC pin及413数据目的端点物理路径通过，无整域false path。bit 2881269B，SHA256 de1d9c565459e0cce4d4de37bc88a9616e99ac78fc0e27a785b5693da707f645。
+
+96项构建输入中95项原字节不变，XML仅工具last_change/last_run_flow，逆变换精确恢复before SHA。测试涵盖算法、真实B/R、随机相位CDC、六种子完整非均匀capture/export和CRC+BFS、17us拒绝、末拍changed等10突变、默认超时不发布、半包后统计恢复、第二job每slot metadata B及lease、两个720p tap/七模式。详见OFFLINE_ACCEPTANCE.json与BUILD_REPORT.md。加密DDR/外部PLL结构边界明确保留，完整工具STA另行覆盖。
+
+下一步：仅按PROPOSED_GIT_SCOPE.json逐项暂存和核对blob，创建指定parent的candidate后立即停止写入。Work复核固定commit与完整技术依赖、隔离快照和保护摘要，发送DeepSeek B后停止给用户独立Codex A提示词；Codex exec不独立审查、不发快照、不操作硬件。硬件、真实图像性能和有效发布率保持PENDING，4us仅条件模型，fail-stop只允许冷重新配置恢复。
+
 ## H-M5B1-20261009-IMPLEMENT（当前任务）
+
+### 2026-10-10续做检查点（优先于旧进度记录）
+
+冻结HEAD/未来candidate直接parent：`c0102ee1c9a0a8aa802c398755d4a7b3139c7ffd`。原开发代理已结束且无活动仿真/构建进程；新Codex exec/Astra接管现有未提交实现，禁止重新初始化/覆盖既有工作。
+
+资源超闸首轮证据保留；Work已授权原闸门内RAM化修复，后续build_20261009_193101完整构建exit0、42,456 XLR/124 RAM10/0 DSP。不放宽资源、地址、QoS或STA门槛。旧DEVELOPMENT_CHECKPOINT资源阻断已过时，须以实际后续证据修订。现有普通/4us视频、六QoS种子、tap七模式、15完整720p BFS、穷举、642扫蛇形和UART串行/主机负向证据需核对源码与覆盖，不能把单模块测试当作系统验收。
+
+剩余：真实B/R定向、CDC/复位/故障及有意义突变；生产默认64pair/1s安全超时与不发布；capture+视频+DDR+全局+UART完整链路/lease及故障中止；全部要求角点STA和内部约束端点；最终输入→构建→bit绑定、历史保护和精确scope、管理报告、candidate。蛇形TB有result_reserved缺失端口警告须处理。DDR warm reset不证明，采用生产fail-stop/no synthetic ACK，不自动恢复，明确冷重新配置限制。
+
+只在所有冻结离线门槛通过后提交candidate；若真实门槛阻断，交Work具体证据与可修复方案，禁止假PASS或删减验收。candidate提交立即停止写入。旧资料、原失败证据、历史未跟踪内容均保留。
 
 ### 目标与基线
 

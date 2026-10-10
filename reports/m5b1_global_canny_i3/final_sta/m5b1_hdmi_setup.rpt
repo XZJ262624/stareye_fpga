@@ -1,0 +1,1813 @@
+
+Efinix Timing Path Constraint Report
+Version: 2025.1.110.5.9
+Date: Sat Oct 10 13:15:51 2026
+
+Copyright (C) 2013 - 2025 Efinix, Inc. All rights reserved.
+
+User command: report_timing -to {hdmi_txc_oe hdmi_txd0_oe hdmi_txd1_oe hdmi_txd2_oe hdmi_txc_rst_o hdmi_txd0_rst_o hdmi_txd1_rst_o hdmi_txd2_rst_o hdmi_txc_o[9] hdmi_txc_o[8] hdmi_txc_o[7] hdmi_txc_o[6] hdmi_txc_o[5] hdmi_txc_o[4] hdmi_txc_o[3] hdmi_txc_o[2] hdmi_txc_o[1] hdmi_txc_o[0] hdmi_txd0_o[9] hdmi_txd0_o[8] hdmi_txd0_o[7] hdmi_txd0_o[6] hdmi_txd0_o[5] hdmi_txd0_o[4] hdmi_txd0_o[3] hdmi_txd0_o[2] hdmi_txd0_o[1] hdmi_txd0_o[0] hdmi_txd1_o[9] hdmi_txd1_o[8] hdmi_txd1_o[7] hdmi_txd1_o[6] hdmi_txd1_o[5] hdmi_txd1_o[4] hdmi_txd1_o[3] hdmi_txd1_o[2] hdmi_txd1_o[1] hdmi_txd1_o[0] hdmi_txd2_o[9] hdmi_txd2_o[8] hdmi_txd2_o[7] hdmi_txd2_o[6] hdmi_txd2_o[5] hdmi_txd2_o[4] hdmi_txd2_o[3] hdmi_txd2_o[2] hdmi_txd2_o[1] hdmi_txd2_o[0]} -npaths 100 -nworst 1 -setup -detail full_path -file {m5b1_hdmi_setup.rpt}
+
+Timing Model: I3
+	process : typical
+	temperature : -40C to 100C
+	voltage : 0.95 +/-30mV
+	speedgrade : 3
+	technology : t16ff
+	status : final
+
+Summary:
+
+ Path #  | Slack (ns) | Delay (ns) |      Start Pin      |     End Pin     |  Launch Clk   |  Capture Clk
+==========================================================================================================
+  1      |  10.698    |  1.992     | rstn_pixel~FF|Q     | hdmi_txd0_rst_o | clk_pixel (R) | clk_pixel (R)
+  2      |  10.921    |  1.769     | rstn_pixel~FF|Q     | hdmi_txc_rst_o  | clk_pixel (R) | clk_pixel (R)
+  3      |  10.950    |  1.740     | rstn_pixel~FF|Q     | hdmi_txd1_rst_o | clk_pixel (R) | clk_pixel (R)
+  4      |  10.967    |  1.771     | hdmi_txd0_o[6]~FF|Q | hdmi_txd0_o[6]  | clk_pixel (R) | clk_pixel (R)
+  5      |  10.997    |  1.741     | hdmi_txd0_o[4]~FF|Q | hdmi_txd0_o[4]  | clk_pixel (R) | clk_pixel (R)
+  6      |  11.036    |  1.702     | hdmi_txd0_o[2]~FF|Q | hdmi_txd0_o[2]  | clk_pixel (R) | clk_pixel (R)
+  7      |  11.059    |  1.679     | hdmi_txd0_o[8]~FF|Q | hdmi_txd0_o[8]  | clk_pixel (R) | clk_pixel (R)
+  8      |  11.198    |  1.492     | rstn_pixel~FF|Q     | hdmi_txd2_rst_o | clk_pixel (R) | clk_pixel (R)
+  9      |  11.243    |  1.495     | hdmi_txd0_o[9]~FF|Q | hdmi_txd0_o[9]  | clk_pixel (R) | clk_pixel (R)
+ 10      |  11.303    |  1.435     | hdmi_txd0_o[5]~FF|Q | hdmi_txd0_o[5]  | clk_pixel (R) | clk_pixel (R)
+ 11      |  11.369    |  1.369     | hdmi_txd0_o[1]~FF|Q | hdmi_txd0_o[1]  | clk_pixel (R) | clk_pixel (R)
+ 12      |  11.434    |  1.304     | hdmi_txd0_o[3]~FF|Q | hdmi_txd0_o[3]  | clk_pixel (R) | clk_pixel (R)
+ 13      |  11.489    |  1.249     | hdmi_txd0_o[7]~FF|Q | hdmi_txd0_o[7]  | clk_pixel (R) | clk_pixel (R)
+ 14      |  11.496    |  1.242     | hdmi_txd0_o[0]~FF|Q | hdmi_txd0_o[0]  | clk_pixel (R) | clk_pixel (R)
+ 15      |  12.033    |  0.705     | hdmi_txd2_o[6]~FF|Q | hdmi_txd2_o[6]  | clk_pixel (R) | clk_pixel (R)
+ 16      |  12.036    |  0.702     | hdmi_txd1_o[4]~FF|Q | hdmi_txd1_o[4]  | clk_pixel (R) | clk_pixel (R)
+ 17      |  12.072    |  0.666     | hdmi_txd1_o[2]~FF|Q | hdmi_txd1_o[2]  | clk_pixel (R) | clk_pixel (R)
+ 18      |  12.086    |  0.652     | hdmi_txd2_o[9]~FF|Q | hdmi_txd2_o[9]  | clk_pixel (R) | clk_pixel (R)
+ 19      |  12.088    |  0.650     | hdmi_txd1_o[3]~FF|Q | hdmi_txd1_o[3]  | clk_pixel (R) | clk_pixel (R)
+ 20      |  12.109    |  0.629     | hdmi_txd1_o[0]~FF|Q | hdmi_txd1_o[0]  | clk_pixel (R) | clk_pixel (R)
+ 21      |  12.155    |  0.583     | hdmi_txd1_o[7]~FF|Q | hdmi_txd1_o[7]  | clk_pixel (R) | clk_pixel (R)
+ 22      |  12.169    |  0.569     | hdmi_txd1_o[5]~FF|Q | hdmi_txd1_o[5]  | clk_pixel (R) | clk_pixel (R)
+ 23      |  12.181    |  0.557     | hdmi_txd1_o[8]~FF|Q | hdmi_txd1_o[8]  | clk_pixel (R) | clk_pixel (R)
+ 24      |  12.187    |  0.551     | hdmi_txd2_o[8]~FF|Q | hdmi_txd2_o[8]  | clk_pixel (R) | clk_pixel (R)
+ 25      |  12.198    |  0.540     | hdmi_txd2_o[0]~FF|Q | hdmi_txd2_o[0]  | clk_pixel (R) | clk_pixel (R)
+ 26      |  12.212    |  0.526     | hdmi_txd1_o[6]~FF|Q | hdmi_txd1_o[6]  | clk_pixel (R) | clk_pixel (R)
+ 27      |  12.224    |  0.514     | hdmi_txd1_o[9]~FF|Q | hdmi_txd1_o[9]  | clk_pixel (R) | clk_pixel (R)
+ 28      |  12.235    |  0.503     | hdmi_txd2_o[4]~FF|Q | hdmi_txd2_o[4]  | clk_pixel (R) | clk_pixel (R)
+ 29      |  12.264    |  0.474     | hdmi_txd2_o[1]~FF|Q | hdmi_txd2_o[1]  | clk_pixel (R) | clk_pixel (R)
+ 30      |  12.265    |  0.473     | hdmi_txd2_o[7]~FF|Q | hdmi_txd2_o[7]  | clk_pixel (R) | clk_pixel (R)
+ 31      |  12.269    |  0.469     | hdmi_txd2_o[3]~FF|Q | hdmi_txd2_o[3]  | clk_pixel (R) | clk_pixel (R)
+ 32      |  12.285    |  0.453     | hdmi_txd2_o[2]~FF|Q | hdmi_txd2_o[2]  | clk_pixel (R) | clk_pixel (R)
+ 33      |  12.285    |  0.453     | hdmi_txd1_o[1]~FF|Q | hdmi_txd1_o[1]  | clk_pixel (R) | clk_pixel (R)
+ 34      |  12.436    |  0.302     | hdmi_txd2_o[5]~FF|Q | hdmi_txd2_o[5]  | clk_pixel (R) | clk_pixel (R)
+
+++++ Path 1 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : rstn_pixel~FF|CLK                    
+Path End      : hdmi_txd0_rst_o                      
+Launch Clock  : clk_pixel (RISE)                     
+Capture Clock : clk_pixel (RISE)                     
+Slack         : 10.698 (required time - arrival time)
+Delay         : 1.992                                
+
+Logic Level             : 1
+Non-global nets on path : 2
+Global nets on path     : 0
+
+Launch Clock Path Delay        : 2.095
++ Clock To Q + Data Path Delay : 2.122
+--------------------------------------
+End-of-path arrival time       : 4.217
+
+Constraint                     : 13.441
++ Capture Clock Path Delay     :  2.083
+- Clock Uncertainty            :  0.126
+- Output Delay                 :  0.483
+---------------------------------------
+End-of-path required time      : 14.915
+
+Launch Clock Path
+      name         model name   delay (ns)  cumulative delay (ns) pins on net    location
+===========================================================================================
+clk_pixel            inpad        0.000             0.000                0      (0,159)  
+clk_pixel            inpad        0.126             0.126             4092      (0,159)  
+clk_pixel            net          1.969             2.095             4092      (0,159)  
+rstn_pixel~FF|CLK    ff           0.000             2.095             4092      (112,241)
+
+Data Path
+      name         model name   delay (ns)  cumulative delay (ns) pins on net    location
+===========================================================================================
+rstn_pixel~FF|Q      ff           0.130             0.130              45       (112,241)
+rstn_pixel           net          0.814             0.944              45       (112,241)
+LUT__110633|in[0]    lut          0.063             1.007              45       (78,321) 
+LUT__110633|out      lut          0.000             1.007               5       (78,321) 
+hdmi_txd2_rst_o      net          1.065             2.072               5       (78,321) 
+hdmi_txd0_rst_o      outpad       0.050             2.122               5       (217,323)
+hdmi_txd0_rst_o      outpad       0.000             2.122               0       (217,323)
+
+Capture Clock Path
+          name            model name   delay (ns)  cumulative delay (ns) pins on net    location
+==================================================================================================
+clk_pixel                   inpad        0.000             0.000                0      (0,159)  
+clk_pixel                   inpad        0.126             0.126             4092      (0,159)  
+clk_pixel                   net          1.907             2.033             4092      (0,159)  
+clk_pixel~CLKOUT~195~322    outpad       0.050             2.083             4092      (195,323)
+clk_pixel~CLKOUT~195~322    outpad       0.000             2.083                0      (195,323)
+
+++++ Path 2 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : rstn_pixel~FF|CLK                    
+Path End      : hdmi_txc_rst_o                       
+Launch Clock  : clk_pixel (RISE)                     
+Capture Clock : clk_pixel (RISE)                     
+Slack         : 10.921 (required time - arrival time)
+Delay         : 1.769                                
+
+Logic Level             : 1
+Non-global nets on path : 2
+Global nets on path     : 0
+
+Launch Clock Path Delay        : 2.095
++ Clock To Q + Data Path Delay : 1.899
+--------------------------------------
+End-of-path arrival time       : 3.994
+
+Constraint                     : 13.441
++ Capture Clock Path Delay     :  2.083
+- Clock Uncertainty            :  0.126
+- Output Delay                 :  0.483
+---------------------------------------
+End-of-path required time      : 14.915
+
+Launch Clock Path
+      name         model name   delay (ns)  cumulative delay (ns) pins on net    location
+===========================================================================================
+clk_pixel            inpad        0.000             0.000                0      (0,159)  
+clk_pixel            inpad        0.126             0.126             4092      (0,159)  
+clk_pixel            net          1.969             2.095             4092      (0,159)  
+rstn_pixel~FF|CLK    ff           0.000             2.095             4092      (112,241)
+
+Data Path
+      name         model name   delay (ns)  cumulative delay (ns) pins on net    location
+===========================================================================================
+rstn_pixel~FF|Q      ff           0.130             0.130              45       (112,241)
+rstn_pixel           net          0.814             0.944              45       (112,241)
+LUT__110633|in[0]    lut          0.063             1.007              45       (78,321) 
+LUT__110633|out      lut          0.000             1.007               5       (78,321) 
+hdmi_txd2_rst_o      net          0.842             1.849               5       (78,321) 
+hdmi_txc_rst_o       outpad       0.050             1.899               5       (57,323) 
+hdmi_txc_rst_o       outpad       0.000             1.899               0       (57,323) 
+
+Capture Clock Path
+         name            model name   delay (ns)  cumulative delay (ns) pins on net    location
+=================================================================================================
+clk_pixel                  inpad        0.000             0.000                0       (0,159) 
+clk_pixel                  inpad        0.126             0.126             4092       (0,159) 
+clk_pixel                  net          1.907             2.033             4092       (0,159) 
+clk_pixel~CLKOUT~63~322    outpad       0.050             2.083             4092       (63,323)
+clk_pixel~CLKOUT~63~322    outpad       0.000             2.083                0       (63,323)
+
+++++ Path 3 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : rstn_pixel~FF|CLK                    
+Path End      : hdmi_txd1_rst_o                      
+Launch Clock  : clk_pixel (RISE)                     
+Capture Clock : clk_pixel (RISE)                     
+Slack         : 10.950 (required time - arrival time)
+Delay         : 1.740                                
+
+Logic Level             : 1
+Non-global nets on path : 2
+Global nets on path     : 0
+
+Launch Clock Path Delay        : 2.095
++ Clock To Q + Data Path Delay : 1.870
+--------------------------------------
+End-of-path arrival time       : 3.965
+
+Constraint                     : 13.441
++ Capture Clock Path Delay     :  2.083
+- Clock Uncertainty            :  0.126
+- Output Delay                 :  0.483
+---------------------------------------
+End-of-path required time      : 14.915
+
+Launch Clock Path
+      name         model name   delay (ns)  cumulative delay (ns) pins on net    location
+===========================================================================================
+clk_pixel            inpad        0.000             0.000                0      (0,159)  
+clk_pixel            inpad        0.126             0.126             4092      (0,159)  
+clk_pixel            net          1.969             2.095             4092      (0,159)  
+rstn_pixel~FF|CLK    ff           0.000             2.095             4092      (112,241)
+
+Data Path
+      name         model name   delay (ns)  cumulative delay (ns) pins on net    location
+===========================================================================================
+rstn_pixel~FF|Q      ff           0.130             0.130              45       (112,241)
+rstn_pixel           net          0.814             0.944              45       (112,241)
+LUT__110633|in[0]    lut          0.063             1.007              45       (78,321) 
+LUT__110633|out      lut          0.000             1.007               5       (78,321) 
+hdmi_txd2_rst_o      net          0.813             1.820               5       (78,321) 
+hdmi_txd1_rst_o      outpad       0.050             1.870               5       (12,323) 
+hdmi_txd1_rst_o      outpad       0.000             1.870               0       (12,323) 
+
+Capture Clock Path
+         name            model name   delay (ns)  cumulative delay (ns) pins on net    location
+=================================================================================================
+clk_pixel                  inpad        0.000             0.000                0       (0,159) 
+clk_pixel                  inpad        0.126             0.126             4092       (0,159) 
+clk_pixel                  net          1.907             2.033             4092       (0,159) 
+clk_pixel~CLKOUT~31~322    outpad       0.050             2.083             4092       (31,323)
+clk_pixel~CLKOUT~31~322    outpad       0.000             2.083                0       (31,323)
+
+++++ Path 4 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : hdmi_txd0_o[6]~FF|CLK                
+Path End      : hdmi_txd0_o[6]                       
+Launch Clock  : clk_pixel (RISE)                     
+Capture Clock : clk_pixel (RISE)                     
+Slack         : 10.967 (required time - arrival time)
+Delay         : 1.771                                
+
+Logic Level             : 1
+Non-global nets on path : 2
+Global nets on path     : 0
+
+Launch Clock Path Delay        : 2.095
++ Clock To Q + Data Path Delay : 1.901
+--------------------------------------
+End-of-path arrival time       : 3.996
+
+Constraint                     : 13.441
++ Capture Clock Path Delay     :  2.083
+- Clock Uncertainty            :  0.126
+- Output Delay                 :  0.435
+---------------------------------------
+End-of-path required time      : 14.963
+
+Launch Clock Path
+        name           model name   delay (ns)  cumulative delay (ns) pins on net    location
+===============================================================================================
+clk_pixel                inpad        0.000             0.000                0       (0,159) 
+clk_pixel                inpad        0.126             0.126             4092       (0,159) 
+clk_pixel                net          1.969             2.095             4092       (0,159) 
+hdmi_txd0_o[6]~FF|CLK    ff           0.000             2.095             4092       (22,320)
+
+Data Path
+       name          model name   delay (ns)  cumulative delay (ns) pins on net    location
+=============================================================================================
+hdmi_txd0_o[6]~FF|Q    ff           0.130             0.130              2        (22,320) 
+hdmi_txd0_o[6]         net          0.910             1.040              2        (22,320) 
+LUT__110636|in[0]      lut          0.063             1.103              2        (177,320)
+LUT__110636|out        lut          0.000             1.103              2        (177,320)
+hdmi_txd0_o[6]_2       net          0.748             1.851              2        (177,320)
+hdmi_txd0_o[6]         outpad       0.050             1.901              2        (210,323)
+hdmi_txd0_o[6]         outpad       0.000             1.901              0        (210,323)
+
+Capture Clock Path
+          name            model name   delay (ns)  cumulative delay (ns) pins on net    location
+==================================================================================================
+clk_pixel                   inpad        0.000             0.000                0      (0,159)  
+clk_pixel                   inpad        0.126             0.126             4092      (0,159)  
+clk_pixel                   net          1.907             2.033             4092      (0,159)  
+clk_pixel~CLKOUT~195~322    outpad       0.050             2.083             4092      (195,323)
+clk_pixel~CLKOUT~195~322    outpad       0.000             2.083                0      (195,323)
+
+++++ Path 5 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : hdmi_txd0_o[4]~FF|CLK                
+Path End      : hdmi_txd0_o[4]                       
+Launch Clock  : clk_pixel (RISE)                     
+Capture Clock : clk_pixel (RISE)                     
+Slack         : 10.997 (required time - arrival time)
+Delay         : 1.741                                
+
+Logic Level             : 1
+Non-global nets on path : 2
+Global nets on path     : 0
+
+Launch Clock Path Delay        : 2.095
++ Clock To Q + Data Path Delay : 1.871
+--------------------------------------
+End-of-path arrival time       : 3.966
+
+Constraint                     : 13.441
++ Capture Clock Path Delay     :  2.083
+- Clock Uncertainty            :  0.126
+- Output Delay                 :  0.435
+---------------------------------------
+End-of-path required time      : 14.963
+
+Launch Clock Path
+        name           model name   delay (ns)  cumulative delay (ns) pins on net    location
+===============================================================================================
+clk_pixel                inpad        0.000             0.000                0       (0,159) 
+clk_pixel                inpad        0.126             0.126             4092       (0,159) 
+clk_pixel                net          1.969             2.095             4092       (0,159) 
+hdmi_txd0_o[4]~FF|CLK    ff           0.000             2.095             4092       (22,321)
+
+Data Path
+       name          model name   delay (ns)  cumulative delay (ns) pins on net    location
+=============================================================================================
+hdmi_txd0_o[4]~FF|Q    ff           0.130             0.130              2        (22,321) 
+hdmi_txd0_o[4]         net          0.465             0.595              2        (22,321) 
+LUT__110637|in[0]      lut          0.061             0.656              2        (65,321) 
+LUT__110637|out        lut          0.000             0.656              2        (65,321) 
+hdmi_txd0_o[4]_2       net          1.165             1.821              2        (65,321) 
+hdmi_txd0_o[4]         outpad       0.050             1.871              2        (209,323)
+hdmi_txd0_o[4]         outpad       0.000             1.871              0        (209,323)
+
+Capture Clock Path
+          name            model name   delay (ns)  cumulative delay (ns) pins on net    location
+==================================================================================================
+clk_pixel                   inpad        0.000             0.000                0      (0,159)  
+clk_pixel                   inpad        0.126             0.126             4092      (0,159)  
+clk_pixel                   net          1.907             2.033             4092      (0,159)  
+clk_pixel~CLKOUT~195~322    outpad       0.050             2.083             4092      (195,323)
+clk_pixel~CLKOUT~195~322    outpad       0.000             2.083                0      (195,323)
+
+++++ Path 6 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : hdmi_txd0_o[2]~FF|CLK                
+Path End      : hdmi_txd0_o[2]                       
+Launch Clock  : clk_pixel (RISE)                     
+Capture Clock : clk_pixel (RISE)                     
+Slack         : 11.036 (required time - arrival time)
+Delay         : 1.702                                
+
+Logic Level             : 1
+Non-global nets on path : 2
+Global nets on path     : 0
+
+Launch Clock Path Delay        : 2.095
++ Clock To Q + Data Path Delay : 1.832
+--------------------------------------
+End-of-path arrival time       : 3.927
+
+Constraint                     : 13.441
++ Capture Clock Path Delay     :  2.083
+- Clock Uncertainty            :  0.126
+- Output Delay                 :  0.435
+---------------------------------------
+End-of-path required time      : 14.963
+
+Launch Clock Path
+        name           model name   delay (ns)  cumulative delay (ns) pins on net    location
+===============================================================================================
+clk_pixel                inpad        0.000             0.000                0       (0,159) 
+clk_pixel                inpad        0.126             0.126             4092       (0,159) 
+clk_pixel                net          1.969             2.095             4092       (0,159) 
+hdmi_txd0_o[2]~FF|CLK    ff           0.000             2.095             4092       (23,320)
+
+Data Path
+       name          model name   delay (ns)  cumulative delay (ns) pins on net    location
+=============================================================================================
+hdmi_txd0_o[2]~FF|Q    ff           0.130             0.130              2        (23,320) 
+hdmi_txd0_o[2]         net          0.302             0.432              2        (23,320) 
+LUT__110638|in[0]      lut          0.061             0.493              2        (40,320) 
+LUT__110638|out        lut          0.000             0.493              2        (40,320) 
+hdmi_txd0_o[2]_2       net          1.289             1.782              2        (40,320) 
+hdmi_txd0_o[2]         outpad       0.050             1.832              2        (208,323)
+hdmi_txd0_o[2]         outpad       0.000             1.832              0        (208,323)
+
+Capture Clock Path
+          name            model name   delay (ns)  cumulative delay (ns) pins on net    location
+==================================================================================================
+clk_pixel                   inpad        0.000             0.000                0      (0,159)  
+clk_pixel                   inpad        0.126             0.126             4092      (0,159)  
+clk_pixel                   net          1.907             2.033             4092      (0,159)  
+clk_pixel~CLKOUT~195~322    outpad       0.050             2.083             4092      (195,323)
+clk_pixel~CLKOUT~195~322    outpad       0.000             2.083                0      (195,323)
+
+++++ Path 7 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : hdmi_txd0_o[8]~FF|CLK                
+Path End      : hdmi_txd0_o[8]                       
+Launch Clock  : clk_pixel (RISE)                     
+Capture Clock : clk_pixel (RISE)                     
+Slack         : 11.059 (required time - arrival time)
+Delay         : 1.679                                
+
+Logic Level             : 1
+Non-global nets on path : 2
+Global nets on path     : 0
+
+Launch Clock Path Delay        : 2.095
++ Clock To Q + Data Path Delay : 1.809
+--------------------------------------
+End-of-path arrival time       : 3.904
+
+Constraint                     : 13.441
++ Capture Clock Path Delay     :  2.083
+- Clock Uncertainty            :  0.126
+- Output Delay                 :  0.435
+---------------------------------------
+End-of-path required time      : 14.963
+
+Launch Clock Path
+        name           model name   delay (ns)  cumulative delay (ns) pins on net    location
+===============================================================================================
+clk_pixel                inpad        0.000             0.000                0       (0,159) 
+clk_pixel                inpad        0.126             0.126             4092       (0,159) 
+clk_pixel                net          1.969             2.095             4092       (0,159) 
+hdmi_txd0_o[8]~FF|CLK    ff           0.000             2.095             4092       (20,321)
+
+Data Path
+       name          model name   delay (ns)  cumulative delay (ns) pins on net    location
+=============================================================================================
+hdmi_txd0_o[8]~FF|Q    ff           0.130             0.130              2        (20,321) 
+hdmi_txd0_o[8]         net          0.285             0.415              2        (20,321) 
+LUT__110635|in[0]      lut          0.061             0.476              2        (37,321) 
+LUT__110635|out        lut          0.000             0.476              2        (37,321) 
+hdmi_txd0_o[8]_2       net          1.283             1.759              2        (37,321) 
+hdmi_txd0_o[8]         outpad       0.050             1.809              2        (211,323)
+hdmi_txd0_o[8]         outpad       0.000             1.809              0        (211,323)
+
+Capture Clock Path
+          name            model name   delay (ns)  cumulative delay (ns) pins on net    location
+==================================================================================================
+clk_pixel                   inpad        0.000             0.000                0      (0,159)  
+clk_pixel                   inpad        0.126             0.126             4092      (0,159)  
+clk_pixel                   net          1.907             2.033             4092      (0,159)  
+clk_pixel~CLKOUT~195~322    outpad       0.050             2.083             4092      (195,323)
+clk_pixel~CLKOUT~195~322    outpad       0.000             2.083                0      (195,323)
+
+++++ Path 8 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : rstn_pixel~FF|CLK                    
+Path End      : hdmi_txd2_rst_o                      
+Launch Clock  : clk_pixel (RISE)                     
+Capture Clock : clk_pixel (RISE)                     
+Slack         : 11.198 (required time - arrival time)
+Delay         : 1.492                                
+
+Logic Level             : 1
+Non-global nets on path : 2
+Global nets on path     : 0
+
+Launch Clock Path Delay        : 2.095
++ Clock To Q + Data Path Delay : 1.622
+--------------------------------------
+End-of-path arrival time       : 3.717
+
+Constraint                     : 13.441
++ Capture Clock Path Delay     :  2.083
+- Clock Uncertainty            :  0.126
+- Output Delay                 :  0.483
+---------------------------------------
+End-of-path required time      : 14.915
+
+Launch Clock Path
+      name         model name   delay (ns)  cumulative delay (ns) pins on net    location
+===========================================================================================
+clk_pixel            inpad        0.000             0.000                0      (0,159)  
+clk_pixel            inpad        0.126             0.126             4092      (0,159)  
+clk_pixel            net          1.969             2.095             4092      (0,159)  
+rstn_pixel~FF|CLK    ff           0.000             2.095             4092      (112,241)
+
+Data Path
+      name         model name   delay (ns)  cumulative delay (ns) pins on net    location
+===========================================================================================
+rstn_pixel~FF|Q      ff           0.130             0.130              45       (112,241)
+rstn_pixel           net          0.814             0.944              45       (112,241)
+LUT__110633|in[0]    lut          0.063             1.007              45       (78,321) 
+LUT__110633|out      lut          0.000             1.007               5       (78,321) 
+hdmi_txd2_rst_o      net          0.565             1.572               5       (78,321) 
+hdmi_txd2_rst_o      outpad       0.050             1.622               5       (46,323) 
+hdmi_txd2_rst_o      outpad       0.000             1.622               0       (46,323) 
+
+Capture Clock Path
+         name            model name   delay (ns)  cumulative delay (ns) pins on net    location
+=================================================================================================
+clk_pixel                  inpad        0.000             0.000                0       (0,159) 
+clk_pixel                  inpad        0.126             0.126             4092       (0,159) 
+clk_pixel                  net          1.907             2.033             4092       (0,159) 
+clk_pixel~CLKOUT~55~322    outpad       0.050             2.083             4092       (55,323)
+clk_pixel~CLKOUT~55~322    outpad       0.000             2.083                0       (55,323)
+
+++++ Path 9 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : hdmi_txd0_o[9]~FF|CLK                
+Path End      : hdmi_txd0_o[9]                       
+Launch Clock  : clk_pixel (RISE)                     
+Capture Clock : clk_pixel (RISE)                     
+Slack         : 11.243 (required time - arrival time)
+Delay         : 1.495                                
+
+Logic Level             : 1
+Non-global nets on path : 2
+Global nets on path     : 0
+
+Launch Clock Path Delay        : 2.095
++ Clock To Q + Data Path Delay : 1.625
+--------------------------------------
+End-of-path arrival time       : 3.720
+
+Constraint                     : 13.441
++ Capture Clock Path Delay     :  2.083
+- Clock Uncertainty            :  0.126
+- Output Delay                 :  0.435
+---------------------------------------
+End-of-path required time      : 14.963
+
+Launch Clock Path
+        name           model name   delay (ns)  cumulative delay (ns) pins on net    location
+===============================================================================================
+clk_pixel                inpad        0.000             0.000                0       (0,159) 
+clk_pixel                inpad        0.126             0.126             4092       (0,159) 
+clk_pixel                net          1.969             2.095             4092       (0,159) 
+hdmi_txd0_o[9]~FF|CLK    ff           0.000             2.095             4092       (23,321)
+
+Data Path
+       name          model name   delay (ns)  cumulative delay (ns) pins on net    location
+=============================================================================================
+hdmi_txd0_o[9]~FF|Q    ff           0.130             0.130              2        (23,321) 
+hdmi_txd0_o[9]         net          0.160             0.290              2        (23,321) 
+LUT__110634|in[0]      lut          0.061             0.351              2        (28,321) 
+LUT__110634|out        lut          0.000             0.351              2        (28,321) 
+hdmi_txd0_o[9]_2       net          1.224             1.575              2        (28,321) 
+hdmi_txd0_o[9]         outpad       0.050             1.625              2        (212,323)
+hdmi_txd0_o[9]         outpad       0.000             1.625              0        (212,323)
+
+Capture Clock Path
+          name            model name   delay (ns)  cumulative delay (ns) pins on net    location
+==================================================================================================
+clk_pixel                   inpad        0.000             0.000                0      (0,159)  
+clk_pixel                   inpad        0.126             0.126             4092      (0,159)  
+clk_pixel                   net          1.907             2.033             4092      (0,159)  
+clk_pixel~CLKOUT~195~322    outpad       0.050             2.083             4092      (195,323)
+clk_pixel~CLKOUT~195~322    outpad       0.000             2.083                0      (195,323)
+
+++++ Path 10 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : hdmi_txd0_o[5]~FF|CLK                
+Path End      : hdmi_txd0_o[5]                       
+Launch Clock  : clk_pixel (RISE)                     
+Capture Clock : clk_pixel (RISE)                     
+Slack         : 11.303 (required time - arrival time)
+Delay         : 1.435                                
+
+Logic Level             : 0
+Non-global nets on path : 1
+Global nets on path     : 0
+
+Launch Clock Path Delay        : 2.095
++ Clock To Q + Data Path Delay : 1.565
+--------------------------------------
+End-of-path arrival time       : 3.660
+
+Constraint                     : 13.441
++ Capture Clock Path Delay     :  2.083
+- Clock Uncertainty            :  0.126
+- Output Delay                 :  0.435
+---------------------------------------
+End-of-path required time      : 14.963
+
+Launch Clock Path
+        name           model name   delay (ns)  cumulative delay (ns) pins on net    location
+===============================================================================================
+clk_pixel                inpad        0.000             0.000                0       (0,159) 
+clk_pixel                inpad        0.126             0.126             4092       (0,159) 
+clk_pixel                net          1.969             2.095             4092       (0,159) 
+hdmi_txd0_o[5]~FF|CLK    ff           0.000             2.095             4092       (16,321)
+
+Data Path
+       name          model name   delay (ns)  cumulative delay (ns) pins on net    location
+=============================================================================================
+hdmi_txd0_o[5]~FF|Q    ff           0.130             0.130              2        (16,321) 
+hdmi_txd0_o[5]         net          1.385             1.515              2        (16,321) 
+hdmi_txd0_o[5]         outpad       0.050             1.565              2        (210,323)
+hdmi_txd0_o[5]         outpad       0.000             1.565              0        (210,323)
+
+Capture Clock Path
+          name            model name   delay (ns)  cumulative delay (ns) pins on net    location
+==================================================================================================
+clk_pixel                   inpad        0.000             0.000                0      (0,159)  
+clk_pixel                   inpad        0.126             0.126             4092      (0,159)  
+clk_pixel                   net          1.907             2.033             4092      (0,159)  
+clk_pixel~CLKOUT~195~322    outpad       0.050             2.083             4092      (195,323)
+clk_pixel~CLKOUT~195~322    outpad       0.000             2.083                0      (195,323)
+
+++++ Path 11 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : hdmi_txd0_o[1]~FF|CLK                
+Path End      : hdmi_txd0_o[1]                       
+Launch Clock  : clk_pixel (RISE)                     
+Capture Clock : clk_pixel (RISE)                     
+Slack         : 11.369 (required time - arrival time)
+Delay         : 1.369                                
+
+Logic Level             : 0
+Non-global nets on path : 1
+Global nets on path     : 0
+
+Launch Clock Path Delay        : 2.095
++ Clock To Q + Data Path Delay : 1.499
+--------------------------------------
+End-of-path arrival time       : 3.594
+
+Constraint                     : 13.441
++ Capture Clock Path Delay     :  2.083
+- Clock Uncertainty            :  0.126
+- Output Delay                 :  0.435
+---------------------------------------
+End-of-path required time      : 14.963
+
+Launch Clock Path
+        name           model name   delay (ns)  cumulative delay (ns) pins on net    location
+===============================================================================================
+clk_pixel                inpad        0.000             0.000                0       (0,159) 
+clk_pixel                inpad        0.126             0.126             4092       (0,159) 
+clk_pixel                net          1.969             2.095             4092       (0,159) 
+hdmi_txd0_o[1]~FF|CLK    ff           0.000             2.095             4092       (15,319)
+
+Data Path
+       name          model name   delay (ns)  cumulative delay (ns) pins on net    location
+=============================================================================================
+hdmi_txd0_o[1]~FF|Q    ff           0.130             0.130              2        (15,319) 
+hdmi_txd0_o[1]         net          1.319             1.449              2        (15,319) 
+hdmi_txd0_o[1]         outpad       0.050             1.499              2        (208,323)
+hdmi_txd0_o[1]         outpad       0.000             1.499              0        (208,323)
+
+Capture Clock Path
+          name            model name   delay (ns)  cumulative delay (ns) pins on net    location
+==================================================================================================
+clk_pixel                   inpad        0.000             0.000                0      (0,159)  
+clk_pixel                   inpad        0.126             0.126             4092      (0,159)  
+clk_pixel                   net          1.907             2.033             4092      (0,159)  
+clk_pixel~CLKOUT~195~322    outpad       0.050             2.083             4092      (195,323)
+clk_pixel~CLKOUT~195~322    outpad       0.000             2.083                0      (195,323)
+
+++++ Path 12 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : hdmi_txd0_o[3]~FF|CLK                
+Path End      : hdmi_txd0_o[3]                       
+Launch Clock  : clk_pixel (RISE)                     
+Capture Clock : clk_pixel (RISE)                     
+Slack         : 11.434 (required time - arrival time)
+Delay         : 1.304                                
+
+Logic Level             : 0
+Non-global nets on path : 1
+Global nets on path     : 0
+
+Launch Clock Path Delay        : 2.095
++ Clock To Q + Data Path Delay : 1.434
+--------------------------------------
+End-of-path arrival time       : 3.529
+
+Constraint                     : 13.441
++ Capture Clock Path Delay     :  2.083
+- Clock Uncertainty            :  0.126
+- Output Delay                 :  0.435
+---------------------------------------
+End-of-path required time      : 14.963
+
+Launch Clock Path
+        name           model name   delay (ns)  cumulative delay (ns) pins on net    location
+===============================================================================================
+clk_pixel                inpad        0.000             0.000                0       (0,159) 
+clk_pixel                inpad        0.126             0.126             4092       (0,159) 
+clk_pixel                net          1.969             2.095             4092       (0,159) 
+hdmi_txd0_o[3]~FF|CLK    ff           0.000             2.095             4092       (20,320)
+
+Data Path
+       name          model name   delay (ns)  cumulative delay (ns) pins on net    location
+=============================================================================================
+hdmi_txd0_o[3]~FF|Q    ff           0.130             0.130              2        (20,320) 
+hdmi_txd0_o[3]         net          1.254             1.384              2        (20,320) 
+hdmi_txd0_o[3]         outpad       0.050             1.434              2        (209,323)
+hdmi_txd0_o[3]         outpad       0.000             1.434              0        (209,323)
+
+Capture Clock Path
+          name            model name   delay (ns)  cumulative delay (ns) pins on net    location
+==================================================================================================
+clk_pixel                   inpad        0.000             0.000                0      (0,159)  
+clk_pixel                   inpad        0.126             0.126             4092      (0,159)  
+clk_pixel                   net          1.907             2.033             4092      (0,159)  
+clk_pixel~CLKOUT~195~322    outpad       0.050             2.083             4092      (195,323)
+clk_pixel~CLKOUT~195~322    outpad       0.000             2.083                0      (195,323)
+
+++++ Path 13 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : hdmi_txd0_o[7]~FF|CLK                
+Path End      : hdmi_txd0_o[7]                       
+Launch Clock  : clk_pixel (RISE)                     
+Capture Clock : clk_pixel (RISE)                     
+Slack         : 11.489 (required time - arrival time)
+Delay         : 1.249                                
+
+Logic Level             : 0
+Non-global nets on path : 1
+Global nets on path     : 0
+
+Launch Clock Path Delay        : 2.095
++ Clock To Q + Data Path Delay : 1.379
+--------------------------------------
+End-of-path arrival time       : 3.474
+
+Constraint                     : 13.441
++ Capture Clock Path Delay     :  2.083
+- Clock Uncertainty            :  0.126
+- Output Delay                 :  0.435
+---------------------------------------
+End-of-path required time      : 14.963
+
+Launch Clock Path
+        name           model name   delay (ns)  cumulative delay (ns) pins on net    location
+===============================================================================================
+clk_pixel                inpad        0.000             0.000                0       (0,159) 
+clk_pixel                inpad        0.126             0.126             4092       (0,159) 
+clk_pixel                net          1.969             2.095             4092       (0,159) 
+hdmi_txd0_o[7]~FF|CLK    ff           0.000             2.095             4092       (16,320)
+
+Data Path
+       name          model name   delay (ns)  cumulative delay (ns) pins on net    location
+=============================================================================================
+hdmi_txd0_o[7]~FF|Q    ff           0.130             0.130              2        (16,320) 
+hdmi_txd0_o[7]         net          1.199             1.329              2        (16,320) 
+hdmi_txd0_o[7]         outpad       0.050             1.379              2        (211,323)
+hdmi_txd0_o[7]         outpad       0.000             1.379              0        (211,323)
+
+Capture Clock Path
+          name            model name   delay (ns)  cumulative delay (ns) pins on net    location
+==================================================================================================
+clk_pixel                   inpad        0.000             0.000                0      (0,159)  
+clk_pixel                   inpad        0.126             0.126             4092      (0,159)  
+clk_pixel                   net          1.907             2.033             4092      (0,159)  
+clk_pixel~CLKOUT~195~322    outpad       0.050             2.083             4092      (195,323)
+clk_pixel~CLKOUT~195~322    outpad       0.000             2.083                0      (195,323)
+
+++++ Path 14 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : hdmi_txd0_o[0]~FF|CLK                
+Path End      : hdmi_txd0_o[0]                       
+Launch Clock  : clk_pixel (RISE)                     
+Capture Clock : clk_pixel (RISE)                     
+Slack         : 11.496 (required time - arrival time)
+Delay         : 1.242                                
+
+Logic Level             : 0
+Non-global nets on path : 1
+Global nets on path     : 0
+
+Launch Clock Path Delay        : 2.095
++ Clock To Q + Data Path Delay : 1.372
+--------------------------------------
+End-of-path arrival time       : 3.467
+
+Constraint                     : 13.441
++ Capture Clock Path Delay     :  2.083
+- Clock Uncertainty            :  0.126
+- Output Delay                 :  0.435
+---------------------------------------
+End-of-path required time      : 14.963
+
+Launch Clock Path
+        name           model name   delay (ns)  cumulative delay (ns) pins on net    location
+===============================================================================================
+clk_pixel                inpad        0.000             0.000                0       (0,159) 
+clk_pixel                inpad        0.126             0.126             4092       (0,159) 
+clk_pixel                net          1.969             2.095             4092       (0,159) 
+hdmi_txd0_o[0]~FF|CLK    ff           0.000             2.095             4092       (23,319)
+
+Data Path
+       name          model name   delay (ns)  cumulative delay (ns) pins on net    location
+=============================================================================================
+hdmi_txd0_o[0]~FF|Q    ff           0.130             0.130              2        (23,319) 
+hdmi_txd0_o[0]         net          1.192             1.322              2        (23,319) 
+hdmi_txd0_o[0]         outpad       0.050             1.372              2        (207,323)
+hdmi_txd0_o[0]         outpad       0.000             1.372              0        (207,323)
+
+Capture Clock Path
+          name            model name   delay (ns)  cumulative delay (ns) pins on net    location
+==================================================================================================
+clk_pixel                   inpad        0.000             0.000                0      (0,159)  
+clk_pixel                   inpad        0.126             0.126             4092      (0,159)  
+clk_pixel                   net          1.907             2.033             4092      (0,159)  
+clk_pixel~CLKOUT~195~322    outpad       0.050             2.083             4092      (195,323)
+clk_pixel~CLKOUT~195~322    outpad       0.000             2.083                0      (195,323)
+
+++++ Path 15 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : hdmi_txd2_o[6]~FF|CLK                
+Path End      : hdmi_txd2_o[6]                       
+Launch Clock  : clk_pixel (RISE)                     
+Capture Clock : clk_pixel (RISE)                     
+Slack         : 12.033 (required time - arrival time)
+Delay         : 0.705                                
+
+Logic Level             : 1
+Non-global nets on path : 2
+Global nets on path     : 0
+
+Launch Clock Path Delay        : 2.095
++ Clock To Q + Data Path Delay : 0.835
+--------------------------------------
+End-of-path arrival time       : 2.930
+
+Constraint                     : 13.441
++ Capture Clock Path Delay     :  2.083
+- Clock Uncertainty            :  0.126
+- Output Delay                 :  0.435
+---------------------------------------
+End-of-path required time      : 14.963
+
+Launch Clock Path
+        name           model name   delay (ns)  cumulative delay (ns) pins on net    location
+===============================================================================================
+clk_pixel                inpad        0.000             0.000                0       (0,159) 
+clk_pixel                inpad        0.126             0.126             4092       (0,159) 
+clk_pixel                net          1.969             2.095             4092       (0,159) 
+hdmi_txd2_o[6]~FF|CLK    ff           0.000             2.095             4092       (35,320)
+
+Data Path
+       name          model name   delay (ns)  cumulative delay (ns) pins on net    location
+=============================================================================================
+hdmi_txd2_o[6]~FF|Q    ff           0.130             0.130              2         (35,320)
+hdmi_txd2_o[6]         net          0.138             0.268              2         (35,320)
+LUT__110646|in[0]      lut          0.061             0.329              2         (35,321)
+LUT__110646|out        lut          0.000             0.329              2         (35,321)
+hdmi_txd2_o[6]_2       net          0.456             0.785              2         (35,321)
+hdmi_txd2_o[6]         outpad       0.050             0.835              2         (39,323)
+hdmi_txd2_o[6]         outpad       0.000             0.835              0         (39,323)
+
+Capture Clock Path
+         name            model name   delay (ns)  cumulative delay (ns) pins on net    location
+=================================================================================================
+clk_pixel                  inpad        0.000             0.000                0       (0,159) 
+clk_pixel                  inpad        0.126             0.126             4092       (0,159) 
+clk_pixel                  net          1.907             2.033             4092       (0,159) 
+clk_pixel~CLKOUT~55~322    outpad       0.050             2.083             4092       (55,323)
+clk_pixel~CLKOUT~55~322    outpad       0.000             2.083                0       (55,323)
+
+++++ Path 16 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : hdmi_txd1_o[4]~FF|CLK                
+Path End      : hdmi_txd1_o[4]                       
+Launch Clock  : clk_pixel (RISE)                     
+Capture Clock : clk_pixel (RISE)                     
+Slack         : 12.036 (required time - arrival time)
+Delay         : 0.702                                
+
+Logic Level             : 1
+Non-global nets on path : 2
+Global nets on path     : 0
+
+Launch Clock Path Delay        : 2.095
++ Clock To Q + Data Path Delay : 0.832
+--------------------------------------
+End-of-path arrival time       : 2.927
+
+Constraint                     : 13.441
++ Capture Clock Path Delay     :  2.083
+- Clock Uncertainty            :  0.126
+- Output Delay                 :  0.435
+---------------------------------------
+End-of-path required time      : 14.963
+
+Launch Clock Path
+        name           model name   delay (ns)  cumulative delay (ns) pins on net    location
+===============================================================================================
+clk_pixel                inpad        0.000             0.000                0       (0,159) 
+clk_pixel                inpad        0.126             0.126             4092       (0,159) 
+clk_pixel                net          1.969             2.095             4092       (0,159) 
+hdmi_txd1_o[4]~FF|CLK    ff           0.000             2.095             4092       (13,321)
+
+Data Path
+       name          model name   delay (ns)  cumulative delay (ns) pins on net    location
+=============================================================================================
+hdmi_txd1_o[4]~FF|Q    ff           0.130             0.130              2         (13,321)
+hdmi_txd1_o[4]         net          0.361             0.491              2         (13,321)
+LUT__110642|in[0]      lut          0.061             0.552              2         (4,321) 
+LUT__110642|out        lut          0.000             0.552              2         (4,321) 
+hdmi_txd1_o[4]_2       net          0.230             0.782              2         (4,321) 
+hdmi_txd1_o[4]         outpad       0.050             0.832              2         (4,323) 
+hdmi_txd1_o[4]         outpad       0.000             0.832              0         (4,323) 
+
+Capture Clock Path
+         name            model name   delay (ns)  cumulative delay (ns) pins on net    location
+=================================================================================================
+clk_pixel                  inpad        0.000             0.000                0       (0,159) 
+clk_pixel                  inpad        0.126             0.126             4092       (0,159) 
+clk_pixel                  net          1.907             2.033             4092       (0,159) 
+clk_pixel~CLKOUT~31~322    outpad       0.050             2.083             4092       (31,323)
+clk_pixel~CLKOUT~31~322    outpad       0.000             2.083                0       (31,323)
+
+++++ Path 17 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : hdmi_txd1_o[2]~FF|CLK                
+Path End      : hdmi_txd1_o[2]                       
+Launch Clock  : clk_pixel (RISE)                     
+Capture Clock : clk_pixel (RISE)                     
+Slack         : 12.072 (required time - arrival time)
+Delay         : 0.666                                
+
+Logic Level             : 1
+Non-global nets on path : 2
+Global nets on path     : 0
+
+Launch Clock Path Delay        : 2.095
++ Clock To Q + Data Path Delay : 0.796
+--------------------------------------
+End-of-path arrival time       : 2.891
+
+Constraint                     : 13.441
++ Capture Clock Path Delay     :  2.083
+- Clock Uncertainty            :  0.126
+- Output Delay                 :  0.435
+---------------------------------------
+End-of-path required time      : 14.963
+
+Launch Clock Path
+        name           model name   delay (ns)  cumulative delay (ns) pins on net    location
+===============================================================================================
+clk_pixel                inpad        0.000             0.000                0       (0,159) 
+clk_pixel                inpad        0.126             0.126             4092       (0,159) 
+clk_pixel                net          1.969             2.095             4092       (0,159) 
+hdmi_txd1_o[2]~FF|CLK    ff           0.000             2.095             4092       (13,319)
+
+Data Path
+       name          model name   delay (ns)  cumulative delay (ns) pins on net    location
+=============================================================================================
+hdmi_txd1_o[2]~FF|Q    ff           0.130             0.130              2         (13,319)
+hdmi_txd1_o[2]         net          0.153             0.283              2         (13,319)
+LUT__110643|in[0]      lut          0.061             0.344              2         (13,318)
+LUT__110643|out        lut          0.000             0.344              2         (13,318)
+hdmi_txd1_o[2]_2       net          0.402             0.746              2         (13,318)
+hdmi_txd1_o[2]         outpad       0.050             0.796              2         (3,323) 
+hdmi_txd1_o[2]         outpad       0.000             0.796              0         (3,323) 
+
+Capture Clock Path
+         name            model name   delay (ns)  cumulative delay (ns) pins on net    location
+=================================================================================================
+clk_pixel                  inpad        0.000             0.000                0       (0,159) 
+clk_pixel                  inpad        0.126             0.126             4092       (0,159) 
+clk_pixel                  net          1.907             2.033             4092       (0,159) 
+clk_pixel~CLKOUT~31~322    outpad       0.050             2.083             4092       (31,323)
+clk_pixel~CLKOUT~31~322    outpad       0.000             2.083                0       (31,323)
+
+++++ Path 18 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : hdmi_txd2_o[9]~FF|CLK                
+Path End      : hdmi_txd2_o[9]                       
+Launch Clock  : clk_pixel (RISE)                     
+Capture Clock : clk_pixel (RISE)                     
+Slack         : 12.086 (required time - arrival time)
+Delay         : 0.652                                
+
+Logic Level             : 1
+Non-global nets on path : 2
+Global nets on path     : 0
+
+Launch Clock Path Delay        : 2.095
++ Clock To Q + Data Path Delay : 0.782
+--------------------------------------
+End-of-path arrival time       : 2.877
+
+Constraint                     : 13.441
++ Capture Clock Path Delay     :  2.083
+- Clock Uncertainty            :  0.126
+- Output Delay                 :  0.435
+---------------------------------------
+End-of-path required time      : 14.963
+
+Launch Clock Path
+        name           model name   delay (ns)  cumulative delay (ns) pins on net    location
+===============================================================================================
+clk_pixel                inpad        0.000             0.000                0       (0,159) 
+clk_pixel                inpad        0.126             0.126             4092       (0,159) 
+clk_pixel                net          1.969             2.095             4092       (0,159) 
+hdmi_txd2_o[9]~FF|CLK    ff           0.000             2.095             4092       (34,320)
+
+Data Path
+       name          model name   delay (ns)  cumulative delay (ns) pins on net    location
+=============================================================================================
+hdmi_txd2_o[9]~FF|Q    ff           0.130             0.130              2         (34,320)
+hdmi_txd2_o[9]         net          0.138             0.268              2         (34,320)
+LUT__110644|in[0]      lut          0.061             0.329              2         (34,321)
+LUT__110644|out        lut          0.000             0.329              2         (34,321)
+hdmi_txd2_o[9]_2       net          0.403             0.732              2         (34,321)
+hdmi_txd2_o[9]         outpad       0.050             0.782              2         (40,323)
+hdmi_txd2_o[9]         outpad       0.000             0.782              0         (40,323)
+
+Capture Clock Path
+         name            model name   delay (ns)  cumulative delay (ns) pins on net    location
+=================================================================================================
+clk_pixel                  inpad        0.000             0.000                0       (0,159) 
+clk_pixel                  inpad        0.126             0.126             4092       (0,159) 
+clk_pixel                  net          1.907             2.033             4092       (0,159) 
+clk_pixel~CLKOUT~55~322    outpad       0.050             2.083             4092       (55,323)
+clk_pixel~CLKOUT~55~322    outpad       0.000             2.083                0       (55,323)
+
+++++ Path 19 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : hdmi_txd1_o[3]~FF|CLK                
+Path End      : hdmi_txd1_o[3]                       
+Launch Clock  : clk_pixel (RISE)                     
+Capture Clock : clk_pixel (RISE)                     
+Slack         : 12.088 (required time - arrival time)
+Delay         : 0.650                                
+
+Logic Level             : 0
+Non-global nets on path : 1
+Global nets on path     : 0
+
+Launch Clock Path Delay        : 2.095
++ Clock To Q + Data Path Delay : 0.780
+--------------------------------------
+End-of-path arrival time       : 2.875
+
+Constraint                     : 13.441
++ Capture Clock Path Delay     :  2.083
+- Clock Uncertainty            :  0.126
+- Output Delay                 :  0.435
+---------------------------------------
+End-of-path required time      : 14.963
+
+Launch Clock Path
+        name           model name   delay (ns)  cumulative delay (ns) pins on net    location
+===============================================================================================
+clk_pixel                inpad        0.000             0.000                0       (0,159) 
+clk_pixel                inpad        0.126             0.126             4092       (0,159) 
+clk_pixel                net          1.969             2.095             4092       (0,159) 
+hdmi_txd1_o[3]~FF|CLK    ff           0.000             2.095             4092       (14,318)
+
+Data Path
+       name          model name   delay (ns)  cumulative delay (ns) pins on net    location
+=============================================================================================
+hdmi_txd1_o[3]~FF|Q    ff           0.130             0.130              2         (14,318)
+hdmi_txd1_o[3]         net          0.600             0.730              2         (14,318)
+hdmi_txd1_o[3]         outpad       0.050             0.780              2         (3,323) 
+hdmi_txd1_o[3]         outpad       0.000             0.780              0         (3,323) 
+
+Capture Clock Path
+         name            model name   delay (ns)  cumulative delay (ns) pins on net    location
+=================================================================================================
+clk_pixel                  inpad        0.000             0.000                0       (0,159) 
+clk_pixel                  inpad        0.126             0.126             4092       (0,159) 
+clk_pixel                  net          1.907             2.033             4092       (0,159) 
+clk_pixel~CLKOUT~31~322    outpad       0.050             2.083             4092       (31,323)
+clk_pixel~CLKOUT~31~322    outpad       0.000             2.083                0       (31,323)
+
+++++ Path 20 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : hdmi_txd1_o[0]~FF|CLK                
+Path End      : hdmi_txd1_o[0]                       
+Launch Clock  : clk_pixel (RISE)                     
+Capture Clock : clk_pixel (RISE)                     
+Slack         : 12.109 (required time - arrival time)
+Delay         : 0.629                                
+
+Logic Level             : 0
+Non-global nets on path : 1
+Global nets on path     : 0
+
+Launch Clock Path Delay        : 2.095
++ Clock To Q + Data Path Delay : 0.759
+--------------------------------------
+End-of-path arrival time       : 2.854
+
+Constraint                     : 13.441
++ Capture Clock Path Delay     :  2.083
+- Clock Uncertainty            :  0.126
+- Output Delay                 :  0.435
+---------------------------------------
+End-of-path required time      : 14.963
+
+Launch Clock Path
+        name           model name   delay (ns)  cumulative delay (ns) pins on net    location
+===============================================================================================
+clk_pixel                inpad        0.000             0.000                0       (0,159) 
+clk_pixel                inpad        0.126             0.126             4092       (0,159) 
+clk_pixel                net          1.969             2.095             4092       (0,159) 
+hdmi_txd1_o[0]~FF|CLK    ff           0.000             2.095             4092       (14,319)
+
+Data Path
+       name          model name   delay (ns)  cumulative delay (ns) pins on net    location
+=============================================================================================
+hdmi_txd1_o[0]~FF|Q    ff           0.130             0.130              2         (14,319)
+hdmi_txd1_o[0]         net          0.579             0.709              2         (14,319)
+hdmi_txd1_o[0]         outpad       0.050             0.759              2         (2,323) 
+hdmi_txd1_o[0]         outpad       0.000             0.759              0         (2,323) 
+
+Capture Clock Path
+         name            model name   delay (ns)  cumulative delay (ns) pins on net    location
+=================================================================================================
+clk_pixel                  inpad        0.000             0.000                0       (0,159) 
+clk_pixel                  inpad        0.126             0.126             4092       (0,159) 
+clk_pixel                  net          1.907             2.033             4092       (0,159) 
+clk_pixel~CLKOUT~31~322    outpad       0.050             2.083             4092       (31,323)
+clk_pixel~CLKOUT~31~322    outpad       0.000             2.083                0       (31,323)
+
+++++ Path 21 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : hdmi_txd1_o[7]~FF|CLK                
+Path End      : hdmi_txd1_o[7]                       
+Launch Clock  : clk_pixel (RISE)                     
+Capture Clock : clk_pixel (RISE)                     
+Slack         : 12.155 (required time - arrival time)
+Delay         : 0.583                                
+
+Logic Level             : 0
+Non-global nets on path : 1
+Global nets on path     : 0
+
+Launch Clock Path Delay        : 2.095
++ Clock To Q + Data Path Delay : 0.713
+--------------------------------------
+End-of-path arrival time       : 2.808
+
+Constraint                     : 13.441
++ Capture Clock Path Delay     :  2.083
+- Clock Uncertainty            :  0.126
+- Output Delay                 :  0.435
+---------------------------------------
+End-of-path required time      : 14.963
+
+Launch Clock Path
+        name           model name   delay (ns)  cumulative delay (ns) pins on net    location
+===============================================================================================
+clk_pixel                inpad        0.000             0.000                0       (0,159) 
+clk_pixel                inpad        0.126             0.126             4092       (0,159) 
+clk_pixel                net          1.969             2.095             4092       (0,159) 
+hdmi_txd1_o[7]~FF|CLK    ff           0.000             2.095             4092       (14,321)
+
+Data Path
+       name          model name   delay (ns)  cumulative delay (ns) pins on net    location
+=============================================================================================
+hdmi_txd1_o[7]~FF|Q    ff           0.130             0.130              2         (14,321)
+hdmi_txd1_o[7]         net          0.533             0.663              2         (14,321)
+hdmi_txd1_o[7]         outpad       0.050             0.713              2         (5,323) 
+hdmi_txd1_o[7]         outpad       0.000             0.713              0         (5,323) 
+
+Capture Clock Path
+         name            model name   delay (ns)  cumulative delay (ns) pins on net    location
+=================================================================================================
+clk_pixel                  inpad        0.000             0.000                0       (0,159) 
+clk_pixel                  inpad        0.126             0.126             4092       (0,159) 
+clk_pixel                  net          1.907             2.033             4092       (0,159) 
+clk_pixel~CLKOUT~31~322    outpad       0.050             2.083             4092       (31,323)
+clk_pixel~CLKOUT~31~322    outpad       0.000             2.083                0       (31,323)
+
+++++ Path 22 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : hdmi_txd1_o[5]~FF|CLK                
+Path End      : hdmi_txd1_o[5]                       
+Launch Clock  : clk_pixel (RISE)                     
+Capture Clock : clk_pixel (RISE)                     
+Slack         : 12.169 (required time - arrival time)
+Delay         : 0.569                                
+
+Logic Level             : 0
+Non-global nets on path : 1
+Global nets on path     : 0
+
+Launch Clock Path Delay        : 2.095
++ Clock To Q + Data Path Delay : 0.699
+--------------------------------------
+End-of-path arrival time       : 2.794
+
+Constraint                     : 13.441
++ Capture Clock Path Delay     :  2.083
+- Clock Uncertainty            :  0.126
+- Output Delay                 :  0.435
+---------------------------------------
+End-of-path required time      : 14.963
+
+Launch Clock Path
+        name           model name   delay (ns)  cumulative delay (ns) pins on net    location
+===============================================================================================
+clk_pixel                inpad        0.000             0.000                0       (0,159) 
+clk_pixel                inpad        0.126             0.126             4092       (0,159) 
+clk_pixel                net          1.969             2.095             4092       (0,159) 
+hdmi_txd1_o[5]~FF|CLK    ff           0.000             2.095             4092       (12,321)
+
+Data Path
+       name          model name   delay (ns)  cumulative delay (ns) pins on net    location
+=============================================================================================
+hdmi_txd1_o[5]~FF|Q    ff           0.130             0.130              2         (12,321)
+hdmi_txd1_o[5]         net          0.519             0.649              2         (12,321)
+hdmi_txd1_o[5]         outpad       0.050             0.699              2         (4,323) 
+hdmi_txd1_o[5]         outpad       0.000             0.699              0         (4,323) 
+
+Capture Clock Path
+         name            model name   delay (ns)  cumulative delay (ns) pins on net    location
+=================================================================================================
+clk_pixel                  inpad        0.000             0.000                0       (0,159) 
+clk_pixel                  inpad        0.126             0.126             4092       (0,159) 
+clk_pixel                  net          1.907             2.033             4092       (0,159) 
+clk_pixel~CLKOUT~31~322    outpad       0.050             2.083             4092       (31,323)
+clk_pixel~CLKOUT~31~322    outpad       0.000             2.083                0       (31,323)
+
+++++ Path 23 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : hdmi_txd1_o[8]~FF|CLK                
+Path End      : hdmi_txd1_o[8]                       
+Launch Clock  : clk_pixel (RISE)                     
+Capture Clock : clk_pixel (RISE)                     
+Slack         : 12.181 (required time - arrival time)
+Delay         : 0.557                                
+
+Logic Level             : 1
+Non-global nets on path : 2
+Global nets on path     : 0
+
+Launch Clock Path Delay        : 2.095
++ Clock To Q + Data Path Delay : 0.687
+--------------------------------------
+End-of-path arrival time       : 2.782
+
+Constraint                     : 13.441
++ Capture Clock Path Delay     :  2.083
+- Clock Uncertainty            :  0.126
+- Output Delay                 :  0.435
+---------------------------------------
+End-of-path required time      : 14.963
+
+Launch Clock Path
+        name           model name   delay (ns)  cumulative delay (ns) pins on net    location
+===============================================================================================
+clk_pixel                inpad        0.000             0.000                0       (0,159)
+clk_pixel                inpad        0.126             0.126             4092       (0,159)
+clk_pixel                net          1.969             2.095             4092       (0,159)
+hdmi_txd1_o[8]~FF|CLK    ff           0.000             2.095             4092       (8,321)
+
+Data Path
+       name          model name   delay (ns)  cumulative delay (ns) pins on net    location
+=============================================================================================
+hdmi_txd1_o[8]~FF|Q    ff           0.130             0.130              2         (8,321)
+hdmi_txd1_o[8]         net          0.119             0.249              2         (8,321)
+LUT__110640|in[0]      lut          0.061             0.310              2         (5,321)
+LUT__110640|out        lut          0.000             0.310              2         (5,321)
+hdmi_txd1_o[8]_2       net          0.327             0.637              2         (5,321)
+hdmi_txd1_o[8]         outpad       0.050             0.687              2         (6,323)
+hdmi_txd1_o[8]         outpad       0.000             0.687              0         (6,323)
+
+Capture Clock Path
+         name            model name   delay (ns)  cumulative delay (ns) pins on net    location
+=================================================================================================
+clk_pixel                  inpad        0.000             0.000                0       (0,159) 
+clk_pixel                  inpad        0.126             0.126             4092       (0,159) 
+clk_pixel                  net          1.907             2.033             4092       (0,159) 
+clk_pixel~CLKOUT~31~322    outpad       0.050             2.083             4092       (31,323)
+clk_pixel~CLKOUT~31~322    outpad       0.000             2.083                0       (31,323)
+
+++++ Path 24 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : hdmi_txd2_o[8]~FF|CLK                
+Path End      : hdmi_txd2_o[8]                       
+Launch Clock  : clk_pixel (RISE)                     
+Capture Clock : clk_pixel (RISE)                     
+Slack         : 12.187 (required time - arrival time)
+Delay         : 0.551                                
+
+Logic Level             : 1
+Non-global nets on path : 2
+Global nets on path     : 0
+
+Launch Clock Path Delay        : 2.095
++ Clock To Q + Data Path Delay : 0.681
+--------------------------------------
+End-of-path arrival time       : 2.776
+
+Constraint                     : 13.441
++ Capture Clock Path Delay     :  2.083
+- Clock Uncertainty            :  0.126
+- Output Delay                 :  0.435
+---------------------------------------
+End-of-path required time      : 14.963
+
+Launch Clock Path
+        name           model name   delay (ns)  cumulative delay (ns) pins on net    location
+===============================================================================================
+clk_pixel                inpad        0.000             0.000                0       (0,159) 
+clk_pixel                inpad        0.126             0.126             4092       (0,159) 
+clk_pixel                net          1.969             2.095             4092       (0,159) 
+hdmi_txd2_o[8]~FF|CLK    ff           0.000             2.095             4092       (38,316)
+
+Data Path
+       name          model name   delay (ns)  cumulative delay (ns) pins on net    location
+=============================================================================================
+hdmi_txd2_o[8]~FF|Q    ff           0.130             0.130              2         (38,316)
+hdmi_txd2_o[8]         net          0.210             0.340              2         (38,316)
+LUT__110645|in[0]      lut          0.061             0.401              2         (40,321)
+LUT__110645|out        lut          0.000             0.401              2         (40,321)
+hdmi_txd2_o[8]_2       net          0.230             0.631              2         (40,321)
+hdmi_txd2_o[8]         outpad       0.050             0.681              2         (40,323)
+hdmi_txd2_o[8]         outpad       0.000             0.681              0         (40,323)
+
+Capture Clock Path
+         name            model name   delay (ns)  cumulative delay (ns) pins on net    location
+=================================================================================================
+clk_pixel                  inpad        0.000             0.000                0       (0,159) 
+clk_pixel                  inpad        0.126             0.126             4092       (0,159) 
+clk_pixel                  net          1.907             2.033             4092       (0,159) 
+clk_pixel~CLKOUT~55~322    outpad       0.050             2.083             4092       (55,323)
+clk_pixel~CLKOUT~55~322    outpad       0.000             2.083                0       (55,323)
+
+++++ Path 25 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : hdmi_txd2_o[0]~FF|CLK                
+Path End      : hdmi_txd2_o[0]                       
+Launch Clock  : clk_pixel (RISE)                     
+Capture Clock : clk_pixel (RISE)                     
+Slack         : 12.198 (required time - arrival time)
+Delay         : 0.540                                
+
+Logic Level             : 0
+Non-global nets on path : 1
+Global nets on path     : 0
+
+Launch Clock Path Delay        : 2.095
++ Clock To Q + Data Path Delay : 0.670
+--------------------------------------
+End-of-path arrival time       : 2.765
+
+Constraint                     : 13.441
++ Capture Clock Path Delay     :  2.083
+- Clock Uncertainty            :  0.126
+- Output Delay                 :  0.435
+---------------------------------------
+End-of-path required time      : 14.963
+
+Launch Clock Path
+        name           model name   delay (ns)  cumulative delay (ns) pins on net    location
+===============================================================================================
+clk_pixel                inpad        0.000             0.000                0       (0,159) 
+clk_pixel                inpad        0.126             0.126             4092       (0,159) 
+clk_pixel                net          1.969             2.095             4092       (0,159) 
+hdmi_txd2_o[0]~FF|CLK    ff           0.000             2.095             4092       (35,315)
+
+Data Path
+       name          model name   delay (ns)  cumulative delay (ns) pins on net    location
+=============================================================================================
+hdmi_txd2_o[0]~FF|Q    ff           0.130             0.130              2         (35,315)
+hdmi_txd2_o[0]         net          0.490             0.620              2         (35,315)
+hdmi_txd2_o[0]         outpad       0.050             0.670              2         (36,323)
+hdmi_txd2_o[0]         outpad       0.000             0.670              0         (36,323)
+
+Capture Clock Path
+         name            model name   delay (ns)  cumulative delay (ns) pins on net    location
+=================================================================================================
+clk_pixel                  inpad        0.000             0.000                0       (0,159) 
+clk_pixel                  inpad        0.126             0.126             4092       (0,159) 
+clk_pixel                  net          1.907             2.033             4092       (0,159) 
+clk_pixel~CLKOUT~55~322    outpad       0.050             2.083             4092       (55,323)
+clk_pixel~CLKOUT~55~322    outpad       0.000             2.083                0       (55,323)
+
+++++ Path 26 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : hdmi_txd1_o[6]~FF|CLK                
+Path End      : hdmi_txd1_o[6]                       
+Launch Clock  : clk_pixel (RISE)                     
+Capture Clock : clk_pixel (RISE)                     
+Slack         : 12.212 (required time - arrival time)
+Delay         : 0.526                                
+
+Logic Level             : 1
+Non-global nets on path : 2
+Global nets on path     : 0
+
+Launch Clock Path Delay        : 2.095
++ Clock To Q + Data Path Delay : 0.656
+--------------------------------------
+End-of-path arrival time       : 2.751
+
+Constraint                     : 13.441
++ Capture Clock Path Delay     :  2.083
+- Clock Uncertainty            :  0.126
+- Output Delay                 :  0.435
+---------------------------------------
+End-of-path required time      : 14.963
+
+Launch Clock Path
+        name           model name   delay (ns)  cumulative delay (ns) pins on net    location
+===============================================================================================
+clk_pixel                inpad        0.000             0.000                0       (0,159) 
+clk_pixel                inpad        0.126             0.126             4092       (0,159) 
+clk_pixel                net          1.969             2.095             4092       (0,159) 
+hdmi_txd1_o[6]~FF|CLK    ff           0.000             2.095             4092       (14,320)
+
+Data Path
+       name          model name   delay (ns)  cumulative delay (ns) pins on net    location
+=============================================================================================
+hdmi_txd1_o[6]~FF|Q    ff           0.130             0.130              2         (14,320)
+hdmi_txd1_o[6]         net          0.182             0.312              2         (14,320)
+LUT__110641|in[0]      lut          0.061             0.373              2         (5,320) 
+LUT__110641|out        lut          0.000             0.373              2         (5,320) 
+hdmi_txd1_o[6]_2       net          0.233             0.606              2         (5,320) 
+hdmi_txd1_o[6]         outpad       0.050             0.656              2         (5,323) 
+hdmi_txd1_o[6]         outpad       0.000             0.656              0         (5,323) 
+
+Capture Clock Path
+         name            model name   delay (ns)  cumulative delay (ns) pins on net    location
+=================================================================================================
+clk_pixel                  inpad        0.000             0.000                0       (0,159) 
+clk_pixel                  inpad        0.126             0.126             4092       (0,159) 
+clk_pixel                  net          1.907             2.033             4092       (0,159) 
+clk_pixel~CLKOUT~31~322    outpad       0.050             2.083             4092       (31,323)
+clk_pixel~CLKOUT~31~322    outpad       0.000             2.083                0       (31,323)
+
+++++ Path 27 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : hdmi_txd1_o[9]~FF|CLK                
+Path End      : hdmi_txd1_o[9]                       
+Launch Clock  : clk_pixel (RISE)                     
+Capture Clock : clk_pixel (RISE)                     
+Slack         : 12.224 (required time - arrival time)
+Delay         : 0.514                                
+
+Logic Level             : 1
+Non-global nets on path : 2
+Global nets on path     : 0
+
+Launch Clock Path Delay        : 2.095
++ Clock To Q + Data Path Delay : 0.644
+--------------------------------------
+End-of-path arrival time       : 2.739
+
+Constraint                     : 13.441
++ Capture Clock Path Delay     :  2.083
+- Clock Uncertainty            :  0.126
+- Output Delay                 :  0.435
+---------------------------------------
+End-of-path required time      : 14.963
+
+Launch Clock Path
+        name           model name   delay (ns)  cumulative delay (ns) pins on net    location
+===============================================================================================
+clk_pixel                inpad        0.000             0.000                0       (0,159)
+clk_pixel                inpad        0.126             0.126             4092       (0,159)
+clk_pixel                net          1.969             2.095             4092       (0,159)
+hdmi_txd1_o[9]~FF|CLK    ff           0.000             2.095             4092       (7,321)
+
+Data Path
+       name          model name   delay (ns)  cumulative delay (ns) pins on net    location
+=============================================================================================
+hdmi_txd1_o[9]~FF|Q    ff           0.130             0.130              2         (7,321)
+hdmi_txd1_o[9]         net          0.166             0.296              2         (7,321)
+LUT__110639|in[0]      lut          0.063             0.359              2         (6,321)
+LUT__110639|out        lut          0.000             0.359              2         (6,321)
+hdmi_txd1_o[9]_2       net          0.235             0.594              2         (6,321)
+hdmi_txd1_o[9]         outpad       0.050             0.644              2         (6,323)
+hdmi_txd1_o[9]         outpad       0.000             0.644              0         (6,323)
+
+Capture Clock Path
+         name            model name   delay (ns)  cumulative delay (ns) pins on net    location
+=================================================================================================
+clk_pixel                  inpad        0.000             0.000                0       (0,159) 
+clk_pixel                  inpad        0.126             0.126             4092       (0,159) 
+clk_pixel                  net          1.907             2.033             4092       (0,159) 
+clk_pixel~CLKOUT~31~322    outpad       0.050             2.083             4092       (31,323)
+clk_pixel~CLKOUT~31~322    outpad       0.000             2.083                0       (31,323)
+
+++++ Path 28 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : hdmi_txd2_o[4]~FF|CLK                
+Path End      : hdmi_txd2_o[4]                       
+Launch Clock  : clk_pixel (RISE)                     
+Capture Clock : clk_pixel (RISE)                     
+Slack         : 12.235 (required time - arrival time)
+Delay         : 0.503                                
+
+Logic Level             : 1
+Non-global nets on path : 2
+Global nets on path     : 0
+
+Launch Clock Path Delay        : 2.095
++ Clock To Q + Data Path Delay : 0.633
+--------------------------------------
+End-of-path arrival time       : 2.728
+
+Constraint                     : 13.441
++ Capture Clock Path Delay     :  2.083
+- Clock Uncertainty            :  0.126
+- Output Delay                 :  0.435
+---------------------------------------
+End-of-path required time      : 14.963
+
+Launch Clock Path
+        name           model name   delay (ns)  cumulative delay (ns) pins on net    location
+===============================================================================================
+clk_pixel                inpad        0.000             0.000                0       (0,159) 
+clk_pixel                inpad        0.126             0.126             4092       (0,159) 
+clk_pixel                net          1.969             2.095             4092       (0,159) 
+hdmi_txd2_o[4]~FF|CLK    ff           0.000             2.095             4092       (35,317)
+
+Data Path
+       name          model name   delay (ns)  cumulative delay (ns) pins on net    location
+=============================================================================================
+hdmi_txd2_o[4]~FF|Q    ff           0.130             0.130              2         (35,317)
+hdmi_txd2_o[4]         net          0.103             0.233              2         (35,317)
+LUT__110647|in[0]      lut          0.063             0.296              2         (36,317)
+LUT__110647|out        lut          0.000             0.296              2         (36,317)
+hdmi_txd2_o[4]_2       net          0.287             0.583              2         (36,317)
+hdmi_txd2_o[4]         outpad       0.050             0.633              2         (38,323)
+hdmi_txd2_o[4]         outpad       0.000             0.633              0         (38,323)
+
+Capture Clock Path
+         name            model name   delay (ns)  cumulative delay (ns) pins on net    location
+=================================================================================================
+clk_pixel                  inpad        0.000             0.000                0       (0,159) 
+clk_pixel                  inpad        0.126             0.126             4092       (0,159) 
+clk_pixel                  net          1.907             2.033             4092       (0,159) 
+clk_pixel~CLKOUT~55~322    outpad       0.050             2.083             4092       (55,323)
+clk_pixel~CLKOUT~55~322    outpad       0.000             2.083                0       (55,323)
+
+++++ Path 29 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : hdmi_txd2_o[1]~FF|CLK                
+Path End      : hdmi_txd2_o[1]                       
+Launch Clock  : clk_pixel (RISE)                     
+Capture Clock : clk_pixel (RISE)                     
+Slack         : 12.264 (required time - arrival time)
+Delay         : 0.474                                
+
+Logic Level             : 0
+Non-global nets on path : 1
+Global nets on path     : 0
+
+Launch Clock Path Delay        : 2.095
++ Clock To Q + Data Path Delay : 0.604
+--------------------------------------
+End-of-path arrival time       : 2.699
+
+Constraint                     : 13.441
++ Capture Clock Path Delay     :  2.083
+- Clock Uncertainty            :  0.126
+- Output Delay                 :  0.435
+---------------------------------------
+End-of-path required time      : 14.963
+
+Launch Clock Path
+        name           model name   delay (ns)  cumulative delay (ns) pins on net    location
+===============================================================================================
+clk_pixel                inpad        0.000             0.000                0       (0,159) 
+clk_pixel                inpad        0.126             0.126             4092       (0,159) 
+clk_pixel                net          1.969             2.095             4092       (0,159) 
+hdmi_txd2_o[1]~FF|CLK    ff           0.000             2.095             4092       (35,318)
+
+Data Path
+       name          model name   delay (ns)  cumulative delay (ns) pins on net    location
+=============================================================================================
+hdmi_txd2_o[1]~FF|Q    ff           0.130             0.130              2         (35,318)
+hdmi_txd2_o[1]         net          0.424             0.554              2         (35,318)
+hdmi_txd2_o[1]         outpad       0.050             0.604              2         (36,323)
+hdmi_txd2_o[1]         outpad       0.000             0.604              0         (36,323)
+
+Capture Clock Path
+         name            model name   delay (ns)  cumulative delay (ns) pins on net    location
+=================================================================================================
+clk_pixel                  inpad        0.000             0.000                0       (0,159) 
+clk_pixel                  inpad        0.126             0.126             4092       (0,159) 
+clk_pixel                  net          1.907             2.033             4092       (0,159) 
+clk_pixel~CLKOUT~55~322    outpad       0.050             2.083             4092       (55,323)
+clk_pixel~CLKOUT~55~322    outpad       0.000             2.083                0       (55,323)
+
+++++ Path 30 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : hdmi_txd2_o[7]~FF|CLK                
+Path End      : hdmi_txd2_o[7]                       
+Launch Clock  : clk_pixel (RISE)                     
+Capture Clock : clk_pixel (RISE)                     
+Slack         : 12.265 (required time - arrival time)
+Delay         : 0.473                                
+
+Logic Level             : 0
+Non-global nets on path : 1
+Global nets on path     : 0
+
+Launch Clock Path Delay        : 2.095
++ Clock To Q + Data Path Delay : 0.603
+--------------------------------------
+End-of-path arrival time       : 2.698
+
+Constraint                     : 13.441
++ Capture Clock Path Delay     :  2.083
+- Clock Uncertainty            :  0.126
+- Output Delay                 :  0.435
+---------------------------------------
+End-of-path required time      : 14.963
+
+Launch Clock Path
+        name           model name   delay (ns)  cumulative delay (ns) pins on net    location
+===============================================================================================
+clk_pixel                inpad        0.000             0.000                0       (0,159) 
+clk_pixel                inpad        0.126             0.126             4092       (0,159) 
+clk_pixel                net          1.969             2.095             4092       (0,159) 
+hdmi_txd2_o[7]~FF|CLK    ff           0.000             2.095             4092       (38,321)
+
+Data Path
+       name          model name   delay (ns)  cumulative delay (ns) pins on net    location
+=============================================================================================
+hdmi_txd2_o[7]~FF|Q    ff           0.130             0.130              2         (38,321)
+hdmi_txd2_o[7]         net          0.423             0.553              2         (38,321)
+hdmi_txd2_o[7]         outpad       0.050             0.603              2         (39,323)
+hdmi_txd2_o[7]         outpad       0.000             0.603              0         (39,323)
+
+Capture Clock Path
+         name            model name   delay (ns)  cumulative delay (ns) pins on net    location
+=================================================================================================
+clk_pixel                  inpad        0.000             0.000                0       (0,159) 
+clk_pixel                  inpad        0.126             0.126             4092       (0,159) 
+clk_pixel                  net          1.907             2.033             4092       (0,159) 
+clk_pixel~CLKOUT~55~322    outpad       0.050             2.083             4092       (55,323)
+clk_pixel~CLKOUT~55~322    outpad       0.000             2.083                0       (55,323)
+
+++++ Path 31 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : hdmi_txd2_o[3]~FF|CLK                
+Path End      : hdmi_txd2_o[3]                       
+Launch Clock  : clk_pixel (RISE)                     
+Capture Clock : clk_pixel (RISE)                     
+Slack         : 12.269 (required time - arrival time)
+Delay         : 0.469                                
+
+Logic Level             : 0
+Non-global nets on path : 1
+Global nets on path     : 0
+
+Launch Clock Path Delay        : 2.095
++ Clock To Q + Data Path Delay : 0.599
+--------------------------------------
+End-of-path arrival time       : 2.694
+
+Constraint                     : 13.441
++ Capture Clock Path Delay     :  2.083
+- Clock Uncertainty            :  0.126
+- Output Delay                 :  0.435
+---------------------------------------
+End-of-path required time      : 14.963
+
+Launch Clock Path
+        name           model name   delay (ns)  cumulative delay (ns) pins on net    location
+===============================================================================================
+clk_pixel                inpad        0.000             0.000                0       (0,159) 
+clk_pixel                inpad        0.126             0.126             4092       (0,159) 
+clk_pixel                net          1.969             2.095             4092       (0,159) 
+hdmi_txd2_o[3]~FF|CLK    ff           0.000             2.095             4092       (38,320)
+
+Data Path
+       name          model name   delay (ns)  cumulative delay (ns) pins on net    location
+=============================================================================================
+hdmi_txd2_o[3]~FF|Q    ff           0.130             0.130              2         (38,320)
+hdmi_txd2_o[3]         net          0.419             0.549              2         (38,320)
+hdmi_txd2_o[3]         outpad       0.050             0.599              2         (37,323)
+hdmi_txd2_o[3]         outpad       0.000             0.599              0         (37,323)
+
+Capture Clock Path
+         name            model name   delay (ns)  cumulative delay (ns) pins on net    location
+=================================================================================================
+clk_pixel                  inpad        0.000             0.000                0       (0,159) 
+clk_pixel                  inpad        0.126             0.126             4092       (0,159) 
+clk_pixel                  net          1.907             2.033             4092       (0,159) 
+clk_pixel~CLKOUT~55~322    outpad       0.050             2.083             4092       (55,323)
+clk_pixel~CLKOUT~55~322    outpad       0.000             2.083                0       (55,323)
+
+++++ Path 32 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : hdmi_txd2_o[2]~FF|CLK                
+Path End      : hdmi_txd2_o[2]                       
+Launch Clock  : clk_pixel (RISE)                     
+Capture Clock : clk_pixel (RISE)                     
+Slack         : 12.285 (required time - arrival time)
+Delay         : 0.453                                
+
+Logic Level             : 1
+Non-global nets on path : 2
+Global nets on path     : 0
+
+Launch Clock Path Delay        : 2.095
++ Clock To Q + Data Path Delay : 0.583
+--------------------------------------
+End-of-path arrival time       : 2.678
+
+Constraint                     : 13.441
++ Capture Clock Path Delay     :  2.083
+- Clock Uncertainty            :  0.126
+- Output Delay                 :  0.435
+---------------------------------------
+End-of-path required time      : 14.963
+
+Launch Clock Path
+        name           model name   delay (ns)  cumulative delay (ns) pins on net    location
+===============================================================================================
+clk_pixel                inpad        0.000             0.000                0       (0,159) 
+clk_pixel                inpad        0.126             0.126             4092       (0,159) 
+clk_pixel                net          1.969             2.095             4092       (0,159) 
+hdmi_txd2_o[2]~FF|CLK    ff           0.000             2.095             4092       (35,319)
+
+Data Path
+       name          model name   delay (ns)  cumulative delay (ns) pins on net    location
+=============================================================================================
+hdmi_txd2_o[2]~FF|Q    ff           0.130             0.130              2         (35,319)
+hdmi_txd2_o[2]         net          0.104             0.234              2         (35,319)
+LUT__110648|in[0]      lut          0.061             0.295              2         (37,319)
+LUT__110648|out        lut          0.000             0.295              2         (37,319)
+hdmi_txd2_o[2]_2       net          0.238             0.533              2         (37,319)
+hdmi_txd2_o[2]         outpad       0.050             0.583              2         (37,323)
+hdmi_txd2_o[2]         outpad       0.000             0.583              0         (37,323)
+
+Capture Clock Path
+         name            model name   delay (ns)  cumulative delay (ns) pins on net    location
+=================================================================================================
+clk_pixel                  inpad        0.000             0.000                0       (0,159) 
+clk_pixel                  inpad        0.126             0.126             4092       (0,159) 
+clk_pixel                  net          1.907             2.033             4092       (0,159) 
+clk_pixel~CLKOUT~55~322    outpad       0.050             2.083             4092       (55,323)
+clk_pixel~CLKOUT~55~322    outpad       0.000             2.083                0       (55,323)
+
+++++ Path 33 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : hdmi_txd1_o[1]~FF|CLK                
+Path End      : hdmi_txd1_o[1]                       
+Launch Clock  : clk_pixel (RISE)                     
+Capture Clock : clk_pixel (RISE)                     
+Slack         : 12.285 (required time - arrival time)
+Delay         : 0.453                                
+
+Logic Level             : 0
+Non-global nets on path : 1
+Global nets on path     : 0
+
+Launch Clock Path Delay        : 2.095
++ Clock To Q + Data Path Delay : 0.583
+--------------------------------------
+End-of-path arrival time       : 2.678
+
+Constraint                     : 13.441
++ Capture Clock Path Delay     :  2.083
+- Clock Uncertainty            :  0.126
+- Output Delay                 :  0.435
+---------------------------------------
+End-of-path required time      : 14.963
+
+Launch Clock Path
+        name           model name   delay (ns)  cumulative delay (ns) pins on net    location
+===============================================================================================
+clk_pixel                inpad        0.000             0.000                0       (0,159) 
+clk_pixel                inpad        0.126             0.126             4092       (0,159) 
+clk_pixel                net          1.969             2.095             4092       (0,159) 
+hdmi_txd1_o[1]~FF|CLK    ff           0.000             2.095             4092       (12,317)
+
+Data Path
+       name          model name   delay (ns)  cumulative delay (ns) pins on net    location
+=============================================================================================
+hdmi_txd1_o[1]~FF|Q    ff           0.130             0.130              2         (12,317)
+hdmi_txd1_o[1]         net          0.403             0.533              2         (12,317)
+hdmi_txd1_o[1]         outpad       0.050             0.583              2         (2,323) 
+hdmi_txd1_o[1]         outpad       0.000             0.583              0         (2,323) 
+
+Capture Clock Path
+         name            model name   delay (ns)  cumulative delay (ns) pins on net    location
+=================================================================================================
+clk_pixel                  inpad        0.000             0.000                0       (0,159) 
+clk_pixel                  inpad        0.126             0.126             4092       (0,159) 
+clk_pixel                  net          1.907             2.033             4092       (0,159) 
+clk_pixel~CLKOUT~31~322    outpad       0.050             2.083             4092       (31,323)
+clk_pixel~CLKOUT~31~322    outpad       0.000             2.083                0       (31,323)
+
+++++ Path 34 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : hdmi_txd2_o[5]~FF|CLK                
+Path End      : hdmi_txd2_o[5]                       
+Launch Clock  : clk_pixel (RISE)                     
+Capture Clock : clk_pixel (RISE)                     
+Slack         : 12.436 (required time - arrival time)
+Delay         : 0.302                                
+
+Logic Level             : 0
+Non-global nets on path : 1
+Global nets on path     : 0
+
+Launch Clock Path Delay        : 2.095
++ Clock To Q + Data Path Delay : 0.432
+--------------------------------------
+End-of-path arrival time       : 2.527
+
+Constraint                     : 13.441
++ Capture Clock Path Delay     :  2.083
+- Clock Uncertainty            :  0.126
+- Output Delay                 :  0.435
+---------------------------------------
+End-of-path required time      : 14.963
+
+Launch Clock Path
+        name           model name   delay (ns)  cumulative delay (ns) pins on net    location
+===============================================================================================
+clk_pixel                inpad        0.000             0.000                0       (0,159) 
+clk_pixel                inpad        0.126             0.126             4092       (0,159) 
+clk_pixel                net          1.969             2.095             4092       (0,159) 
+hdmi_txd2_o[5]~FF|CLK    ff           0.000             2.095             4092       (38,319)
+
+Data Path
+       name          model name   delay (ns)  cumulative delay (ns) pins on net    location
+=============================================================================================
+hdmi_txd2_o[5]~FF|Q    ff           0.130             0.130              2         (38,319)
+hdmi_txd2_o[5]         net          0.252             0.382              2         (38,319)
+hdmi_txd2_o[5]         outpad       0.050             0.432              2         (38,323)
+hdmi_txd2_o[5]         outpad       0.000             0.432              0         (38,323)
+
+Capture Clock Path
+         name            model name   delay (ns)  cumulative delay (ns) pins on net    location
+=================================================================================================
+clk_pixel                  inpad        0.000             0.000                0       (0,159) 
+clk_pixel                  inpad        0.126             0.126             4092       (0,159) 
+clk_pixel                  net          1.907             2.033             4092       (0,159) 
+clk_pixel~CLKOUT~55~322    outpad       0.050             2.083             4092       (55,323)
+clk_pixel~CLKOUT~55~322    outpad       0.000             2.083                0       (55,323)
+

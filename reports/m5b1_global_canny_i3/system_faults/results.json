@@ -1,0 +1,159 @@
+{
+  "status": "PASS",
+  "sources": [
+    {
+      "path": "rtl/m5b1_global_canny/m5b1_arbiter.sv",
+      "bytes": 9225,
+      "sha256": "01e7b16838696b37f5b787171c49b9c0e4ccd21baf97a945bf4c2a8cbe30d78d"
+    },
+    {
+      "path": "rtl/m5b1_global_canny/m5b1_async_fifo.sv",
+      "bytes": 2124,
+      "sha256": "5826a1bce3a4291d9a7cc3d1018f8db79a7699926362510ca7e760e5dc789e99"
+    },
+    {
+      "path": "rtl/m5b1_global_canny/m5b1_backend.sv",
+      "bytes": 11425,
+      "sha256": "27d8d9d0942944519747e541732d5c0d1d0d3aa70a547ab0b68e64e5d22826c4"
+    },
+    {
+      "path": "rtl/m5b1_global_canny/m5b1_capture.sv",
+      "bytes": 4321,
+      "sha256": "0d96ab725ec245a3cbceb260e3ebd416614958afd5179e06e9344df9a5dbc6ce"
+    },
+    {
+      "path": "rtl/m5b1_global_canny/m5b1_failstop.sv",
+      "bytes": 1363,
+      "sha256": "fd9f81893d54df10188396efd3f3827f7f3675db91f2f343b0e439d5a9ae1d40"
+    },
+    {
+      "path": "rtl/m5b1_global_canny/m5b1_global_engine.sv",
+      "bytes": 7883,
+      "sha256": "805d4595b957162e02aa5dd229b03704f51b572adc51130135b9af962be90045"
+    },
+    {
+      "path": "rtl/m5b1_global_canny/m5b1_mailbox.sv",
+      "bytes": 1241,
+      "sha256": "7d898ce68936f6b1a7b4f189cfc692c9c6d0aabb45438940554125df2bf08f8e"
+    },
+    {
+      "path": "rtl/m5b1_global_canny/m5b1_system.sv",
+      "bytes": 5333,
+      "sha256": "37e6343ea78385526976336cf527ccf09d73e0fc6ea5eadedfc408415375396f"
+    },
+    {
+      "path": "rtl/m5b1_global_canny/m5b1_transfer.sv",
+      "bytes": 2379,
+      "sha256": "70386dab501910f4b001c0e3737ddd1bb162b222eb4e1a7754f35d1abb6bacfe"
+    },
+    {
+      "path": "rtl/m5b1_global_canny/m5b1_uart.sv",
+      "bytes": 2421,
+      "sha256": "299a823d2121952395220551b222551170dc9f7322cf2710ca6bc578c58fdea9"
+    },
+    {
+      "path": "rtl/m5b1_global_canny/m5b1_video_dma.sv",
+      "bytes": 9360,
+      "sha256": "abdaca5182c6a4d6ac6df382f6c854fe7d2f08aaf04cb8f17abfc46a59f977f6"
+    },
+    {
+      "path": "tb/m5b1_global_canny/tb_m5b1_system.sv",
+      "bytes": 11484,
+      "sha256": "e24fa52a551689df0fc1edc90963150062102693a58c4ced223483ed556c4b8e"
+    },
+    {
+      "path": "scripts/m5b1_system_faults.py",
+      "bytes": 2637,
+      "sha256": "8b7365835be85e19e19fea1bfb66a7aba3ce6d123b4739671f793e0e263ef9b3"
+    },
+    {
+      "path": "scripts/m5b1_uart_decode.py",
+      "bytes": 7436,
+      "sha256": "1509cedbe99c72cf87e3f02feb49b19a4d21ce5251822bda02798beab118192a"
+    }
+  ],
+  "cases": [
+    {
+      "case": "stuck_owner",
+      "mode": 2,
+      "summary": "# M5B1_SYSTEM_FAULT_PASS bytes=324 inflight=1 watchdog=1 no_synthetic_ack=1",
+      "log": {
+        "path": "reports/m5b1_global_canny_i3/system_faults/stuck_owner.log",
+        "bytes": 2860,
+        "sha256": "ed6ba27024d477701542e9776e8559003fc91dbb6ea193de03139af2bd39a1c4"
+      },
+      "uart_bytes": 324,
+      "uart_sha256": "3989aa38fc2882d96ac2d3378ab1d1289bd9ed3aa9395d0af15f8640280f33ce",
+      "crc_valid_packets": 1,
+      "partial_intervals": []
+    },
+    {
+      "case": "capture_epoch",
+      "mode": 3,
+      "summary": "# M5B1_SYSTEM_EPOCH_PASS stale_capture_rejected=1 statistics_bytes=324",
+      "log": {
+        "path": "reports/m5b1_global_canny_i3/system_faults/capture_epoch.log",
+        "bytes": 1830,
+        "sha256": "6a0cf92b14f038cd204a41ef9b74580d6ed79ea7656f4b1e5a99151d76b71428"
+      },
+      "uart_bytes": 324,
+      "uart_sha256": "96fdc0092265a30b72766087ac71e50a57935611e2f71e082f9841941ef6cce5",
+      "crc_valid_packets": 1,
+      "partial_intervals": []
+    },
+    {
+      "case": "export_timeout",
+      "mode": 1,
+      "summary": "# M5B1_SYSTEM_EXPORT_TIMEOUT_PASS bytes=1208 lease_released=1 published_result_preserved=1",
+      "log": {
+        "path": "reports/m5b1_global_canny_i3/system_faults/export_timeout.log",
+        "bytes": 1852,
+        "sha256": "5143ce13cf2f0cb880ffcc659c552b31a7a7b50fee0ec538d916394718bb250f"
+      },
+      "uart_bytes": 1208,
+      "uart_sha256": "ac8c8d3cc8a765a36175614b18c08d2846ce4716832f233d03d77b70900707e0",
+      "crc_valid_packets": 1,
+      "partial_intervals": [
+        {
+          "start": 324,
+          "end": 1208,
+          "reason": "truncated payload"
+        }
+      ]
+    },
+    {
+      "case": "export_recovery",
+      "mode": 4,
+      "summary": "# M5B1_SYSTEM_EXPORT_RECOVERY_PASS bytes=1532 metadata_B=2 aborted_partial_then_next_stats=1",
+      "log": {
+        "path": "reports/m5b1_global_canny_i3/system_faults/export_recovery.log",
+        "bytes": 1855,
+        "sha256": "9f0102593ac87f1f8f7bb5caf05cd1710650470893b72743f6c36cf4a6122c55"
+      },
+      "uart_bytes": 1532,
+      "uart_sha256": "9d66b43d43f1863811032bcc1844edeb478e3873e0c1bcb9a62a9d2ef25770dd",
+      "crc_valid_packets": 2,
+      "partial_intervals": [
+        {
+          "start": 324,
+          "end": 1208,
+          "reason": "truncated payload"
+        }
+      ]
+    },
+    {
+      "case": "result_lease",
+      "mode": 5,
+      "summary": "# M5B1_SYSTEM_PASS full_capture=921600 exported_bytes=346384 class_split=7 work_split=28 metadata_B=2 checked_video=16707226 accepted=49572 completed=49572 max_service=0000017b000001790000017b camera_max=2832 display_min=0 capture_max=848 C2_wait=3575 mode=5",
+      "log": {
+        "path": "reports/m5b1_global_canny_i3/system_faults/result_lease.log",
+        "bytes": 2018,
+        "sha256": "f3cfbe34c63cca74cdd93a9cd945a54a26f0332cd98c33d3b6280c00bcc2c5e8"
+      },
+      "uart_bytes": 346384,
+      "uart_sha256": "f32fe1613ce96746be578ee839f07bdbd2a4677af617602b898f3626f47b4187",
+      "crc_valid_packets": 4,
+      "partial_intervals": []
+    }
+  ]
+}
