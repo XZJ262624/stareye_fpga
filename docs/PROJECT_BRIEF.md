@@ -1,6 +1,43 @@
 # 星眸项目背景
 
-## 2026-10-11 M5B.1修复离线验收交回（当前，待固定candidate双审查）
+## 2026-10-12 M5B.1受控隔离原型实物验收PASS（当前）
+
+固定技术candidate为`8976a276f03b4cd146c451aa081b04f71637fcf2`，parent为`264962e0c6af61e751c794c5b5f5252d00edbb6c`。Codex A与DeepSeek B均PASS_WITH_FINDINGS，三项阻断修复已关闭。用户确认同一配置未重启、AR0135连接、全程正常、七模式和阈值正常；COM13原始记录持续1871.569991秒（31分11.57秒），满足至少30分钟稳定性门。
+
+947729字节记录包含1858份统计及一对完整分类/结果图；除明确保留的首字节FF外，offset1到EOF严格解析全部CRC通过，无重同步或截断容忍。job连续1~1858、每包accepted/published与job相同、source SOF严格递增，无协议/FIFO错误、采集丢弃、stop/quarantine或校准回退。首对1280x720实物导出921600像素与软件八邻域BFS逐bit一致；不声称其余1857个结果均已逐像素比较。FF来源未知，作为非阻断传输边界保留。
+
+Work决定M5B.1受控隔离原型PASS，本轮实物闸门关闭。生产soft_reset仍接0；协议硬停撤销背压WVALID且只能冷重新配置恢复。窄hold、warm reset、跨PVT、DDR全容量及普适服务上界仍未获证明，不放行生产部署或Flash。M5A保留，M5C双路融合仅接口预留、未实现；M6/M7未开始。本轮仅归档，不修改已审RTL/工程/bit，不自动启动下一阶段实现。
+
+最终证据见`reports/m5b1_global_canny_i3/review_fix_264962e0/HARDWARE_ACCEPTANCE_RESULT_8976A276.md`与`HARDWARE_UART_VERIFICATION_234852.json`。管理归档不得替代固定技术candidate身份。
+
+## 2026-10-11 M5B.1真实首帧导出/BFS通过，等待30分钟稳定性（历史，已由2026-10-12验收覆盖）
+
+用户COM13原始二进制380405B已核验：录制123.974秒，107统计+1分类+1结果，分类/结果同epoch1/frame34/job1、1280x720，921600像素与软件八邻域BFS逐bit一致。published107/accepted107、capture_drop0，全部统计的协议/FIFO错误0、校准有效、无stop/quarantine。实际导出/CRC/身份/BFS子闸门PASS，整体验收仍PENDING_30MIN_STABILITY，不推进下一阶段。
+
+原始offset0多一字节FF，初始严格解包失败；明确跳过仅该1字节后，对offset1~EOF重新严格解包全部CRC通过、无重同步或末尾截断容忍，FF来源未知并保留记录。详见`reports/m5b1_global_canny_i3/review_fix_264962e0/HARDWARE_EXPORT_PASS_225827.md`与`HARDWARE_UART_VERIFICATION_225827.json`。原始文件未修改，candidate代码/bit不变。
+
+用户可保持本次板卡配置继续运行，重新启动记录器采后续统计，无需为了接收再次JTAG；首对导出已保存。等待用户反馈从本次下载完成后至少30分钟同次连续运行与七模式/静态运动无异常及后续文件。LED对应已由断开相机的M0流水验证解决，原硬停/soft_reset接0/warm/PVT限制保留。Work本轮仅离线解析和记录，不操作硬件。
+
+
+## 2026-10-11 M5B.1首次实物反馈已收到（历史，后续见当前导出/BFS结果）
+
+用户JTAG临时配置candidate8976a276，AR0135及板载串口已接，720p60/七模式/阈值和静态运动约20分钟无可见视频异常，用户判断PASS。Work只读复算当前bit哈希与审查绑定一致；用户未提供下载时SHA。四份用户粘贴统计包CRC匹配，job91~94/published91~94，采集丢弃及样本协议/FIFO错误0，后台发布有实物局部证据。
+
+整体验收仍PENDING：未达30分钟、无完整原始串口、无分类/结果BFS对比，指定M0镜像断开相机后流水正常，物理LED顺序已对应为照片左到右7~0，先前编号误判解除；LED7/6与相机共享，不属于M5B状态灯，低电平亮的故障灯正常应亮。详见`reports/m5b1_global_canny_i3/review_fix_264962e0/HARDWARE_FIRST_FEEDBACK_20261011.md`及`HARDWARE_STATS_FIRST_FEEDBACK.json`。用户原PASS保留为反馈，不能替代完整闸门结论。不推进下一阶段。
+
+Work已准备外部Windows原始字节记录器（未打开COM/未操作硬件），交用户补做前置记录、同bit JTAG冷配置与下载后至少30分钟，再回传.bin/.json及LED编号。仅管理/证据资料写入，candidate代码/bit保持。原硬停/冷配置及warm/PVT限制保留。
+
+
+## 2026-10-11 M5B.1双审查通过，等待受控实物验收（历史，首次反馈见当前）
+
+固定candidate `8976a276f03b4cd146c451aa081b04f71637fcf2`，唯一parent `264962e0c6af61e751c794c5b5f5252d00edbb6c`，branch `codex/m5b1-global-canny-prototype`。用户独立Codex A与自动隔离快照DeepSeek B均PASS_WITH_FINDINGS，R1/R2/R3关闭，无新阻断；双方完成前未交换本轮报告。Work决定GO受控实物、STOP等待用户反馈，M5B.1仍未完成，不推进M5C或下一开发阶段。
+
+审查归档及Work决定见`reports/m5b1_global_canny_i3/review_fix_264962e0/{CODEX_A_REVIEW_8976A276,DEEPSEEK_B_REVIEW_8976A276,DUAL_REVIEW_DECISION_8976A276}.md`。用户确认已有板载USB串口；操作与反馈清单见同目录`HARDWARE_ACCEPTANCE_8976A276.md`。仅用户JTAG临时配置，接回AR0135，460800-8-N-1原始二进制提前保存，至少30分钟七模式/静态及运动共存、CRC与真实分类+BFS校验；Work不操作硬件。
+
+固定bit 2924727B、SHA256 `8bc85b157426cf35e7aab31bc4acd1c8c54b5799c0e7a0424ee555f3927488c4`；本轮生产RTL/TB/工程/bit未改，只有后审管理记录。硬停撤销WVALID且只能冷重配置、hold +0.027ns、加密DDR ID/真实服务/发布率/PVT/warm restart边界持续保留。特别纠正：生产soft_reset接0，无独立启用该分支的验证，不能将旧文档相关表述当作已证功能。B的tuple少一位、死变量和分层CE/负向覆盖建议进入后续非阻断待办，不修改已审candidate。
+
+
+## 2026-10-11 M5B.1修复离线验收交回（历史，后续见当前双审查结果）
 
 三项264962e0审查缺口已在真实连接与事务验收中关闭；冻结离线总门通过，尚不代表独立复审或硬件PASS。当前报告入口统一为`reports/m5b1_global_canny_i3/review_fix_264962e0/`下的`OFFLINE_ACCEPTANCE.json`、`IMPLEMENTATION.md`、`BUILD_REPORT.md`、`EVIDENCE_SUMMARY.json`、`TECHNICAL_DEPENDENCIES.json`与`PROPOSED_GIT_SCOPE.json`。根目录旧c010验收和旧bit叙述仅保留历史含义。
 
