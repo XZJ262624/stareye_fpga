@@ -11,7 +11,7 @@ def snap():return {p.relative_to(W).as_posix():digest(p) for d in ('outflow','wo
 def main():
  ap=argparse.ArgumentParser();ap.add_argument('--preflight',action='store_true');a=ap.parse_args()
  stamp=datetime.datetime.now().strftime('%Y%m%d_%H%M%S');before=snap();C=W/'work'/('sta_'+stamp);C.mkdir(parents=True)
- O=R/'reports/m5b1_global_canny_i3'/('sta_preflight_'+stamp if a.preflight else 'final_sta');O.mkdir(exist_ok=True)
+ O=R/'reports/m5b1_global_canny_i3/review_fix_264962e0/final'/('sta_preflight_'+stamp if a.preflight else 'final_sta');O.mkdir(parents=True,exist_ok=True)
  for d in ('outflow','work_pnr'):shutil.copytree(W/d,C/d)
  for n in ('Ti60_Demo.xml','Ti60_Demo.peri.xml','Ti60_Demo_I3.sdc'):shutil.copy2(W/n,C/n)
  assert all(digest(C/p)==v for p,v in before.items())
@@ -44,7 +44,7 @@ foreach half {hi lo} {
 '''
  # Query the same exact pin whitelist; the installed grouped-regexp path
  # lookup was independently observed to fail while exact names succeed.
- manifest=json.loads((R/'reports/m5b1_global_canny_i3/CDC_PIN_MANIFEST.json').read_text())
+ manifest=json.loads((R/'reports/m5b1_global_canny_i3/review_fix_264962e0/final/CDC_PIN_MANIFEST.json').read_text())
  assert digest(W/'outflow/Ti60_Demo.map.v')['sha256']==manifest['map_sha256'],'Regenerate and re-audit exact pins against final map'
  tcl+='proc audit_exact {selectors} {set r {}; foreach s $selectors {set p [get_pins -regexp $s]; if {[llength $p]!=1} {error "audit pin mismatch $s"}; set r [concat $r $p]}; return $r}\n'
  for key,pins in manifest['groups'].items():

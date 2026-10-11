@@ -10,7 +10,8 @@ from pathlib import Path
 import argparse,json,struct,zlib
 from collections import deque
 MAGIC=b'SM5B'
-STAT_WORDS={0:'requests',1:'accepted',2:'busy_rejected',3:'capture_drop',4:'published',5:'result_age',6:'camera_max_bytes',7:'display_min_bytes',8:'C0_max_wait_ui',9:'C1_max_wait_ui',10:'C2_max_wait_ui',11:'C0_max_service_ui',12:'C1_max_service_ui',13:'C2_max_service_ui',14:'scans_hi16_pairs_lo16',15:'elapsed_ui',16:'changed_pixels',17:'system_status',22:'job_fault_flags',23:'classification_min_bytes_ui',24:'classification_max_bytes_ui',25:'fifo_sticky_bits',26:'B_response_errors',27:'R_response_errors',28:'ID_errors',29:'LAST_errors',30:'range_permission_errors',31:'epoch_errors',32:'watchdog_errors'}
+# job_fault_flags: bit0 capture dropped, bit1 engine failed, bit2 stop, bit3 current job failed.
+STAT_WORDS={0:'requests',1:'accepted',2:'busy_rejected',3:'capture_drop',4:'published',5:'result_age',6:'camera_max_bytes',7:'display_min_bytes',8:'C0_max_wait_ui',9:'C1_max_wait_ui',10:'C2_max_wait_ui',11:'C0_max_service_ui',12:'C1_max_service_ui',13:'C2_max_service_ui',14:'scans_hi16_pairs_lo16',15:'elapsed_ui',16:'changed_pixels',17:'system_status',22:'job_fault_flags',23:'classification_min_bytes_ui',24:'classification_max_bytes_ui',25:'fifo_sticky_bits',26:'B_response_errors',27:'R_response_errors',28:'ID_errors',29:'LAST_errors',30:'range_permission_errors',31:'epoch_errors',32:'watchdog_errors',33:'local_cancelled_operations'}
 def descriptor(b):
  v=int.from_bytes(b,'little');get=lambda shift,bits:(v>>shift)&((1<<bits)-1)
  return dict(epoch=get(0,64),frame_id=get(64,64),job_id=get(128,64),source_sof_pixel_ticks=get(192,64),high=get(256,8),low=get(264,8),median=get(272,1),support_radius=get(273,3),nms_version=get(276,8),width=get(284,12),height=get(296,12),capture_success=bool(get(308,1)))

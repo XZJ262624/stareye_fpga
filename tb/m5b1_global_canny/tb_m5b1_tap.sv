@@ -22,7 +22,7 @@ module tb_m5b1_tap;
   if(tap_position==WIDTH*HEIGHT-1)begin tap_frames=tap_frames+1;tap_position=0;end else tap_position=tap_position+1;
  end
  m5a_stream_top #(.WIDTH(WIDTH),.HEIGHT(HEIGHT),.H_TOTAL(H_TOTAL)) dut(
-  .tap_input_frame_id(tag_in),.tap_input_epoch(64'd77),
+  .tap_input_frame_id(tag_in),.tap_input_epoch(64'd77),.tap_input_qualified(1'b1),
   .tap_valid(tap_valid),.tap_class(tap_class),.tap_x(tap_x),.tap_y(tap_y),.tap_high(tap_high),.tap_low(tap_low),.tap_filter(tap_filter),
   .tap_frame_id(tap_frame_id),.tap_epoch(tap_epoch),.tap_timestamp(tap_timestamp),
   .clk(clk),.ce(ce),.arst_n(rst),.in_gray(gray),.in_de(de),.in_hs(hs),.in_vs(vs),.in_sof(sof),

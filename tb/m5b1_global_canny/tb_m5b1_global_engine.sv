@@ -15,7 +15,7 @@ module tb_m5b1_global_engine;
   .clk(clk),.rst_n(rst_n),.stop(1'b0),.start(start),.descriptor(320'h1234),.class_base(32'h01000000),.result_available(2'b11),
   .result_reserved(),.busy(busy),.finished(finished),.failed(failed),.published(published),.result_slot(result_slot),.published_descriptor(published_descriptor),
   .pairs(pairs),.scans(scans),.elapsed(elapsed),.changed_pixels(changed_pixels),
-  .tx_start(tx_start),.tx_write(tx_write),.tx_address(tx_address),.tx_length(tx_length),
+  .tx_start(tx_start),.tx_write(tx_write),.tx_cancel(),.tx_address(tx_address),.tx_length(tx_length),
   .tx_busy(tx_busy),.tx_done(tx_done),.tx_error(tx_error),.tx_beat(tx_beat),.tx_read_beat(tx_read_beat),.tx_rdata(tx_rdata),.tx_write_beat(phase==1&&writing),.tx_wdata(tx_wdata));
  always @(negedge clk)begin
   tx_done=0;tx_read_beat=0;

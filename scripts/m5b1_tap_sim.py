@@ -6,10 +6,10 @@ Hardware tap itself uses original 12-bit NMS and is not reconstructed here.
 from pathlib import Path
 import subprocess,re,json,hashlib
 from m5a_streaming_canny_gold import generate
-R=Path(__file__).resolve().parents[1];T=R/'tb/m5b1_global_canny';O=R/'reports/m5b1_global_canny_i3/tap';M=Path('E:/Modelsim_10.1c/win64')
+R=Path(__file__).resolve().parents[1];T=R/'tb/m5b1_global_canny';O=R/'reports/m5b1_global_canny_i3/review_fix_264962e0/final/tap';M=Path('E:/Modelsim_10.1c/win64')
 def rec(p):return dict(path=p.relative_to(R).as_posix(),bytes=p.stat().st_size,sha256=hashlib.sha256(p.read_bytes()).hexdigest())
 def main():
- O.mkdir(exist_ok=True);results=[];lib=O/'work'
+ O.mkdir(parents=True,exist_ok=True);results=[];lib=O/'work'
  rtl=[p for d in ('rtl/m5b1_global_canny/m5a_copy','rtl/m3_sobel_core','rtl/m32_median_integration','rtl/m4_color_overlay') for p in sorted((R/d).glob('*.v'))]+[T/'tb_m5b1_tap.sv']
  bound=rtl+[Path(__file__),R/'scripts/m5a_streaming_canny_gold.py'];before=[rec(p) for p in bound]
  if not lib.exists():subprocess.run([str(M/'vlib.exe'),str(lib)],check=True,capture_output=True)

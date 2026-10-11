@@ -1,6 +1,26 @@
 # 星眸项目背景
 
-## 2026-10-10当前阶段
+## 2026-10-11 M5B.1修复离线验收交回（当前，待固定candidate双审查）
+
+三项264962e0审查缺口已在真实连接与事务验收中关闭；冻结离线总门通过，尚不代表独立复审或硬件PASS。当前报告入口统一为`reports/m5b1_global_canny_i3/review_fix_264962e0/`下的`OFFLINE_ACCEPTANCE.json`、`IMPLEMENTATION.md`、`BUILD_REPORT.md`、`EVIDENCE_SUMMARY.json`、`TECHNICAL_DEPENDENCIES.json`与`PROPOSED_GIT_SCOPE.json`。根目录旧c010验收和旧bit叙述仅保留历史含义。
+
+branch为codex/m5b1-global-canny-prototype；新candidate必须直接parent `264962e0c6af61e751c794c5b5f5252d00edbb6c`。仅精确清单提交，commit后立即停止所有写入交Work；本文件不自嵌commit ID，以Git交回为准。Work核对固定Git快照后盲审DeepSeek B，并停止给用户独立Codex A复审提示词。未做硬件操作。
+
+真实LCD七模式逐像素、有效全零成功descriptor、无效/帧中失效后恢复、CE/标签复位、三阶段未受理取消、已受理A/W/B/R真实排空、metadata背压稳定、同拍边界、六项修复突变、原七组回归与十项突变均有当前源码/runner绑定。默认capture/engine 96M及export 960M周期全部通过；export exit0，712B/两CRC统计，截断包显式重同步。较早default_export_v2原因未知且仍为历史未达到oracle，未改成PASS。
+
+build_20261010_235246完整exit0；45042 XLR/124 RAM10/0 DSP，setup/hold +0.196/+0.027ns，134份路径覆盖报告不是134个PVT角点。940精确pin/457结构CDC分类/413物理数据端点，最大clock-to-Q加数据1.415ns、skew0.825ns，新增内部时序三项0/0/0。新bit2924727B，SHA256 `8bc85b157426cf35e7aab31bc4acd1c8c54b5799c0e7a0424ee555f3927488c4`。96输入/53输出已绑定；1924非规则保护文件及两规则原前缀、2139历史未跟踪资料保持。
+
+显著限制：协议watchdog硬停会撤销stalled WVALID，保留owner/busy、不伪ACK、无新握手/发布，仅冷重新配置；这是既有隔离边界，不能称普遍AXI稳定VALID合规，须交新A/B独立评估。正常取消/普通soft_reset仍强制稳定VALID及真实B/R。默认周期TB使用加速UART，5000UI收尾不是生产波特率上界；本地tag reset不是加密DDR warm restart。4us仅条件模型，不承诺fps；硬件、warm/PVT与真实有效发布率仍PENDING。M5C仅预留未实施。
+
+## 2026-10-11 M5B.1修复检查点（历史决定，边界仍有效）
+
+当前仍为264962e0独立审查FAIL后的离线修复验证，未生成新candidate、未放行实物。新完整构建与STA已结束，Work核对96输入/53输出当前哈希一致；部分最终连接/资格用例尚未执行，default_export_v2没有达到oracle且原因未定，全部回归与保护/scope绑定仍待收尾。此前自动审批usage-limit错误只说明当时调用失败，不能认定账户额度耗尽；Work重新经自动审批执行vlog版本查询已成功，按检查点恢复Astra。续做依据见`reports/m5b1_global_canny_i3/review_fix_264962e0/RESUME_CHECKPOINT_20261011.md`及STATUS。保留M5A、DDR低频全局路线及M5C未来接口预留；本检查点不调整路线或降低闸门。
+
+## 2026-10-10 M5B.1独立审查阻断（历史，FAIL尚未解除）
+
+264962e0 candidate被Codex A判FAIL，DeepSeek B为PASS_WITH_FINDINGS；Work采用FAIL，离线修复显示实际接线错拍、无效回放资格与后台未受理请求取消。旧离线PASS仅覆盖已测范围，不等于当前candidate放行。按REVIEW_FIX_SPEC_264962E0.md由Codex exec/Astra顺序修复，创建直接继承264962e0的新candidate再双审查；实物、M5C融合和后续阶段保持未放行。
+
+## 2026-10-10旧离线candidate节点（历史，随后独立审查FAIL）
 
 M5B.1隔离全局Canny原型冻结离线门通过，固定candidate待双独立审查与用户实物验收。新工程从M5A输入闭包复制，后台结果暂不接入实时显示。真实DDR事务/lease、分类捕获、全局双向收敛与单次UART导出已离线验证；4us仅服务条件，64pair/1s超时安全不发布，生产fail-stop需冷重新配置，不承诺fps。最终构建43227 XLR/124 RAM10/0 DSP，setup/hold +0.190/+0.024ns。详见STATUS和reports/m5b1_global_canny_i3/OFFLINE_ACCEPTANCE.json；下文早期阶段描述保留历史时点含义。
 

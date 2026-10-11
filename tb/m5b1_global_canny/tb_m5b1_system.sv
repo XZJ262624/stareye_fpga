@@ -21,10 +21,10 @@ module tb_m5b1_system;
  wire [95:0] max_wait,max_service;wire [31:0] qos_exceeded,accepts,completes,rejects;
  reg bg_req=0,bg_inflight=0;integer bg_beats=0,bg_count=0;
  wire [63:0] epoch;wire uart_tx;wire [5:0] led;
- reg [11:0] tap_x=0,tap_y=0;reg tap_valid=0;reg [1:0] tap_class=0;reg [63:0] stamp=0;
+ reg [11:0] tap_x=0,tap_y=0;reg tap_valid=0;reg [1:0] tap_class=0;reg [63:0] stamp=0,tap_source_id=0;
  m5b1_system dut(.ui_clk(ui_clk),.cam_clk(cam_clk),.pix_clk(pix_clk),.rst_n(arst_n),.pll_locked(arst_n),.cal_done(arst_n),.cal_pass(arst_n),
-  .cam_vs(cam_vs),.cam_valid(cam_valid),.cam_data(cam_data),.pix_sof(pix_sof),.pix_request(pix_request),.pix_data(pix_data),.frame_id(replay_frame_id),.epoch(epoch),
-  .tap_valid(tap_valid),.tap_class(tap_class),.tap_x(tap_x),.tap_y(tap_y),.tap_high(8'd64),.tap_low(8'd32),.tap_filter(1'b1),.tap_frame_id(replay_frame_id),.tap_epoch(TESTMODE==3?64'd0:epoch),.tap_timestamp(stamp),.uart_tx(uart_tx),.led(led),
+  .cam_vs(cam_vs),.cam_valid(cam_valid),.cam_data(cam_data),.pix_sof(pix_sof),.pix_request(pix_request),.pix_data(pix_data),.frame_id(replay_frame_id),.epoch(epoch),.pix_qualified(),
+  .tap_valid(tap_valid),.tap_class(tap_class),.tap_x(tap_x),.tap_y(tap_y),.tap_high(8'd64),.tap_low(8'd32),.tap_filter(1'b1),.tap_frame_id(tap_source_id),.tap_epoch(TESTMODE==3?64'd0:epoch),.tap_timestamp(stamp),.uart_tx(uart_tx),.led(led),
   .aid(aid),.alen(alen),.wid(wid),.aaddr(aaddr),.asize(asize),.aburst(aburst),.alock(alock),.avalid(avalid),.atype(atype),.aready(aready),
   .wdata(wdata),.wstrb(wstrb),.wlast(wlast),.wvalid(wvalid),.wready(wready),.bid(bid),.bresp(bresp),.bvalid(bvalid),.bready(bready),
   .rid(rid),.rresp(rresp),.rdata(rdata),.rlast(rlast),.rvalid(rvalid),.rready(rready));
@@ -35,7 +35,9 @@ module tb_m5b1_system;
  assign fault=dut.video_fault;assign quarantine=dut.quarantine;assign reset_request=dut.reset_request;
  assign cam_bytes=dut.camera_bytes;assign disp_bytes=dut.display_bytes;assign cam_max=dut.camera_max;assign disp_min=dut.display_min;
  assign rejected=dut.rejected;assign max_service=dut.max_service;assign max_wait=dut.max_wait;assign qos_exceeded=dut.qos_exceeded;
- reg stall_bus=0;
+ reg stall_bus=0;reg w_stalled=0;reg [153:0] w_held;
+ reg hardstop_seen=0;integer hardstop_backend=-1,hardstop_published=0;
+ reg [2:0] hardstop_owner_state;reg [1:0] hardstop_owner;reg [127:0] hardstop_data;
  integer fileout,bytes_out=0,class_cross=0,work_cross=0,metadata_b=0,publish_observed=0;reg last_metadata_slot=0,abort_seen=0;
  initial fileout=$fopen("system_uart.hex","w");
  reg [127:0] mem[0:1107711];integer ms=0,beat=0,len=0,base=0,age=0;
@@ -54,6 +56,27 @@ module tb_m5b1_system;
   cycles=cycles+1;if(ms!=0)age=age+1;
   if(TESTMODE!=2&&(fault||quarantine||reset_request))$fatal(1,"VIDEO_PROTOCOL_FAULT cycles=%0d cam=%0d display=%0d ws=%0d rs=%0d camfault=%b pixfault=%b",cycles,cam_bytes,disp_bytes,dut.video.ws,dut.video.rs,dut.video.cam_fault,dut.video.pix_fault);
   if(|rejected)$fatal(1,"legal DMA rejected");
+  // Normal cancellation and ordinary soft reset retain the complete stalled
+  // tuple. The frozen prototype's protocol-watchdog emergency isolation is
+  // separately observed below: it withdraws VALID, retains ownership, never
+  // asserts a synthetic ACK, and requires cold reconfiguration. It is NOT a
+  // claim of AXI VALID compliance or finite drainage after a dead DDR bus.
+  if(w_stalled&&!dut.stop&&{wid,wstrb,wlast,wvalid,wdata}!==w_held)$fatal(1,"system W payload changed while stalled");
+  if(dut.stop&&dut.background.ever_run)begin
+   if(TESTMODE!=2||!dut.quarantine||!dut.reset_request||dut.error_reason!=1||dut.ack)$fatal(1,"unexpected hardstop exception");
+   if(!hardstop_seen)begin
+    if(!w_stalled||w_held[128]!==1'b1||wvalid||{wid,wstrb,wlast,wdata}!=={w_held[153:129],w_held[127:0]})$fatal(1,"hardstop first edge differs beyond VALID withdrawal");
+    hardstop_owner=dut.arbiter.owner;hardstop_owner_state=dut.arbiter.state;hardstop_published=dut.background.published_count;
+    $display("HARDSTOP_FIRST watchdog=1 calibration_done=1 calibration_pass=1 stop=%b reset_request=%b quarantine=%b ACK=%b owner=%0d arbstate=%0d transfer=%0d busy=%b eng_selected=%b backend=%0d Wbefore=%h Wnow=%h",dut.stop,dut.reset_request,dut.quarantine,dut.ack,dut.arbiter.owner,dut.arbiter.state,dut.background.transfer.state,dut.background.tx_busy,dut.background.eng_selected,dut.background.state,w_held,{wid,wstrb,wlast,wvalid,wdata});
+    hardstop_seen=1;
+   end
+   if(avalid||wvalid||bready||rready||dut.arbiter.owner!=hardstop_owner||dut.arbiter.state!=hardstop_owner_state||!dut.background.tx_busy||dut.background.published_count!=hardstop_published)$fatal(1,"hardstop isolated interface/retained owner/publication");
+   if(hardstop_backend!=dut.background.state||hardstop_data!==wdata)begin
+    $display("HARDSTOP_TRACE backend=%0d eng_selected=%b owner=%0d arbstate=%0d transfer=%0d busy=%b WVALID=%b WLAST=%b WDATA=%h cap_data=%h",dut.background.state,dut.background.eng_selected,dut.arbiter.owner,dut.arbiter.state,dut.background.transfer.state,dut.background.tx_busy,wvalid,wlast,wdata,dut.background.cap_data);
+    hardstop_backend=dut.background.state;hardstop_data=wdata;
+   end
+  end
+  w_stalled=wvalid&&!wready;w_held={wid,wstrb,wlast,wvalid,wdata};
   if(stalled&&{aaddr,aid,alen,atype,avalid}!==held)$fatal(1,"unstable A");
   stalled=avalid&&!aready;held={aaddr,aid,alen,atype,avalid};
   if(avalid&&aready)begin
@@ -106,8 +129,7 @@ module tb_m5b1_system;
  always @(posedge pix_clk)begin
   if(pix_sof)position=0;
   if(pix_request)begin
-   #0.01;
-   if(dut.video.frame_used&&!dut.stop)begin
+   if(dut.video.pix_qualified&&!dut.stop)begin
     if(pix_data!==pixel(replay_frame_id,position))$fatal(1,"pixel mismatch frame=%0d pos=%0d got=%h expected=%h",replay_frame_id,position,pix_data,pixel(replay_frame_id,position));
     checked=checked+1;
    end
@@ -161,7 +183,7 @@ module tb_m5b1_system;
  initial begin
   wait(run);
   forever begin
-   @(posedge pix_sof);repeat(50500)@(negedge pix_clk);
+   @(posedge pix_sof);repeat(50500)@(negedge pix_clk);tap_source_id=replay_frame_id;
    for(cy=0;cy<720;cy=cy+1)for(cx=0;cx<1650;cx=cx+1)begin
     @(negedge pix_clk);tap_valid=cx<1280;tap_x=cx;tap_y=cy;tap_class=(cx%97==0&&cy%11==0)?2:((cx%13<8&&cy%17<12)?1:0);
    end

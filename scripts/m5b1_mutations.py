@@ -1,7 +1,7 @@
 """Compile broken copies and require the real HDL acceptance oracle to fail."""
 from pathlib import Path
 import subprocess,hashlib,json,datetime
-R=Path(__file__).resolve().parents[1];T=R/'tb/m5b1_global_canny';M=Path('E:/Modelsim_10.1c/win64');O=R/'reports/m5b1_global_canny_i3/mutations'
+R=Path(__file__).resolve().parents[1];T=R/'tb/m5b1_global_canny';M=Path('E:/Modelsim_10.1c/win64');O=R/'reports/m5b1_global_canny_i3/review_fix_264962e0/final/mutations'
 def rec(p):return dict(path=p.relative_to(R).as_posix(),bytes=p.stat().st_size,sha256=hashlib.sha256(p.read_bytes()).hexdigest())
 CASES=[
  ('ack_isolation','arbiter',[('&&!ddr_reset_ack','')],'arbiter',[],'ACK'),
@@ -16,7 +16,7 @@ CASES=[
  ('capture_epoch','capture',[("tap_epoch!=desc[63:0]||",''),("tap_epoch!=arm_data[63:0]||",'')],'capture',[],'descriptor identity/status'),
 ]
 def main():
- O.mkdir(exist_ok=True);src=sorted((R/'rtl/m5b1_global_canny').glob('*.sv'));tracked=src+sorted(T.glob('*.sv'))+[Path(__file__)];before=[rec(p) for p in tracked];cases=[]
+ O.mkdir(parents=True,exist_ok=True);src=sorted((R/'rtl/m5b1_global_canny').glob('*.sv'));tracked=src+sorted({T/f'tb_m5b1_{c[3]}.sv' for c in CASES})+[Path(__file__)];before=[rec(p) for p in tracked];cases=[]
  run=O/('work_'+datetime.datetime.now().strftime('%Y%m%d_%H%M%S'));run.mkdir()
  for name,module,replacements,test,args,expected in CASES:
   C=run/name;C.mkdir();original=R/f'rtl/m5b1_global_canny/m5b1_{module}.sv';s=original.read_text()

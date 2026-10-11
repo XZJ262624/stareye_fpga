@@ -13,9 +13,9 @@ module m5b1_backend #(parameter REQUEST_CYCLES=96000000,CAPTURE_CYCLES=96000000,
  localparam IDLE=0,HEADER=1,CAPTURE=2,CAPWAIT=3,FREEZE=4,ENGINE=5,ENGINE_WAIT=6,
   STATS=7,STATS_WAIT=8,EXPORT_START=9,EXPORT_READ=10,EXPORT_READ_WAIT=11,EXPORT_BYTES=12,
   EXPORT_FINISH=13,DRAIN=14,EXPORT_PREFETCH=15,FAULT_REPORT=16,FAULT_IDLE=17;
- wire tx_busy,tx_done,tx_error,tx_read_beat,tx_write_beat;wire [7:0] tx_beat;
+ wire tx_busy,tx_done,tx_error,tx_cancelled,tx_read_beat,tx_write_beat;wire [7:0] tx_beat;
  reg [7:0] export_type;
- reg [4:0] state;reg fault_reported,ever_run;
+ reg [4:0] state;reg fault_reported,ever_run,job_failed;reg [31:0] local_cancels;
  wire export_active=(state>=EXPORT_START&&state<=EXPORT_FINISH)||state==EXPORT_PREFETCH;
  wire [13:0] capture_min,capture_max;wire [1:0] capture_fifo_faults;reg class_slot,latest_slot,latest_valid,exported;
  reg [63:0] job_id;reg [31:0] tick,requests,accepted,busy_rejected,capture_drop,published_count,result_age;
@@ -33,22 +33,25 @@ module m5b1_backend #(parameter REQUEST_CYCLES=96000000,CAPTURE_CYCLES=96000000,
  wire eng_reserved;
  wire eng_busy,eng_finished,eng_failed,eng_published,eng_result_slot;wire [319:0] eng_descriptor;
  wire [15:0] eng_pairs,eng_scans;wire [31:0] eng_elapsed,eng_changed;
- wire eng_tx_start,eng_tx_write;wire [31:0] eng_tx_address;wire [7:0] eng_tx_length;wire [127:0] eng_tx_data;
+ wire eng_tx_start,eng_tx_write,eng_tx_cancel;wire [31:0] eng_tx_address;wire [7:0] eng_tx_length;wire [127:0] eng_tx_data;
  wire [31:0] class_base=class_slot?32'h01039000:32'h01000000;
  m5b1_global_engine engine(.clk(ui_clk),.rst_n(rst_n),.stop(stop),.start(state==ENGINE),.descriptor(frozen),.class_base(class_base),
   .result_available(latest_valid?(latest_slot?2'b01:2'b10):2'b11),
   .result_reserved(eng_reserved),.busy(eng_busy),.finished(eng_finished),.failed(eng_failed),.published(eng_published),.result_slot(eng_result_slot),.published_descriptor(eng_descriptor),
   .pairs(eng_pairs),.scans(eng_scans),.elapsed(eng_elapsed),.changed_pixels(eng_changed),
-  .tx_start(eng_tx_start),.tx_write(eng_tx_write),.tx_address(eng_tx_address),.tx_length(eng_tx_length),
+  .tx_start(eng_tx_start),.tx_write(eng_tx_write),.tx_cancel(eng_tx_cancel),.tx_address(eng_tx_address),.tx_length(eng_tx_length),
   .tx_busy(tx_busy),.tx_done(state==ENGINE_WAIT&&tx_done),.tx_error(tx_error),.tx_beat(tx_beat),.tx_read_beat(state==ENGINE_WAIT&&tx_read_beat),.tx_rdata(rdata),.tx_write_beat(state==ENGINE_WAIT&&tx_write_beat),.tx_wdata(eng_tx_data));
 
  wire eng_selected=state==ENGINE_WAIT;
- wire transfer_start=eng_selected?eng_tx_start:(state==CAPTURE&&cap_count>=32&&!(descriptor_valid&&!cap_descriptor[308]))||(state==EXPORT_READ);
+ wire capture_timeout=state>=HEADER&&state<=FREEZE&&capture_age>=CAPTURE_CYCLES;
+ wire export_timeout=export_active&&export_age>=EXPORT_CYCLES;
+ wire transfer_cancel=eng_selected?eng_tx_cancel:capture_timeout||export_timeout;
+ wire transfer_start=eng_selected?eng_tx_start:!transfer_cancel&&((state==CAPTURE&&cap_count>=32&&!(descriptor_valid&&!cap_descriptor[308]))||(state==EXPORT_READ));
  wire [31:0] export_base=export_type==2?class_base:(latest_slot?32'h010c9000:32'h010ac000);
  wire [31:0] transfer_address=eng_selected?eng_tx_address:(state==CAPTURE?class_base+offset:export_base+offset);
  wire transfer_write=eng_selected?eng_tx_write:state==CAPTURE;
- m5b1_transfer transfer(.clk(ui_clk),.rst_n(rst_n),.stop(stop),.start(transfer_start),.write_op(transfer_write),
-  .address(transfer_address),.length(eng_selected?eng_tx_length:8'd31),.busy(tx_busy),.done(tx_done),.error(tx_error),.beat(tx_beat),.read_beat(tx_read_beat),.write_beat(tx_write_beat),
+ m5b1_transfer transfer(.clk(ui_clk),.rst_n(rst_n),.stop(stop),.start(transfer_start),.cancel(transfer_cancel),.write_op(transfer_write),
+  .address(transfer_address),.length(eng_selected?eng_tx_length:8'd31),.busy(tx_busy),.done(tx_done),.error(tx_error),.cancelled(tx_cancelled),.beat(tx_beat),.read_beat(tx_read_beat),.write_beat(tx_write_beat),
   .avalid(avalid),.aready(aready),.aaddr(aaddr),.alen(alen),.aid(aid),.atype(atype),
   .source_data(eng_selected?eng_tx_data:cap_data),.wdata(wdata),.wvalid(wvalid),.wlast(wlast),.wready(wready),
   .bvalid(bvalid),.bid(bid),.bresp(bresp),.rvalid(rvalid),.rlast(rlast),.rid(rid),.rresp(rresp),.rready(rready),.rejected(rejected));
@@ -77,17 +80,18 @@ module m5b1_backend #(parameter REQUEST_CYCLES=96000000,CAPTURE_CYCLES=96000000,
  end
  always @(posedge ui_clk or negedge rst_n)begin
   if(!rst_n)begin
-   state<=IDLE;fault_reported<=0;ever_run<=0;class_slot<=1;latest_slot<=0;latest_valid<=0;exported<=0;job_id<=0;tick<=0;requests<=0;accepted<=0;busy_rejected<=0;capture_drop<=0;published_count<=0;result_age<=0;
+   state<=IDLE;fault_reported<=0;ever_run<=0;job_failed<=0;local_cancels<=0;class_slot<=1;latest_slot<=0;latest_valid<=0;exported<=0;job_id<=0;tick<=0;requests<=0;accepted<=0;busy_rejected<=0;capture_drop<=0;published_count<=0;result_age<=0;
    offset<=0;capture_age<=0;export_age<=0;arm<=0;descriptor_take<=0;frozen<=0;publish_toggle<=0;bg_fault<=0;stats<=0;byte_index<=0;export_type<=2;packet_start<=0;packet_abort<=0;
   end else begin
    arm<=0;descriptor_take<=0;packet_start<=0;packet_abort<=0;
    if(run)ever_run<=1;
+   if(tx_cancelled)local_cancels<=local_cancels+1'b1;
    if(run&&!stop)begin
     if(tick==REQUEST_CYCLES-1)begin
      tick<=0;requests<=requests+1'b1;result_age<=result_age+1'b1;
      if(state!=IDLE)busy_rejected<=busy_rejected+1'b1;
      else if(!arm_busy)begin
-      accepted<=accepted+1'b1;job_id<=job_id+1'b1;class_slot<=!class_slot;arm<=1;state<=HEADER;offset<=0;capture_age<=0;
+      accepted<=accepted+1'b1;job_id<=job_id+1'b1;job_failed<=0;class_slot<=!class_slot;arm<=1;state<=HEADER;offset<=0;capture_age<=0;
      end
     end else tick<=tick+1'b1;
    end
@@ -106,14 +110,14 @@ module m5b1_backend #(parameter REQUEST_CYCLES=96000000,CAPTURE_CYCLES=96000000,
      else if(offset==230400-512)state<=FREEZE;
      else begin offset<=offset+512;state<=CAPTURE;end
     end
-    FREEZE:if(descriptor_valid)begin
+    FREEZE:if(descriptor_valid&&!capture_timeout)begin
      frozen<=cap_descriptor;descriptor_take<=1;
      if(cap_descriptor[308]&&cap_descriptor[63:0]==epoch&&cap_descriptor[191:128]==job_id)state<=ENGINE;
-     else begin capture_drop<=capture_drop+1'b1;bg_fault<=1;state<=STATS;end
+     else begin capture_drop<=capture_drop+1'b1;bg_fault<=1;job_failed<=1;state<=STATS;end
     end
     ENGINE:state<=ENGINE_WAIT;
     ENGINE_WAIT:if(eng_finished)begin
-     if(eng_failed)bg_fault<=1;
+     if(eng_failed)begin bg_fault<=1;job_failed<=1;end
      if(eng_published)begin latest_valid<=1;latest_slot<=eng_result_slot;published_count<=published_count+1'b1;publish_toggle<=!publish_toggle;result_age<=0;end
      state<=STATS;
     end
@@ -124,15 +128,15 @@ module m5b1_backend #(parameter REQUEST_CYCLES=96000000,CAPTURE_CYCLES=96000000,
      stats[351:256]<=max_wait;stats[447:352]<=max_service;
      stats[479:448]<={eng_scans,eng_pairs};stats[511:480]<=eng_elapsed;stats[543:512]<=eng_changed;
      stats[575:544]<=system_status;stats[639:576]<=job_id;stats[703:640]<=frozen[127:64];
-     stats[735:704]<={29'b0,stop,eng_failed,dropped_sync[1]};
+     stats[735:704]<={28'b0,job_failed,stop,eng_failed,dropped_sync[1]};
      stats[767:736]<={18'b0,capture_min};stats[799:768]<={18'b0,capture_max};
-     stats[831:800]<={26'b0,capture_fifo_faults,video_fifo_faults};stats[1055:832]<=error_counts;byte_index<=0;packet_start<=1;state<=STATS_WAIT;
+     stats[831:800]<={26'b0,capture_fifo_faults,video_fifo_faults};stats[1055:832]<=error_counts;stats[1087:1056]<=local_cancels;byte_index<=0;packet_start<=1;state<=STATS_WAIT;
     end
     STATS_WAIT:begin
      if(payload_ready&&payload_valid&&byte_index<255)byte_index<=byte_index+1'b1;
      if(packet_done)begin
       if(stop)state<=FAULT_IDLE;
-      else if(!exported&&latest_valid&&!eng_failed)begin export_type<=2;state<=EXPORT_START;export_age<=0;end
+      else if(!exported&&latest_valid&&!eng_failed&&!job_failed)begin export_type<=2;state<=EXPORT_START;export_age<=0;end
       else state<=IDLE;
      end
     end
@@ -158,10 +162,15 @@ module m5b1_backend #(parameter REQUEST_CYCLES=96000000,CAPTURE_CYCLES=96000000,
     end
     FAULT_REPORT:state<=STATS;
     FAULT_IDLE:begin end
-    DRAIN:if(cap_empty&&descriptor_valid&&!tx_busy)begin descriptor_take<=1;frozen<=cap_descriptor;state<=STATS;end
+    DRAIN:begin
+     job_failed<=1;
+     if(cap_empty&&descriptor_valid&&!tx_busy)begin descriptor_take<=1;frozen<=cap_descriptor;frozen[308]<=0;state<=STATS;end
+    end
    endcase
-   if(state>=HEADER&&state<=FREEZE&&capture_age>=CAPTURE_CYCLES&&!tx_busy)begin bg_fault<=1;state<=DRAIN;end
-   if(export_active&&export_age>=EXPORT_CYCLES&&!tx_busy)begin bg_fault<=1;exported<=1;packet_abort<=1;state<=IDLE;end
+   // Keep CAPWAIT's payload/pop contract until the owned transaction drains.
+   // Cancelling only a queued request also terminates without future READY.
+   if(capture_timeout&&!tx_busy)begin bg_fault<=1;job_failed<=1;capture_drop<=capture_drop+1'b1;state<=DRAIN;end
+   if(export_timeout&&!tx_busy)begin bg_fault<=1;job_failed<=1;exported<=1;packet_abort<=1;state<=FAULT_REPORT;end
    // UART fault telemetry is independent of the quarantined DDR transaction.
    // Keep the owner/busy state intact: this is not a DDR reset or synthetic ACK.
    if(stop&&ever_run&&!fault_reported)begin fault_reported<=1;latest_valid<=0;bg_fault<=1;packet_abort<=1;state<=FAULT_REPORT;end

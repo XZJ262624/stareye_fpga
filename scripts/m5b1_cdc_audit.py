@@ -5,7 +5,7 @@ explicitly. RAM data is a clock-domain boundary only for reviewed FIFO memories.
 """
 from pathlib import Path
 import re,json,hashlib,collections,functools
-R=Path(__file__).resolve().parents[1];O=R/'reports/m5b1_global_canny_i3';P=R/'efinity/m5b1_global_canny_i3/outflow/Ti60_Demo.map.v'
+R=Path(__file__).resolve().parents[1];O=R/'reports/m5b1_global_canny_i3/review_fix_264962e0/final';P=R/'efinity/m5b1_global_canny_i3/outflow/Ti60_Demo.map.v'
 def main():
  raw=P.read_bytes();s=re.sub(r'/\*.*?\*/','',raw.decode(),flags=re.S);widths={}
  for m in re.finditer(r'\b(?:wire|input|output)\s+\[(\d+):(\d+)\]\s*(.*?);',s,re.S):

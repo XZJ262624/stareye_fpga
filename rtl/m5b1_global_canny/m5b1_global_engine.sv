@@ -8,14 +8,15 @@ module m5b1_global_engine #(
  output reg busy,finished,failed,published,output reg result_reserved,output reg result_slot,
  output reg [319:0] published_descriptor,output reg [15:0] pairs,scans,
  output reg [31:0] elapsed,changed_pixels,
- output reg tx_start,tx_write,output reg [31:0] tx_address,output reg [7:0] tx_length,
+ output reg tx_start,tx_write,output tx_cancel,output reg [31:0] tx_address,output reg [7:0] tx_length,
  input tx_busy,tx_done,tx_error,input [7:0] tx_beat,input tx_read_beat,tx_write_beat,
  input [127:0] tx_rdata,output reg [127:0] tx_wdata);
  localparam CLASS_BEATS=WIDTH/64,WORK_BEATS=WIDTH/128;
  localparam IDLE=0,IC=1,ICW=2,IP=3,IW=4,IWW=5,SC=6,SCW=7,SO=8,SOW=9,
   SN=10,SNW=11,PREP=12,PIXEL=13,SW=14,SWW=15,PAIR=16,RESERVE=17,
   CR=18,CRW=19,CW=20,CWW=21,META=22,METAW=23,ABORT=24;
- reg [4:0] state;
+ reg [4:0] state,drain_state;reg [31:0] metadata_elapsed;
+ assign tx_cancel=busy&&(state==ABORT||elapsed>=WALL_CYCLES||stop||(tx_done&&tx_error));
  reg [11:0] row,column;reg reverse;reg pair_changed;
  reg [31:0] src_base,dst_base,classification,copy_offset,result_base;
  reg [319:0] desc;
@@ -44,12 +45,12 @@ module m5b1_global_engine #(
  wire last_row=next_row_outside;
  always @*begin
   tx_wdata=0;
-  case(state)
+  case(state==ABORT?drain_state:state)
    IWW,SWW:tx_wdata=new_row[tx_beat*128+:128];
    CWW:tx_wdata=copy_head;
    METAW:case(tx_beat)
     0:tx_wdata=desc[127:0];1:tx_wdata=desc[255:128];
-    2:tx_wdata={16'b0,elapsed,pairs,desc[319:256]};default:tx_wdata=0;
+    2:tx_wdata={16'b0,metadata_elapsed,pairs,desc[319:256]};default:tx_wdata=0;
    endcase
   endcase
  end
@@ -58,14 +59,14 @@ module m5b1_global_engine #(
  always @(posedge clk or negedge rst_n)begin
   if(!rst_n)begin
    busy<=0;finished<=0;failed<=0;published<=0;result_reserved<=0;result_slot<=0;published_descriptor<=0;pairs<=0;scans<=0;elapsed<=0;changed_pixels<=0;
-   tx_start<=0;tx_write<=0;tx_address<=0;tx_length<=0;state<=IDLE;row<=0;column<=0;reverse<=0;pair_changed<=0;
+   tx_start<=0;tx_write<=0;tx_address<=0;tx_length<=0;state<=IDLE;drain_state<=IDLE;metadata_elapsed<=0;row<=0;column<=0;reverse<=0;pair_changed<=0;
    src_base<=0;dst_base<=0;classification<=0;copy_offset<=0;result_base<=0;desc<=0;
    class_shift<=0;cur_shift<=0;next_shift<=0;previous_row<=0;previous_shift<=0;new_row<=0;
    previous_new<=0;previous_up<=0;previous_down<=0;
   end else begin
    tx_start<=0;finished<=0;published<=0;
    if(busy&&elapsed!=32'hffffffff)elapsed<=elapsed+1'b1;
-   if(busy&&state!=ABORT&&(elapsed>=WALL_CYCLES||stop||(tx_done&&tx_error)))begin state<=ABORT;failed<=1;end
+   if(busy&&state!=ABORT&&(elapsed>=WALL_CYCLES||stop||(tx_done&&tx_error)))begin drain_state<=state;state<=ABORT;failed<=1;end
    else case(state)
     IDLE:if(start)begin
      busy<=1;failed<=0;result_reserved<=0;elapsed<=0;pairs<=0;scans<=0;changed_pixels<=0;row<=0;column<=0;
@@ -138,9 +139,9 @@ module m5b1_global_engine #(
      if(copy_offset==WIDTH*HEIGHT/8-512)state<=META;
      else begin copy_offset<=copy_offset+512;state<=CR;end
     end
-    META:begin launch(1,32'h010e6000+(result_slot?128:0),2);state<=METAW;end
+    META:begin metadata_elapsed<=elapsed;launch(1,32'h010e6000+(result_slot?128:0),2);state<=METAW;end
     METAW:if(tx_done)begin published_descriptor<=desc;published<=1;busy<=0;finished<=1;state<=IDLE;end
-    ABORT:if(!tx_busy)begin result_reserved<=0;busy<=0;finished<=1;state<=IDLE;end
+    ABORT:if(!tx_busy&&!tx_start)begin result_reserved<=0;busy<=0;finished<=1;state<=IDLE;end
    endcase
   end
  end

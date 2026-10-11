@@ -1,7 +1,7 @@
 module m5b1_system(
  input ui_clk,cam_clk,pix_clk,rst_n,pll_locked,cal_done,cal_pass,
  input cam_vs,cam_valid,input [7:0] cam_data,input pix_sof,pix_request,
- output [7:0] pix_data,output [63:0] frame_id,output [63:0] epoch,
+ output [7:0] pix_data,output [63:0] frame_id,output [63:0] epoch,output pix_qualified,
  input tap_valid,input [1:0] tap_class,input [11:0] tap_x,tap_y,input [7:0] tap_high,tap_low,input tap_filter,
  input [63:0] tap_frame_id,tap_epoch,tap_timestamp,output uart_tx,output [5:0] led,
  output [7:0] aid,alen,wid,output [31:0] aaddr,output [2:0] asize,
@@ -23,7 +23,7 @@ module m5b1_system(
   .allow_run(run),.stop(stop),.ddr_reset_ack(ack),.epoch(epoch));
  m5b1_video_dma video(.ui_clk(ui_clk),.cam_clk(cam_clk),.pix_clk(pix_clk),.arst_n(rst_n),.run(run),.stop(stop),.epoch(epoch),
   .cam_vs(cam_vs),.cam_valid(cam_valid),.cam_data(cam_data),.pix_sof(pix_sof),.pix_request(pix_request),
-  .pix_data(pix_data),.replay_frame_id(frame_id),.display_valid(display_valid),.fault(video_fault),
+  .pix_data(pix_data),.replay_frame_id(frame_id),.pix_qualified(pix_qualified),.display_valid(display_valid),.fault(video_fault),
   .avalid(ca[1:0]),.aready(car[1:0]),.aaddr(cad[63:0]),.alen(cl[15:0]),.aid(ci[15:0]),.atype(ct[1:0]),
   .wvalid(cw[0]),.wlast(cwl[0]),.wdata(cwd[127:0]),.wready(cwr[0]),
   .bvalid(cb[0]),.bresp(cbr[1:0]),.bid(cbi[7:0]),.rvalid(cr[1]),.rlast(crl[1]),.rdata(crd[255:128]),.rresp(crresp[3:2]),.rid(cri[15:8]),.rready(crr[1]),

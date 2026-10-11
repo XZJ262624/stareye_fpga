@@ -1,0 +1,802 @@
+
+Efinix Timing Path Constraint Report
+Version: 2025.1.110.5.9
+Date: Sun Oct 11 00:04:35 2026
+
+Copyright (C) 2013 - 2025 Efinix, Inc. All rights reserved.
+
+User command: report_timing -from_clock {clk_pixel} -to_clock {clk_pixel} -npaths 10 -nworst 1 -setup -detail full_path -file {m5b1_clk_pixel_clk_pixel_setup.rpt}
+
+Timing Model: I3
+	process : typical
+	temperature : -40C to 100C
+	voltage : 0.95 +/-30mV
+	speedgrade : 3
+	technology : t16ff
+	status : final
+
+Summary:
+
+ Path #  | Slack (ns) | Delay (ns) |                      Start Pin                      |                    End Pin                    |  Launch Clk   |  Capture Clk
+========================================================================================================================================================================
+  1      |  5.434     |  6.517     | u_m5a_stream/u_final_packet/storage__D$f12|RDATA[2] | osd_rgb[2]~FF|D                               | clk_pixel (R) | clk_pixel (R)
+  2      |  5.576     |  6.375     | u_m5a_stream/u_final_packet/storage__D$f12|RDATA[2] | osd_rgb[7]~FF|D                               | clk_pixel (R) | clk_pixel (R)
+  3      |  5.593     |  6.358     | u_m5a_stream/u_final_packet/storage__D$f12|RDATA[2] | osd_rgb[20]~FF|D                              | clk_pixel (R) | clk_pixel (R)
+  4      |  5.621     |  6.330     | u_m5a_stream/u_final_packet/storage__D$f12|RDATA[2] | osd_rgb[3]~FF|D                               | clk_pixel (R) | clk_pixel (R)
+  5      |  5.632     |  6.319     | u_m5a_stream/u_final_packet/storage__D$f12|RDATA[2] | osd_rgb[21]~FF|D                              | clk_pixel (R) | clk_pixel (R)
+  6      |  5.639     |  6.312     | u_m5a_stream/u_final_packet/storage__D$f12|RDATA[2] | osd_rgb[0]~FF|D                               | clk_pixel (R) | clk_pixel (R)
+  7      |  5.649     |  7.482     | u_m5a_stream/tag_read[1]~FF|Q                       | u_m5b1/background/capture/push_data[77]~FF|CE | clk_pixel (R) | clk_pixel (R)
+  8      |  5.649     |  7.482     | u_m5a_stream/tag_read[1]~FF|Q                       | u_m5b1/background/capture/push_data[74]~FF|CE | clk_pixel (R) | clk_pixel (R)
+  9      |  5.649     |  7.482     | u_m5a_stream/tag_read[1]~FF|Q                       | u_m5b1/background/capture/push_data[89]~FF|CE | clk_pixel (R) | clk_pixel (R)
+ 10      |  5.649     |  7.482     | u_m5a_stream/tag_read[1]~FF|Q                       | u_m5b1/background/capture/push_data[48]~FF|CE | clk_pixel (R) | clk_pixel (R)
+
+++++ Path 1 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : u_m5a_stream/u_final_packet/storage__D$f12|RCLK
+Path End      : osd_rgb[2]~FF|D                                
+Launch Clock  : clk_pixel (RISE)                               
+Capture Clock : clk_pixel (RISE)                               
+Slack         : 5.434 (required time - arrival time)           
+Delay         : 6.517                                          
+
+Logic Level             : 11
+Non-global nets on path : 11
+Global nets on path     :  0
+
+Launch Clock Path Delay        : 2.095
++ Clock To Q + Data Path Delay : 7.881
+--------------------------------------
+End-of-path arrival time       : 9.976
+
+Constraint                     : 13.441
++ Capture Clock Path Delay     :  2.095
+- Clock Uncertainty            :  0.126
+---------------------------------------
+End-of-path required time      : 15.410
+
+Launch Clock Path
+                     name                        model name   delay (ns)  cumulative delay (ns) pins on net    location
+=========================================================================================================================
+clk_pixel                                       inpad           0.000             0.000                0       (0,159) 
+clk_pixel                                       inpad           0.126             0.126             4158       (0,159) 
+clk_pixel                                       net             1.969             2.095             4158       (0,159) 
+u_m5a_stream/u_final_packet/storage__D$f12|RCLK ram_8192x20     0.000             2.095             4158       (72,262)
+
+Data Path
+                       name                          model name   delay (ns)  cumulative delay (ns) pins on net    location
+=============================================================================================================================
+u_m5a_stream/u_final_packet/storage__D$f12|RDATA[2] ram_8192x20     1.361             1.361              18        (72,262)
+u_m5a_stream/u_final_packet/read_data[29]           net             0.812             2.173              18        (72,262)
+LUT__110326|in[1]                                   lut             0.063             2.236              18        (30,285)
+LUT__110326|out                                     lut             0.000             2.236              30        (30,285)
+n62029                                              net             0.277             2.513              30        (30,285)
+LUT__110379|in[2]                                   lut             0.061             2.574              30        (29,288)
+LUT__110379|out                                     lut             0.000             2.574               2        (29,288)
+n62082                                              net             0.731             3.305               2        (29,288)
+LUT__110385|in[1]                                   lut             0.061             3.366               2        (31,301)
+LUT__110385|out                                     lut             0.000             3.366               9        (31,301)
+n62088                                              net             0.835             4.201               9        (31,301)
+LUT__110393|in[0]                                   lut             0.061             4.262               9        (34,308)
+LUT__110393|out                                     lut             0.000             4.262              19        (34,308)
+n62096                                              net             0.302             4.564              19        (34,308)
+LUT__110409|in[1]                                   lut             0.061             4.625              19        (44,307)
+LUT__110409|out                                     lut             0.000             4.625               8        (44,307)
+n62112                                              net             0.471             5.096               8        (44,307)
+LUT__110508|in[2]                                   lut             0.061             5.157               8        (41,305)
+LUT__110508|out                                     lut             0.000             5.157               3        (41,305)
+n62211                                              net             0.335             5.492               3        (41,305)
+LUT__110530|in[1]                                   lut             0.061             5.553               3        (47,312)
+LUT__110530|out                                     lut             0.000             5.553               2        (47,312)
+n62233                                              net             0.436             5.989               2        (47,312)
+LUT__110538|in[1]                                   lut             0.063             6.052               2        (36,312)
+LUT__110538|out                                     lut             0.000             6.052               2        (36,312)
+n62241                                              net             0.471             6.523               2        (36,312)
+LUT__110544|in[2]                                   lut             0.061             6.584               2        (32,303)
+LUT__110544|out                                     lut             0.000             6.584              17        (32,303)
+n62247                                              net             0.773             7.357              17        (32,303)
+LUT__110604|in[0]                                   lut             0.061             7.418              17        (29,315)
+LUT__110604|out                                     lut             0.000             7.418               2        (29,315)
+n62277                                              net             0.399             7.817               2        (29,315)
+LUT__110605|in[2]                                   lut             0.061             7.878               2        (23,315)
+LUT__110605|out                                     lut             0.000             7.878               2        (23,315)
+osd_rgb[2]~FF|D                                     ff              0.003             7.881               2        (23,315)
+
+Capture Clock Path
+      name         model name   delay (ns)  cumulative delay (ns) pins on net    location
+===========================================================================================
+clk_pixel            inpad        0.000             0.000                0       (0,159) 
+clk_pixel            inpad        0.126             0.126             4158       (0,159) 
+clk_pixel            net          1.969             2.095             4158       (0,159) 
+osd_rgb[2]~FF|CLK    ff           0.000             2.095             4158       (23,315)
+
+++++ Path 2 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : u_m5a_stream/u_final_packet/storage__D$f12|RCLK
+Path End      : osd_rgb[7]~FF|D                                
+Launch Clock  : clk_pixel (RISE)                               
+Capture Clock : clk_pixel (RISE)                               
+Slack         : 5.576 (required time - arrival time)           
+Delay         : 6.375                                          
+
+Logic Level             : 11
+Non-global nets on path : 11
+Global nets on path     :  0
+
+Launch Clock Path Delay        : 2.095
++ Clock To Q + Data Path Delay : 7.739
+--------------------------------------
+End-of-path arrival time       : 9.834
+
+Constraint                     : 13.441
++ Capture Clock Path Delay     :  2.095
+- Clock Uncertainty            :  0.126
+---------------------------------------
+End-of-path required time      : 15.410
+
+Launch Clock Path
+                     name                        model name   delay (ns)  cumulative delay (ns) pins on net    location
+=========================================================================================================================
+clk_pixel                                       inpad           0.000             0.000                0       (0,159) 
+clk_pixel                                       inpad           0.126             0.126             4158       (0,159) 
+clk_pixel                                       net             1.969             2.095             4158       (0,159) 
+u_m5a_stream/u_final_packet/storage__D$f12|RCLK ram_8192x20     0.000             2.095             4158       (72,262)
+
+Data Path
+                       name                          model name   delay (ns)  cumulative delay (ns) pins on net    location
+=============================================================================================================================
+u_m5a_stream/u_final_packet/storage__D$f12|RDATA[2] ram_8192x20     1.361             1.361              18        (72,262)
+u_m5a_stream/u_final_packet/read_data[29]           net             0.812             2.173              18        (72,262)
+LUT__110326|in[1]                                   lut             0.063             2.236              18        (30,285)
+LUT__110326|out                                     lut             0.000             2.236              30        (30,285)
+n62029                                              net             0.277             2.513              30        (30,285)
+LUT__110379|in[2]                                   lut             0.061             2.574              30        (29,288)
+LUT__110379|out                                     lut             0.000             2.574               2        (29,288)
+n62082                                              net             0.731             3.305               2        (29,288)
+LUT__110385|in[1]                                   lut             0.061             3.366               2        (31,301)
+LUT__110385|out                                     lut             0.000             3.366               9        (31,301)
+n62088                                              net             0.835             4.201               9        (31,301)
+LUT__110393|in[0]                                   lut             0.061             4.262               9        (34,308)
+LUT__110393|out                                     lut             0.000             4.262              19        (34,308)
+n62096                                              net             0.302             4.564              19        (34,308)
+LUT__110409|in[1]                                   lut             0.061             4.625              19        (44,307)
+LUT__110409|out                                     lut             0.000             4.625               8        (44,307)
+n62112                                              net             0.471             5.096               8        (44,307)
+LUT__110508|in[2]                                   lut             0.061             5.157               8        (41,305)
+LUT__110508|out                                     lut             0.000             5.157               3        (41,305)
+n62211                                              net             0.335             5.492               3        (41,305)
+LUT__110530|in[1]                                   lut             0.061             5.553               3        (47,312)
+LUT__110530|out                                     lut             0.000             5.553               2        (47,312)
+n62233                                              net             0.436             5.989               2        (47,312)
+LUT__110538|in[1]                                   lut             0.063             6.052               2        (36,312)
+LUT__110538|out                                     lut             0.000             6.052               2        (36,312)
+n62241                                              net             0.471             6.523               2        (36,312)
+LUT__110544|in[2]                                   lut             0.061             6.584               2        (32,303)
+LUT__110544|out                                     lut             0.000             6.584              17        (32,303)
+n62247                                              net             0.826             7.410              17        (32,303)
+LUT__110644|in[0]                                   lut             0.061             7.471              17        (28,318)
+LUT__110644|out                                     lut             0.000             7.471               2        (28,318)
+n62312                                              net             0.204             7.675               2        (28,318)
+LUT__110645|in[2]                                   lut             0.061             7.736               2        (23,318)
+LUT__110645|out                                     lut             0.000             7.736               2        (23,318)
+osd_rgb[7]~FF|D                                     ff              0.003             7.739               2        (23,318)
+
+Capture Clock Path
+      name         model name   delay (ns)  cumulative delay (ns) pins on net    location
+===========================================================================================
+clk_pixel            inpad        0.000             0.000                0       (0,159) 
+clk_pixel            inpad        0.126             0.126             4158       (0,159) 
+clk_pixel            net          1.969             2.095             4158       (0,159) 
+osd_rgb[7]~FF|CLK    ff           0.000             2.095             4158       (23,318)
+
+++++ Path 3 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : u_m5a_stream/u_final_packet/storage__D$f12|RCLK
+Path End      : osd_rgb[20]~FF|D                               
+Launch Clock  : clk_pixel (RISE)                               
+Capture Clock : clk_pixel (RISE)                               
+Slack         : 5.593 (required time - arrival time)           
+Delay         : 6.358                                          
+
+Logic Level             : 11
+Non-global nets on path : 11
+Global nets on path     :  0
+
+Launch Clock Path Delay        : 2.095
++ Clock To Q + Data Path Delay : 7.722
+--------------------------------------
+End-of-path arrival time       : 9.817
+
+Constraint                     : 13.441
++ Capture Clock Path Delay     :  2.095
+- Clock Uncertainty            :  0.126
+---------------------------------------
+End-of-path required time      : 15.410
+
+Launch Clock Path
+                     name                        model name   delay (ns)  cumulative delay (ns) pins on net    location
+=========================================================================================================================
+clk_pixel                                       inpad           0.000             0.000                0       (0,159) 
+clk_pixel                                       inpad           0.126             0.126             4158       (0,159) 
+clk_pixel                                       net             1.969             2.095             4158       (0,159) 
+u_m5a_stream/u_final_packet/storage__D$f12|RCLK ram_8192x20     0.000             2.095             4158       (72,262)
+
+Data Path
+                       name                          model name   delay (ns)  cumulative delay (ns) pins on net    location
+=============================================================================================================================
+u_m5a_stream/u_final_packet/storage__D$f12|RDATA[2] ram_8192x20     1.361             1.361              18        (72,262)
+u_m5a_stream/u_final_packet/read_data[29]           net             0.812             2.173              18        (72,262)
+LUT__110326|in[1]                                   lut             0.063             2.236              18        (30,285)
+LUT__110326|out                                     lut             0.000             2.236              30        (30,285)
+n62029                                              net             0.277             2.513              30        (30,285)
+LUT__110379|in[2]                                   lut             0.061             2.574              30        (29,288)
+LUT__110379|out                                     lut             0.000             2.574               2        (29,288)
+n62082                                              net             0.731             3.305               2        (29,288)
+LUT__110385|in[1]                                   lut             0.061             3.366               2        (31,301)
+LUT__110385|out                                     lut             0.000             3.366               9        (31,301)
+n62088                                              net             0.835             4.201               9        (31,301)
+LUT__110393|in[0]                                   lut             0.061             4.262               9        (34,308)
+LUT__110393|out                                     lut             0.000             4.262              19        (34,308)
+n62096                                              net             0.302             4.564              19        (34,308)
+LUT__110409|in[1]                                   lut             0.061             4.625              19        (44,307)
+LUT__110409|out                                     lut             0.000             4.625               8        (44,307)
+n62112                                              net             0.471             5.096               8        (44,307)
+LUT__110508|in[2]                                   lut             0.061             5.157               8        (41,305)
+LUT__110508|out                                     lut             0.000             5.157               3        (41,305)
+n62211                                              net             0.335             5.492               3        (41,305)
+LUT__110530|in[1]                                   lut             0.061             5.553               3        (47,312)
+LUT__110530|out                                     lut             0.000             5.553               2        (47,312)
+n62233                                              net             0.436             5.989               2        (47,312)
+LUT__110538|in[1]                                   lut             0.063             6.052               2        (36,312)
+LUT__110538|out                                     lut             0.000             6.052               2        (36,312)
+n62241                                              net             0.471             6.523               2        (36,312)
+LUT__110544|in[2]                                   lut             0.061             6.584               2        (32,303)
+LUT__110544|out                                     lut             0.000             6.584              17        (32,303)
+n62247                                              net             0.810             7.394              17        (32,303)
+LUT__110670|in[0]                                   lut             0.061             7.455              17        (28,320)
+LUT__110670|out                                     lut             0.000             7.455               2        (28,320)
+n62333                                              net             0.201             7.656               2        (28,320)
+LUT__110671|in[2]                                   lut             0.063             7.719               2        (27,320)
+LUT__110671|out                                     lut             0.000             7.719               2        (27,320)
+osd_rgb[20]~FF|D                                    ff              0.003             7.722               2        (27,320)
+
+Capture Clock Path
+       name         model name   delay (ns)  cumulative delay (ns) pins on net    location
+============================================================================================
+clk_pixel             inpad        0.000             0.000                0       (0,159) 
+clk_pixel             inpad        0.126             0.126             4158       (0,159) 
+clk_pixel             net          1.969             2.095             4158       (0,159) 
+osd_rgb[20]~FF|CLK    ff           0.000             2.095             4158       (27,320)
+
+++++ Path 4 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : u_m5a_stream/u_final_packet/storage__D$f12|RCLK
+Path End      : osd_rgb[3]~FF|D                                
+Launch Clock  : clk_pixel (RISE)                               
+Capture Clock : clk_pixel (RISE)                               
+Slack         : 5.621 (required time - arrival time)           
+Delay         : 6.330                                          
+
+Logic Level             : 11
+Non-global nets on path : 11
+Global nets on path     :  0
+
+Launch Clock Path Delay        : 2.095
++ Clock To Q + Data Path Delay : 7.694
+--------------------------------------
+End-of-path arrival time       : 9.789
+
+Constraint                     : 13.441
++ Capture Clock Path Delay     :  2.095
+- Clock Uncertainty            :  0.126
+---------------------------------------
+End-of-path required time      : 15.410
+
+Launch Clock Path
+                     name                        model name   delay (ns)  cumulative delay (ns) pins on net    location
+=========================================================================================================================
+clk_pixel                                       inpad           0.000             0.000                0       (0,159) 
+clk_pixel                                       inpad           0.126             0.126             4158       (0,159) 
+clk_pixel                                       net             1.969             2.095             4158       (0,159) 
+u_m5a_stream/u_final_packet/storage__D$f12|RCLK ram_8192x20     0.000             2.095             4158       (72,262)
+
+Data Path
+                       name                          model name   delay (ns)  cumulative delay (ns) pins on net    location
+=============================================================================================================================
+u_m5a_stream/u_final_packet/storage__D$f12|RDATA[2] ram_8192x20     1.361             1.361              18        (72,262)
+u_m5a_stream/u_final_packet/read_data[29]           net             0.812             2.173              18        (72,262)
+LUT__110326|in[1]                                   lut             0.063             2.236              18        (30,285)
+LUT__110326|out                                     lut             0.000             2.236              30        (30,285)
+n62029                                              net             0.277             2.513              30        (30,285)
+LUT__110379|in[2]                                   lut             0.061             2.574              30        (29,288)
+LUT__110379|out                                     lut             0.000             2.574               2        (29,288)
+n62082                                              net             0.731             3.305               2        (29,288)
+LUT__110385|in[1]                                   lut             0.061             3.366               2        (31,301)
+LUT__110385|out                                     lut             0.000             3.366               9        (31,301)
+n62088                                              net             0.835             4.201               9        (31,301)
+LUT__110393|in[0]                                   lut             0.061             4.262               9        (34,308)
+LUT__110393|out                                     lut             0.000             4.262              19        (34,308)
+n62096                                              net             0.302             4.564              19        (34,308)
+LUT__110409|in[1]                                   lut             0.061             4.625              19        (44,307)
+LUT__110409|out                                     lut             0.000             4.625               8        (44,307)
+n62112                                              net             0.471             5.096               8        (44,307)
+LUT__110508|in[2]                                   lut             0.061             5.157               8        (41,305)
+LUT__110508|out                                     lut             0.000             5.157               3        (41,305)
+n62211                                              net             0.335             5.492               3        (41,305)
+LUT__110530|in[1]                                   lut             0.061             5.553               3        (47,312)
+LUT__110530|out                                     lut             0.000             5.553               2        (47,312)
+n62233                                              net             0.436             5.989               2        (47,312)
+LUT__110538|in[1]                                   lut             0.063             6.052               2        (36,312)
+LUT__110538|out                                     lut             0.000             6.052               2        (36,312)
+n62241                                              net             0.471             6.523               2        (36,312)
+LUT__110544|in[2]                                   lut             0.061             6.584               2        (32,303)
+LUT__110544|out                                     lut             0.000             6.584              17        (32,303)
+n62247                                              net             0.792             7.376              17        (32,303)
+LUT__110612|in[0]                                   lut             0.061             7.437              17        (26,305)
+LUT__110612|out                                     lut             0.000             7.437               2        (26,305)
+n62284                                              net             0.193             7.630               2        (26,305)
+LUT__110613|in[2]                                   lut             0.061             7.691               2        (26,310)
+LUT__110613|out                                     lut             0.000             7.691               2        (26,310)
+osd_rgb[3]~FF|D                                     ff              0.003             7.694               2        (26,310)
+
+Capture Clock Path
+      name         model name   delay (ns)  cumulative delay (ns) pins on net    location
+===========================================================================================
+clk_pixel            inpad        0.000             0.000                0       (0,159) 
+clk_pixel            inpad        0.126             0.126             4158       (0,159) 
+clk_pixel            net          1.969             2.095             4158       (0,159) 
+osd_rgb[3]~FF|CLK    ff           0.000             2.095             4158       (26,310)
+
+++++ Path 5 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : u_m5a_stream/u_final_packet/storage__D$f12|RCLK
+Path End      : osd_rgb[21]~FF|D                               
+Launch Clock  : clk_pixel (RISE)                               
+Capture Clock : clk_pixel (RISE)                               
+Slack         : 5.632 (required time - arrival time)           
+Delay         : 6.319                                          
+
+Logic Level             : 11
+Non-global nets on path : 11
+Global nets on path     :  0
+
+Launch Clock Path Delay        : 2.095
++ Clock To Q + Data Path Delay : 7.683
+--------------------------------------
+End-of-path arrival time       : 9.778
+
+Constraint                     : 13.441
++ Capture Clock Path Delay     :  2.095
+- Clock Uncertainty            :  0.126
+---------------------------------------
+End-of-path required time      : 15.410
+
+Launch Clock Path
+                     name                        model name   delay (ns)  cumulative delay (ns) pins on net    location
+=========================================================================================================================
+clk_pixel                                       inpad           0.000             0.000                0       (0,159) 
+clk_pixel                                       inpad           0.126             0.126             4158       (0,159) 
+clk_pixel                                       net             1.969             2.095             4158       (0,159) 
+u_m5a_stream/u_final_packet/storage__D$f12|RCLK ram_8192x20     0.000             2.095             4158       (72,262)
+
+Data Path
+                       name                          model name   delay (ns)  cumulative delay (ns) pins on net    location
+=============================================================================================================================
+u_m5a_stream/u_final_packet/storage__D$f12|RDATA[2] ram_8192x20     1.361             1.361              18        (72,262)
+u_m5a_stream/u_final_packet/read_data[29]           net             0.812             2.173              18        (72,262)
+LUT__110326|in[1]                                   lut             0.063             2.236              18        (30,285)
+LUT__110326|out                                     lut             0.000             2.236              30        (30,285)
+n62029                                              net             0.277             2.513              30        (30,285)
+LUT__110379|in[2]                                   lut             0.061             2.574              30        (29,288)
+LUT__110379|out                                     lut             0.000             2.574               2        (29,288)
+n62082                                              net             0.731             3.305               2        (29,288)
+LUT__110385|in[1]                                   lut             0.061             3.366               2        (31,301)
+LUT__110385|out                                     lut             0.000             3.366               9        (31,301)
+n62088                                              net             0.835             4.201               9        (31,301)
+LUT__110393|in[0]                                   lut             0.061             4.262               9        (34,308)
+LUT__110393|out                                     lut             0.000             4.262              19        (34,308)
+n62096                                              net             0.302             4.564              19        (34,308)
+LUT__110409|in[1]                                   lut             0.061             4.625              19        (44,307)
+LUT__110409|out                                     lut             0.000             4.625               8        (44,307)
+n62112                                              net             0.471             5.096               8        (44,307)
+LUT__110508|in[2]                                   lut             0.061             5.157               8        (41,305)
+LUT__110508|out                                     lut             0.000             5.157               3        (41,305)
+n62211                                              net             0.335             5.492               3        (41,305)
+LUT__110530|in[1]                                   lut             0.061             5.553               3        (47,312)
+LUT__110530|out                                     lut             0.000             5.553               2        (47,312)
+n62233                                              net             0.436             5.989               2        (47,312)
+LUT__110538|in[1]                                   lut             0.063             6.052               2        (36,312)
+LUT__110538|out                                     lut             0.000             6.052               2        (36,312)
+n62241                                              net             0.471             6.523               2        (36,312)
+LUT__110544|in[2]                                   lut             0.061             6.584               2        (32,303)
+LUT__110544|out                                     lut             0.000             6.584              17        (32,303)
+n62247                                              net             0.788             7.372              17        (32,303)
+LUT__110675|in[0]                                   lut             0.063             7.435              17        (30,311)
+LUT__110675|out                                     lut             0.000             7.435               2        (30,311)
+n62337                                              net             0.184             7.619               2        (30,311)
+LUT__110676|in[2]                                   lut             0.061             7.680               2        (31,311)
+LUT__110676|out                                     lut             0.000             7.680               2        (31,311)
+osd_rgb[21]~FF|D                                    ff              0.003             7.683               2        (31,311)
+
+Capture Clock Path
+       name         model name   delay (ns)  cumulative delay (ns) pins on net    location
+============================================================================================
+clk_pixel             inpad        0.000             0.000                0       (0,159) 
+clk_pixel             inpad        0.126             0.126             4158       (0,159) 
+clk_pixel             net          1.969             2.095             4158       (0,159) 
+osd_rgb[21]~FF|CLK    ff           0.000             2.095             4158       (31,311)
+
+++++ Path 6 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : u_m5a_stream/u_final_packet/storage__D$f12|RCLK
+Path End      : osd_rgb[0]~FF|D                                
+Launch Clock  : clk_pixel (RISE)                               
+Capture Clock : clk_pixel (RISE)                               
+Slack         : 5.639 (required time - arrival time)           
+Delay         : 6.312                                          
+
+Logic Level             : 11
+Non-global nets on path : 11
+Global nets on path     :  0
+
+Launch Clock Path Delay        : 2.095
++ Clock To Q + Data Path Delay : 7.676
+--------------------------------------
+End-of-path arrival time       : 9.771
+
+Constraint                     : 13.441
++ Capture Clock Path Delay     :  2.095
+- Clock Uncertainty            :  0.126
+---------------------------------------
+End-of-path required time      : 15.410
+
+Launch Clock Path
+                     name                        model name   delay (ns)  cumulative delay (ns) pins on net    location
+=========================================================================================================================
+clk_pixel                                       inpad           0.000             0.000                0       (0,159) 
+clk_pixel                                       inpad           0.126             0.126             4158       (0,159) 
+clk_pixel                                       net             1.969             2.095             4158       (0,159) 
+u_m5a_stream/u_final_packet/storage__D$f12|RCLK ram_8192x20     0.000             2.095             4158       (72,262)
+
+Data Path
+                       name                          model name   delay (ns)  cumulative delay (ns) pins on net    location
+=============================================================================================================================
+u_m5a_stream/u_final_packet/storage__D$f12|RDATA[2] ram_8192x20     1.361             1.361              18        (72,262)
+u_m5a_stream/u_final_packet/read_data[29]           net             0.812             2.173              18        (72,262)
+LUT__110326|in[1]                                   lut             0.063             2.236              18        (30,285)
+LUT__110326|out                                     lut             0.000             2.236              30        (30,285)
+n62029                                              net             0.277             2.513              30        (30,285)
+LUT__110379|in[2]                                   lut             0.061             2.574              30        (29,288)
+LUT__110379|out                                     lut             0.000             2.574               2        (29,288)
+n62082                                              net             0.731             3.305               2        (29,288)
+LUT__110385|in[1]                                   lut             0.061             3.366               2        (31,301)
+LUT__110385|out                                     lut             0.000             3.366               9        (31,301)
+n62088                                              net             0.835             4.201               9        (31,301)
+LUT__110393|in[0]                                   lut             0.061             4.262               9        (34,308)
+LUT__110393|out                                     lut             0.000             4.262              19        (34,308)
+n62096                                              net             0.302             4.564              19        (34,308)
+LUT__110409|in[1]                                   lut             0.061             4.625              19        (44,307)
+LUT__110409|out                                     lut             0.000             4.625               8        (44,307)
+n62112                                              net             0.471             5.096               8        (44,307)
+LUT__110508|in[2]                                   lut             0.061             5.157               8        (41,305)
+LUT__110508|out                                     lut             0.000             5.157               3        (41,305)
+n62211                                              net             0.335             5.492               3        (41,305)
+LUT__110530|in[1]                                   lut             0.061             5.553               3        (47,312)
+LUT__110530|out                                     lut             0.000             5.553               2        (47,312)
+n62233                                              net             0.436             5.989               2        (47,312)
+LUT__110538|in[1]                                   lut             0.063             6.052               2        (36,312)
+LUT__110538|out                                     lut             0.000             6.052               2        (36,312)
+n62241                                              net             0.471             6.523               2        (36,312)
+LUT__110544|in[2]                                   lut             0.061             6.584               2        (32,303)
+LUT__110544|out                                     lut             0.000             6.584              17        (32,303)
+n62247                                              net             0.761             7.345              17        (32,303)
+LUT__110545|in[0]                                   lut             0.063             7.408              17        (30,319)
+LUT__110545|out                                     lut             0.000             7.408               2        (30,319)
+n62248                                              net             0.204             7.612               2        (30,319)
+LUT__110546|in[2]                                   lut             0.061             7.673               2        (25,319)
+LUT__110546|out                                     lut             0.000             7.673               2        (25,319)
+osd_rgb[0]~FF|D                                     ff              0.003             7.676               2        (25,319)
+
+Capture Clock Path
+      name         model name   delay (ns)  cumulative delay (ns) pins on net    location
+===========================================================================================
+clk_pixel            inpad        0.000             0.000                0       (0,159) 
+clk_pixel            inpad        0.126             0.126             4158       (0,159) 
+clk_pixel            net          1.969             2.095             4158       (0,159) 
+osd_rgb[0]~FF|CLK    ff           0.000             2.095             4158       (25,319)
+
+++++ Path 7 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : u_m5a_stream/tag_read[1]~FF|CLK              
+Path End      : u_m5b1/background/capture/push_data[77]~FF|CE
+Launch Clock  : clk_pixel (RISE)                             
+Capture Clock : clk_pixel (RISE)                             
+Slack         : 5.649 (required time - arrival time)         
+Delay         : 7.482                                        
+
+Logic Level             :  9
+Non-global nets on path : 10
+Global nets on path     :  0
+
+Launch Clock Path Delay        : 2.095
++ Clock To Q + Data Path Delay : 7.716
+--------------------------------------
+End-of-path arrival time       : 9.811
+
+Constraint                     : 13.441
++ Capture Clock Path Delay     :  2.145
+- Clock Uncertainty            :  0.126
+---------------------------------------
+End-of-path required time      : 15.460
+
+Launch Clock Path
+             name                model name   delay (ns)  cumulative delay (ns) pins on net    location
+=========================================================================================================
+clk_pixel                          inpad        0.000             0.000                0       (0,159) 
+clk_pixel                          inpad        0.126             0.126             4158       (0,159) 
+clk_pixel                          net          1.969             2.095             4158       (0,159) 
+u_m5a_stream/tag_read[1]~FF|CLK    ff           0.000             2.095             4158       (51,273)
+
+Data Path
+                    name                       model name   delay (ns)  cumulative delay (ns) pins on net    location
+=======================================================================================================================
+u_m5a_stream/tag_read[1]~FF|Q                     ff          0.130             0.130             332       (51,273) 
+u_m5a_stream/tag_read[1]                          net         1.673             1.803             332       (51,273) 
+LUT__82816|in[3]                                  lut         0.061             1.864             332       (133,321)
+LUT__82816|out                                    lut         0.000             1.864               2       (133,321)
+n45015                                            net         0.418             2.282               2       (133,321)
+LUT__82820|in[1]                                  lut         0.061             2.343               2       (136,318)
+LUT__82820|out                                    lut         0.000             2.343               3       (136,318)
+n45019                                            net         0.797             3.140               3       (136,318)
+LUT__82826|in[0]                                  lut         0.061             3.201               3       (143,276)
+LUT__82826|out                                    lut         0.000             3.201               2       (143,276)
+n45025                                            net         0.342             3.543               2       (143,276)
+LUT__82827|in[3]                                  lut         0.061             3.604               2       (134,273)
+LUT__82827|out                                    lut         0.000             3.604               2       (134,273)
+n45026                                            net         0.709             4.313               2       (134,273)
+LUT__82851|in[1]                                  lut         0.061             4.374               2       (91,278) 
+LUT__82851|out                                    lut         0.000             4.374               2       (91,278) 
+n45050                                            net         0.518             4.892               2       (91,278) 
+LUT__82852|in[2]                                  lut         0.063             4.955               2       (114,288)
+LUT__82852|out                                    lut         0.000             4.955               2       (114,288)
+n45051                                            net         0.469             5.424               2       (114,288)
+LUT__83158|in[0]                                  lut         0.063             5.487               2       (84,275) 
+LUT__83158|out                                    lut         0.000             5.487               3       (84,275) 
+n45357                                            net         0.574             6.061               3       (84,275) 
+LUT__83221|in[2]                                  lut         0.063             6.124               3       (69,245) 
+LUT__83221|out                                    lut         0.000             6.124               5       (69,245) 
+n45404                                            net         0.061             6.185               5       (69,245) 
+LUT__83222|in[0]                                  lut         0.063             6.248               5       (69,244) 
+LUT__83222|out                                    lut         0.000             6.248             129       (69,244) 
+ceg_net9846                                       net         1.364             7.612             129       (69,244) 
+u_m5b1/background/capture/push_data[77]~FF|CE     ff          0.104             7.716             129       (105,212)
+
+Capture Clock Path
+                     name                       model name   delay (ns)  cumulative delay (ns) pins on net    location
+========================================================================================================================
+clk_pixel                                         inpad        0.000             0.000                0      (0,159)  
+clk_pixel                                         inpad        0.126             0.126             4158      (0,159)  
+clk_pixel                                         net          2.019             2.145             4158      (0,159)  
+u_m5b1/background/capture/push_data[77]~FF|CLK    ff           0.000             2.145             4158      (105,212)
+
+++++ Path 8 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : u_m5a_stream/tag_read[1]~FF|CLK              
+Path End      : u_m5b1/background/capture/push_data[74]~FF|CE
+Launch Clock  : clk_pixel (RISE)                             
+Capture Clock : clk_pixel (RISE)                             
+Slack         : 5.649 (required time - arrival time)         
+Delay         : 7.482                                        
+
+Logic Level             :  9
+Non-global nets on path : 10
+Global nets on path     :  0
+
+Launch Clock Path Delay        : 2.095
++ Clock To Q + Data Path Delay : 7.716
+--------------------------------------
+End-of-path arrival time       : 9.811
+
+Constraint                     : 13.441
++ Capture Clock Path Delay     :  2.145
+- Clock Uncertainty            :  0.126
+---------------------------------------
+End-of-path required time      : 15.460
+
+Launch Clock Path
+             name                model name   delay (ns)  cumulative delay (ns) pins on net    location
+=========================================================================================================
+clk_pixel                          inpad        0.000             0.000                0       (0,159) 
+clk_pixel                          inpad        0.126             0.126             4158       (0,159) 
+clk_pixel                          net          1.969             2.095             4158       (0,159) 
+u_m5a_stream/tag_read[1]~FF|CLK    ff           0.000             2.095             4158       (51,273)
+
+Data Path
+                    name                       model name   delay (ns)  cumulative delay (ns) pins on net    location
+=======================================================================================================================
+u_m5a_stream/tag_read[1]~FF|Q                     ff          0.130             0.130             332       (51,273) 
+u_m5a_stream/tag_read[1]                          net         1.673             1.803             332       (51,273) 
+LUT__82816|in[3]                                  lut         0.061             1.864             332       (133,321)
+LUT__82816|out                                    lut         0.000             1.864               2       (133,321)
+n45015                                            net         0.418             2.282               2       (133,321)
+LUT__82820|in[1]                                  lut         0.061             2.343               2       (136,318)
+LUT__82820|out                                    lut         0.000             2.343               3       (136,318)
+n45019                                            net         0.797             3.140               3       (136,318)
+LUT__82826|in[0]                                  lut         0.061             3.201               3       (143,276)
+LUT__82826|out                                    lut         0.000             3.201               2       (143,276)
+n45025                                            net         0.342             3.543               2       (143,276)
+LUT__82827|in[3]                                  lut         0.061             3.604               2       (134,273)
+LUT__82827|out                                    lut         0.000             3.604               2       (134,273)
+n45026                                            net         0.709             4.313               2       (134,273)
+LUT__82851|in[1]                                  lut         0.061             4.374               2       (91,278) 
+LUT__82851|out                                    lut         0.000             4.374               2       (91,278) 
+n45050                                            net         0.518             4.892               2       (91,278) 
+LUT__82852|in[2]                                  lut         0.063             4.955               2       (114,288)
+LUT__82852|out                                    lut         0.000             4.955               2       (114,288)
+n45051                                            net         0.469             5.424               2       (114,288)
+LUT__83158|in[0]                                  lut         0.063             5.487               2       (84,275) 
+LUT__83158|out                                    lut         0.000             5.487               3       (84,275) 
+n45357                                            net         0.574             6.061               3       (84,275) 
+LUT__83221|in[2]                                  lut         0.063             6.124               3       (69,245) 
+LUT__83221|out                                    lut         0.000             6.124               5       (69,245) 
+n45404                                            net         0.061             6.185               5       (69,245) 
+LUT__83222|in[0]                                  lut         0.063             6.248               5       (69,244) 
+LUT__83222|out                                    lut         0.000             6.248             129       (69,244) 
+ceg_net9846                                       net         1.364             7.612             129       (69,244) 
+u_m5b1/background/capture/push_data[74]~FF|CE     ff          0.104             7.716             129       (105,233)
+
+Capture Clock Path
+                     name                       model name   delay (ns)  cumulative delay (ns) pins on net    location
+========================================================================================================================
+clk_pixel                                         inpad        0.000             0.000                0      (0,159)  
+clk_pixel                                         inpad        0.126             0.126             4158      (0,159)  
+clk_pixel                                         net          2.019             2.145             4158      (0,159)  
+u_m5b1/background/capture/push_data[74]~FF|CLK    ff           0.000             2.145             4158      (105,233)
+
+++++ Path 9 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : u_m5a_stream/tag_read[1]~FF|CLK              
+Path End      : u_m5b1/background/capture/push_data[89]~FF|CE
+Launch Clock  : clk_pixel (RISE)                             
+Capture Clock : clk_pixel (RISE)                             
+Slack         : 5.649 (required time - arrival time)         
+Delay         : 7.482                                        
+
+Logic Level             :  9
+Non-global nets on path : 10
+Global nets on path     :  0
+
+Launch Clock Path Delay        : 2.095
++ Clock To Q + Data Path Delay : 7.716
+--------------------------------------
+End-of-path arrival time       : 9.811
+
+Constraint                     : 13.441
++ Capture Clock Path Delay     :  2.145
+- Clock Uncertainty            :  0.126
+---------------------------------------
+End-of-path required time      : 15.460
+
+Launch Clock Path
+             name                model name   delay (ns)  cumulative delay (ns) pins on net    location
+=========================================================================================================
+clk_pixel                          inpad        0.000             0.000                0       (0,159) 
+clk_pixel                          inpad        0.126             0.126             4158       (0,159) 
+clk_pixel                          net          1.969             2.095             4158       (0,159) 
+u_m5a_stream/tag_read[1]~FF|CLK    ff           0.000             2.095             4158       (51,273)
+
+Data Path
+                    name                       model name   delay (ns)  cumulative delay (ns) pins on net    location
+=======================================================================================================================
+u_m5a_stream/tag_read[1]~FF|Q                     ff          0.130             0.130             332       (51,273) 
+u_m5a_stream/tag_read[1]                          net         1.673             1.803             332       (51,273) 
+LUT__82816|in[3]                                  lut         0.061             1.864             332       (133,321)
+LUT__82816|out                                    lut         0.000             1.864               2       (133,321)
+n45015                                            net         0.418             2.282               2       (133,321)
+LUT__82820|in[1]                                  lut         0.061             2.343               2       (136,318)
+LUT__82820|out                                    lut         0.000             2.343               3       (136,318)
+n45019                                            net         0.797             3.140               3       (136,318)
+LUT__82826|in[0]                                  lut         0.061             3.201               3       (143,276)
+LUT__82826|out                                    lut         0.000             3.201               2       (143,276)
+n45025                                            net         0.342             3.543               2       (143,276)
+LUT__82827|in[3]                                  lut         0.061             3.604               2       (134,273)
+LUT__82827|out                                    lut         0.000             3.604               2       (134,273)
+n45026                                            net         0.709             4.313               2       (134,273)
+LUT__82851|in[1]                                  lut         0.061             4.374               2       (91,278) 
+LUT__82851|out                                    lut         0.000             4.374               2       (91,278) 
+n45050                                            net         0.518             4.892               2       (91,278) 
+LUT__82852|in[2]                                  lut         0.063             4.955               2       (114,288)
+LUT__82852|out                                    lut         0.000             4.955               2       (114,288)
+n45051                                            net         0.469             5.424               2       (114,288)
+LUT__83158|in[0]                                  lut         0.063             5.487               2       (84,275) 
+LUT__83158|out                                    lut         0.000             5.487               3       (84,275) 
+n45357                                            net         0.574             6.061               3       (84,275) 
+LUT__83221|in[2]                                  lut         0.063             6.124               3       (69,245) 
+LUT__83221|out                                    lut         0.000             6.124               5       (69,245) 
+n45404                                            net         0.061             6.185               5       (69,245) 
+LUT__83222|in[0]                                  lut         0.063             6.248               5       (69,244) 
+LUT__83222|out                                    lut         0.000             6.248             129       (69,244) 
+ceg_net9846                                       net         1.364             7.612             129       (69,244) 
+u_m5b1/background/capture/push_data[89]~FF|CE     ff          0.104             7.716             129       (105,221)
+
+Capture Clock Path
+                     name                       model name   delay (ns)  cumulative delay (ns) pins on net    location
+========================================================================================================================
+clk_pixel                                         inpad        0.000             0.000                0      (0,159)  
+clk_pixel                                         inpad        0.126             0.126             4158      (0,159)  
+clk_pixel                                         net          2.019             2.145             4158      (0,159)  
+u_m5b1/background/capture/push_data[89]~FF|CLK    ff           0.000             2.145             4158      (105,221)
+
+++++ Path 10 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : u_m5a_stream/tag_read[1]~FF|CLK              
+Path End      : u_m5b1/background/capture/push_data[48]~FF|CE
+Launch Clock  : clk_pixel (RISE)                             
+Capture Clock : clk_pixel (RISE)                             
+Slack         : 5.649 (required time - arrival time)         
+Delay         : 7.482                                        
+
+Logic Level             :  9
+Non-global nets on path : 10
+Global nets on path     :  0
+
+Launch Clock Path Delay        : 2.095
++ Clock To Q + Data Path Delay : 7.716
+--------------------------------------
+End-of-path arrival time       : 9.811
+
+Constraint                     : 13.441
++ Capture Clock Path Delay     :  2.145
+- Clock Uncertainty            :  0.126
+---------------------------------------
+End-of-path required time      : 15.460
+
+Launch Clock Path
+             name                model name   delay (ns)  cumulative delay (ns) pins on net    location
+=========================================================================================================
+clk_pixel                          inpad        0.000             0.000                0       (0,159) 
+clk_pixel                          inpad        0.126             0.126             4158       (0,159) 
+clk_pixel                          net          1.969             2.095             4158       (0,159) 
+u_m5a_stream/tag_read[1]~FF|CLK    ff           0.000             2.095             4158       (51,273)
+
+Data Path
+                    name                       model name   delay (ns)  cumulative delay (ns) pins on net    location
+=======================================================================================================================
+u_m5a_stream/tag_read[1]~FF|Q                     ff          0.130             0.130             332       (51,273) 
+u_m5a_stream/tag_read[1]                          net         1.673             1.803             332       (51,273) 
+LUT__82816|in[3]                                  lut         0.061             1.864             332       (133,321)
+LUT__82816|out                                    lut         0.000             1.864               2       (133,321)
+n45015                                            net         0.418             2.282               2       (133,321)
+LUT__82820|in[1]                                  lut         0.061             2.343               2       (136,318)
+LUT__82820|out                                    lut         0.000             2.343               3       (136,318)
+n45019                                            net         0.797             3.140               3       (136,318)
+LUT__82826|in[0]                                  lut         0.061             3.201               3       (143,276)
+LUT__82826|out                                    lut         0.000             3.201               2       (143,276)
+n45025                                            net         0.342             3.543               2       (143,276)
+LUT__82827|in[3]                                  lut         0.061             3.604               2       (134,273)
+LUT__82827|out                                    lut         0.000             3.604               2       (134,273)
+n45026                                            net         0.709             4.313               2       (134,273)
+LUT__82851|in[1]                                  lut         0.061             4.374               2       (91,278) 
+LUT__82851|out                                    lut         0.000             4.374               2       (91,278) 
+n45050                                            net         0.518             4.892               2       (91,278) 
+LUT__82852|in[2]                                  lut         0.063             4.955               2       (114,288)
+LUT__82852|out                                    lut         0.000             4.955               2       (114,288)
+n45051                                            net         0.469             5.424               2       (114,288)
+LUT__83158|in[0]                                  lut         0.063             5.487               2       (84,275) 
+LUT__83158|out                                    lut         0.000             5.487               3       (84,275) 
+n45357                                            net         0.574             6.061               3       (84,275) 
+LUT__83221|in[2]                                  lut         0.063             6.124               3       (69,245) 
+LUT__83221|out                                    lut         0.000             6.124               5       (69,245) 
+n45404                                            net         0.061             6.185               5       (69,245) 
+LUT__83222|in[0]                                  lut         0.063             6.248               5       (69,244) 
+LUT__83222|out                                    lut         0.000             6.248             129       (69,244) 
+ceg_net9846                                       net         1.364             7.612             129       (69,244) 
+u_m5b1/background/capture/push_data[48]~FF|CE     ff          0.104             7.716             129       (105,232)
+
+Capture Clock Path
+                     name                       model name   delay (ns)  cumulative delay (ns) pins on net    location
+========================================================================================================================
+clk_pixel                                         inpad        0.000             0.000                0      (0,159)  
+clk_pixel                                         inpad        0.126             0.126             4158      (0,159)  
+clk_pixel                                         net          2.019             2.145             4158      (0,159)  
+u_m5b1/background/capture/push_data[48]~FF|CLK    ff           0.000             2.145             4158      (105,232)
+

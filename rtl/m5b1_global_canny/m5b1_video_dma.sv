@@ -4,7 +4,7 @@
 module m5b1_video_dma #(parameter FRAME_BYTES=921600)(
  input ui_clk,cam_clk,pix_clk,arst_n,run,stop,input [63:0] epoch,
  input cam_vs,cam_valid,input [7:0] cam_data,input pix_sof,pix_request,
- output reg [7:0] pix_data,output reg [63:0] replay_frame_id,
+ output [7:0] pix_data,output [63:0] replay_frame_id,output pix_qualified,
  output reg display_valid,output reg fault,
  output [1:0] avalid,input [1:0] aready,output [63:0] aaddr,
  output [15:0] alen,aid,output [1:0] atype,
@@ -69,26 +69,32 @@ module m5b1_video_dma #(parameter FRAME_BYTES=921600)(
  reg offer_send;wire offer_busy,offer_valid;wire [63:0] offer_id;reg offer_take;
  m5b1_mailbox #(.WIDTH(64)) offer_box(.sclk(ui_clk),.dclk(pix_clk),.arst_n(arst_n),
   .send(offer_send),.sdata(slot_id[rslot]),.busy(offer_busy),.valid(offer_valid),.ddata(offer_id),.take(offer_take));
- reg [19:0] display_count;reg first_pixel;reg pix_fault;
+ reg [19:0] display_count;reg first_pixel;reg pix_fault;reg [63:0] replay_id_hold;
+ // lcd_driver samples this FWFT byte on the request edge. Its RGB/DE
+ // register is the one required data stage; another DMA register shifts rows.
+ wire admit=offer_valid&&pix_run[1]&&display_rc>=256;
+ assign pix_qualified=pix_request&&pix_run[1]&&!display_empty&&(first_pixel?admit:display_valid);
+ assign pix_data=pix_qualified?display_head[unpack_pos*8+:8]:8'd0;
+ assign replay_frame_id=first_pixel?offer_id:replay_id_hold;
  always @(posedge pix_clk or negedge prst_n)begin
-  if(!prst_n)begin pix_run<=0;unpack_pos<=0;pix_data<=0;display_valid<=0;replay_frame_id<=0;display_count<=0;consume_send<=0;offer_take<=0;first_pixel<=1;pix_fault<=0;frame_used<=0;end
+  if(!prst_n)begin pix_run<=0;unpack_pos<=0;display_valid<=0;replay_id_hold<=0;display_count<=0;consume_send<=0;offer_take<=0;first_pixel<=1;pix_fault<=0;frame_used<=0;end
   else begin
    pix_run<={pix_run[0],run&&!stop};consume_send<=0;offer_take<=0;
    if(pix_sof)begin first_pixel<=1;display_count<=0;display_valid<=0;unpack_pos<=0;frame_used<=0;end
    if(first_pixel&&pix_request)begin
     first_pixel<=0;
-    if(offer_valid&&pix_run[1]&&display_rc>=256)begin
-     offer_take<=1;replay_frame_id<=offer_id;display_valid<=1;frame_used<=1;
-     pix_data<=display_head[7:0];unpack_pos<=1;display_count<=1;
-    end else pix_data<=0;
+    if(admit)begin
+     offer_take<=1;replay_id_hold<=offer_id;display_valid<=1;frame_used<=1;
+     unpack_pos<=1;display_count<=1;
+    end
    end else if(pix_request)begin
     if(display_valid&&pix_run[1])begin
-     pix_data<=display_head[unpack_pos*8+:8];unpack_pos<=unpack_pos+1'b1;display_count<=display_count+1'b1;
+     unpack_pos<=unpack_pos+1'b1;display_count<=display_count+1'b1;
      if(display_empty)pix_fault<=1;
      if(display_count==FRAME_BYTES-1)begin
       display_valid<=0;consume_send<=1;if(consume_busy)pix_fault<=1;
      end
-    end else pix_data<=0;
+    end
    end
   end
  end

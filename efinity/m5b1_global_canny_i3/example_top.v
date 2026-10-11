@@ -925,13 +925,20 @@ module example_top #(parameter M5A_FILTER_ENABLE=1, parameter SIM_DATA=0)
 
 
     wire [63:0] m5b1_frame_id,m5b1_epoch,tap_frame_id,tap_epoch,tap_timestamp;
+    wire m5b1_pix_qualified;
+    reg m5b1_lcd_qualified;
+    reg [63:0] m5b1_lcd_frame_id,m5b1_lcd_epoch;
+    // Match the existing lcd_driver data register, including the last pixel.
+    always @(posedge clk_pixel or negedge rstn_pixel)
+      if(!rstn_pixel)begin m5b1_lcd_qualified<=0;m5b1_lcd_frame_id<=0;m5b1_lcd_epoch<=0;end
+      else begin m5b1_lcd_qualified<=m5b1_pix_qualified;m5b1_lcd_frame_id<=m5b1_frame_id;m5b1_lcd_epoch<=m5b1_epoch;end
     wire tap_valid,tap_filter;wire [1:0] tap_class;wire [11:0] tap_x,tap_y;wire [7:0] tap_high,tap_low;
     reg m5b1_vs_d=1'b1;
     always @(posedge clk_pixel or negedge rstn_pixel)if(!rstn_pixel)m5b1_vs_d<=1'b1;else m5b1_vs_d<=lcd_vs;
     m5b1_system u_m5b1(.ui_clk(w_ddr3_ui_clk),.cam_clk(cmos_pclk),.pix_clk(clk_pixel),.rst_n(rstn_sys),
       .pll_locked(w_pll_lock),.cal_done(w_ddr3_cal_done),.cal_pass(w_ddr3_cal_pass),
       .cam_vs(cmos_frame_vsync),.cam_valid(cmos_frame_href),.cam_data(cmos_frame_Gray[7:0]),
-      .pix_sof(m5b1_vs_d&&!lcd_vs),.pix_request(lcd_request),.pix_data(lcd_data),.frame_id(m5b1_frame_id),.epoch(m5b1_epoch),
+      .pix_sof(m5b1_vs_d&&!lcd_vs),.pix_request(lcd_request),.pix_data(lcd_data),.frame_id(m5b1_frame_id),.epoch(m5b1_epoch),.pix_qualified(m5b1_pix_qualified),
       .tap_valid(tap_valid),.tap_class(tap_class),.tap_x(tap_x),.tap_y(tap_y),.tap_high(tap_high),.tap_low(tap_low),.tap_filter(tap_filter),
       .tap_frame_id(tap_frame_id),.tap_epoch(tap_epoch),.tap_timestamp(tap_timestamp),.uart_tx(uart_tx_o),.led(led_o),
       .aid(w_ddr3_aid),.alen(w_ddr3_alen),.wid(w_ddr3_wid),.aaddr(w_ddr3_aaddr),.asize(w_ddr3_asize),
@@ -995,7 +1002,7 @@ module example_top #(parameter M5A_FILTER_ENABLE=1, parameter SIM_DATA=0)
         .filter_request(M5A_FILTER_ENABLE!=0),.threshold(control_threshold),.mode(control_mode),
         .out_de(sobel_de),.out_hs(sobel_hs),.out_vs(sobel_vs),.out_rgb(display_rgb),
         .out_raw(),.out_legacy_mag(),.out_legacy_bin(),.out_nms(),.out_filter_enable(),.out_threshold(display_threshold),.out_mode(display_mode),
-        .tap_input_frame_id(m5b1_frame_id),.tap_input_epoch(m5b1_epoch),
+        .tap_input_frame_id(m5b1_lcd_frame_id),.tap_input_epoch(m5b1_lcd_epoch),.tap_input_qualified(m5b1_lcd_qualified),
         .tap_valid(tap_valid),.tap_class(tap_class),.tap_x(tap_x),.tap_y(tap_y),.tap_high(tap_high),.tap_low(tap_low),.tap_filter(tap_filter),
         .tap_frame_id(tap_frame_id),.tap_epoch(tap_epoch),.tap_timestamp(tap_timestamp),
         .out_x(),.out_y(),.out_overlay_valid(),.out_overlay_edge(),.out_nms_valid(),.out_canny_valid(),.out_canny_edge(),.raster_fault());

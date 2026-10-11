@@ -1,6 +1,28 @@
 # 星眸项目已确定事实与决定
 
-## D-M5B1-20261010：离线实现与候选边界（当前）
+## 2026-10-11 M5B.1修复离线验收交回（当前，待固定candidate双审查）
+
+三项264962e0审查缺口已在真实连接与事务验收中关闭；冻结离线总门通过，尚不代表独立复审或硬件PASS。当前报告入口统一为`reports/m5b1_global_canny_i3/review_fix_264962e0/`下的`OFFLINE_ACCEPTANCE.json`、`IMPLEMENTATION.md`、`BUILD_REPORT.md`、`EVIDENCE_SUMMARY.json`、`TECHNICAL_DEPENDENCIES.json`与`PROPOSED_GIT_SCOPE.json`。根目录旧c010验收和旧bit叙述仅保留历史含义。
+
+branch为codex/m5b1-global-canny-prototype；新candidate必须直接parent `264962e0c6af61e751c794c5b5f5252d00edbb6c`。仅精确清单提交，commit后立即停止所有写入交Work；本文件不自嵌commit ID，以Git交回为准。Work核对固定Git快照后盲审DeepSeek B，并停止给用户独立Codex A复审提示词。未做硬件操作。
+
+真实LCD七模式逐像素、有效全零成功descriptor、无效/帧中失效后恢复、CE/标签复位、三阶段未受理取消、已受理A/W/B/R真实排空、metadata背压稳定、同拍边界、六项修复突变、原七组回归与十项突变均有当前源码/runner绑定。默认capture/engine 96M及export 960M周期全部通过；export exit0，712B/两CRC统计，截断包显式重同步。较早default_export_v2原因未知且仍为历史未达到oracle，未改成PASS。
+
+build_20261010_235246完整exit0；45042 XLR/124 RAM10/0 DSP，setup/hold +0.196/+0.027ns，134份路径覆盖报告不是134个PVT角点。940精确pin/457结构CDC分类/413物理数据端点，最大clock-to-Q加数据1.415ns、skew0.825ns，新增内部时序三项0/0/0。新bit2924727B，SHA256 `8bc85b157426cf35e7aab31bc4acd1c8c54b5799c0e7a0424ee555f3927488c4`。96输入/53输出已绑定；1924非规则保护文件及两规则原前缀、2139历史未跟踪资料保持。
+
+显著限制：协议watchdog硬停会撤销stalled WVALID，保留owner/busy、不伪ACK、无新握手/发布，仅冷重新配置；这是既有隔离边界，不能称普遍AXI稳定VALID合规，须交新A/B独立评估。正常取消/普通soft_reset仍强制稳定VALID及真实B/R。默认周期TB使用加速UART，5000UI收尾不是生产波特率上界；本地tag reset不是加密DDR warm restart。4us仅条件模型，不承诺fps；硬件、warm/PVT与真实有效发布率仍PENDING。M5C仅预留未实施。
+
+## D-M5B1-20261011-RESUME与硬停边界（历史决定，边界仍有效）
+
+新完整构建/STA通过不等于修复验收完成；新增连接descriptor/帧中资格失效用例未执行，default_export_v2仅能判未达到oracle且原因未知。此前自动审批服务返回usage-limit错误，普通sandbox实际ModelSim DLL启动失败，因而保存检查点并停写。用户指出额度尚有余额后，Work经相同自动审批路径只读vlog版本查询成功；错误不能证明账户总额度耗尽，具体根因未知，撤回“当前额度耗尽阻断”的判断并恢复同一Astra。保持开发规则，不绕过、不换模型、不伪造PASS、不硬件操作；后续仍直接继承264962e0，再固定快照双独立复审。
+
+Work保留REVIEW_FIX_SPEC26及SPEC67/69已冻结的真实协议卡死全域硬停隔离，不在本轮扩展自动排空或warm恢复。TXwatchdog使WVALID撤销、真实owner/transfer busy保留、无伪ACK/无新握手/无发布，只允许冷重新配置。Work核验arbiter与264962e0字节相同，transfer的stop门不变；故障完整轨迹和原失败日志保留。不得声称硬停后符合AXI稳定VALID；正常job取消/超时和普通soft_reset仍用强稳定VALID及真实B/R排空检查。新A/B须显著获知此限制并独立评估，Work保留该边界不能代替复审结论。
+
+## D-M5B1-264962E0-FAIL-FIX（历史决定，边界仍有效）
+
+用户转交独立Codex A对264962e0的FAIL及完整三项问题表；DeepSeek B独立结论PASS_WITH_FINDINGS。Work采用FAIL，仅解除冻结进入受控离线修复，不放行实物。冻结修复规格REVIEW_FIX_SPEC_264962E0.md：生产显示错拍、回放资格对齐、未受理C2取消三项全部关闭，新增真实连接/取消oracle及HDL负向后全套回归、重新完整I3构建/STA/资源/bit。追加修复candidate直接parent为264962e0，不改写历史；之后重新盲审双闸门。M5C预留仍在，不因本修复取消或实施融合。
+
+## D-M5B1-20261010：离线实现与候选边界（历史，parent与当前闸门已由FAIL修复规格覆盖）
 
 保留M5A原管脚/PLL/DDR IP/ROM/720p及七模式，事务层由新单owner仲裁、真实B/最后R栅栏和逐buffer权限替换；C2整行按4KiB分段。资源优化使用同步RAM，不放宽48640 XLR门。CDC只允许精确首级和复位释放例外，Gray/mailbox施加5ns预算，桥同步链禁止SRL提取；本隔离顶层crop改为相机域双级同步复位释放。
 
@@ -182,7 +204,7 @@ bit本轮只读复算2,179,422字节/SHA-256 `5cbaa12da39eb141d6b481299c496e9f71
 D063：用户明确授权本轮按最终清单独立提交`docs: assess global canny architecture feasibility`，直接父为M5A 4e0496e8a36f53dcfffa9e9564ffbf0f780a55ba。NO-GO结论与六项阻断不变；只归档，无生产RTL、新工程、编译、bitstream、下载/Flash、M5B.1、融合、合并或推送。先前禁止提交规则为历史分析轮次，本轮授权仅覆盖归档提交。
 
 
-## 2026-10-08 M5B.0R离线工作收尾（当前）
+## 2026-10-08 M5B.0R离线工作收尾（历史决定，边界仍有效）
 项目m5b0r_ddr_admission；分支codex/m5b0r-ddr-admission，HEAD仍为ba28397cc5f0d4b34ed06b803c8e5af067c9ca98。M5B.0分析保持NO-GO；M5B.0R完成独立诊断和隔离原型的离线验证准备，当前闸门NO_GO，实际阻断项尚未全部关闭。M5B.1未启动、无全局Canny生产RTL/视频DDR接入/融合。
 用户指定GPT-6 Astra/ultra完成架构及初稿，后续代理限额时主会话接管实现、构建、仿真和独立复核；Astra恢复后进行只读最终复核，主会话处理LED总体超时编码、QoS持续吞吐及取消协议问题。
 独立工程efinity/m5b0r_ddr_address_diag_i3：DDR v5.14参数/源码/ROM与M2匹配、调试插入关闭，仅DDR和LED0～5；24MHz普通core入口及sysPLL CORE参考的建模边界保留。完整I3构建及112份最终STA通过，7391 XLR/30 RAM10/0 DSP，最小setup/hold +0.100/+0.021ns。0无时钟/内部未约束/多时钟，2无输入延迟及17无输出延迟保留；仅20个网表确认的复位链异步SR例外，不广泛切断DDR/monitor数据。受约束时序通过不能证明全部PVT、电气或物理高地址安全。

@@ -1,11 +1,11 @@
 """Validate isolated project provenance, protected files, ports and warnings."""
 from pathlib import Path
 import json,hashlib,xml.etree.ElementTree as ET,re,collections,subprocess
-R=Path(__file__).resolve().parents[1];O=R/'reports/m5b1_global_canny_i3';W=R/'efinity/m5b1_global_canny_i3';S=R/'efinity/m5a_streaming_canny_i3';NS={'e':'http://www.efinixinc.com/enf_proj'}
+R=Path(__file__).resolve().parents[1];B=R/'reports/m5b1_global_canny_i3';O=B/'review_fix_264962e0/final';W=R/'efinity/m5b1_global_canny_i3';S=R/'efinity/m5a_streaming_canny_i3';NS={'e':'http://www.efinixinc.com/enf_proj'}
 def rec(p):
  b=p.read_bytes();return dict(path=p.relative_to(R).as_posix(),bytes=len(b),sha256=hashlib.sha256(b).hexdigest())
 def main():
- baseline=json.loads((O/'BASELINE_PROTECTION.json').read_text());allowed={'.gitattributes','.gitignore'}
+ baseline=json.loads((B/'BASELINE_PROTECTION.json').read_text());allowed={'.gitattributes','.gitignore'}
  changes=[r['path'] for r in baseline['tracked'] if r['path'] not in allowed and (not (R/r['path']).exists() or rec(R/r['path'])!=r)]
  missing=[p for p in baseline['untracked'] if not (R/p).exists()];assert not changes and not missing,(changes,missing)
  management=[]
@@ -13,7 +13,7 @@ def main():
   if row['path'] in allowed:
    data=(R/row['path']).read_bytes();assert hashlib.sha256(data[:row['bytes']]).hexdigest()==row['sha256'],'Existing attributes/ignore rules were changed'
    management.append(dict(before=row,after=rec(R/row['path']),policy='append only; original byte prefix unchanged'))
- provenance=json.loads((O/'M5A_INPUT_COPY.json').read_text());changed=[];copies=[]
+ provenance=json.loads((B/'M5A_INPUT_COPY.json').read_text());changed=[];copies=[]
  permitted={'efinity/m5b1_global_canny_i3/example_top.v','efinity/m5b1_global_canny_i3/Ti60_Demo.xml','efinity/m5b1_global_canny_i3/Ti60_Demo_I3.sdc','rtl/m5b1_global_canny/m5a_copy/m5a_stream_top.v'}
  for row in provenance['files']:
   assert rec(R/row['source']['path'])==row['source'],row['source']['path']
@@ -30,6 +30,13 @@ def main():
  def header(p):return p.read_text().split(');',1)[0]
  assert header(W/'example_top.v')==header(S/'example_top.v'),'top interface/parameters changed'
  sdc=(W/'Ti60_Demo_I3.sdc').read_text();assert not re.search(r'set_false_path[^\n]*get_clocks|set_clock_groups',sdc)
+ sta=json.loads((O/'final_sta/binding.json').read_text());clone=Path(sta['clone'])
+ if not clone.is_absolute():clone=R/clone
+ active_sdc=[Path(p.strip()).resolve() for p in (clone/'work_pnr/sdc_file_list').read_text().splitlines() if p.strip()]
+ assert active_sdc==[(clone/'Ti60_Demo_I3.sdc').resolve()],active_sdc
+ assert (clone/'Ti60_Demo_I3.sdc').read_bytes()==(W/'Ti60_Demo_I3.sdc').read_bytes()
+ xml_sdc=[n.get('name') for n in tree.findall('.//e:sdc_file',NS)]
+ assert xml_sdc==['Ti60_Demo_I3.sdc'],xml_sdc
  assert rec(W/'Ti60_Demo.peri.xml')['sha256']==rec(S/'Ti60_Demo.peri.xml')['sha256']
  def warnings(p):
   lines=[l for l in p.read_text(errors='replace').splitlines() if l.startswith('WARNING')]
@@ -46,12 +53,13 @@ def main():
   'm5b1_uart.sv':'CRC serializer deliberately selects low byte after right shift; all 580 production-baud serial bytes match independent host CRC/payload.',
   "u_m5b1/video/slot_id":'Four 64-bit frame identities need async reads; logic storage intentional and included in resource gate.',
   "u_m5b1/arbiter/waiting":'Three constant-index counters intentionally map to FF/logic.',
-  "u_m5a_stream/frame_tags":'Eight 192-bit stable pipeline tags intentionally use logic storage, verified by full-frame tap/tag tests.'}
+  "u_m5a_stream/frame_tags":'Eight 193-bit stable pipeline tags include replay qualification and intentionally use logic storage, verified by full-frame tap/tag tests.'}
  annotated=[]
  for line in known:
   hits=[explain for key,explain in reasons.items() if key in line];assert hits,line
   assert not re.search(r'latch|multiple drivers',line,re.I),line
   annotated.append(dict(warning=line,explanation=hits[-1]))
  result=dict(status='PASS_STATIC_SCOPE_AND_PROVENANCE',protected_tracked=len(baseline['tracked']),protected_changes=changes,authorized_append_only_management=management,historical_untracked=len(baseline['untracked']),historical_untracked_missing=missing,copy_count=len(copies),copies=copies,approved_modified_copies=changed,xml_design_files=names,removed_legacy_transaction_files=sorted(removed),new_production_modules=sorted(added),top_ports_parameters_identical=True,peri_pins_PLL_identical=True,DDR_IP_parameters_ROM_identical=True,broad_clock_domain_false_paths=0,map_report=rec(W/'outflow/Ti60_Demo.map.out'),warning_count=len(current),normalized_new_warnings=delta,new_RTL_warnings=annotated)
+ result['active_SDC']=rec(W/'Ti60_Demo_I3.sdc');result['STA_active_SDC_list']=rec(clone/'work_pnr/sdc_file_list');result['project_SDC_files']=xml_sdc;result['inactive_pt_SDC_used']=False
  (O/'STATIC_AUDIT.json').write_text(json.dumps(result,indent=2));print('STATIC_PASS protected',len(baseline['tracked']),'untracked',len(baseline['untracked']),'copies',len(copies),'new warning categories',len(delta))
 if __name__=='__main__':main()

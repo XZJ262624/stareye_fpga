@@ -9,7 +9,7 @@ module m5a_stream_top #(parameter WIDTH=1280,HEIGHT=720,H_TOTAL=1650)(
  output out_legacy_bin,out_overlay_valid,out_overlay_edge,out_nms_valid,out_canny_valid,out_canny_edge,
  output [2:0] out_mode,output out_filter_enable,output [11:0] out_x,out_y,
  output raster_fault,
- input [63:0] tap_input_frame_id,tap_input_epoch,
+ input [63:0] tap_input_frame_id,tap_input_epoch,input tap_input_qualified,
  output tap_valid,output [1:0] tap_class,output [11:0] tap_x,tap_y,
  output [7:0] tap_high,tap_low,output tap_filter,
  output [63:0] tap_frame_id,tap_epoch,tap_timestamp);
@@ -35,7 +35,7 @@ module m5a_stream_top #(parameter WIDTH=1280,HEIGHT=720,H_TOTAL=1650)(
   .low_threshold(low_threshold),.strong_edge(strong_edge),.weak_edge(weak_edge));
  // An eight-entry frame-tag queue follows accepted input/output frames.
  // This avoids an unsafe fixed assumption about vertical blanking or CE stalls.
- reg [191:0] frame_tags[0:7];
+ reg [192:0] frame_tags[0:7];
  reg [63:0] pixel_ticks,source_sof_time;reg source_sof_d;
  always @(posedge clk or negedge rst_n)begin
   if(!rst_n)begin pixel_ticks<=0;source_sof_time<=0;source_sof_d<=0;end
@@ -44,23 +44,29 @@ module m5a_stream_top #(parameter WIDTH=1280,HEIGHT=720,H_TOTAL=1650)(
  reg [3:0] tag_write,tag_read;reg tag_armed;
  wire tags_empty=tag_write==tag_read;
  wire tags_full=(tag_write-tag_read)==8;
+ wire tap_raster_valid=ce&&nms_ready&&nms_packet[26]&&!tags_empty;
+ wire [2:0] last_source_tag=tag_write[2:0]-1'b1;
  always @(posedge clk or negedge rst_n)begin
   if(!rst_n)begin tag_write<=0;tag_read<=0;tag_armed<=1;end
   else if(ce)begin
    if(in_sof)tag_armed<=1;
    if(in_de&&tag_armed&&!tags_full)begin
-    frame_tags[tag_write[2:0]]<={source_sof_time,tap_input_epoch,tap_input_frame_id};
+    frame_tags[tag_write[2:0]]<={tap_input_qualified,source_sof_time,tap_input_epoch,tap_input_frame_id};
     tag_write<=tag_write+1'b1;tag_armed<=0;
    end
-   if(tap_valid&&tap_x==WIDTH-1&&tap_y==HEIGHT-1)tag_read<=tag_read+1'b1;
+   // Invalidation is sticky for this source frame, even while older pixels
+   // remain in the pipeline. The capture then fails/finishes by its wall clock.
+   if(in_de&&!tag_armed&&!tap_input_qualified)frame_tags[last_source_tag][192]<=0;
+   // Consume every raw raster EOF, including unqualified/invalidated frames.
+   if(tap_raster_valid&&tap_x==WIDTH-1&&tap_y==HEIGHT-1)tag_read<=tag_read+1'b1;
   end
  end
- assign tap_valid=ce&&nms_ready&&nms_packet[26]&&!tags_empty;
+ assign tap_valid=tap_raster_valid&&frame_tags[tag_read[2:0]][192];
  assign tap_x=nms_packet[23:12];assign tap_y=nms_packet[11:0];
  assign tap_class=!nms_good?2'b00:strong_edge?2'b10:weak_edge?2'b01:2'b00;
  assign tap_high=nms_packet[38:31];assign tap_low=low_threshold;
  assign tap_filter=nms_packet[27];
- assign {tap_timestamp,tap_epoch,tap_frame_id}=frame_tags[tag_read[2:0]];
+ assign {tap_timestamp,tap_epoch,tap_frame_id}=frame_tags[tag_read[2:0]][191:0];
  wire local_support,local_edge;wire [11:0] local_x,local_y;
  m5a_local_hysteresis #(.WIDTH(WIDTH),.HEIGHT(HEIGHT)) u_hysteresis(
   .clk(clk),.ce(ce),.rst_n(rst_n),.in_sof(nms_ready?!nms_packet[24]:1'b0),.in_de(nms_packet[26]),

@@ -6,8 +6,9 @@ resolve exactly once in every subsequent placement, routing and STA run.
 """
 from pathlib import Path
 import re,json,hashlib
-R=Path(__file__).resolve().parents[1];W=R/'efinity/m5b1_global_canny_i3';O=R/'reports/m5b1_global_canny_i3'
+R=Path(__file__).resolve().parents[1];W=R/'efinity/m5b1_global_canny_i3';O=R/'reports/m5b1_global_canny_i3/review_fix_264962e0/final'
 def main():
+ O.mkdir(parents=True,exist_ok=True)
  net=W/'outflow/Ti60_Demo.map.v';raw=net.read_bytes();text=raw.decode();names=re.findall(r'EFX_FF \\(\S+)',text);groups={}
  def select(key,pattern,pin,count):
   selected=sorted(n+'|'+pin for n in names if re.fullmatch(pattern,n));assert len(selected)==count,(key,len(selected),count)

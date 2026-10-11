@@ -1,0 +1,506 @@
+
+Efinix Timing Path Constraint Report
+Version: 2025.1.110.5.9
+Date: Sun Oct 11 00:04:40 2026
+
+Copyright (C) 2013 - 2025 Efinix, Inc. All rights reserved.
+
+User command: report_timing -from_clock {cmos_pclk} -to_clock {cmos_pclk} -npaths 10 -nworst 1 -hold -detail full_path -file {m5b1_cmos_pclk_cmos_pclk_hold.rpt}
+
+Timing Model: I3
+	process : typical
+	temperature : -40C to 100C
+	voltage : 0.95 +/-30mV
+	speedgrade : 3
+	technology : t16ff
+	status : final
+
+Summary:
+
+ Path #  | Slack (ns) | Delay (ns) |                Start Pin                 |                    End Pin                    |  Launch Clk   |  Capture Clk
+=============================================================================================================================================================
+  1      |  0.060     |  0.169     | u_m5b1/video/pack[75]~FF|Q               | u_m5b1/video/camera_fifo/mem__D$c12|WDATA[9]  | cmos_pclk (R) | cmos_pclk (R)
+  2      |  0.074     |  0.183     | u_m5b1/video/pack[90]~FF|Q               | u_m5b1/video/camera_fifo/mem__D$d12|WDATA[4]  | cmos_pclk (R) | cmos_pclk (R)
+  3      |  0.075     |  0.184     | u_m5b1/video/pack[26]~FF|Q               | u_m5b1/video/camera_fifo/mem__D$12|WDATA[12]  | cmos_pclk (R) | cmos_pclk (R)
+  4      |  0.078     |  0.187     | u_m5b1/video/pack[83]~FF|Q               | u_m5b1/video/camera_fifo/mem__D$d12|WDATA[17] | cmos_pclk (R) | cmos_pclk (R)
+  5      |  0.079     |  0.188     | u_m5b1/video/pack[34]~FF|Q               | u_m5b1/video/camera_fifo/mem__D$12|WDATA[2]   | cmos_pclk (R) | cmos_pclk (R)
+  6      |  0.079     |  0.170     | u_m5b1/video/camera_fifo/wp[3]~FF|Q      | u_m5b1/video/camera_fifo/mem__D$b12|WADDR[2]  | cmos_pclk (R) | cmos_pclk (R)
+  7      |  0.080     |  0.189     | u_m5b1/video/pack[25]~FF|Q               | u_m5b1/video/camera_fifo/mem__D$12|WDATA[11]  | cmos_pclk (R) | cmos_pclk (R)
+  8      |  0.090     |  0.088     | u_Sensor_Image_XYCrop/image_ypos[8]~FF|Q | XYCrop_frame_href~FF|D                        | cmos_pclk (R) | cmos_pclk (R)
+  9      |  0.092     |  0.090     | u_m5b1/video/camera_fifo/wp[5]~FF|Q      | u_m5b1/video/camera_fifo/wg[4]~FF|D           | cmos_pclk (R) | cmos_pclk (R)
+ 10      |  0.092     |  0.090     | u_m5b1/video/pack[100]~FF|Q              | u_m5b1/video/pack[92]~FF|D                    | cmos_pclk (R) | cmos_pclk (R)
+
+++++ Path 1 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : u_m5b1/video/pack[75]~FF|CLK                
+Path End      : u_m5b1/video/camera_fifo/mem__D$c12|WDATA[9]
+Launch Clock  : cmos_pclk (RISE)                            
+Capture Clock : cmos_pclk (RISE)                            
+Slack         : 0.060 (arrival time - required time)        
+Delay         : 0.169                                       
+
+Logic Level             : 0
+Non-global nets on path : 1
+Global nets on path     : 0
+
+Launch Clock Path Delay        : 1.172
++ Clock To Q + Data Path Delay : 0.130
+--------------------------------------
+End-of-path arrival time       : 1.302
+
+Constraint                     : 0.000
++ Capture Clock Path Delay     : 1.172
++ Clock Uncertainty            : 0.070
+--------------------------------------
+End-of-path required time      : 1.242
+
+Launch Clock Path
+            name              model name   delay (ns)  cumulative delay (ns) pins on net    location
+======================================================================================================
+cmos_pclk                       inpad        0.000             0.000               0       (111,323)
+cmos_pclk                       inpad        0.070             0.070             305       (111,323)
+cmos_pclk                       net          1.102             1.172             305       (111,323)
+u_m5b1/video/pack[75]~FF|CLK    ff           0.000             1.172             305       (93,151) 
+
+Data Path
+                    name                      model name   delay (ns)  cumulative delay (ns) pins on net    location
+======================================================================================================================
+u_m5b1/video/pack[75]~FF|Q                   ff               0.072            0.072              3         (93,151)
+u_m5b1/video/pack[75]                        net              0.169            0.241              3         (93,151)
+u_m5b1/video/camera_fifo/mem__D$c12|WDATA[9] ram_8192x20     -0.111            0.130              3         (87,142)
+
+Capture Clock Path
+                  name                    model name   delay (ns)  cumulative delay (ns) pins on net    location
+==================================================================================================================
+cmos_pclk                                inpad           0.000             0.000               0       (111,323)
+cmos_pclk                                inpad           0.070             0.070             305       (111,323)
+cmos_pclk                                net             1.102             1.172             305       (111,323)
+u_m5b1/video/camera_fifo/mem__D$c12|WCLK ram_8192x20     0.000             1.172             305       (87,142) 
+
+++++ Path 2 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : u_m5b1/video/pack[90]~FF|CLK                
+Path End      : u_m5b1/video/camera_fifo/mem__D$d12|WDATA[4]
+Launch Clock  : cmos_pclk (RISE)                            
+Capture Clock : cmos_pclk (RISE)                            
+Slack         : 0.074 (arrival time - required time)        
+Delay         : 0.183                                       
+
+Logic Level             : 0
+Non-global nets on path : 1
+Global nets on path     : 0
+
+Launch Clock Path Delay        : 1.172
++ Clock To Q + Data Path Delay : 0.144
+--------------------------------------
+End-of-path arrival time       : 1.316
+
+Constraint                     : 0.000
++ Capture Clock Path Delay     : 1.172
++ Clock Uncertainty            : 0.070
+--------------------------------------
+End-of-path required time      : 1.242
+
+Launch Clock Path
+            name              model name   delay (ns)  cumulative delay (ns) pins on net    location
+======================================================================================================
+cmos_pclk                       inpad        0.000             0.000               0       (111,323)
+cmos_pclk                       inpad        0.070             0.070             305       (111,323)
+cmos_pclk                       net          1.102             1.172             305       (111,323)
+u_m5b1/video/pack[90]~FF|CLK    ff           0.000             1.172             305       (111,146)
+
+Data Path
+                    name                      model name   delay (ns)  cumulative delay (ns) pins on net    location
+======================================================================================================================
+u_m5b1/video/pack[90]~FF|Q                   ff               0.072            0.072              3        (111,146)
+u_m5b1/video/pack[90]                        net              0.183            0.255              3        (111,146)
+u_m5b1/video/camera_fifo/mem__D$d12|WDATA[4] ram_8192x20     -0.111            0.144              3        (102,142)
+
+Capture Clock Path
+                  name                    model name   delay (ns)  cumulative delay (ns) pins on net    location
+==================================================================================================================
+cmos_pclk                                inpad           0.000             0.000               0       (111,323)
+cmos_pclk                                inpad           0.070             0.070             305       (111,323)
+cmos_pclk                                net             1.102             1.172             305       (111,323)
+u_m5b1/video/camera_fifo/mem__D$d12|WCLK ram_8192x20     0.000             1.172             305       (102,142)
+
+++++ Path 3 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : u_m5b1/video/pack[26]~FF|CLK                
+Path End      : u_m5b1/video/camera_fifo/mem__D$12|WDATA[12]
+Launch Clock  : cmos_pclk (RISE)                            
+Capture Clock : cmos_pclk (RISE)                            
+Slack         : 0.075 (arrival time - required time)        
+Delay         : 0.184                                       
+
+Logic Level             : 0
+Non-global nets on path : 1
+Global nets on path     : 0
+
+Launch Clock Path Delay        : 1.172
++ Clock To Q + Data Path Delay : 0.145
+--------------------------------------
+End-of-path arrival time       : 1.317
+
+Constraint                     : 0.000
++ Capture Clock Path Delay     : 1.172
++ Clock Uncertainty            : 0.070
+--------------------------------------
+End-of-path required time      : 1.242
+
+Launch Clock Path
+            name              model name   delay (ns)  cumulative delay (ns) pins on net    location
+======================================================================================================
+cmos_pclk                       inpad        0.000             0.000               0       (111,323)
+cmos_pclk                       inpad        0.070             0.070             305       (111,323)
+cmos_pclk                       net          1.102             1.172             305       (111,323)
+u_m5b1/video/pack[26]~FF|CLK    ff           0.000             1.172             305       (74,149) 
+
+Data Path
+                    name                      model name   delay (ns)  cumulative delay (ns) pins on net    location
+======================================================================================================================
+u_m5b1/video/pack[26]~FF|Q                   ff               0.072            0.072              3         (74,149)
+u_m5b1/video/pack[26]                        net              0.184            0.256              3         (74,149)
+u_m5b1/video/camera_fifo/mem__D$12|WDATA[12] ram_8192x20     -0.111            0.145              3         (72,142)
+
+Capture Clock Path
+                 name                    model name   delay (ns)  cumulative delay (ns) pins on net    location
+=================================================================================================================
+cmos_pclk                               inpad           0.000             0.000               0       (111,323)
+cmos_pclk                               inpad           0.070             0.070             305       (111,323)
+cmos_pclk                               net             1.102             1.172             305       (111,323)
+u_m5b1/video/camera_fifo/mem__D$12|WCLK ram_8192x20     0.000             1.172             305       (72,142) 
+
+++++ Path 4 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : u_m5b1/video/pack[83]~FF|CLK                 
+Path End      : u_m5b1/video/camera_fifo/mem__D$d12|WDATA[17]
+Launch Clock  : cmos_pclk (RISE)                             
+Capture Clock : cmos_pclk (RISE)                             
+Slack         : 0.078 (arrival time - required time)         
+Delay         : 0.187                                        
+
+Logic Level             : 0
+Non-global nets on path : 1
+Global nets on path     : 0
+
+Launch Clock Path Delay        : 1.172
++ Clock To Q + Data Path Delay : 0.148
+--------------------------------------
+End-of-path arrival time       : 1.320
+
+Constraint                     : 0.000
++ Capture Clock Path Delay     : 1.172
++ Clock Uncertainty            : 0.070
+--------------------------------------
+End-of-path required time      : 1.242
+
+Launch Clock Path
+            name              model name   delay (ns)  cumulative delay (ns) pins on net    location
+======================================================================================================
+cmos_pclk                       inpad        0.000             0.000               0       (111,323)
+cmos_pclk                       inpad        0.070             0.070             305       (111,323)
+cmos_pclk                       net          1.102             1.172             305       (111,323)
+u_m5b1/video/pack[83]~FF|CLK    ff           0.000             1.172             305       (99,154) 
+
+Data Path
+                    name                       model name   delay (ns)  cumulative delay (ns) pins on net    location
+=======================================================================================================================
+u_m5b1/video/pack[83]~FF|Q                    ff               0.072            0.072              3        (99,154) 
+u_m5b1/video/pack[83]                         net              0.187            0.259              3        (99,154) 
+u_m5b1/video/camera_fifo/mem__D$d12|WDATA[17] ram_8192x20     -0.111            0.148              3        (102,142)
+
+Capture Clock Path
+                  name                    model name   delay (ns)  cumulative delay (ns) pins on net    location
+==================================================================================================================
+cmos_pclk                                inpad           0.000             0.000               0       (111,323)
+cmos_pclk                                inpad           0.070             0.070             305       (111,323)
+cmos_pclk                                net             1.102             1.172             305       (111,323)
+u_m5b1/video/camera_fifo/mem__D$d12|WCLK ram_8192x20     0.000             1.172             305       (102,142)
+
+++++ Path 5 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : u_m5b1/video/pack[34]~FF|CLK               
+Path End      : u_m5b1/video/camera_fifo/mem__D$12|WDATA[2]
+Launch Clock  : cmos_pclk (RISE)                           
+Capture Clock : cmos_pclk (RISE)                           
+Slack         : 0.079 (arrival time - required time)       
+Delay         : 0.188                                      
+
+Logic Level             : 0
+Non-global nets on path : 1
+Global nets on path     : 0
+
+Launch Clock Path Delay        : 1.172
++ Clock To Q + Data Path Delay : 0.149
+--------------------------------------
+End-of-path arrival time       : 1.321
+
+Constraint                     : 0.000
++ Capture Clock Path Delay     : 1.172
++ Clock Uncertainty            : 0.070
+--------------------------------------
+End-of-path required time      : 1.242
+
+Launch Clock Path
+            name              model name   delay (ns)  cumulative delay (ns) pins on net    location
+======================================================================================================
+cmos_pclk                       inpad        0.000             0.000               0       (111,323)
+cmos_pclk                       inpad        0.070             0.070             305       (111,323)
+cmos_pclk                       net          1.102             1.172             305       (111,323)
+u_m5b1/video/pack[34]~FF|CLK    ff           0.000             1.172             305       (73,149) 
+
+Data Path
+                   name                      model name   delay (ns)  cumulative delay (ns) pins on net    location
+=====================================================================================================================
+u_m5b1/video/pack[34]~FF|Q                  ff               0.072            0.072              3         (73,149)
+u_m5b1/video/pack[34]                       net              0.188            0.260              3         (73,149)
+u_m5b1/video/camera_fifo/mem__D$12|WDATA[2] ram_8192x20     -0.111            0.149              3         (72,142)
+
+Capture Clock Path
+                 name                    model name   delay (ns)  cumulative delay (ns) pins on net    location
+=================================================================================================================
+cmos_pclk                               inpad           0.000             0.000               0       (111,323)
+cmos_pclk                               inpad           0.070             0.070             305       (111,323)
+cmos_pclk                               net             1.102             1.172             305       (111,323)
+u_m5b1/video/camera_fifo/mem__D$12|WCLK ram_8192x20     0.000             1.172             305       (72,142) 
+
+++++ Path 6 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : u_m5b1/video/camera_fifo/wp[3]~FF|CLK       
+Path End      : u_m5b1/video/camera_fifo/mem__D$b12|WADDR[2]
+Launch Clock  : cmos_pclk (RISE)                            
+Capture Clock : cmos_pclk (RISE)                            
+Slack         : 0.079 (arrival time - required time)        
+Delay         : 0.170                                       
+
+Logic Level             : 0
+Non-global nets on path : 1
+Global nets on path     : 0
+
+Launch Clock Path Delay        : 1.172
++ Clock To Q + Data Path Delay : 0.149
+--------------------------------------
+End-of-path arrival time       : 1.321
+
+Constraint                     : 0.000
++ Capture Clock Path Delay     : 1.172
++ Clock Uncertainty            : 0.070
+--------------------------------------
+End-of-path required time      : 1.242
+
+Launch Clock Path
+                name                   model name   delay (ns)  cumulative delay (ns) pins on net    location
+===============================================================================================================
+cmos_pclk                                inpad        0.000             0.000               0       (111,323)
+cmos_pclk                                inpad        0.070             0.070             305       (111,323)
+cmos_pclk                                net          1.102             1.172             305       (111,323)
+u_m5b1/video/camera_fifo/wp[3]~FF|CLK    ff           0.000             1.172             305       (92,173) 
+
+Data Path
+                    name                      model name   delay (ns)  cumulative delay (ns) pins on net    location
+======================================================================================================================
+u_m5b1/video/camera_fifo/wp[3]~FF|Q          ff               0.072            0.072              12        (92,173)
+u_m5b1/video/camera_fifo/wp[3]               net              0.170            0.242              12        (92,173)
+u_m5b1/video/camera_fifo/mem__D$b12|WADDR[2] ram_8192x20     -0.093            0.149              12        (87,162)
+
+Capture Clock Path
+                  name                    model name   delay (ns)  cumulative delay (ns) pins on net    location
+==================================================================================================================
+cmos_pclk                                inpad           0.000             0.000               0       (111,323)
+cmos_pclk                                inpad           0.070             0.070             305       (111,323)
+cmos_pclk                                net             1.102             1.172             305       (111,323)
+u_m5b1/video/camera_fifo/mem__D$b12|WCLK ram_8192x20     0.000             1.172             305       (87,162) 
+
+++++ Path 7 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : u_m5b1/video/pack[25]~FF|CLK                
+Path End      : u_m5b1/video/camera_fifo/mem__D$12|WDATA[11]
+Launch Clock  : cmos_pclk (RISE)                            
+Capture Clock : cmos_pclk (RISE)                            
+Slack         : 0.080 (arrival time - required time)        
+Delay         : 0.189                                       
+
+Logic Level             : 0
+Non-global nets on path : 1
+Global nets on path     : 0
+
+Launch Clock Path Delay        : 1.172
++ Clock To Q + Data Path Delay : 0.150
+--------------------------------------
+End-of-path arrival time       : 1.322
+
+Constraint                     : 0.000
++ Capture Clock Path Delay     : 1.172
++ Clock Uncertainty            : 0.070
+--------------------------------------
+End-of-path required time      : 1.242
+
+Launch Clock Path
+            name              model name   delay (ns)  cumulative delay (ns) pins on net    location
+======================================================================================================
+cmos_pclk                       inpad        0.000             0.000               0       (111,323)
+cmos_pclk                       inpad        0.070             0.070             305       (111,323)
+cmos_pclk                       net          1.102             1.172             305       (111,323)
+u_m5b1/video/pack[25]~FF|CLK    ff           0.000             1.172             305       (73,148) 
+
+Data Path
+                    name                      model name   delay (ns)  cumulative delay (ns) pins on net    location
+======================================================================================================================
+u_m5b1/video/pack[25]~FF|Q                   ff               0.072            0.072              3         (73,148)
+u_m5b1/video/pack[25]                        net              0.189            0.261              3         (73,148)
+u_m5b1/video/camera_fifo/mem__D$12|WDATA[11] ram_8192x20     -0.111            0.150              3         (72,142)
+
+Capture Clock Path
+                 name                    model name   delay (ns)  cumulative delay (ns) pins on net    location
+=================================================================================================================
+cmos_pclk                               inpad           0.000             0.000               0       (111,323)
+cmos_pclk                               inpad           0.070             0.070             305       (111,323)
+cmos_pclk                               net             1.102             1.172             305       (111,323)
+u_m5b1/video/camera_fifo/mem__D$12|WCLK ram_8192x20     0.000             1.172             305       (72,142) 
+
+++++ Path 8 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : u_Sensor_Image_XYCrop/image_ypos[8]~FF|CLK
+Path End      : XYCrop_frame_href~FF|D                    
+Launch Clock  : cmos_pclk (RISE)                          
+Capture Clock : cmos_pclk (RISE)                          
+Slack         : 0.090 (arrival time - required time)      
+Delay         : 0.088                                     
+
+Logic Level             : 1
+Non-global nets on path : 1
+Global nets on path     : 0
+
+Launch Clock Path Delay        : 1.172
++ Clock To Q + Data Path Delay : 0.160
+--------------------------------------
+End-of-path arrival time       : 1.332
+
+Constraint                     : 0.000
++ Capture Clock Path Delay     : 1.172
++ Clock Uncertainty            : 0.070
+--------------------------------------
+End-of-path required time      : 1.242
+
+Launch Clock Path
+                   name                     model name   delay (ns)  cumulative delay (ns) pins on net    location
+====================================================================================================================
+cmos_pclk                                     inpad        0.000             0.000               0       (111,323)
+cmos_pclk                                     inpad        0.070             0.070             305       (111,323)
+cmos_pclk                                     net          1.102             1.172             305       (111,323)
+u_Sensor_Image_XYCrop/image_ypos[8]~FF|CLK    ff           0.000             1.172             305       (154,318)
+
+Data Path
+                  name                    model name   delay (ns)  cumulative delay (ns) pins on net    location
+==================================================================================================================
+u_Sensor_Image_XYCrop/image_ypos[8]~FF|Q     ff          0.072             0.072              3        (154,318)
+u_Sensor_Image_XYCrop/image_ypos[8]          net         0.054             0.126              3        (154,318)
+LUT__81300|in[0]                             lut         0.034             0.160              3        (152,318)
+LUT__81300|out                               lut         0.000             0.160              2        (152,318)
+XYCrop_frame_href~FF|D                       ff          0.000             0.160              2        (152,318)
+
+Capture Clock Path
+          name            model name   delay (ns)  cumulative delay (ns) pins on net    location
+==================================================================================================
+cmos_pclk                   inpad        0.000             0.000               0       (111,323)
+cmos_pclk                   inpad        0.070             0.070             305       (111,323)
+cmos_pclk                   net          1.102             1.172             305       (111,323)
+XYCrop_frame_href~FF|CLK    ff           0.000             1.172             305       (152,318)
+
+++++ Path 9 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : u_m5b1/video/camera_fifo/wp[5]~FF|CLK
+Path End      : u_m5b1/video/camera_fifo/wg[4]~FF|D  
+Launch Clock  : cmos_pclk (RISE)                     
+Capture Clock : cmos_pclk (RISE)                     
+Slack         : 0.092 (arrival time - required time) 
+Delay         : 0.090                                
+
+Logic Level             : 1
+Non-global nets on path : 1
+Global nets on path     : 0
+
+Launch Clock Path Delay        : 1.172
++ Clock To Q + Data Path Delay : 0.162
+--------------------------------------
+End-of-path arrival time       : 1.334
+
+Constraint                     : 0.000
++ Capture Clock Path Delay     : 1.172
++ Clock Uncertainty            : 0.070
+--------------------------------------
+End-of-path required time      : 1.242
+
+Launch Clock Path
+                name                   model name   delay (ns)  cumulative delay (ns) pins on net    location
+===============================================================================================================
+cmos_pclk                                inpad        0.000             0.000               0       (111,323)
+cmos_pclk                                inpad        0.070             0.070             305       (111,323)
+cmos_pclk                                net          1.102             1.172             305       (111,323)
+u_m5b1/video/camera_fifo/wp[5]~FF|CLK    ff           0.000             1.172             305       (88,179) 
+
+Data Path
+               name                  model name   delay (ns)  cumulative delay (ns) pins on net    location
+=============================================================================================================
+u_m5b1/video/camera_fifo/wp[5]~FF|Q     ff          0.072             0.072              16        (88,179)
+u_m5b1/video/camera_fifo/wp[5]          net         0.056             0.128              16        (88,179)
+LUT__81644|in[2]                        lut         0.034             0.162              16        (92,179)
+LUT__81644|out                          lut         0.000             0.162               2        (92,179)
+u_m5b1/video/camera_fifo/wg[4]~FF|D     ff          0.000             0.162               2        (92,179)
+
+Capture Clock Path
+                name                   model name   delay (ns)  cumulative delay (ns) pins on net    location
+===============================================================================================================
+cmos_pclk                                inpad        0.000             0.000               0       (111,323)
+cmos_pclk                                inpad        0.070             0.070             305       (111,323)
+cmos_pclk                                net          1.102             1.172             305       (111,323)
+u_m5b1/video/camera_fifo/wg[4]~FF|CLK    ff           0.000             1.172             305       (92,179) 
+
+++++ Path 10 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : u_m5b1/video/pack[100]~FF|CLK       
+Path End      : u_m5b1/video/pack[92]~FF|D          
+Launch Clock  : cmos_pclk (RISE)                    
+Capture Clock : cmos_pclk (RISE)                    
+Slack         : 0.092 (arrival time - required time)
+Delay         : 0.090                               
+
+Logic Level             : 0
+Non-global nets on path : 1
+Global nets on path     : 0
+
+Launch Clock Path Delay        : 1.172
++ Clock To Q + Data Path Delay : 0.162
+--------------------------------------
+End-of-path arrival time       : 1.334
+
+Constraint                     : 0.000
++ Capture Clock Path Delay     : 1.172
++ Clock Uncertainty            : 0.070
+--------------------------------------
+End-of-path required time      : 1.242
+
+Launch Clock Path
+            name               model name   delay (ns)  cumulative delay (ns) pins on net    location
+=======================================================================================================
+cmos_pclk                        inpad        0.000             0.000               0       (111,323)
+cmos_pclk                        inpad        0.070             0.070             305       (111,323)
+cmos_pclk                        net          1.102             1.172             305       (111,323)
+u_m5b1/video/pack[100]~FF|CLK    ff           0.000             1.172             305       (113,149)
+
+Data Path
+           name              model name   delay (ns)  cumulative delay (ns) pins on net    location
+=====================================================================================================
+u_m5b1/video/pack[100]~FF|Q     ff          0.072             0.072              3        (113,149)
+u_m5b1/video/pack[100]          net         0.090             0.162              3        (113,149)
+u_m5b1/video/pack[92]~FF|D      ff          0.000             0.162              3        (111,149)
+
+Capture Clock Path
+            name              model name   delay (ns)  cumulative delay (ns) pins on net    location
+======================================================================================================
+cmos_pclk                       inpad        0.000             0.000               0       (111,323)
+cmos_pclk                       inpad        0.070             0.070             305       (111,323)
+cmos_pclk                       net          1.102             1.172             305       (111,323)
+u_m5b1/video/pack[92]~FF|CLK    ff           0.000             1.172             305       (111,149)
+

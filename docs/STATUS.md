@@ -1,6 +1,34 @@
 # 星眸项目状态
 
-## 2026-10-10 M5B.1离线candidate节点（当前，覆盖旧进度）
+## 2026-10-11 M5B.1修复离线验收交回（当前，待固定candidate双审查）
+
+三项264962e0审查缺口已在真实连接与事务验收中关闭；冻结离线总门通过，尚不代表独立复审或硬件PASS。当前报告入口统一为`reports/m5b1_global_canny_i3/review_fix_264962e0/`下的`OFFLINE_ACCEPTANCE.json`、`IMPLEMENTATION.md`、`BUILD_REPORT.md`、`EVIDENCE_SUMMARY.json`、`TECHNICAL_DEPENDENCIES.json`与`PROPOSED_GIT_SCOPE.json`。根目录旧c010验收和旧bit叙述仅保留历史含义。
+
+branch为codex/m5b1-global-canny-prototype；新candidate必须直接parent `264962e0c6af61e751c794c5b5f5252d00edbb6c`。仅精确清单提交，commit后立即停止所有写入交Work；本文件不自嵌commit ID，以Git交回为准。Work核对固定Git快照后盲审DeepSeek B，并停止给用户独立Codex A复审提示词。未做硬件操作。
+
+真实LCD七模式逐像素、有效全零成功descriptor、无效/帧中失效后恢复、CE/标签复位、三阶段未受理取消、已受理A/W/B/R真实排空、metadata背压稳定、同拍边界、六项修复突变、原七组回归与十项突变均有当前源码/runner绑定。默认capture/engine 96M及export 960M周期全部通过；export exit0，712B/两CRC统计，截断包显式重同步。较早default_export_v2原因未知且仍为历史未达到oracle，未改成PASS。
+
+build_20261010_235246完整exit0；45042 XLR/124 RAM10/0 DSP，setup/hold +0.196/+0.027ns，134份路径覆盖报告不是134个PVT角点。940精确pin/457结构CDC分类/413物理数据端点，最大clock-to-Q加数据1.415ns、skew0.825ns，新增内部时序三项0/0/0。新bit2924727B，SHA256 `8bc85b157426cf35e7aab31bc4acd1c8c54b5799c0e7a0424ee555f3927488c4`。96输入/53输出已绑定；1924非规则保护文件及两规则原前缀、2139历史未跟踪资料保持。
+
+显著限制：协议watchdog硬停会撤销stalled WVALID，保留owner/busy、不伪ACK、无新握手/发布，仅冷重新配置；这是既有隔离边界，不能称普遍AXI稳定VALID合规，须交新A/B独立评估。正常取消/普通soft_reset仍强制稳定VALID及真实B/R。默认周期TB使用加速UART，5000UI收尾不是生产波特率上界；本地tag reset不是加密DDR warm restart。4us仅条件模型，不承诺fps；硬件、warm/PVT与真实有效发布率仍PENDING。M5C仅预留未实施。
+
+## 2026-10-11 M5B.1修复验证检查点（历史检查点）
+
+Codex exec/Astra已停写并保存`reports/m5b1_global_canny_i3/review_fix_264962e0/RESUME_CHECKPOINT_20261011.md`。HEAD仍为264962e0，索引为空；尚无修复candidate，不进入双审查或实物节点。核心修复及多项正向/负向/恢复回归已有证据，但部分结果对应早期TB或脚本，须按检查点重新绑定。
+
+新完整构建build_20261010_235246 exit0；Work独立核对96项最终输入和53项构建输出，当前字节/哈希均一致。新STA exit0、134份覆盖报告、最小报告slack +0.027ns，内部no_clock/unconstrained/multiple_clock为0/0/0。新bit为2924727B、SHA256 `8bc85b157426cf35e7aab31bc4acd1c8c54b5799c0e7a0424ee555f3927488c4`；尚未完成所有验收绑定，不得下载或作为验收版本。
+
+仍需：真实连接成功descriptor资格及帧中失效恢复的新增用例；default_export_v2未达到oracle的原因定位与完整960M周期重跑；最终六种子与所有受影响回归/突变/主机统计重放；当前parent/scope/保护校验及candidate。default_export日志无Fatal且缺退出码/完整stdout，原因未知，不能称RTL超时逻辑失败或PASS。
+
+此前升级仿真请求收到自动审批服务的`You've hit your usage limit`失败消息，普通sandbox查询vlog也实际遭遇系统DLL重定位失败。该错误不能证明用户账户总额度耗尽，具体原因未查明。用户指出额度仍有余额后，Work经同一自动审批通道重新执行只读`vlog.exe -version`，成功返回ModelSim10.1c，先前错误不能继续作为当前执行阻断；按检查点恢复Astra开发，并以实际工具返回为准。没有绕过审批或换模型。真实协议卡死后的既有硬停会撤销WVALID、保留owner/busy且不伪造ACK，只能冷重新配置；正常取消/普通soft_reset仍必须保持稳定VALID和真实B/R排空，该限制须交新A/B独立审查。
+
+## 2026-10-10 M5B.1双审查FAIL与修复启动（历史，后续见当前检查点）
+
+固定candidate 264962e0c6af61e751c794c5b5f5252d00edbb6c经用户委派Codex A审查为FAIL，DeepSeek B为PASS_WITH_FINDINGS。Work采用FAIL。三项待关闭：实际DMA→LCD驱动显示错一拍；无效黑色回放帧被当成功分类快照；C2请求未受理时超时无法取消。旧编译/STA和模块仿真通过不覆盖这些连接/取消缺口，不能放行实物。
+
+已归档用户转交的A报告并冻结REVIEW_FIX_SPEC_264962E0.md；Codex exec/Astra独占修复及补生产连接验收、全套回归、完整I3构建/STA/资源/新bit绑定。新candidate直接parent必须是264962e0；完成后再次双审查。M5A保持PASS，M5C仅未来接口预留，本轮无融合/识别或硬件操作。
+
+## 2026-10-10 M5B.1离线candidate节点（历史，后续独立审查为FAIL）
 
 M5B.1完成冻结离线验收，待固定candidate的Codex A与DeepSeek B独立审查及用户实物验收。分支codex/m5b1-global-canny-prototype；candidate直接parent必须为c0102ee1c9a0a8aa802c398755d4a7b3139c7ffd，自身ID由Git交接。
 
@@ -10,7 +38,7 @@ bit：efinity/m5b1_global_canny_i3/outflow/Ti60_Demo.bit，2881269B，SHA256 de1
 
 4us仅为模型条件，不是硬件保证；真实帧/发布率/30分钟稳定性待实测。生产fail-stop不伪造ACK，故障后需冷重新配置；后台结果不进入七模式显示，不承诺fps。本轮无Programmer/JTAG/SPI/Flash，无合并main或推送。candidate提交后Codex exec立即停写，Work复核并进入双审查。
 
-## 2026-10-10 M5B.1实现与离线验收续做（当前）
+## 2026-10-10 M5B.1实现与离线验收续做（历史决定，边界仍有效）
 
 当前分支`codex/m5b1-global-canny-prototype`，HEAD仍为冻结规格提交`c0102ee1c9a0a8aa802c398755d4a7b3139c7ffd`；尚无candidate。新增RTL、工程和验证资料存在工作区，先前“尚无RTL/构建”的记录仅为开发起点。
 
@@ -384,7 +412,7 @@ M4离线仿真、完整I3编译、STA和实物功能验收PASS。RAW、MAG、BIN
 - 本轮仅实物归档与独立提交，未重新编译、未运行Programmer、未再次下载、未写Flash、未修改业务RTL、未继续首行诊断、未进入M5B、未合并main、未推送。M5B及其余后续阶段未开始。
 
 
-## 2026-10-08 M5B.0R离线工作收尾（当前）
+## 2026-10-08 M5B.0R离线工作收尾（历史决定，边界仍有效）
 项目m5b0r_ddr_admission；分支codex/m5b0r-ddr-admission，HEAD仍为ba28397cc5f0d4b34ed06b803c8e5af067c9ca98。M5B.0分析保持NO-GO；M5B.0R完成独立诊断和隔离原型的离线验证准备，当前闸门NO_GO，实际阻断项尚未全部关闭。M5B.1未启动、无全局Canny生产RTL/视频DDR接入/融合。
 用户指定GPT-6 Astra/ultra完成架构及初稿，后续代理限额时主会话接管实现、构建、仿真和独立复核；Astra恢复后进行只读最终复核，主会话处理LED总体超时编码、QoS持续吞吐及取消协议问题。
 独立工程efinity/m5b0r_ddr_address_diag_i3：DDR v5.14参数/源码/ROM与M2匹配、调试插入关闭，仅DDR和LED0～5；24MHz普通core入口及sysPLL CORE参考的建模边界保留。完整I3构建及112份最终STA通过，7391 XLR/30 RAM10/0 DSP，最小setup/hold +0.100/+0.021ns。0无时钟/内部未约束/多时钟，2无输入延迟及17无输出延迟保留；仅20个网表确认的复位链异步SR例外，不广泛切断DDR/monitor数据。受约束时序通过不能证明全部PVT、电气或物理高地址安全。

@@ -21,7 +21,7 @@ module tb_m5b1_video;
  reg bg_req=0,bg_inflight=0;integer bg_beats=0,bg_count=0;
  m5b1_video_dma dut(.ui_clk(ui_clk),.cam_clk(cam_clk),.pix_clk(pix_clk),.arst_n(arst_n),.run(run),.stop(stop),.epoch(64'd1),
   .cam_vs(cam_vs),.cam_valid(cam_valid),.cam_data(cam_data),.pix_sof(pix_sof),.pix_request(pix_request),
-  .pix_data(pix_data),.replay_frame_id(replay_frame_id),.display_valid(display_valid),.fault(fault),
+  .pix_data(pix_data),.pix_qualified(),.replay_frame_id(replay_frame_id),.display_valid(display_valid),.fault(fault),
   .avalid(va),.aready(c_aready[1:0]),.aaddr(vad),.alen(vl),.aid(vi),.atype(vt),
   .wvalid(vw),.wlast(vlast),.wdata(vdata),.wready(c_wready[0]),
   .bvalid(c_bvalid[0]),.bresp(c_bresp[1:0]),.bid(c_bid[7:0]),
@@ -117,8 +117,7 @@ module tb_m5b1_video;
  always @(posedge pix_clk)begin
   if(pix_sof)position=0;
   if(pix_request)begin
-   #0.01;
-   if(dut.frame_used)begin
+   if(dut.pix_qualified)begin
     if(pix_data!==pixel(replay_frame_id,position))$fatal(1,"pixel mismatch frame=%0d pos=%0d got=%h expected=%h",replay_frame_id,position,pix_data,pixel(replay_frame_id,position));
     checked=checked+1;
    end
