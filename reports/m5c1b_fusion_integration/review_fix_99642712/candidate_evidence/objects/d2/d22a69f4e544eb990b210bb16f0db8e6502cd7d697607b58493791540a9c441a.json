@@ -1,0 +1,19 @@
+{
+  "parent_sha256": "25721eb7e2d6dd0f320832f53c0a435baefbc25d982b22fc9e2b18bd9de7482d",
+  "current_sha256": "b02ca220e9d91c4b59e1744d9a14766c5af975dc070cd2ff2e9f2611b51e4ef7",
+  "changes": [
+    {
+      "old": "R=F.parents[2]",
+      "new": "R=F.parents[3]"
+    },
+    {
+      "old": "F/'QUERY_DERIVATION.json'",
+      "new": "F/sys.argv[1]"
+    },
+    {
+      "old": "previous=json.loads((F/'route/RESULT.json').read_text());assert previous['status']=='PASS_STAGE' and previous['resources']['pass'];verify_previous(previous)",
+      "new": "route=json.loads((F/'route/RESULT.json').read_text());assert route['status']=='PASS_STAGE' and route['resources']['pass'];previous=json.loads((F/sys.argv[2]/'RESULT.json').read_text());assert previous['status']=='PASS_QUERY_EXECUTION_PENDING_RECONCILIATION';verify_previous(previous)"
+    }
+  ],
+  "scope": "One immutable per-stage plan with prior completed query archive; fresh route resource gate retained; actual I3,1200s,source/db guards and pre/post full archive unchanged."
+}

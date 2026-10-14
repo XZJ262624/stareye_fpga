@@ -1,5 +1,30 @@
 # 星眸项目状态
 
+## 2026-10-14 23:44：新离线bit与配置采用通过，准备固定修复candidate（唯一当前入口）
+
+本轮修复基线candidate为 `99642712cfb912f484006f4cd74aba4bdaa8d57b`，分支 `codex/m5c-fusion-prototype`。该candidate的Codex A结论FAIL仍有效，新离线bit已生成，本轮进入固定修复candidate及独立复审准备；实际candidate/parent以Work审查节点回执为准，未通过双独立复审前不允许实物验收。下方较早章节是各自时点的历史记录；“候选尚未提交”“本轮审查未开始”和旧资源/时序数值均不得当作当前修复状态。
+
+UART租约清理修复已完成7项定向验证；修复后的18项长批次全部通过（17项整机分类判据及1项默认960M后续恢复），补充64项全部通过（46正向、18指定负向）。另一组legacy46也已全部通过（23正向、23指定负向）；Work复核其3061条封存文件记录零差异。来源及结论范围见 `reports/m5c1b_fusion_integration/review_fix_99642712/` 的封存回执，不能混称所有测试均完整像素验证。
+
+speed构建及seed2/3均在placement得到48914 XLR，超过48640硬门274，未进入route。隔离area实验保持生产RTL不变；精确65+64约束别名和同map完整eligible重复谓词证明已获Work核准，新鲜结构审计通过56组约束与12×16 RGB路径。area绑定构建interface/place已通过：48007 XLR（含1482 routing）、192 RAM10、1 DSP，XLR距硬门余633；56 native精确对象一致，Work核111项post-place归档零差异。新route及7段当前I3查询、端点/配置审计均完成；setup/hold +0.191/+0.026 ns，24组1487目标端点最大CQ+data2.632 ns、skew2.339 ns，196时钟对覆盖完整，内部0/0/0；后台6808FF完整覆盖，525缺路端点逐名分类unknown0。Work独立复核5392条封存记录零差异，见resource_area_bound/PHYSICAL_HANDBACK.json与WORK_PHYSICAL_FULL_CHECK.json。当前仅离线资格通过：新bit为2998245字节，SHA-256 `790bd6fdc013cc62ac0ca3383c9667cafe794cedfb48c22096febf02834892e8`，位于review_fix_99642712/offline_area_artifact的隔离镜像outflow，原生转换exit0且无硬件操作。Work核249项文件记录及101项新版本技术输入无差异，两处root配置已精确采用，其余99输入与已测版本相同。详见OFFLINE/ADOPTION相关回执。具体提交清单由Work冻结，实际固定Git身份由审查节点回执记录；当前离线资格不构成独立复审或实物通过。旧hold +0.016 ns属于旧candidate历史。
+
+继续由Codex exec/GPT-6 Astra独占工程写入，Work核对证据、资源闸门和管理记录。资源门通过后需完整新I3布线/STA/bit及精确candidate证据；新candidate必须直接以99642712为parent。固定candidate后自动DeepSeek B只读快照并停止交用户独立Codex A；通过后另停实物验收。长测试等待阈值约120分钟，完整构建继续推进。冷重新配置、默认UART约7.5秒/TTL约2秒、条件DDR服务、PVT/warm reset等限制不变，M6/M7未开始。
+
+## 2026-10-14 21:21：长回归17/18通过，资源超限待优化（当前）
+
+当前修复源18项批次已17项按各自判据通过，剩starvation恢复仍运行、无排队；默认960M恢复、60帧、ABA正负、六相位、sourceID等已完成。当前物理bound构建综合/接口通过，place资源NO_GO：48914XLR超过48640门274，RAM192/DSP1；未route/STA/bit。仅可确定routing类别增加1169，具体原因未证。
+
+Work授权Codex exec/Astra先只读资源诊断与隔离实验提案，不改活动输入。最后回归完成后继续优化和新完整构建；64focused/46legacy补充批次仍待执行，不能声称全部验证完成。旧candidate99642712仍FAIL，不允许实物；M6/M7未开始。
+
+## 2026-10-14 M5C.1B候选独立审查FAIL，修复中（当前）
+
+固定candidate `99642712cfb912f484006f4cd74aba4bdaa8d57b`：Codex A结论FAIL，首次UART普通导出超时/错误退出遗漏lease及uart_owned清理；默认超时测试首次IDLE结束，未覆盖后续恢复。失效链为源码推导，尚不声称已有新仿真复现。DeepSeek B在A反馈前独立完成PASS_WITH_FINDINGS；Work仍判FAIL，禁止实物验收。
+
+已冻结最小修复和超时→排空→租约回收→下一job发布→融合ACK恢复及负向验收，Codex exec/Astra独占执行；修复后须重新绑定仿真、完整新I3构建/STA/bit及双独立复审。旧离线结果保留历史含义，不代表缺陷关闭。长测试门槛约120分钟，完整构建持续推进。M6/M7未开始，无新硬件操作。
+
+短定向验证已通过并由Work复核7门/84输入记录：5个修复正向（未受理超时、实际末R排空、客户端读错误、正常class/mask导出、跨cleanup融合ACK边界），1个原candidate漏租约复现，1个单点去掉释放动作的命名负向。backend SHA `074809ba7876858bfb8734e13e723e3fef78ff627f313aa808b2c553fa28a3cb`。末R夹具先前错误重复要求done=0的FAIL保留，v3只修正实际排空区间断言；实际lastR早于release并完成下一job真实metadata B发布及融合获取/释放。证据见review_fix_99642712/WORK_FOCUSED_CHECK.json。此结果不是默认960M、完整reader整机、新构建或独立复审通过。
+
+
 ## 2026-10-14 M5C.1B离线工程验证通过，候选准备中（当前）
 
 局部流式Canny、低频DDR全局Canny及历史结果辅助融合的生产接入RTL已经完成本轮离线验证。最终矩阵为15项完整数据流正例、1项仅冷停隔离正例、1项身份保护负例；旧失败夹具保留且不计通过。Work复核2735条矩阵记录、700条新构建记录和252条文件生成记录，无差异。

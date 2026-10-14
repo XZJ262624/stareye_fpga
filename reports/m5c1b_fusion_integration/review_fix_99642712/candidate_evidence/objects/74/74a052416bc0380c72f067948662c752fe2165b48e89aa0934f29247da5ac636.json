@@ -1,0 +1,88 @@
+{
+  "status": "PASS_FOCUSED_ONLY_FIVE_POSITIVE_TWO_NAMED_NEGATIVE",
+  "runs": [
+    {
+      "run": "focused_fixed_0_121805",
+      "status": "PASS_FOCUSED_RECOVERY",
+      "result": {
+        "path": "reports/m5c1b_fusion_integration/review_fix_99642712/focused_fixed_0_121805/RESULT.json",
+        "bytes": 5466,
+        "sha256": "eb73c6465a81048b28abd2baffb66a69bad601f7c3654213c605a6e441172b89"
+      }
+    },
+    {
+      "run": "focused_v3_fixed_1_122251",
+      "status": "PASS_FOCUSED_RECOVERY",
+      "result": {
+        "path": "reports/m5c1b_fusion_integration/review_fix_99642712/focused_v3_fixed_1_122251/RESULT.json",
+        "bytes": 5523,
+        "sha256": "0f873f920c73e1370712730bcae73fc85b6691be319510c8e680b623211085ab"
+      }
+    },
+    {
+      "run": "focused_fixed_2_122022",
+      "status": "PASS_FOCUSED_RECOVERY",
+      "result": {
+        "path": "reports/m5c1b_fusion_integration/review_fix_99642712/focused_fixed_2_122022/RESULT.json",
+        "bytes": 5466,
+        "sha256": "8c55c51230b48dc714dc26a4587baf9f23503e0512cb0e510dcc3be430703973"
+      }
+    },
+    {
+      "run": "focused_fixed_3_122036",
+      "status": "PASS_FOCUSED_RECOVERY",
+      "result": {
+        "path": "reports/m5c1b_fusion_integration/review_fix_99642712/focused_fixed_3_122036/RESULT.json",
+        "bytes": 5469,
+        "sha256": "e5d67741d5c3fdcba2961118487a40c67fbf363ad76384c4d2a7b69b37f64bf7"
+      }
+    },
+    {
+      "run": "focused_v2_fence_0_122155",
+      "status": "PASS_FOCUSED_RECOVERY",
+      "result": {
+        "path": "reports/m5c1b_fusion_integration/review_fix_99642712/focused_v2_fence_0_122155/RESULT.json",
+        "bytes": 5526,
+        "sha256": "ef37dc54478ee8206c7799a434c15c2a64a4d7218bf36db392b2288b55b6f5f7"
+      }
+    },
+    {
+      "run": "focused_old_0_121903",
+      "status": "PASS_NAMED_ORIGINAL_LEAK_SENSITIVITY",
+      "result": {
+        "path": "reports/m5c1b_fusion_integration/review_fix_99642712/focused_old_0_121903/RESULT.json",
+        "bytes": 5631,
+        "sha256": "dd1446a98c0082924d0e7421049d6d310d438a886dbb3e5989287be67dd8c44e"
+      }
+    },
+    {
+      "run": "focused_v2_mutant_0_122141",
+      "status": "PASS_NAMED_SINGLE_RELEASE_MUTANT",
+      "result": {
+        "path": "reports/m5c1b_fusion_integration/review_fix_99642712/focused_v2_mutant_0_122141/RESULT.json",
+        "bytes": 5706,
+        "sha256": "2276ddc2f6e90dc2e6e3a03ee8dc80dce62561abf84fe43ad3a97243f956f7e1"
+      }
+    }
+  ],
+  "backend": {
+    "path": "rtl/m5c_fusion/m5b1_backend.sv",
+    "bytes": 20099,
+    "sha256": "074809ba7876858bfb8734e13e723e3fef78ff627f313aa808b2c553fa28a3cb"
+  },
+  "diff": "--- candidate99642712\n+++ currentbackend\n@@ -20,7 +20,8 @@\n  localparam IDLE=0,HEADER=1,CAPTURE=2,CAPWAIT=3,FREEZE=4,ENGINE=5,ENGINE_WAIT=6,\n   STATS=7,STATS_WAIT=8,EXPORT_START=9,EXPORT_READ=10,EXPORT_READ_WAIT=11,EXPORT_BYTES=12,\n   EXPORT_FINISH=13,DRAIN=14,EXPORT_PREFETCH=15,FAULT_REPORT=16,FAULT_IDLE=17,\n-  RESERVE_WAIT=18,BIND=19,BIND_WAIT=20,UART_ACQUIRE=21,UART_WAIT=22,TELEMETRY=23,TELEMETRY_WAIT=24;\n+  RESERVE_WAIT=18,BIND=19,BIND_WAIT=20,UART_ACQUIRE=21,UART_WAIT=22,TELEMETRY=23,TELEMETRY_WAIT=24,\n+  UART_RELEASE=25,UART_RELEASE_WAIT=26;\n  wire tx_busy,tx_done,tx_error,tx_cancelled,tx_read_beat,tx_write_beat;wire [7:0] tx_beat;\n  reg [7:0] export_type;\n  reg [4:0] state;reg fault_reported,ever_run,job_failed;reg [31:0] local_cancels;\n@@ -42,7 +43,7 @@\n  reg [767:0] frozen_extended,pair_descriptor[0:1];\n  reg [319:0] writer_identity;\n  reg [63:0] generation,uart_token;\n- reg writer_owned,cancel_sent,uart_owned,uart_release;\n+ reg writer_owned,cancel_sent,uart_owned,uart_release,uart_cleanup_report;\n  wire reserve_ack,reserve_denied,reserve_slot,bind_ack,acquire_ack,acquire_denied;\n  wire lease_latest_valid,lease_latest_slot;wire [1:0] reserved,committed;\n  wire event_rejected;\n@@ -139,7 +140,7 @@\n    state<=IDLE;fault_reported<=0;ever_run<=0;job_failed<=0;local_cancels<=0;class_slot<=1;latest_slot<=0;latest_valid<=0;exported<=0;job_id<=0;tick<=0;requests<=0;accepted<=0;busy_rejected<=0;capture_drop<=0;published_count<=0;result_age<=0;\n    offset<=0;capture_age<=0;export_age<=0;arm<=0;descriptor_take<=0;frozen<=0;publish_toggle<=0;bg_fault<=0;stats<=0;byte_index<=0;export_type<=2;packet_start<=0;packet_abort<=0;\n    frozen_extended<=0;pair_descriptor[0]<=0;pair_descriptor[1]<=0;writer_identity<=0;generation<=0;\n-   uart_token<=0;writer_owned<=0;cancel_sent<=0;uart_owned<=0;uart_release<=0;metadata_committed<=0;telemetry_take<=0;\n+   uart_token<=0;writer_owned<=0;cancel_sent<=0;uart_owned<=0;uart_release<=0;uart_cleanup_report<=0;metadata_committed<=0;telemetry_take<=0;\n   end else begin\n    arm<=0;descriptor_take<=0;packet_start<=0;packet_abort<=0;\n    uart_release<=0;telemetry_take<=0;\n@@ -229,7 +230,7 @@\n     EXPORT_READ_WAIT:begin\n      \n      if(tx_done)begin\n-      if(tx_error)begin bg_fault<=1;exported<=1;packet_abort<=1;state<=IDLE;end\n+      if(tx_error)begin bg_fault<=1;packet_abort<=1;uart_cleanup_report<=0;state<=UART_RELEASE;end\n       else begin byte_index<=0;state<=EXPORT_PREFETCH;end\n      end\n     end\n@@ -242,7 +243,15 @@\n     end\n     EXPORT_FINISH:if(packet_done)begin\n      if(export_type==2)begin export_type<=3;state<=EXPORT_START;end\n-     else begin exported<=1;uart_release<=1;uart_owned<=0;state<=IDLE;end\n+     else begin uart_cleanup_report<=0;state<=UART_RELEASE;end\n+    end\n+    // Ordinary exits retain the original slot/identity/token until every real\n+    // read has drained and the lease core has consumed retire+release. Keeping\n+    // export_exclusive asserted prevents a fusion acquire crossing that fence.\n+    // No new job can replace writer_identity while these states are active.\n+    UART_RELEASE:if(!stop&&!tx_busy)begin uart_release<=1;state<=UART_RELEASE_WAIT;end\n+    UART_RELEASE_WAIT:if(!stop&&!pair_leased[latest_slot?3:1])begin\n+     uart_owned<=0;exported<=1;state<=uart_cleanup_report?FAULT_REPORT:IDLE;\n     end\n     FAULT_REPORT:state<=STATS;\n     FAULT_IDLE:begin end\n@@ -254,7 +263,7 @@\n    // Keep CAPWAIT's payload/pop contract until the owned transaction drains.\n    // Cancelling only a queued request also terminates without future READY.\n    if(capture_timeout&&!tx_busy)begin bg_fault<=1;job_failed<=1;capture_drop<=capture_drop+1'b1;state<=DRAIN;end\n-   if(export_timeout&&!tx_busy)begin bg_fault<=1;job_failed<=1;exported<=1;packet_abort<=1;state<=FAULT_REPORT;end\n+   if(export_timeout&&!tx_busy)begin bg_fault<=1;job_failed<=1;packet_abort<=1;uart_cleanup_report<=1;state<=UART_RELEASE;end\n    // UART fault telemetry is independent of the quarantined DDR transaction.\n    // Keep the owner/busy state intact: this is not a DDR reset or synthetic ACK.\n    if(stop&&ever_run&&!fault_reported)begin fault_reported<=1;latest_valid<=0;bg_fault<=1;packet_abort<=1;state<=FAULT_REPORT;end\n",
+  "scope": "Actual backend/capture/engine/transfer/arbiter/lease; zero-class service model. Real metadataB count/publication and fusion acquire/release, not full fusion reader/pixels. CASE2 conditional error at client RRESP, not physical badR recovery.",
+  "remaining": [
+    "default960M exact wall with recovery",
+    "current-source fullsystem/legacy/focused matrix",
+    "new full I3 build/STA/artifact",
+    "UART_ACQUIRE denial healthy path not naturally exercised; static guard/exiting before uart_owned reviewed separately"
+  ],
+  "prior_case1_failure": {
+    "path": "reports/m5c1b_fusion_integration/review_fix_99642712/focused_fixed_1_122008/RESULT.json",
+    "bytes": 5504,
+    "sha256": "f637fbbb5fd74be5f26fd33d9e351bb8e5adef8901f742b884bede7004cd5a70"
+  },
+  "B3": "Actual pair_lease source uses nreads=nreads+1 then nreads=nreads-1, unlike reviewer transcription; no RTL change.",
+  "B4": "Cross-cleanup fusion acquire tested; live fusion read collision safety still requires fullsystem matrix."
+}

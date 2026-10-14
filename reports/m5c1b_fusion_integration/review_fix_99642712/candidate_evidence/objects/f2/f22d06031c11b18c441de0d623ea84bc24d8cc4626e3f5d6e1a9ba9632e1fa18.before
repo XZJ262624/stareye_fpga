@@ -1,0 +1,492 @@
+# 星眸项目交接单
+
+## 2026-10-14 22:45：修复回归与area资源门通过，继续布线/STA（唯一当前入口）
+
+当前技术HEAD仍为 `99642712cfb912f484006f4cd74aba4bdaa8d57b`，分支 `codex/m5c-fusion-prototype`。该candidate的Codex A结论FAIL仍有效，尚无修复candidate或新bitstream，不允许实物验收。下方较早章节是各自时点的历史记录；“候选尚未提交”“本轮审查未开始”和旧资源/时序数值均不得当作当前修复状态。
+
+UART租约清理修复已完成7项定向验证；修复后的18项长批次全部通过（17项整机分类判据及1项默认960M后续恢复），补充64项全部通过（46正向、18指定负向）。另一组legacy46也已全部通过（23正向、23指定负向）；Work复核其3061条封存文件记录零差异。来源及结论范围见 `reports/m5c1b_fusion_integration/review_fix_99642712/` 的封存回执，不能混称所有测试均完整像素验证。
+
+speed构建及seed2/3均在placement得到48914 XLR，超过48640硬门274，未进入route。隔离area实验保持生产RTL不变；精确65+64约束别名和同map完整eligible重复谓词证明已获Work核准，新鲜结构审计通过56组约束与12×16 RGB路径。area绑定构建interface/place已通过：48007 XLR（含1482 routing）、192 RAM10、1 DSP，XLR距硬门余633；56 native精确对象一致，Work核111项post-place归档零差异。Work已授权继续route及5段全新I3 STA/当前物理端点审计；尚无route/STA/新bit通过结论。不得沿用旧hold +0.016 ns作为修复版时序证明。
+
+继续由Codex exec/GPT-6 Astra独占工程写入，Work核对证据、资源闸门和管理记录。资源门通过后需完整新I3布线/STA/bit及精确candidate证据；新candidate必须直接以99642712为parent。固定candidate后自动DeepSeek B只读快照并停止交用户独立Codex A；通过后另停实物验收。长测试等待阈值约120分钟，完整构建继续推进。冷重新配置、默认UART约7.5秒/TTL约2秒、条件DDR服务、PVT/warm reset等限制不变，M6/M7未开始。
+
+## H-M5C1B-20261014晚间：资源超限诊断（当前）
+
+18项修复后长批次已17项通过，最后starvation恢复仍运行，活动输入不改。新bound构建在place资源门NO_GO（48914XLR超48640门274，RAM192/DSP1），无route/STA/bit。Codex exec/Astra按review_fix_99642712/WORK_RESOURCE_DIAG_FREEZE.md先只读诊断并提出隔离资源实验；未经Work具体冻结不改RTL/约束或运行新实验。最后回归完成后继续资源门与完整构建，不操作硬件或暂存提交。
+
+## H-M5C1B-20261014：独立审查FAIL后的UART租约修复（当前）
+
+起点candidate `99642712cfb912f484006f4cd74aba4bdaa8d57b`，parent `f8bc4492f7247b5c242c80b76d9ca4a76347f30d`，branch `codex/m5c-fusion-prototype`。Codex A发现首次UART普通超时/错误退出缺少租约回收，结论FAIL；DeepSeek B独立PASS_WITH_FINDINGS不能覆盖此阻断。旧bit不得进入实物验收。
+
+Codex exec/GPT-6 Astra Medium独占修复，Work管理文档与最终复核。目标、路径和验收见 `reports/m5c1b_fusion_integration/review_fix_99642712/WORK_FIX_FREEZE.md`：真实读排空后使用原slot/identity/token清理，验证下一job及融合ACK恢复，加入泄漏负向，随后重新完整I3构建/STA/bit与候选复审。当前不暂存提交或操作硬件；下列候选准备记录为历史。
+
+
+## H-M5C1B-20261014：候选与审查证据准备（当前）
+
+开发分支codex/m5c-fusion-prototype，HEAD仍f8bc4492f7247b5c242c80b76d9ca4a76347f30d，当前HEAD唯一parent为8976a276f03b4cd146c451aa081b04f71637fcf2。未来candidate必须直接以f8bc449为parent，不能混淆这两种parent关系。当前索引为空，尚无新candidate。
+
+Work已复核最终17闸门、新全构建/实际I3及离线bit文件的封存证据。下一步仅精确候选范围和可复现/可审查证据配送：正式101技术输入、实际测试/负例与原始日志、当前构建/时序/文件元数据，明确未提交大文件的绑定及审查边界。禁止整个reports树、未知未跟踪资料、工具包、密钥或私人数据进入候选。只有精确路径清单经Work冻结后Codex exec才暂存/提交，不改历史、不合并main、不推送。
+
+复杂工作由Codex exec/GPT-6 Astra独占执行；Work直接管理规划、文档、归档和最终复核。固定candidate后Work按长期授权自动发送逐文件验证的只读隔离快照给DeepSeek B，并停止提供用户委派Codex A提示词。两位审查者完成前报告相互隔离。独立审查与实物闸门必须等待用户结果，当前不操作硬件。
+
+用户等待规则：仅预计约120分钟或更久的测试可启动后台后结束对话等待，不修改实际测试超时或降低覆盖。完整构建不适用该结束等待规则，Work持续组织、检查和推进。
+
+技术输入101和旧保护文件的开发/构建时点零差异证据不改写。本次Work在封存后明确更新STATUS/PROJECT_BRIEF/DECISIONS/HANDOFF/MILESTONES五份管理文档；旧字节和前后哈希见`reports/m5c1b_fusion_integration/work_management_update_20261014/MANAGEMENT_DELTA.json`。其他保护技术文件保持原样，不伪称管理更新后全部4465项仍逐字节相同。
+
+
+## H-M5C1B-20261012-IMPLEMENT：真实接入实施授权（当前）
+
+Work已复核99copies和127精确目标，冻结reports/m5c1b_fusion_integration/WORK_IMPLEMENTATION_FREEZE.md及三准备文件，Codex exec/Astra唯一Writer开始新副本完整接入、实际map资源准入、整机仿真与完整新I3构建/STA。新branch codex/m5c-fusion-prototype，起始及未来candidate唯一parent f8bc4492f7247b5c242c80b76d9ca4a76347f30d。开发完成停写交Work后另授权精确candidate，禁止硬件/Git变更/旧源修改。
+
+## H-M5C1B-20261012：真实DDR与显示接入（当前任务，先冻结精确清单）
+
+用户明确“那就下一步”，授权推进生产接入增量。开发起点HEAD f8bc4492f7247b5c242c80b76d9ca4a76347f30d，branch codex/m5b1-global-canny-prototype；管理docs及未提交M5C.0/1A新产物已有，禁止清理。受保护技术基线candidate8976a276f03b4cd146c451aa081b04f71637fcf2，parent264962e0。M5C.1A三核心PASS，新工程须复制这些核心，不回改原件与证据。
+
+Codex exec/GPT-6 Astra Medium首先仅写reports/m5c1b_fusion_integration/的INTEGRATION_CONTRACT.md、PROPOSED_FILE_SCOPE.json、EARLY_RESOURCE_PLAN.md；只读研究实际capture/engine/backend、时钟reset/CDC、七模式controls/OSD和构建脚本，生成足够实施的端口/字段/状态/精确目标文件清单。此准备步骤停止交Work核定后才开核心写入。不得把原草案接口当已实施，不得只完成文档后冒称已接入。
+
+Work已选定目标行为：FUS默认关闭、普通七模式轮转和阈值/滤波语义保留；双键稳定长按至少1秒且释放一次切换FUS，短/长互斥、不兼触阈值或模式，SOF生效。FUS只在mode6生效；局部红色、额外历史辅助青色、灰度背景、原OSD优先并增加FUS/LOCAL与age状态。按M5C.1A冻结公式/120帧+148500000tick、无两帧进入滞回，失效保守回退。新接口和遥测具体位布局由本准备明确，保持旧1/2/3串口packet兼容，新增统计用独立版本/type不得偷改旧解包语义。
+
+接入须真实联合lease保护class/mask、实际metadataB提交事件、真实客户端受理和末R/写B drain、单调pair/token、frame/config_generation等跨域一致传递；不再用TBmodel done当生产输入。capture源SOF seq/tick/config必须同descriptor/job绑定，不能从publish计龄、不能把UI tick当pixel tick、不能把source ID当显示帧计数。按真实LCD资格/身份时序保留错拍修复。
+
+采用8行双时钟cache、每行320B class+160B mask，原子READY/消费退役、整descriptor mailbox与精确CDC约束；SOF预填前4行、标签/欠载/迟到/过期时回退并真实排空。reader只走原C2低优先，burst≤512B、不跨4KiB、不扩DDRpayload范围、不得挤入RT urgent或暂停光栅。C2子仲裁优先不可背压capture写入，再公平engine/reader，首次大UART导出与fusion互斥。两槽第三job可拒绝但健康服务下应及时切新pair或LOCAL释放，杜绝永久循环等待。
+
+建议新branch codex/m5c-fusion-prototype，后续唯一candidate parent应为f8bc449...（先禁止Git操作，待Work核定授权）。新工程efinity/m5c_fusion_i3、RTL rtl/m5c_fusion、tb/m5c_fusion、新scripts/m5c1b_*，源copy manifest逐文件指定不复制工具/outflow/数据库/锁/旧bit。禁止改M2~M5B1/1A已验证源码/报告/管脚/时钟/DDR IP/ROM/外部接口/分辨率、.gitignore/.gitattributes旧内容、首行诊断/识别/热恢复/清理/Flash。
+
+资源门≤48640XLR/204RAM10/128DSP，现45042/124/0余量窄；先做实际新工程综合准入，超门先在新范围优化真实逻辑/RAM不削弱校验、不放宽门槛，仍不可满足则NO-GO交Work。通过后完整I3编译/P&R/bit/STA，setup/hold非负、新内部no_clock/unconstrained/multiclock0/0/0与精确CDC物理验证。旧slack不继承。
+
+整机安全与效用分门，测试须经过新DMA→真实LCD→资格寄存→M5A→cache/lease/reader→fusion→OSD的生产连接，健康七模式及FUS开关完整720p逐像素，至少60帧健康服务静止有效辅助、4us条件和17us拒绝模型/饥饿恢复，配置A-B-A/帧重复跳号/各CDC随机phase/取消真实B/R/错误/硬停，原回归及对应负向。软件golden与实际字节CRC+BFS、统计原因/age/tokens绑定，不借旧PASS。硬停仅冷重新配置，soft_reset接0，跨PVT/warm仍未知。
+
+准备交回后Work冻结具体实施handoff；最终离线合格candidate交回即停写，Work自动DeepSeek B且停止给用户Codex A提示词；双审查后到实物再次停止。所有阶段禁止Programmer/JTAG/串口/Flash。当前准备不得开始仿真/综合/核心代码/Git，独占新准备报告目录即可。
+
+## 2026-10-12 M5C.1A离线融合核心PASS（当前开发状态）
+
+用户授权开始下一步并在中断后要求继续。Work冻结M5C.1A离线范围，Codex exec/GPT-6 Astra独占完成三核心：分类/结果联合slot lease、像素墙钟/显示帧龄与配置guard、逐行一致性历史辅助融合。内部开发不是Codex A/DeepSeek B独立审查。
+
+三核心单元通过；未改真实M5A连接完成12个720p帧、11059200有效像素/tap逐项比较和744次CE暂停采样，七个健康模式每个新增7个合法弱边辅助，五故障帧按oracle局部回退。十项实际负向均命中指定Fatal，包括旧租用token释放/退役、独立响应owner、首次受理伪末R同拍。此前混合故障/效用的连接FAIL日志保留，不改写为PASS。
+
+Work只读总复核2680个不同文件哈希（含2563项保护记录），HEAD仍f8bc4492f7247b5c242c80b76d9ca4a76347f30d，索引为空，10项新开发文件未提交。原生产bit大小2924727B、SHA8bc85b157426cf35e7aab31bc4acd1c8c54b5799c0e7a0424ee555f3927488c4不变。核心验收与限制见reports/m5c1a_fusion_core/IMPLEMENTATION.md、FINAL_MANIFEST.json及WORK_ACCEPTANCE.json。
+
+结论仅PASS_OFFLINE_CORE：没有生产DDR/CDC/cache/reader/C2接入，没有新综合/P&R/STA/bit或硬件验证；metadata B/末R为单元接口模型。行分类一致性不是物理静止证明，也不是当前帧完整BFS。M5A和M5B.1受控原型PASS保留；M5C整机仍开发中，M6/M7未开始。
+
+下一步由Work冻结生产接入增量，先建立真正的跨域行cache、低优先reader/C2事务复用与联合lease接线，再过≤48640XLR/204RAM10/128DSP资源及完整新STA门；不能继承旧slack。正式candidate完成后自动DeepSeek B并停止给用户Codex A，双审查后再停止给实物清单。当前不操作板卡、不启动独立审查、不创建candidate或改生产工程。此节为停写后的管理更新，旧保护清单中的管理文档记录保留其开发交回时点含义，不伪称更新后仍逐字节相同。
+
+## H-M5C1A-20261012：离线融合核心开发（已交回，后续见顶部验收）
+
+Work核定M5C.0草案后冻结reports/m5c1a_fusion_core/FROZEN_SPEC.md。Codex exec/Astra Medium唯一Writer按该精确范围开发三项离线核心及golden/TB验证；不改M5A/M5B1生产工程，不综合建bit、不操作硬件、不Git提交。起点HEAD f8bc4492f7247b5c242c80b76d9ca4a76347f30d。完成交Work复核后才冻结生产接入；M5C整体未完成。
+
+## H-M5C0-20261012：下一阶段架构与规格准备（历史准备）
+
+用户在M5B.1受控原型实物PASS后询问并授权下一步推进。下一步命名M5C.0，仅为Work本轮选定的架构/可行性准备子步骤，不把原接口预留伪称已有完整冻结规格。
+
+开发基础branch codex/m5b1-global-canny-prototype；HEAD f8bc4492f7247b5c242c80b76d9ca4a76347f30d，parent 8976a276f03b4cd146c451aa081b04f71637fcf2。技术基线仍固定candidate8976a276。
+
+委派Codex exec / GPT-6 Astra Medium：读取PROJECT_BRIEF、STATUS、DECISIONS、AI_WORKFLOW、REVIEW_PROTOCOL及M5C_INTERFACE_RESERVATION；只读核对实际RTL的结果槽/lease/导出、消费者带宽、分类tap、CDC和现有资源，提出M5C架构及可验收规格草案。明确区分既有实现与建议；不可简单把旧mask无条件OR到实时画面。研究age/config/epoch/source_kind、static/motion判定、预填充与低优先DDR读取、无效/过期/欠载/硬停的局部回退、七模式保留与新增显示方式。列明资源与服务准入门槛、软件golden/真实LCD逐像素和负向测试、构建/STA以及硬件验收要求。
+
+唯一允许写入：reports/m5c0_fusion_architecture/ 下新草案和分析证据。禁止修改docs、任何RTL/TB/约束/Efinity工程、既有报告、已验证接口/时钟/管脚/分辨率；不得打开串口、Programmer/JTAG/Flash，不得Git暂存提交/切分支/合并/推送，不清理历史资料。先验证HEAD，如不符停止报告。无需综合仿真，分析不足须明确未知，不能编造资源/服务上界。停止边界：把架构/冻结规格草案、可行性GO/NO-GO和问题清单交Work；本任务不实现融合、不创建RTLcandidate，也不替代Codex A或DeepSeek B审查。
+
+## 2026-10-12 M5B.1受控隔离原型实物验收PASS（已签收基线）
+
+固定技术candidate为`8976a276f03b4cd146c451aa081b04f71637fcf2`，parent为`264962e0c6af61e751c794c5b5f5252d00edbb6c`。Codex A与DeepSeek B均PASS_WITH_FINDINGS，三项阻断修复已关闭。用户确认同一配置未重启、AR0135连接、全程正常、七模式和阈值正常；COM13原始记录持续1871.569991秒（31分11.57秒），满足至少30分钟稳定性门。
+
+947729字节记录包含1858份统计及一对完整分类/结果图；除明确保留的首字节FF外，offset1到EOF严格解析全部CRC通过，无重同步或截断容忍。job连续1~1858、每包accepted/published与job相同、source SOF严格递增，无协议/FIFO错误、采集丢弃、stop/quarantine或校准回退。首对1280x720实物导出921600像素与软件八邻域BFS逐bit一致；不声称其余1857个结果均已逐像素比较。FF来源未知，作为非阻断传输边界保留。
+
+Work决定M5B.1受控隔离原型PASS，本轮实物闸门关闭。生产soft_reset仍接0；协议硬停撤销背压WVALID且只能冷重新配置恢复。窄hold、warm reset、跨PVT、DDR全容量及普适服务上界仍未获证明，不放行生产部署或Flash。M5A保留，M5C双路融合仅接口预留、未实现；M6/M7未开始。本轮仅归档，不修改已审RTL/工程/bit，不自动启动下一阶段实现。
+
+最终证据见`reports/m5b1_global_canny_i3/review_fix_264962e0/HARDWARE_ACCEPTANCE_RESULT_8976A276.md`与`HARDWARE_UART_VERIFICATION_234852.json`。管理归档不得替代固定技术candidate身份。
+
+## 2026-10-11 M5B.1真实首帧导出/BFS通过，等待30分钟稳定性（历史，已由2026-10-12验收覆盖）
+
+用户COM13原始二进制380405B已核验：录制123.974秒，107统计+1分类+1结果，分类/结果同epoch1/frame34/job1、1280x720，921600像素与软件八邻域BFS逐bit一致。published107/accepted107、capture_drop0，全部统计的协议/FIFO错误0、校准有效、无stop/quarantine。实际导出/CRC/身份/BFS子闸门PASS，整体验收仍PENDING_30MIN_STABILITY，不推进下一阶段。
+
+原始offset0多一字节FF，初始严格解包失败；明确跳过仅该1字节后，对offset1~EOF重新严格解包全部CRC通过、无重同步或末尾截断容忍，FF来源未知并保留记录。详见`reports/m5b1_global_canny_i3/review_fix_264962e0/HARDWARE_EXPORT_PASS_225827.md`与`HARDWARE_UART_VERIFICATION_225827.json`。原始文件未修改，candidate代码/bit不变。
+
+用户可保持本次板卡配置继续运行，重新启动记录器采后续统计，无需为了接收再次JTAG；首对导出已保存。等待用户反馈从本次下载完成后至少30分钟同次连续运行与七模式/静态运动无异常及后续文件。LED对应已由断开相机的M0流水验证解决，原硬停/soft_reset接0/warm/PVT限制保留。Work本轮仅离线解析和记录，不操作硬件。
+
+
+## 2026-10-11 M5B.1首次实物反馈已收到（历史，后续见当前导出/BFS结果）
+
+用户JTAG临时配置candidate8976a276，AR0135及板载串口已接，720p60/七模式/阈值和静态运动约20分钟无可见视频异常，用户判断PASS。Work只读复算当前bit哈希与审查绑定一致；用户未提供下载时SHA。四份用户粘贴统计包CRC匹配，job91~94/published91~94，采集丢弃及样本协议/FIFO错误0，后台发布有实物局部证据。
+
+整体验收仍PENDING：未达30分钟、无完整原始串口、无分类/结果BFS对比，指定M0镜像断开相机后流水正常，物理LED顺序已对应为照片左到右7~0，先前编号误判解除；LED7/6与相机共享，不属于M5B状态灯，低电平亮的故障灯正常应亮。详见`reports/m5b1_global_canny_i3/review_fix_264962e0/HARDWARE_FIRST_FEEDBACK_20261011.md`及`HARDWARE_STATS_FIRST_FEEDBACK.json`。用户原PASS保留为反馈，不能替代完整闸门结论。不推进下一阶段。
+
+Work已准备外部Windows原始字节记录器（未打开COM/未操作硬件），交用户补做前置记录、同bit JTAG冷配置与下载后至少30分钟，再回传.bin/.json及LED编号。仅管理/证据资料写入，candidate代码/bit保持。原硬停/冷配置及warm/PVT限制保留。
+
+
+## 2026-10-11 M5B.1双审查通过，等待受控实物验收（历史，首次反馈见当前）
+
+固定candidate `8976a276f03b4cd146c451aa081b04f71637fcf2`，唯一parent `264962e0c6af61e751c794c5b5f5252d00edbb6c`，branch `codex/m5b1-global-canny-prototype`。用户独立Codex A与自动隔离快照DeepSeek B均PASS_WITH_FINDINGS，R1/R2/R3关闭，无新阻断；双方完成前未交换本轮报告。Work决定GO受控实物、STOP等待用户反馈，M5B.1仍未完成，不推进M5C或下一开发阶段。
+
+审查归档及Work决定见`reports/m5b1_global_canny_i3/review_fix_264962e0/{CODEX_A_REVIEW_8976A276,DEEPSEEK_B_REVIEW_8976A276,DUAL_REVIEW_DECISION_8976A276}.md`。用户确认已有板载USB串口；操作与反馈清单见同目录`HARDWARE_ACCEPTANCE_8976A276.md`。仅用户JTAG临时配置，接回AR0135，460800-8-N-1原始二进制提前保存，至少30分钟七模式/静态及运动共存、CRC与真实分类+BFS校验；Work不操作硬件。
+
+固定bit 2924727B、SHA256 `8bc85b157426cf35e7aab31bc4acd1c8c54b5799c0e7a0424ee555f3927488c4`；本轮生产RTL/TB/工程/bit未改，只有后审管理记录。硬停撤销WVALID且只能冷重配置、hold +0.027ns、加密DDR ID/真实服务/发布率/PVT/warm restart边界持续保留。特别纠正：生产soft_reset接0，无独立启用该分支的验证，不能将旧文档相关表述当作已证功能。B的tuple少一位、死变量和分层CE/负向覆盖建议进入后续非阻断待办，不修改已审candidate。
+
+
+## 2026-10-11 M5B.1修复离线验收交回（历史，后续见当前双审查结果）
+
+三项264962e0审查缺口已在真实连接与事务验收中关闭；冻结离线总门通过，尚不代表独立复审或硬件PASS。当前报告入口统一为`reports/m5b1_global_canny_i3/review_fix_264962e0/`下的`OFFLINE_ACCEPTANCE.json`、`IMPLEMENTATION.md`、`BUILD_REPORT.md`、`EVIDENCE_SUMMARY.json`、`TECHNICAL_DEPENDENCIES.json`与`PROPOSED_GIT_SCOPE.json`。根目录旧c010验收和旧bit叙述仅保留历史含义。
+
+branch为codex/m5b1-global-canny-prototype；新candidate必须直接parent `264962e0c6af61e751c794c5b5f5252d00edbb6c`。仅精确清单提交，commit后立即停止所有写入交Work；本文件不自嵌commit ID，以Git交回为准。Work核对固定Git快照后盲审DeepSeek B，并停止给用户独立Codex A复审提示词。未做硬件操作。
+
+真实LCD七模式逐像素、有效全零成功descriptor、无效/帧中失效后恢复、CE/标签复位、三阶段未受理取消、已受理A/W/B/R真实排空、metadata背压稳定、同拍边界、六项修复突变、原七组回归与十项突变均有当前源码/runner绑定。默认capture/engine 96M及export 960M周期全部通过；export exit0，712B/两CRC统计，截断包显式重同步。较早default_export_v2原因未知且仍为历史未达到oracle，未改成PASS。
+
+build_20261010_235246完整exit0；45042 XLR/124 RAM10/0 DSP，setup/hold +0.196/+0.027ns，134份路径覆盖报告不是134个PVT角点。940精确pin/457结构CDC分类/413物理数据端点，最大clock-to-Q加数据1.415ns、skew0.825ns，新增内部时序三项0/0/0。新bit2924727B，SHA256 `8bc85b157426cf35e7aab31bc4acd1c8c54b5799c0e7a0424ee555f3927488c4`。96输入/53输出已绑定；1924非规则保护文件及两规则原前缀、2139历史未跟踪资料保持。
+
+显著限制：协议watchdog硬停会撤销stalled WVALID，保留owner/busy、不伪ACK、无新握手/发布，仅冷重新配置；这是既有隔离边界，不能称普遍AXI稳定VALID合规，须交新A/B独立评估。正常取消/普通soft_reset仍强制稳定VALID及真实B/R。默认周期TB使用加速UART，5000UI收尾不是生产波特率上界；本地tag reset不是加密DDR warm restart。4us仅条件模型，不承诺fps；硬件、warm/PVT与真实有效发布率仍PENDING。M5C仅预留未实施。
+
+## H-M5B1-20261011-RESUME（历史续做检查点，已由顶部交回覆盖）
+
+Codex exec/Astra已停写；完整续做清单、未执行命令、历史与当前绑定差异、失败原因未定及Git停止边界见`reports/m5b1_global_canny_i3/review_fix_264962e0/RESUME_CHECKPOINT_20261011.md`。开发/下一candidate直接parent仍是264962e0c6af61e751c794c5b5f5252d00edbb6c，索引为空，尚无新candidate；上一轮双审查FAIL不变。未完成不得进入复审或硬件。
+
+新完整构建/STA已结束，Work独立核对96输入/53输出当前哈希一致；新bit2924727B、SHA256 8bc85b157426cf35e7aab31bc4acd1c8c54b5799c0e7a0424ee555f3927488c4；134份STA覆盖报告最小slack+.027ns、内部三项0。仍需补新增成功descriptor/帧中失效用例，定位default_export_v2没有oracle/诊断的FAIL，完整默认周期重跑及最终全部源码/脚本绑定、scope与保护闭包。不能把新构建通过等同于修复完成。
+
+此前升级仿真收到自动审批的usage-limit错误，普通sandbox版本查询实测DLL失败；不能据此断定账户总额度耗尽。用户反馈后，Work通过相同自动审批通道重新执行只读vlog版本查询成功，当前恢复同一Astra独占开发；审批报错具体根因仍未知，保留历史记录，不绕过、不换模型。Work仅维护管理记录/只读复核。保持原硬停接口隔离限制并显著交外部A/B，正常取消强稳定VALID断言不削弱。最终candidate提交后全部停写，Work才核验快照/自动发送DeepSeek B并交用户Codex A提示词。
+
+## H-M5B1-264962E0-REVIEW-FIX（冻结修复规格，进度见当前RESUME）
+
+Codex A独立审查candidate 264962e0c6af61e751c794c5b5f5252d00edbb6c结论FAIL；DeepSeek B已独立完成PASS_WITH_FINDINGS。Work采用FAIL，不进入实物验收。A报告已由用户转交，归档于reports/m5b1_global_canny_i3/CODEX_A_REVIEW_264962E0.md；冻结修复规格见REVIEW_FIX_SPEC_264962E0.md。
+
+Codex exec按L3/GPT-6 Astra独占修复：真实video_dma→lcd_driver→M5A连接错拍、回放有效资格到tap、未受理C2请求取消。必须有生产连接完整720p/七模式/资格与三类超时真实HDL及对应负向，保留真实在途B/R排空和RT；重新完整I3构建/STA/资源/bit及证据绑定。开发起点及新candidate唯一直接parent为264962e0c6af61e751c794c5b5f5252d00edbb6c；不改旧工程、DDR IP/ROM/管脚/时钟/分辨率、不实施M5C，不运行Programmer/下载/Flash。
+
+唯一writer完成后按精确scope追加candidate并立即停写交Work；Work复核、发送新的DeepSeek B隔离盲审快照，再停止向用户提供Codex A独立复审提示词。详细范围、禁止项、接口要求、测试与停止边界以上述冻结修复规格为准。
+
+## 2026-10-10 Codex exec离线完成交Work（历史，candidate后被独立审查FAIL）
+
+冻结规格与硬件限制保持，离线全门已通过。精确candidate自身ID由提交后Git交回；唯一parent为c0102ee1c9a0a8aa802c398755d4a7b3139c7ffd。范围为新M5B1工程/RTL/TB/scripts/reports，管理文档四份以及根.gitignore和.gitattributes（仅追加M5B1规则，旧字节前缀保留）。
+
+build_20261010_130312全流程成功，43227 XLR/124 RAM10/0 DSP；I3 final模型typical、−40至100°C、0.95V±30mV、grade3，134份覆盖报告setup/hold +0.190/+0.024ns，内部检查0/0/0。940精确CDC pin及413数据目的端点物理路径通过，无整域false path。bit 2881269B，SHA256 de1d9c565459e0cce4d4de37bc88a9616e99ac78fc0e27a785b5693da707f645。
+
+96项构建输入中95项原字节不变，XML仅工具last_change/last_run_flow，逆变换精确恢复before SHA。测试涵盖算法、真实B/R、随机相位CDC、六种子完整非均匀capture/export和CRC+BFS、17us拒绝、末拍changed等10突变、默认超时不发布、半包后统计恢复、第二job每slot metadata B及lease、两个720p tap/七模式。详见OFFLINE_ACCEPTANCE.json与BUILD_REPORT.md。加密DDR/外部PLL结构边界明确保留，完整工具STA另行覆盖。
+
+下一步：仅按PROPOSED_GIT_SCOPE.json逐项暂存和核对blob，创建指定parent的candidate后立即停止写入。Work复核固定commit与完整技术依赖、隔离快照和保护摘要，发送DeepSeek B后停止给用户独立Codex A提示词；Codex exec不独立审查、不发快照、不操作硬件。硬件、真实图像性能和有效发布率保持PENDING，4us仅条件模型，fail-stop只允许冷重新配置恢复。
+
+## H-M5B1-20261009-IMPLEMENT（历史任务）
+
+### 2026-10-10续做检查点（优先于旧进度记录）
+
+冻结HEAD/未来candidate直接parent：`c0102ee1c9a0a8aa802c398755d4a7b3139c7ffd`。原开发代理已结束且无活动仿真/构建进程；新Codex exec/Astra接管现有未提交实现，禁止重新初始化/覆盖既有工作。
+
+资源超闸首轮证据保留；Work已授权原闸门内RAM化修复，后续build_20261009_193101完整构建exit0、42,456 XLR/124 RAM10/0 DSP。不放宽资源、地址、QoS或STA门槛。旧DEVELOPMENT_CHECKPOINT资源阻断已过时，须以实际后续证据修订。现有普通/4us视频、六QoS种子、tap七模式、15完整720p BFS、穷举、642扫蛇形和UART串行/主机负向证据需核对源码与覆盖，不能把单模块测试当作系统验收。
+
+剩余：真实B/R定向、CDC/复位/故障及有意义突变；生产默认64pair/1s安全超时与不发布；capture+视频+DDR+全局+UART完整链路/lease及故障中止；全部要求角点STA和内部约束端点；最终输入→构建→bit绑定、历史保护和精确scope、管理报告、candidate。蛇形TB有result_reserved缺失端口警告须处理。DDR warm reset不证明，采用生产fail-stop/no synthetic ACK，不自动恢复，明确冷重新配置限制。
+
+只在所有冻结离线门槛通过后提交candidate；若真实门槛阻断，交Work具体证据与可修复方案，禁止假PASS或删减验收。candidate提交立即停止写入。旧资料、原失败证据、历史未跟踪内容均保留。
+
+### 目标与基线
+
+M5B.0R固定candidate `e734d527a149e318ac5009257dab90642c19cb59`完成双审查和用户实物PASS；归档提交为`85727319be83f49e81b17d91a310ba0175b37319`。当前分支`codex/m5b1-global-canny-prototype`。M5B.1规格已冻结于`reports/m5b1_global_canny_i3/SPEC_FREEZE.md`，本轮由Codex exec按L3/Astra独占实现、验证并创建candidate。
+
+### 必须实现
+
+1. 从M5A实际编译输入创建`efinity/m5b1_global_canny_i3`，保留管脚、PLL、DDR IP、720p和七模式；新分类tap来自`nms_packet`对应的强/弱分类。
+2. 三客户端单owner真实modified AXI：相机写、显示读、后台C2。事务到真实B或最后R才结束；8bit ID、RESP/LAST、地址权限、4KiB和payload边界完整检查。
+3. 替换旧视频事务适配层，关闭写B栅栏、读R排空、视频槽生命周期、真实FIFO水位、预填充、校准done+pass和epoch复位问题。
+4. 实现分类CDC/捕获、前反向全帧传播、工作/结果双缓冲、64pair/1s安全超时、copy前reserve及metadata原子发布；初版单job，结果不接实时显示。
+5. 复用既有地址图`[0x01000000,0x010e7000)`，不得重新分配或借用视频槽尾；BG burst≤512B、RT burst≤2048B。
+6. 使用现有`uart_tx_o` 460800-8-N-1输出每job统计；冷复位后首个成功job单次导出230400B分类图与115200B结果图，包头、长度、身份和CRC32可由仓库工具校验。
+
+### 验证与构建
+
+必须完成冻结规格第9节全部验收：分类与算法黄金、真实B/R协议、CDC/复位、六种子QoS压力、17us反例、保护突变、七模式显示回归、UART解包、完整Efinity map/P&R/bit、全部要求角点STA、资源与输入到bit绑定。384 UI周期/4us只是条件验证目标；不得把仿真边界写成硬件保证，不得承诺1～2fps。
+
+完整构建必须包含新仲裁器、视频DMA、分类CDC和全局引擎；不得复用M5B.0R诊断资源/STA。setup/hold必须非负，新增内部无时钟/未约束/多时钟端点为0。若XLR>48640、RAM10>204或DSP>128，停止交Work决定。
+
+### 允许与禁止范围
+
+允许新建`efinity/m5b1_global_canny_i3`、`rtl/m5b1_global_canny`、`tb/m5b1_global_canny`、`scripts/m5b1_*`、`reports/m5b1_global_canny_i3`以及必要管理文档/属性规则。旧M2～M5A、M5B.0/R源码与证据只读；不得改DDR IP参数、ROM、管脚、PLL、分辨率或七模式语义，不得清理历史未跟踪资料、合并main、推送、rebase、改写历史或使用`git add .`/`git add -A`。不得运行Programmer、下载、SPI Active或写Flash。
+
+### Git与停止边界
+
+实现完成后按精确scope逐文件暂存，核对index blob和parent→candidate差异，创建candidate并报告branch、candidate、parent、范围、测试、构建、STA/资源、bit元数据、限制及工作区。candidate提交后立即停止写入交Work；Work复核并自动发送DeepSeek B隔离快照，然后停止向用户提供独立Codex A提示词。双审查完成前不得进入实物验收。
+
+## H-M5B0R-20261009-ACK-EDGE-FIX（历史修复任务）
+
+### Codex exec交回摘要
+
+A/W/B/R及客户端数据接口已在真实ACK同拍隔离，四状态定向覆盖1111及六种子通过；普通soft_reset保持stalled VALID语义。54诊断、monitor、13项负向及7项真实Git范围验收通过。新candidate直接parent为02841e20，提交后ID由Git报告。细节、复验及未综合仲裁器边界见 `reports/m5b0r_ddr_admission/ACK_EDGE_FIX_REPORT.md`；保持NO_GO，提交后停止写入交Work，不能把开发测试视作独立复审PASS。
+
+### 审查结果与基线
+
+Codex A已完成candidate `02841e20e297e4e6fdd14db0762a91d7089232fb`的独立复审，唯一parent为`6c44df8c5edc10c45a59c4c867e3fc44a6e7456d`，最终结论`FAIL`。DeepSeek B净化快照盲审结论为`PASS_WITH_FINDINGS`，但同样指出A状态ACK首拍的下游握手暴露。Work采用更严格的Codex A结论。本轮必须以`02841e20e297e4e6fdd14db0762a91d7089232fb`为直接父提交追加新candidate，不amend、不rebase、不改写历史。
+
+### 冻结修复规格
+
+1. 关闭`ddr_reset_ack`边界上的全部DDR侧孤立握手风险。至少覆盖A通道；必须同步审查W/B/R通道在ACK有效同拍的VALID/READY行为，并以明确协议说明或RTL隔离关闭风险。只允许真实`ddr_reset_ack`撤销/屏蔽在途握手，不得破坏普通`soft_reset`期间保持stalled VALID的既有要求。
+2. 仲裁TB增加`state==A`、`ddr_reset_ack==1`、DDR `aready==1`同拍的定向测试，直接断言DDR侧不得产生地址握手；ACK清账不得跳过该观察。同步增加W/B/R边界检查或可执行证明。加入能恢复旧漏洞且必被真实验收器拒绝的负向突变。
+3. `m5b0r_evidence_verify.py --candidate`增加parent→candidate实际Git差异对scope白名单的覆盖检查，处理新增、删除和重命名，拒绝任何scope外提交路径；增加“额外提交文件”负向验收。不得放宽现有candidate、唯一parent、空索引、干净跟踪工作区和blob一致性检查。
+4. 归档本轮Codex A与DeepSeek B报告；重跑受影响仲裁、根级正向/负向及证据验收，更新绑定、范围清单和修复报告。诊断RTL/工程13项输入未改变时可复用原构建、112份STA和bit，但必须重新验证输入与绑定，并明确仲裁器仍未综合/STA。
+
+### 允许范围
+
+`rtl/m5b0r_ddr_admission/m5b0r_arbiter.sv`、`tb/m5b0r_ddr_admission/tb_m5b0r_arbiter.sv`、必要的`scripts/m5b0r*`、`reports/m5b0r_ddr_admission`、本交接涉及的必要管理文档与范围清单。除非验证证明必需，不修改诊断RTL、诊断顶层或Efinity工程输入。
+
+### 禁止范围
+
+不得修改M2～M5A、M5B.0模型/报告、DDR IP参数、管脚、时钟、分辨率、生产视频链路；不得运行Programmer、JTAG下载、SPI Active或写Flash；不得删除历史未跟踪资料；不得提交bitstream、outflow/work数据库、缓存、锁、波形、原始日志、reference、tools或用户私人文件；禁止`git add .`、`git add -A`、合并main、推送、rebase或改写历史。
+
+### 验收与Git要求
+
+修复必须用正向和反向证据证明：ACK与DDR READY重叠时无孤立A握手，普通soft_reset stalled VALID语义保持，W/B/R边界结论明确，旧漏洞突变被拒绝，scope外提交负向被拒绝。保持现有54例诊断、monitor、六仲裁种子与其他九项负向不回退。保护既有文件和历史未跟踪路径。按精确清单逐文件暂存，核对索引blob后创建提交`fix: isolate DDR reset ACK downstream handshakes`，parent必须为`02841e20e297e4e6fdd14db0762a91d7089232fb`。
+
+### 停止边界
+
+新candidate提交后立即停止写入并交回Work。Work复核、冻结并自动向DeepSeek B发送净化快照，再停止向用户提供Codex A复审提示词。双审查结束前不进入实物验收或M5B.1。
+
+## H-M5B0R-20261008-REVIEW-FAIL-FIX（当前修复任务）
+
+### 目标与基线
+
+Codex A已于2026-10-08 18:43完成固定candidate审查，结论`FAIL`。审查对象为分支`codex/m5b0r-ddr-admission`、candidate `6c44df8c5edc10c45a59c4c867e3fc44a6e7456d`、parent `ba28397cc5f0d4b34ed06b803c8e5af067c9ca98`。当前修复必须以`6c44df8c5edc10c45a59c4c867e3fc44a6e7456d`为直接父提交追加新candidate，不rebase、不amend、不改写旧candidate。
+
+### 必须修复
+
+1. `ddr_reset_ack`有效期间禁止任何客户端地址请求握手，保证`c_avalid && c_aready`绝不在时序逻辑优先执行ACK清理时被漏记。
+2. 仲裁TB增加ACK与VALID重叠、ACK保持多周期、ACK撤销后恢复的定向测试；独立断言ACK期间不得接受请求，并确保`accepted=completed+cancelled`能够覆盖该边界。
+3. 诊断TB增加独立于RTL内部计数的完整计划验收。健康流程须核对预期事务数9,967、写拍356,927、读拍357,128，并独立覆盖地址/模式/守卫复测；增加跳过关键阶段或缩短计划时必定失败的负向验收，最终精确计数须从当前规格和循环结构复算确认。
+4. 修正文档中53/54例不一致；将提交前Git状态检查与可在固定candidate上执行的证据复验分离，支持显式candidate/parent或等价的提交后只读复验方式。
+
+### 允许范围
+
+`rtl/m5b0r_ddr_admission/m5b0r_arbiter.sv`、`tb/m5b0r_ddr_admission/tb_m5b0r_arbiter.sv`、`tb/m5b0r_ddr_admission/tb_m5b0r_diagnostic.sv`、必要的`scripts/m5b0r*`、`reports/m5b0r_ddr_admission`及必要管理文档。Work已先行写入本轮Codex A归档、双审查长期规则和本交接单，这些文件纳入新candidate范围。
+
+### 禁止范围
+
+不得修改M2～M5A受保护工程、M5B.0模型/报告、诊断顶层接口、DDR IP参数、管脚、时钟、视频分辨率或生产视频链路；不得运行Programmer、JTAG下载、SPI Active或写Flash；不得删除或清理未跟踪文件；不得提交bitstream、outflow、work、数据库、缓存、锁、波形、原始日志、reference、tools或用户资料；不得使用`git add .`或`git add -A`；不得合并main、rebase、改写历史或推送。
+
+### 验证与Git要求
+
+重跑受影响的全部仲裁仿真和诊断仿真，运行新增正向/负向验收及现有范围/证据检查；若Efinity诊断工程未引用仲裁器且诊断RTL/工程输入未改变，可复用既有完整构建与112份STA，但必须明确说明未重编译的理由并重新核对绑定。保护10,469个既有文件和历史1,550个未跟踪路径。按精确清单逐文件暂存，核对工作区、索引blob、清单及提交内容一致后创建追加candidate commit。提交后报告branch、candidate、parent、范围、测试、构建/STA复用边界、bitstream元数据、已知限制和工作区状态。
+
+### Codex exec交回摘要
+
+修复内容、独立计划复算、9项负向验收及构建复用依据见 `reports/m5b0r_ddr_admission/REVIEW_FIX_REPORT.md`。新candidate必须直接以旧candidate为parent，具体ID由提交后Git报告；不将开发验证记为独立复审结果。用户双审查规则及旧FAIL归档一并纳入。
+
+### 停止边界
+
+新candidate提交后立即停止写入。Work复核并冻结后，自动发送经验证的隔离快照给DeepSeek B，并向用户提供Codex A复审提示词。双审查结束前不进入实物验收或M5B.1。
+
+## H-M5B0-20261007-ARCHIVE-FINAL（当前归档）
+
+目标：归档M5B.0，保持NO-GO，按明确范围独立提交`docs: assess global canny architecture feasibility`，直接父4e0496e8a36f53dcfffa9e9564ffbf0f780a55ba。GPT-6 Astra / ultra只读审查，主会话负责文档、范围、换行、暂存blob、保护及提交结果。
+
+当前M5B.1未启动，六项缺口全部保留；新增安全DDR容量0，没有生产RTL/整机DDR接入/全局bitstream/融合。历史不提交说明为前轮分析停止边界，本轮用户明确授权仅归档提交。新提交ID与最终blob总大小以实际Git核查为准。范围见reports/m5b0_global_canny_architecture/FINAL_CHANGE_SCOPE.json，归档复核见ROOT_REVIEW.md，当前保护见ARCHIVE_PROTECTION_CHECK.json。禁止编译、候选地址测试、仲裁实现、Programmer/下载/Flash、清理资料、M5B.1、合并或推送；提交后停止，等待M5B.0R。
+
+## H-M5B0-20261007-FINAL（历史分析快照，主会话独立复核完成）
+
+### 1. 项目与结论
+m5b0_global_canny_architecture，M5B.0架构/DDR核查/软件分析完成；生产实施闸门NO-GO，算法软件单项GO。M5B硬件未实现，M5A继续PASS。
+
+### 2. 基线与边界
+HEAD为4e0496e8a36f53dcfffa9e9564ffbf0f780a55ba。主会话创建codex/m5b0-global-canny-architecture；架构代理没有Git写操作。只新增本轮报告/Python和必要docs，不修改M2～M5A工程/RTL/旧报告/脚本。
+
+### 3. 方案
+冻结M5A NMS强弱2bit整帧；UI96MHz单DDR端口需未来事务仲裁；前反向完整八邻域扫描、工作1bit A/B、结果1bit A/B。所有坐标/config/frame_id/epoch一致，复制前reserve结果槽，完全收敛且B响应完成后发布，busy拒绝新请求。
+
+### 4. 证据
+19683个3×3穷举、30模式/15完整720p与BFS一致，小图literal/事件激活时刻及changed数一致；横蛇362扫、竖蛇642扫。地址1正6负，带宽3参数负向，协议34项用例通过。主会话已独立重跑这些用例，并用另一套DFS/二维扫描验证630随机图、用union-find验证完整720p竖蛇；结果绑定root_replay/ROOT_TEST_RESULTS.json及ROOT_REVIEW.md。无真实M5A分类帧或硬件吞吐/CDC证明。
+
+### 5. 阻断
+新增实际已证安全地址0；候选[0x01000000,0x010E7000)仅算术规划。IP高位别名/校准保留、真实R/B响应与多主owner/QoS、FIFO最坏停服及真实场景1～2fps统计不足。资源仅粗估，不能依据DDR峰自动放行。
+
+### 6. 保护与范围
+BEFORE/AFTER全量10430可读文件/2264422457B的SHA/大小/mtime及保护文件集合一致，另1个既有不可读锁仅大小/mtime一致；1550历史未跟踪路径全部保留。最终范围、AFTER/ROOT独立审查及Git状态已归档于reports/m5b0_global_canny_architecture/FINAL_CHANGE_SCOPE.json、PROTECTED_BASELINES_AFTER.json、ROOT_REVIEW.md、FINAL_GIT_STATUS.json。索引为空、HEAD未变；本轮没有暂存/提交。
+
+### 7. 写入权交还
+GPT-6 Astra / ultra架构代理已完成软件、报告和本节管理更新；交回唯一主线写入权给主会话。主会话独立复核算法/地址/带宽/最坏/闸门并生成最终保护和复验记录，本代理之后仅只读答疑。
+
+### 8. 停止边界
+未生产RTL、未复制工程、未完整编译、未bit、未Programmer/下载/Flash、未暂存/提交/合并/推送、未删除历史未跟踪资料。不得把本轮完成当作进入M5B.1硬件实现授权；不处理首行、不融合/static_mask/识别。
+
+
+## H-M5A-20261007-HARDWARE-ARCHIVE（历史决定，边界仍有效）
+
+### 1. 项目与结论
+`m5a_streaming_canny_i3`；**M5A PASS**。M5A流式局部Canny/Canny-lite完成离线算法验证、完整I3编译、STA及实物功能验收，阶段PASS。 下文保留各阶段历史记录，当前状态与授权以本节为准。
+
+### 2. 实际基线与镜像
+归档起始分支`codex/m5a-streaming-canny`，HEAD与新提交直接父节点均为M4 `95bf83f7172ecdf11ee9b8deb3e2c1bba535a56d`，索引为空；起始可见未跟踪文件1,798项，包含拟提交M5A新文件和历史资料。工程`efinity/m5a_streaming_canny_i3/Ti60_Demo.xml`，顶层example_top。bit只读复算2,201,595字节/SHA-256 `7233bac31c21bd986e18b53b3ecb1ba7d8a4d623a45e56937be309c89a57f75a`匹配记录，保留忽略且不提交、不重新生成。
+
+### 3. 用户实物证据
+用户于2026-10-07明确确认：“M5A流式局部Canny/Canny-lite实物功能验收PASS。”用户已按照M5A实物验收完成测试并明确确认总体功能PASS。本次没有另外提供Programmer原始日志、分模式文字记录、测试照片或视频、精确连续运行时长、逐阈值观察或显示器EDID原始记录，不虚构具体画面、数值或异常。详见[实物报告](../reports/m5a_streaming_canny_i3/HARDWARE_ACCEPTANCE.md)；七模式计划保持为计划/实现说明，不倒填逐项实物结果。
+
+### 4. 算法与保留边界
+当前实现是局部Canny/Canny-lite，仅完成3×3八邻域一跳弱边缘连接；没有实现跨整帧递归或迭代滞后连接、低频全局Canny、局部/全局快慢融合或目标识别。
+
+厂商固有首行异常不属于M5A新增回归，不阻断M5A验收。用户已明确该问题为厂商生产/参考链路的固有问题，不影响竞赛考核，无需继续处理；本轮未诊断、未修改RTL掩盖，也不声称M5A解决了该问题。
+
+全局setup/hold +0.194/+0.026 ns，像素域+5.879/+0.028 ns，HDMI出口+11.196/+0.164 ns。hold为正但较窄；实物功能通过不能严格证明所有工艺、电压和温度条件下稳定。继承7个无输入延迟端点和135个无输出延迟端点，PLL复位、I/O约束及CDC边界继续保留。旧Flash流水灯冷启动及R3/R4共享管脚风险保持，本轮没有写Flash。
+
+### 5. 写入与委派
+按用户要求委派GPT-6 Astra / ultra完成文档归档，同一时刻仅一个写入者；主会话独立复核验收边界、最终文件范围、每个暂存blob及最终提交，并作为唯一Git操作者。允许README/docs当前状态与M5A报告/清单、必要管理脚本和定向字节保留属性；不修改业务RTL/TB/工程。旧ACCEPTANCE/ROOT_FINAL_REVIEW等离线JSON保留历史语义，不声称它们自动证明了硬件PASS。
+
+### 6. 文件范围与保护
+沿用reports/m5a_streaming_canny_i3，保存原254文件/12,063,517字节清单为PROPOSED_GIT_SCOPE_BEFORE_HARDWARE.json，更新PROPOSED_GIT_SCOPE.json/.csv并解释差异。新增实物报告、清单差异说明和本轮主会话独立复核，追加M5A -text规则以保持Git blob与输入/证据字节一致；PROJECT_BRIEF一并更新，旧规则保持。M2～M4的3,022可读保护文件及历史1,550未跟踪资料按原快照重新核查；离线已记录的M4临时.lock缺失单列，不删除或恢复锁。所有其他起始未跟踪资料保留，不纳入本次提交。
+
+### 7. 独立提交与审查
+用户已授权`feat: add streaming local canny pipeline`，新提交必须直接接在上述M4提交后。主会话按明确清单逐项暂存、独立核对文件数/总大小/SHA与逐blob内容，再提交。自身ID以git log与提交后报告为准，避免循环写入；提交后复查分支、HEAD、父节点、信息、文件数/大小、空索引、跟踪干净、原未跟踪保留、bit未跟踪及M2～M4保护。提交前清单/旧final_gate含父HEAD和空索引断言，提交后不应直接按旧Git状态断言重跑；只读算法/构建/94STA证据校验可独立调用。
+
+### 8. 停止边界
+本轮不重新编译、不运行Programmer、不再次下载、不写Flash、不修改业务RTL、不继续首行问题诊断、不开发M5B、不实现全局Canny/快慢融合/目标识别、不合并main、不推送、不删除未跟踪资料。仅完成本轮M5A归档与独立提交。
+
+## H-20261006-M4历史实物归档与独立提交
+
+### 1. 项目与结论
+`m4_color_overlay_i3`；**M4 PASS（保留已知首行异常）**。M4离线仿真、完整I3编译、STA和实物功能验收PASS。RAW、MAG、BIN、OVERLAY模式、阈值控制、OSD、红色边缘、空间对齐、动态更新及720p60输出正常。厂商AR0135参考链路继承的固定首行冻结异常作为已接受的延期问题保留，不属于M4新增回归。
+
+### 2. 真实基线
+分支`codex/m4-color-overlay`；本轮起始HEAD为M3.2 `3424514afe1721dc000495673c0ca757ea1f6372`、暂存区空。工作工程`efinity/m4_color_overlay_i3/Ti60_Demo.xml`。bit只读复算2,179,422字节，SHA-256 `5cbaa12da39eb141d6b481299c496e9f71885edc1ba220f071aed88dff4f46d3`，与用户已验收镜像记录一致，没有重新生成。
+
+### 3. 用户实物证据
+用户已JTAG临时下载并完成全部计划检查。BIN/64启动、720p60、RAW/MAG/BIN回归正常；BIN→OVERLAY→RAW→MAG→BIN，每次完整双键手势一次，单键不误切模式；纯红边缘/灰度背景/OSD覆盖/三方向中心对齐/阈值/动态和连续运行通过。MAG不受阈值修改。具体运行时长、Programmer完整日志及照片未提供。详见[实物验收](../reports/m4_color_overlay_i3/HARDWARE_ACCEPTANCE.md)。
+
+### 4. 延期问题与边界
+**DEFERRED：厂商AR0135参考链路继承的固定首行冻结异常，用户已知并接受本阶段延期处理；待更换AR0135模块后复测。该问题尚未定位或修复。** 厂商原始参考bitstream同实物也有该现象，非M4叠加、3318拍延迟、Sobel、中值或I3迁移新增回归；根因未定位，不能断言摄像头故障或新模块必能解决。用户暂停排查，后续更换模块再交叉验证。最小setup/hold +0.193/+0.023 ns；hold较窄，长时实物稳定不严格证明全PVT。PLL复位/I/O/CDC、旧Flash/R3/R4边界继续保留。
+
+### 5. 写入与委派
+本轮按用户指定由GPT-6 Astra / ultra归档文档；同一时间只有一个写入者。主会话独立复核验收语义、文件范围、逐项暂存blob及提交结果，负责唯一Git提交。允许范围为项目文档、M4报告和清单；既有离线ACCEPTANCE.json/ROOT_FINAL_REVIEW.json保留历史PASS_OFFLINE语义。
+
+### 6. 文件保护与范围
+主会话本轮核查2609个可读保护文件内容/大小/mtime未变、原1548份未跟踪资料保留。唯一集合差异是旧GUI临时锁`efinity/m32_median_integration_i3/.lock`已不存在，原因未确认，未删除或恢复。沿用M4报告目录，新增实物验收报告及主会话本轮复核证据；旧215清单需重新计算，最终数量、总大小及哈希以最新清单与实际暂存blob一致为准。bit/outflow/work/数据库/缓存/锁/波形/临时日志/reference/tools和无关首行诊断临时文件不提交。
+
+### 7. 独立提交与核查
+用户已授权`feat: add real-time color edge overlay`；父提交必须保持上述M3.2提交。主会话按清单逐项暂存，独立核对文件数/总大小/SHA及无生成物，然后提交。新提交自身ID以git log与主会话提交后报告为准；提交后核查分支、HEAD、父提交、信息、文件数/大小、空暂存区、跟踪工作区干净、未跟踪资料保留、bit未跟踪及M2～M3.2保护范围。
+
+### 8. 停止边界
+本轮不重新编译、不运行Programmer、不再次下载、不写Flash、不继续首行诊断、不修改业务RTL、不进入M5/Canny、不合并main、不推送、不删除资料。完成归档和独立提交后停止；下文均为历史交接，不取代本节当前结论与授权。
+
+## H-20261006-M4：历史离线任务交接
+
+### 架构放行
+主会话已独立追踪M32原RAW与边缘中心，批准统一输出光栅延迟方案：旧M32输出包延后1651拍，旧三模式像素及同步仅整体平移；当前边缘中心需等于延迟包slot坐标，OVERLAY背景用原始RAW，边界/无效/非法固定光栅帧禁止红。输入原像素n到M32输出n+1666、新packet n+3317、RGB OSD n+3318，最终以真实HDL验证为准。所有模式使用同一DE/HS/VS，不按模式切换光栅延迟。允许Astra作为唯一写入者实现与验证；主会话从此只读直到代理交回写入权。
+
+用户任务全文：本机附件6cdccd98-7463-4f79-a47d-578779549d91/已粘贴的文本.txt。当前目标为M4灰度背景与红色边缘叠加，优先从启用中值的M3.2已签收基线建立独立副本。实际HEAD为3424514afe1721dc000495673c0ca757ea1f6372，M3.1直接父提交为742d8a461b36f5970f7caea04fb8f8c925fe8a02；启动时已跟踪工作区及暂存区为空，未跟踪资料完整保留。
+
+委派GPT-6 Astra / ultra。第一步仅架构审查，先源码追踪RAW中心坐标、边缘及RGB/OSD通路，再由主会话复核后放行实现。顺序唯一写入者：Astra实现期间主会话仅只读复核。允许修改新efinity/m4_color_overlay_i3、rtl/tb/scripts的M4专用内容、reports/m4_color_overlay_i3及必要项目状态文档和定向忽略规则；不修改旧M2/M3/M3.1/M3.2工程或共享原算法核，不修改相机、DDR、FIFO、PLL、管脚和复位结构。分支codex/m4-color-overlay由主会话建立。
+
+验收：RAW/MAG/BIN行为保持，模式RAW→MAG→BIN→OVERLAY→RAW、按键+16/-16饱和及20ms消抖/释放/帧边界机制保持。OVERLAY背景为中心位置匹配的原始灰度，边缘有效且阈值通过时纯红，不完整窗口仍显示灰度背景；OSD优先。必须独立二维黄金、原三模式逐像素回归、至少两完整720p帧及用户指定负向验证。官方2025.1.110.5.9完整I3构建、最终内部及HDMI STA、coverage/CDC/I/O告警审计，源码/最终数据库/报告/bit哈希绑定，主会话独立核查。
+
+停止边界：只允许离线开发与编译结论，实物颜色和空间对齐待验收。禁止Programmer、JTAG、Flash、断电、上板、Canny/识别、历史资料清理；不暂存、不提交、不合并main、不推送。旧Flash/R3/R4与窄hold/PVT边界保留。保护旧工程前后内容、大小及mtime；不以旧报告代替M4证据。
+
+## 1. 基本信息
+H-20261004-M31；阶段M3.1；项目m31_sobel_controls；L3按AGENTS自动委派GPT-6 Astra/Medium，主会话最终独立复核。用户授权先提交M3基线，再创建独立分支和英文路径工程副本；本轮不自动提交M3.1。
+
+## 2. 已验证基线
+Ti60F225I3、Efinity2025.1.110.5.9；M2实物720p60实时相机→DDR→HDMI；M3离线通过，用户本轮实物二值Sobel/水平垂直斜边/动态更新通过，运行10分钟稳定、720p60、无黑屏花屏撕裂冻结错位重影。M3状态为“实物功能PASS、图像质量待调优”，见reports/m3_sobel_core_i3/HARDWARE_ACCEPTANCE.md。M3当前阈值64，静止场景动态白散斑、运动前后密度变化原因未确认。两张照片位于document/m3_pic，主会话已查看归档；照片不单独诊断动态现象原因。
+
+## 3. 目标与架构门槛
+先只读核实板载按键数量/管脚/极性/电压/复用、既有LED及像素域控制接口，提出三模式、阈值步长、可靠同步/消抖、当前值显示、帧内一致性和阈值64/96/128比较方案，经主会话放行后实现。优先使用已证实硬件，不猜按键管脚。曝光/增益/传感器噪声只核查，不改初始化。
+
+## 4. 唯一写入权与范围
+主会话先独占写入完成M3报告/精准暂存/提交；Astra第一阶段只读架构核查。收到主会话明确放行后才是唯一实现写入者，可写efinity/m31_sobel_controls_i3、rtl/tb/scripts的M3.1专用目录、reports/m31_sobel_controls_i3、必要docs/.gitignore/.gitattributes。禁止修改M2/M3原工程、M3五个核心RTL、document/reference/tools。子代理不做Git操作。
+
+## 5. 验收
+按键双触发器同步、稳定计时消抖、一次按压一次事件、长按/复位/组合键/同时事件行为明确；阈值8位、步长明确、0..255饱和不回绕，64/96/128可达；三模式可操作，当前模式和值可见或可可靠记录。仿真须覆盖抖动、短脉冲、释放、长按、边界、帧边界与模式/阈值生效时机、输出同步。完整官方I3接口生成/综合/P&R/bit，setup/hold/新增告警/资源/HDMI出口/新增CDC约束及最终DB/报告/bit哈希绑定；负向验收不可写死PASS。
+
+## 6. 禁止与停止边界
+不Programmer、JTAG、SPI Active或Flash，不碰板卡，不改相机/DDR/HDMI频率/既有管脚和参数，不改窗口/Sobel核，不加中值。新增按键接口仅按实际资料证据配置。离线完成暂停，不自动提交M3.1，不宣称M3.1上板通过。
+
+## 7. 当前进度
+主会话已读取PROJECT_BRIEF/STATUS/DECISIONS，已保存M3用户实测并完成独立提交。M3输入哈希未变，新增.lock是GUI临时锁，需精确排除验收输入盘点，不删除锁。委派第一阶段只读分析，尚未放行实现。
+
+## 8. 交付与主会话复核
+提交后由主会话提供确切M3基线hash，创建M3.1分支；Astra交付架构、按键/引脚证据、控制及比较方案、实现测试和构建结果、变更清单、风险和bit路径/大小/SHA。主会话独立核实原核不变、按键CDC/消抖/边界、同步和实际时序、Git范围，更新状态与交接。旧Flash风险不因M3实测关闭。
+
+M3冻结基线：7a9b448080fd6f1624c2ef37ee2eb267fed49c82；M3.1分支：codex/m31-sobel-controls；已创建69文件精确工作副本。第一阶段Astra仍只读，未放行实现。
+
+## 9. 架构放行（2026-10-04）
+主会话独立查看核心板V1.4原理图第3、7页，确认K1=N2/CSI、K2=M2/CSO，Bank1A参考电压1.8V、10k上拉、按下接地；K3=CRESET_N不使用。实物V1.5与参考V1.4版本边界保留。官方配置模型说明CSI/CSO可兼作用户GPIO；仅在user mode操作按键，不改变配置模式。
+批准Astra作为唯一写入者实施M3.1：像素域两级同步、20ms消抖、释放提交手势；K1阈值+16、K2-16、组合键切换RAW/MAG/BIN，饱和0..255，无长按连发，启动按住先释放。参数只在帧边界应用；OSD显示已生效模式和阈值，输出统一延迟一级。原五核及M2/M3工程保持不变。官方API配置新增按键及生成接口，定向约束第一同步级。完整仿真、负向验收、编译和最终证据绑定后主会话复核；禁止下载/Flash及M3.1自动提交。
+
+## 10. 最终交接
+2026-10-04：Astra/Medium完成控制/OSD/官方配置/编译及仿真初验，主会话接管唯一写入，修正端点误报、补脚本/dump绑定，实际执行94份隔离STA、最终仿真、1正向25负向及源码/1018文件复核。M3.1离线PASS、实物未验证；不自动提交/下载/Flash。M3冻结7a9b448080fd6f1624c2ef37ee2eb267fed49c82。完整交付与比较方案见reports/m31_sobel_controls_i3。纠正早期空闲GPIO假设：N2/M2原为旧LCD DE/clkout，新副本移除后改输入，其余接口未变。旧M3勿按K1/K2。当前暂停，下一步是按比较方案进行单独授权的实物验收；旧Flash风险保留。
+
+## 2026-10-06 M3.2交付审查交接
+用户指定GPT-6 Astra/Ultra审查交付包，主会话独立复核。M3基线7a9b448080fd6f1624c2ef37ee2eb267fed49c82；M3.1分支codex/m31-sobel-controls，用户确认已上板且阈值调节正常。交付ZIP已由主会话独立安全核查及哈希验证：79文件、75,382,662字节，77条CSV/78条SHA清单符合无自哈希规则，零错误；gzip为已识别文本证据，未执行交付脚本。解包仅handoff/review/m32_median_filter_delivery。
+阶段一Astra仅静态只读审查RTL/TB/脚本与报告，禁止执行交付脚本、编译或修改原M2/M3/M3.1。主会话是唯一写入者，维护reports/m32_median_review和项目文档。静态通过后才放行独立测试；仅最终模块独立验收PASS后方可创建codex/m32-median-integration与efinity/m32_median_integration_i3副本。PASS WITH CONDITIONS/FAIL均不进入整机。集成写入权后续单独顺序移交，原工程永不覆盖。禁止Programmer/下载/Flash，禁止自动Git提交。
+
+
+## M3.2 integration gate (2026-10-06)
+ROOT standalone module verdict PASS, see reports/m32_median_review/MODULE_ACCEPTANCE.md and ROOT_MODULE_EVIDENCE.json. New branch codex/m32-median-integration, new input-only M31 copy efinity/m32_median_integration_i3 created. M31 working tree has not been committed; Git parent remains M3 7a9b448. M31 current XML functional canonical comparison with archived build XML is equal including all repeated IP nodes and schema-default ooc=false. Astra/Ultra is now sole integration writer. Allowed: new M32 engine/rtl/tb/scripts/reports, M32-specific ignore rules and necessary project docs. No changes to original M2/M3/M31, shared original cores/controls, vendor documents or tools. Fixed 1650-clock raster reanchoring, 1661-clock packet RAM delay, RAW preserved, 5x5-supported filtered MAG/BIN border, default bypass and separate enabled build mandatory. Independent sim/negative cases/full I3 build and final implementation timing hash binding required; no Git changes beyond ROOT-created branch, no Programmer/download/Flash.
+
+
+## M3.2最终交接（2026-10-06）
+独立模块PASS后创建codex/m32-median-integration及两个新工程副本。Astra/Ultra完成静态/架构/初版配置后，其续作代理触发限额；主会话接回唯一写入权，完成最终源码复核、独立整链路黄金、18帧小图/两个720p帧、旁路逐像素等价、两套完整I3编译、188份最终STA与17个CLI负向控制。模块、离线整链路均PASS；未实物验收、不承诺降噪改善。
+最后修改仅新M32包装、顶层接入/参数配置、测试与报告、必要状态文档和定向忽略；原1,412文件内容/大小/mtime核验不变。RAM重锚1661拍、Sobel出口1666拍、OSD出口1667拍；同一原像素相对M3.1最终显示延迟1662拍。完整5x5支持域以外滤波MAG/BIN黑色，RAW全图原样；默认旁路参数0及独立参数1构建分别绑定bit/最终DB/STA哈希。
+M31硬件新信息只确认阈值调节正常，旧Flash风险未关闭。用户下一步可审阅两配置与对比方案再另行授权JTAG验证；本轮不执行任何硬件操作，不自动提交。结果、位宽整改、统计口径、限制、完整拟提交文件清单及bit路径/大小/SHA见reports/m32_median_integration_i3；交付79文件清单在reports/m32_median_review/FILE_INVENTORY.csv。
+
+
+## H-20261006-M31-M32 acceptance and ordered commits
+User authorizes hardware acceptance archival and exactly ordered independent M31 then M32 commits on current development branch, no merge/push. First inspect real HEAD/index/file scopes and verify existing bit hashes without recompilation. Astra gpt-6-astra/ultra is delegated read-only review; ROOT sole writer and sole Git operator. Allowed writes: documentation, reviewed scope manifests and byte-preserving Git attributes; no RTL/clock/pins/IP changes. ROOT independently verifies dependency separation, source/DB/bit hashes, narrow hold/PVT wording, staged blobs and final commits. M31 shared RTL belongs only to first commit; M32 archive ZIP and generated artifacts excluded. Both commits exclude raw logs, caches, bit/wave/database, reference/tools. Generic shared docs/ignore are staged as reviewed M31-only snapshots first without overwriting current worktree, followed by final M32 versions. If scope cannot be reliably separated, stop before staging. No Programmer/download/Flash/power cycling/M4.
+
+
+## 历史M3.2实物验收与停止边界（2026-10-06）
+用户反馈详见reports/m32_median_integration_i3/ACCEPTANCE_REPORT.md；M32模块、离线、实物功能及本次运行条件稳定性均PASS。高阈值噪点差异小合理，低阈值中值收益明显且主要边缘保留；不扩展为全部图像质量或严格跨PVT证明。启用版+0.026 ns窄hold、PLL复位、旧Flash冷启动/R3/R4共享风险仍保留。M31共享控制/OSD依赖先入第一提交，M32两工程及本轮验收后入第二提交。仅归档和提交，不编译、不运行Programmer、不下载、Flash、重复断电或M4开发。
+
+## 本轮归档限制
+M3.1历史构建的原位置生成物存在25项缺失、6项变化，不能完整重放原验收器；保留审计副本bit/LPF/LBF及94份STA已独立匹配。详见../reports/m31_sobel_controls_i3/PRECOMMIT_EVIDENCE_CHECK.json。本轮不恢复或重编译。M3.2历史交付重放需本地handoff交付内容；最终整机源码闭包已纳入清单。
+
+## 顺序提交记录（2026-10-06）
+M3.1已独立提交：742d8a461b36f5970f7caea04fb8f8c925fe8a02，feat: add runtime Sobel controls and OSD，203个文件、7774280字节（提交涉及文件的最终blob总大小）。父提交为M3 7a9b448080fd6f1624c2ef37ee2eb267fed49c82。M3.2将以此为直接父提交，feat: integrate optional median filter；其自身ID以git log为准，避免在提交内容中循环写入自身哈希。当前分支codex/m32-median-integration；仅归档与顺序提交，不进入M4。
+
+## H-20261006-M4历史离线最终交接（实物签收前）
+M4离线开发与完整编译通过，实物彩色叠加效果待验收。分支codex/m4-color-overlay，HEAD3424514afe1721dc000495673c0ca757ea1f6372不变，暂存区为空，未提交。新工程efinity/m4_color_overlay_i3，四模式RAW/MAG/BIN/OVR、20ms消抖、+16/−16阈值及帧边界生效、OSD优先；启用中值且保留配置旁路。总延迟3318拍；原三模式仅统一1651拍延迟、逐像素保持。四完整720p帧及三模式各921600像素回归，31小帧、21证据负向/10RTL故障通过。官方2025.1.110.5.9完整I3构建及94份最终STA通过，setup/hold+0.193/+0.023 ns，HDMI+11.315/+0.109 ns；8384 XLR/70 RAM/0 DSP。原2609个可读文件SHA/大小/mtime及文件集合不变，一项锁文件仅元数据核验；原1548未跟踪资料保留。Astra/ultra完成架构及初稿后触发用量限制，主会话接回全部验证/构建及独立复核。完整证据见../reports/m4_color_overlay_i3/BUILD_REPORT.md、ROOT_FINAL_REVIEW.json及PROPOSED_GIT_SCOPE.json。实物颜色/中心对齐、窄hold/PVT、PLL复位、旧Flash/R3/R4风险保留；未Programmer、下载、Flash、上板、断电、Canny、识别、合并main或推送。
+旧记录中的不进入M4为此前归档轮次停止边界；本轮由用户新授权覆盖。主会话为最终唯一写入者，代理已停止，等待用户实物签收。
+
+## H-M5A-20261006（历史开发交接，覆盖上轮停止在M4）
+目标：从实际M4提交95bf83f7172ecdf11ee9b8deb3e2c1bba535a56d建立codex/m5a-streaming-canny、新工程m5a_streaming_canny_i3，完成流式局部Canny离线仿真、独立黄金、故障注入、完整I3构建及最终STA。主会话实际检查Git：原跟踪工作区/索引均干净，M4已提交，现已创建新分支；保护范围快照见reports/m5a_streaming_canny_i3/PROTECTED_BASELINES_BEFORE.json。
+委派：GPT-6 Astra/ultra首先只读追踪并提出算法规格/接入/CE停顿/同步延迟架构，主会话独立审查后顺序放行唯一写入者。允许后续仅新M5A工程/RTL/TB/scripts/reports及必要状态文档/定向ignore；不修改旧M2～M4工程、共享原核、外围参数和用户资料。
+算法：复用中值/Sobel、明确四方向整数近似和Y向下符号、NMS、high及floor(high/2)、零幅值非边缘、8邻域一跳局部连接；7模式保持旧四模式逐像素，BIN64启动，帧边界阈值/模式更新，RAW原始背景。局部连接不是完整全局递归Canny。
+验收：单元/边界/CE停顿/复位/全256阈值/方向覆盖、独立软件黄金、至少2完整720p及旧四模式回归、实际负向注入、完整2025.1.110.5.9 I3编译、非负setup/hold/最终DB报告bit哈希绑定、保护前后和拟提交白名单。未硬件验证不可记M5A最终PASS。
+禁止：Programmer/JTAG/Flash/首行诊断/全局传播/快慢融合/识别/删资料/Git暂存提交合并推送。既有首行异常DEFERRED、窄hold/PVT/PLL复位IOCDC/旧FlashR3R4风险保留。附件任务文本为本轮用户完整要求，须完整阅读并执行。
+
+
+## H-M5A-20261007-FINAL（历史离线交接，实物签收前）
+
+1. 目标：M5A流式局部Canny离线开发、验证、完整I3构建及主会话独立复核。
+2. 基线：M4 95bf83f7172ecdf11ee9b8deb3e2c1bba535a56d；分支codex/m5a-streaming-canny；工程efinity/m5a_streaming_canny_i3，顶层example_top。
+3. 已完成：M5A流式局部Canny/Canny-lite离线开发、仿真、完整I3编译及最终已约束STA通过；实物待验收，不记录M5A最终实物PASS。 七模式/方向/NMS/双阈值/一跳连接，原四模式含OSD回归。完整720p两帧、20RTL故障、24CLI拒绝、新94STA和实现哈希绑定通过。
+4. 实际证据：reports/m5a_streaming_canny_i3/BUILD_REPORT.md、ROOT_FINAL_REVIEW.json、ROOT_HDL_REVIEW.json及PROPOSED_GIT_SCOPE.json；bit 2,201,595字节/SHA `7233bac31c21bd986e18b53b3ecb1ba7d8a4d623a45e56937be309c89a57f75a`。
+5. 修改边界：仅新M5A副本/源码/测试/脚本/报告及状态文档、限定ignore；M2～M4原目录不修改，保护文件/旧未跟踪资料保持，旧M4临时锁缺失单列。
+6. 委派：GPT-6 Astra / ultra完成实现和主要验证，文档收尾额度中断；主会话接回完成CLI负向、独立HDL/黄金/STA/保护/Git及文档范围。
+7. 保留事项：厂商AR0135参考链路继承的固定首行冻结异常保持DEFERRED，未定位、未修复，本轮未诊断或掩盖。+0.026 ns窄hold裕量、跨PVT未经严格证明、PLL异步复位/I/O约束/CDC、旧Flash流水灯冷启动及R3/R4共享风险继续保留。 实物七模式/按键/OSD、NMS变细、局部连接限制、红色对齐和稳定性待用户验收。
+8. 下一步/停止边界：等待用户按MODES_AND_HARDWARE_PLAN.md验收；本轮不Programmer、下载、Flash、首行诊断、全局Canny、暂存/提交、合并或推送，不擅自安排实际下载。
+
+## H-M5B0-20261007-ARCHITECTURE（当前任务，覆盖此前M5A停止边界）
+目标：从实际M5A 4e0496e8a36f53dcfffa9e9564ffbf0f780a55ba开展M5B.0架构闸门，分支codex/m5b0-global-canny-architecture，追踪实际DDR地址/带宽/AXI端口与完整八连通收敛算法，软件模型必须与独立BFS逐像素相等，输出GO/条件GO/NO-GO和阻断项。
+委派：GPT-6 Astra / ultra为唯一新报告/软件模型/分析脚本写入者；主会话独立复核源证据、地址单位、最坏迭代/带宽、发布失败规则和资源结论。
+允许：reports/m5b0_global_canny_architecture、M5B0专用软件/分析脚本及必要背景状态/交接/阶段/决定。必须完整阅读用户附件 a8ecb2ee-a497-4565-9c34-c43c8153ae16/已粘贴的文本.txt。
+禁止：任何生产RTL、Efinity副本/编译/bit、旧M2～M5A输入/输出/报告/脚本、Programmer/下载/Flash、首行诊断、实际融合/static_mask/识别、暂存/提交/合并/推送、删除历史未跟踪文件。快照输入冻结完整分类图，只收敛结果发布，watchdog超时不得冒称全局Canny。
+保护：reports/m5b0_global_canny_architecture/PROTECTED_BASELINES_BEFORE.json实际记录10430可读文件/2264422457字节及1项无法读取锁元数据、1550历史未跟踪路径。本轮开始跟踪工作区/索引干净；此HANDOFF是授权管理变更，不改变已验收工程。
+验收：自动地址半开区间/对齐/无重叠/负向检查；机器可读带宽复算；独立BFS/候选算法含完整720p与蛇形最坏、超时/帧身份/所有权测试；不保证1～2fps或安全闲置DDR端口；最终主会话复核后归档架构完成但不写M5B硬件实现PASS。
+
+## H-M5B0-20261007-ARCHIVE（本轮授权）
+目标：保持NO-GO，归档M5B.0并独立提交docs: assess global canny architecture feasibility，直接父4e0496e8a36f53dcfffa9e9564ffbf0f780a55ba。GPT-6 Astra / ultra只读审查文档、清单、软件证据及归档边界；主会话唯一写入，负责最终范围、暂存blob、保护与提交复核。允许管理文档及本阶段归档证据；禁止生产RTL、新Efinity工程、编译、bit、下载、Flash、候选地址测试、仲裁实现、融合、M5B.1、删除历史资料、合并或推送。此前不暂存/提交的停止限制属于上轮分析，本轮用户明确授权按清单归档提交。验收：范围及换行可解释、暂存blob哈希一致、父节点正确、NO-GO不变、M2～M5A保护与1550历史未跟踪保留。
+
+## H-M5B0R-20261007-OFFLINE（历史任务）
+基线ba28397cc5f0d4b34ed06b803c8e5af067c9ca98；目标为独立DDR诊断与隔离仲裁/QoS原型离线开发，禁止接入生产视频或全局Canny。委派GPT-6 Astra / ultra，先只读官方证据/现有IP/测试工程审查并提交架构方案，主会话独立复核后授权新路径写入；同一时刻唯一写入者。必须完整读取用户附件e2c108f5-67d9-4c89-83a3-e871a1b8baa9/已粘贴的文本.txt。允许reports/m5b0r_ddr_admission、efinity/m5b0r_ddr_address_diag_i3、专用diagnostic/prototype/tb/scripts及必要当前管理文档；保护M2～M5A所有文件与M5B.0报告/模型/脚本，历史1550未跟踪保留。不暂存/提交/合并/推送；不Programmer/下载/Flash；完整Efinity编译只针对诊断工程。Ti60F225I3及DDR参数与M2一致、debug关闭；从M0核LED脚/极性，未来实物相机必须断开。本轮无实物DDR证明，新闸门只允许GO_FOR_M5B1_PROTOTYPE/CONDITIONAL_GO_PENDING_HARDWARE_DIAG/NO_GO，未实测不得完整GO。验收包含负向地址故障模型、真实响应隔离/复位/超时/公平性随机HDL验证、有条件QoS推导、真实帧证据或缺口、诊断完整STA及最终实现哈希绑定；主会话独立复核后离线暂停。
+
+
+## 2026-10-08 M5B.0R离线工作收尾（历史决定，边界仍有效）
+项目m5b0r_ddr_admission；分支codex/m5b0r-ddr-admission，HEAD仍为ba28397cc5f0d4b34ed06b803c8e5af067c9ca98。M5B.0分析保持NO-GO；M5B.0R完成独立诊断和隔离原型的离线验证准备，当前闸门NO_GO，实际阻断项尚未全部关闭。M5B.1未启动、无全局Canny生产RTL/视频DDR接入/融合。
+用户指定GPT-6 Astra/ultra完成架构及初稿，后续代理限额时主会话接管实现、构建、仿真和独立复核；Astra恢复后进行只读最终复核，主会话处理LED总体超时编码、QoS持续吞吐及取消协议问题。
+独立工程efinity/m5b0r_ddr_address_diag_i3：DDR v5.14参数/源码/ROM与M2匹配、调试插入关闭，仅DDR和LED0～5；24MHz普通core入口及sysPLL CORE参考的建模边界保留。完整I3构建及112份最终STA通过，7391 XLR/30 RAM10/0 DSP，最小setup/hold +0.100/+0.021ns。0无时钟/内部未约束/多时钟，2无输入延迟及17无输出延迟保留；仅20个网表确认的复位链异步SR例外，不广泛切断DDR/monitor数据。受约束时序通过不能证明全部PVT、电气或物理高地址安全。
+HDL诊断54例、monitor6情形、仲裁六种子合计123000完成事务、主会话四个验收负向用例通过。软件28个可检测地址映射故障及11个协议规格案例通过；共同比例/双向一致重映射仍可能不可观测，不能认证真实映射。QoS读/写停服预算54.14/60.75us为条件示例；持续恢复约束比单次停服更严，17us反例不安全，实际Lmax及水位/CDC/预填充未证明。全仓94图像候选无已认证真实分类帧，仅性能统计方案，不虚构fps。
+高地址/校准保留区仍需厂商依据与受控实物诊断；真实DDR仲裁、epoch取消桥接、FIFO服务上界和720p60共存压力未验证。未来诊断相机须物理断开，仅JTAG临时，禁止Flash；本轮未Programmer、下载、Flash或生产接入。旧Flash流水灯冷启动和R3/R4共享风险继续保留。
+报告见../reports/m5b0r_ddr_admission/M5B0R_GATE.md、BUILD_REPORT.md、ROOT_REVIEW.md及PROPOSED_GIT_SCOPE.json。本轮不暂存、不提交、不合并main、不推送；历史未跟踪文件全部保留。
+
+## H-M5B0R-20261008-CANDIDATE（当前授权）
+
+目标：在现有离线成果不改变功能结论的前提下，固化三角色流程，复核M5B.0R最终证据和精确范围，并创建固定candidate commit。基线分支`codex/m5b0r-ddr-admission`，父提交必须为`ba28397cc5f0d4b34ed06b803c8e5af067c9ca98`；candidate信息建议为`feat: add isolated DDR admission diagnostics`。
+
+角色：Codex exec为本阶段唯一Writer，按L3使用GPT-6 Astra/Medium；Work负责最终复核。Codex A不在当前对话中调用。candidate冻结后必须停止，由Work把固定commit及审查提示词交给用户，由用户在独立可见Codex对话委派Codex A。
+
+允许：既有`reports/m5b0r_ddr_admission`、`efinity/m5b0r_ddr_address_diag_i3`必要源输入、`rtl/m5b0r_ddr_admission`、`tb/m5b0r_ddr_admission`、`scripts/m5b0r*`、四份既有管理文档，以及本轮明确新增的`AGENTS.md`、`docs/AI_WORKFLOW.md`和`docs/REVIEW_PROTOCOL.md`。允许更新精确提交清单及只读验收报告以反映最终candidate范围。
+
+禁止：修改M2～M5A受保护工程或M5B.0模型/报告；接入生产视频或全局Canny；重新设计已冻结诊断功能；Programmer、JTAG下载、SPI Active、Flash；提交bitstream、outflow、work、数据库、缓存、锁、波形、原始日志、工具包、reference或历史未跟踪资料；使用`git add .`或`git add -A`；合并main、rebase、改写历史或推送。
+
+验收：最终证据验收器和范围验收器通过；10,469个受保护文件及历史1,550个未跟踪路径保持；精确暂存blob与清单一致；candidate直接以指定基线为parent；提交后暂存区为空；M5B.0R闸门继续为`NO_GO`，不得写成实物通过或M5B.1放行。提交完成后冻结并停止在用户委派Codex A审查节点。
+
+### H-M5B0R-20261008-CANDIDATE 范围补充与交回约定
+
+Work额外授权根 `.gitattributes` 仅追加M5B.0R工程、RTL、TB、报告与scripts/m5b0r*的 `-text` 规则；原阶段规则保持。理由：现有 core.autocrlf=true 会使已验收输入/证据在暂存或checkout时发生换行转换，须保持其逐字哈希。管理文档及AGENTS随精确路径用命令级 core.autocrlf=false 暂存，不改Git配置；所有暂存blob逐字核对。
+
+最终candidate范围为PROPOSED_GIT_SCOPE.json中files加清单自身；清单自身不自哈希。candidate ID、parent和最终文件数/字节数由提交后Git读取交给Work，不在提交内循环引用自身。证据验收器为提交前专用，包含父HEAD和空索引断言；提交后不能直接把该Git状态断言当当前验收。范围验收器仍可只读复核。完成提交后停止写入，Work复核后把固定candidate交给用户委派Codex A。

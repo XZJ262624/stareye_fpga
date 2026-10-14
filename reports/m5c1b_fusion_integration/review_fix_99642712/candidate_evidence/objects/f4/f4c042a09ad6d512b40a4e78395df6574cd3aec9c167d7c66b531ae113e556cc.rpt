@@ -1,0 +1,70 @@
+
+Efinix Timing Path Constraint Report
+Version: 2025.1.110.5.9
+Date: Wed Oct 14 23:21:06 2026
+
+Copyright (C) 2013 - 2025 Efinix, Inc. All rights reserved.
+
+User command: report_timing -from_clock {clk_sys} -to_clock {clk_pixel} -npaths 1 -nworst 1 -setup -detail full_path -file {clock_73_setup.rpt}
+
+Timing Model: I3
+	process : typical
+	temperature : -40C to 100C
+	voltage : 0.95 +/-30mV
+	speedgrade : 3
+	technology : t16ff
+	status : final
+
+Summary:
+
+ Path #  | Slack (ns) | Delay (ns) |               Start Pin               |           End Pin           | Launch Clk  |  Capture Clk
+======================================================================================================================================
+ 1       |  2.233     |  2.499     | u_m5b1/telemetry_descriptor[568]~FF|Q | fusion_descriptor[568]~FF|D | clk_sys (R) | clk_pixel (R)
+
+++++ Path 1 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : u_m5b1/telemetry_descriptor[568]~FF|CLK
+Path End      : fusion_descriptor[568]~FF|D            
+Launch Clock  : clk_sys (RISE)                         
+Capture Clock : clk_pixel (RISE)                       
+Slack         : 2.233 (required time - arrival time)   
+Delay         : 2.499                                  
+
+Logic Level             : 0
+Non-global nets on path : 1
+Global nets on path     : 0
+
+Launch Clock Path Delay        : 2.104
++ Clock To Q + Data Path Delay : 2.632
+--------------------------------------
+End-of-path arrival time       : 4.736
+
+Constraint                     : 5.000
++ Capture Clock Path Delay     : 2.095
+- Clock Uncertainty            : 0.126
+--------------------------------------
+End-of-path required time      : 6.969
+
+Launch Clock Path
+                 name                    model name   delay (ns)  cumulative delay (ns) pins on net    location
+=================================================================================================================
+clk_sys                                    inpad        0.000             0.000                0      (0,162)  
+clk_sys                                    inpad        0.126             0.126            10502      (0,162)  
+clk_sys                                    net          1.978             2.104            10502      (0,162)  
+u_m5b1/telemetry_descriptor[568]~FF|CLK    ff           0.000             2.104            10502      (125,232)
+
+Data Path
+                name                   model name   delay (ns)  cumulative delay (ns) pins on net    location
+===============================================================================================================
+u_m5b1/telemetry_descriptor[568]~FF|Q     ff          0.130             0.130              4        (125,232)
+u_m5b1/telemetry_descriptor[568]          net         2.499             2.629              4        (125,232)
+fusion_descriptor[568]~FF|D               ff          0.003             2.632              4        (8,227)  
+
+Capture Clock Path
+            name               model name   delay (ns)  cumulative delay (ns) pins on net    location
+=======================================================================================================
+clk_pixel                        inpad        0.000             0.000                0       (0,159)
+clk_pixel                        inpad        0.126             0.126             7376       (0,159)
+clk_pixel                        net          1.969             2.095             7376       (0,159)
+fusion_descriptor[568]~FF|CLK    ff           0.000             2.095             7376       (8,227)
+

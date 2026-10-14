@@ -1,0 +1,30 @@
+{
+  "parent": {
+    "path": "tb/m5c_fusion/tb_m5c1b_uart_lease_recovery_v2.sv",
+    "bytes": 13854,
+    "sha256": "036e71b3989d87438fc9a4af36c6f2f4c58df604d3823b581ab1291b29764eca"
+  },
+  "derived": {
+    "path": "tb/m5c_fusion/tb_m5c1b_uart_lease_recovery_v3.sv",
+    "bytes": 14095,
+    "sha256": "09b021816ffeda568e8e1bb0db3264b2127d23c3006d3460332fa66556b7ad85"
+  },
+  "runner_parent": {
+    "path": "reports/m5c1b_fusion_integration/review_fix_99642712/run_focused_v2.py",
+    "bytes": 3572,
+    "sha256": "a2fc4ef0d3b3b8c9c5df8b1512503c42a5dbbd15e1b531c5ee3ca606c0209b43"
+  },
+  "runner": {
+    "path": "reports/m5c1b_fusion_integration/review_fix_99642712/run_focused_v3.py",
+    "bytes": 3710,
+    "sha256": "774c5aa301dcf245d7cc6be299ee2b4f347ddbf78edc0e0a5fc63683bfbd38f2"
+  },
+  "prior_failure": {
+    "path": "reports/m5c1b_fusion_integration/review_fix_99642712/focused_fixed_1_122008/RESULT.json",
+    "bytes": 5504,
+    "sha256": "f637fbbb5fd74be5f26fd33d9e351bb8e5adef8901f742b884bede7004cd5a70"
+  },
+  "cause": "The first fixture repeated pre-drain uart_done==0 assertion on the real lastR edge after hold_last was removed. New assertion applies throughout actual held-lastR interval only; later UART_RELEASE_ORDER/real counts and cleanup bound remain unchanged.",
+  "default": "EXPORT960000000, watchdog (EXPORT_LIMIT+50000000)*10ns; actual nextjob publication+fusion ACK/retire, never firstIDLE PASS",
+  "no_RTL_change": true
+}

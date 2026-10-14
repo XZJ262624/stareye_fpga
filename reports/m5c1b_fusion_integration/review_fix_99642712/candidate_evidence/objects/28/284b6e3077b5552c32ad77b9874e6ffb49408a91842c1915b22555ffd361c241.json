@@ -1,0 +1,32 @@
+{
+  "change": "New run_stage_v2 reads new MAPPED_AUDIT_GATE_V2; stage commands/inputs/timeouts unchanged. Prior proposal audit_v2 bytes preserved at explicitly named snapshot.",
+  "historical_manifest": "PROPOSAL_MANIFEST.json",
+  "records": [
+    {
+      "path": "reports/m5c1b_fusion_integration/review_fix_99642712/resource_area_bound/run_stage.py",
+      "bytes": 6711,
+      "sha256": "1c7174d3075574171dc5f520348174690b7f8d1b5c4382a9f4e87b0d0e55e93c"
+    },
+    {
+      "path": "reports/m5c1b_fusion_integration/review_fix_99642712/resource_area_bound/run_stage_v2.py",
+      "bytes": 6714,
+      "sha256": "04580f943f7eca6b36eb7465836aaf6a49d1d7a81a5ba8a1339d679ae16992e0"
+    },
+    {
+      "path": "reports/m5c1b_fusion_integration/review_fix_99642712/resource_area_bound/audit_then_place_v2.py",
+      "bytes": 4327,
+      "sha256": "6728b2084fefc1a2f3f1b5968f8b8c73d2eae08901b7de4ad39f17f2fb862356"
+    },
+    {
+      "path": "reports/m5c1b_fusion_integration/review_fix_99642712/resource_area_bound/audit_then_place_v2_pre_runner_binding.py",
+      "bytes": 4324,
+      "sha256": "0a485e49468090e1bd544e4a02162ad43776ade49b63c072bdccda26eb0a4a8b"
+    },
+    {
+      "path": "reports/m5c1b_fusion_integration/review_fix_99642712/resource_area_bound/rgb_factor_diagnostic/ELIGIBLE_SHARED_LEAF_BINDING.json",
+      "bytes": 379710,
+      "sha256": "a383744aa2ef1d2b2f0df2432c241f610384e1851d35c285abefd001762071ab"
+    }
+  ],
+  "diff": "--- \n+++ \n@@ -27,7 +27,7 @@\n if prev:\n  rr=json.loads((F/prev/'RESULT.json').read_text());assert rr['status']=='PASS_STAGE';verify_archive(R/rr['output_archive']['path'],True)\n if stage=='interface':\n- gate=json.loads((F/'MAPPED_AUDIT_GATE.json').read_text());assert gate['status']=='PASS_STRUCTURAL_EXACT_SELECTORS';assert gate['map_sha256']==rec(P/'outflow/Ti60_Demo.map.v')['sha256'];assert gate['sdc_sha256']==rec(P/'Ti60_Demo_I3.sdc')['sha256']\n+ gate=json.loads((F/'MAPPED_AUDIT_GATE_V2.json').read_text());assert gate['status']=='PASS_STRUCTURAL_EXACT_SELECTORS';assert gate['map_sha256']==rec(P/'outflow/Ti60_Demo.map.v')['sha256'];assert gate['sdc_sha256']==rec(P/'Ti60_Demo_I3.sdc')['sha256']\n if stage=='route':assert json.loads((F/'place/RESULT.json').read_text())['resources']['pass']\n paths=[R/x['copy']['path'] for x in m['records']];before=[rec(p) for p in paths];xml=(P/'Ti60_Demo.xml').read_bytes();(W/'xml_before.xml').write_bytes(xml)\n commands={'map':'call E:\\\\Efinity\\\\2025.1\\\\bin\\\\efx_run.bat Ti60_Demo.xml --flow map','interface':'call E:\\\\Efinity\\\\2025.1\\\\bin\\\\efx_run.bat Ti60_Demo.xml --flow interface'}\n"
+}

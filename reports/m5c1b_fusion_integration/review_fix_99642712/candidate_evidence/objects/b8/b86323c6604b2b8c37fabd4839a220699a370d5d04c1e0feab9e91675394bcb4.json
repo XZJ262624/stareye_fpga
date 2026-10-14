@@ -1,0 +1,36 @@
+{
+  "parent": {
+    "path": "tb/m5c_fusion/tb_m5c1b_uart_lease_recovery.sv",
+    "bytes": 12857,
+    "sha256": "2ddaac2945349c8fd3c460916b80715833b1f0c2e1bc65d8a3b918203b891e44"
+  },
+  "derived": {
+    "path": "tb/m5c_fusion/tb_m5c1b_uart_lease_recovery_v2.sv",
+    "bytes": 13854,
+    "sha256": "036e71b3989d87438fc9a4af36c6f2f4c58df604d3823b581ab1291b29764eca"
+  },
+  "positive_backend": {
+    "path": "rtl/m5c_fusion/m5b1_backend.sv",
+    "bytes": 20099,
+    "sha256": "074809ba7876858bfb8734e13e723e3fef78ff627f313aa808b2c553fa28a3cb"
+  },
+  "single_mutant": {
+    "path": "reports/m5c1b_fusion_integration/review_fix_99642712/mutant_uart_release_missing.sv",
+    "bytes": 20099,
+    "sha256": "4ebb910bc8e0f628284eb6d6b99a6531652735caeb265331f0a090a53ac7d402"
+  },
+  "old": "UART_RELEASE:if(!stop&&!tx_busy)begin uart_release<=1;",
+  "new": "UART_RELEASE:if(!stop&&!tx_busy)begin uart_release<=0;",
+  "inverse_byteexact": true,
+  "runner_parent": {
+    "path": "reports/m5c1b_fusion_integration/review_fix_99642712/run_focused.py",
+    "bytes": 3135,
+    "sha256": "eb6c6037d644d14b8337ec1774febcbc5ca505913192b64081c8ce1df43ab921"
+  },
+  "runner": {
+    "path": "reports/m5c1b_fusion_integration/review_fix_99642712/run_focused_v2.py",
+    "bytes": 3572,
+    "sha256": "a2fc4ef0d3b3b8c9c5df8b1512503c42a5dbbd15e1b531c5ee3ca606c0209b43"
+  },
+  "boundary": "16UI cleanup deadline starts only once tx already drained and state25/26 entered. Extra FENCE case holds genuine external fusion request across actual UART release, checksACK only after exclusive/owner clear and retires both contexts."
+}

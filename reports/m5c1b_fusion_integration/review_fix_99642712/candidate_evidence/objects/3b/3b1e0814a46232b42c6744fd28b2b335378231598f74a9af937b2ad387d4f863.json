@@ -1,0 +1,41 @@
+{
+  "generator": {
+    "path": "reports/m5c1b_fusion_integration/review_fix_99642712/prepare_offline_area.py",
+    "bytes": 3996,
+    "sha256": "04e365ee990bb386dc7e34093b0f93d06fbe505433f39c2df0f3730ad917a6be"
+  },
+  "helpers": [
+    {
+      "parent": {
+        "path": "reports/m5c1b_fusion_integration/offline_artifact_retry_20261014/run_conversion.py",
+        "bytes": 3948,
+        "sha256": "8549a58d4f9629a75df8f190804032d672c55f3d1a6dd92ad3eb22d18c94d9be"
+      },
+      "derived": {
+        "path": "reports/m5c1b_fusion_integration/review_fix_99642712/offline_area_artifact/run_conversion.py",
+        "bytes": 3990,
+        "sha256": "07ea08a104f20fded6918177f4194057cbd6deea50dd24866f3f27debc0fe0e0"
+      },
+      "diff": "--- \n+++ \n@@ -1,6 +1,6 @@\n from pathlib import Path\n import json,hashlib,shutil,subprocess,time,datetime,xml.etree.ElementTree as ET\n-F=Path(__file__).resolve().parent;R=F.parents[2];P=F/'mirror/efinity/m5c_fusion_i3';B=F.parent/'fresh_i3_build_20261014'\n+F=Path(__file__).resolve().parent;R=F.parents[3];P=F/'mirror/efinity/m5c_fusion_i3';B=F.parent/'fresh_i3_build_20261014'\n def rec(p):\n  b=p.read_bytes();return dict(path=p.relative_to(R).as_posix(),bytes=len(b),sha256=hashlib.sha256(b).hexdigest())\n def put(n,x):\n"
+    },
+    {
+      "parent": {
+        "path": "reports/m5c1b_fusion_integration/offline_artifact_retry_20261014/options_preflight.py",
+        "bytes": 961,
+        "sha256": "56c0017c0f55064490f8871938b20b7e7cb189f3712459fa42a1e579f4e2a196"
+      },
+      "derived": {
+        "path": "reports/m5c1b_fusion_integration/review_fix_99642712/offline_area_artifact/options_preflight.py",
+        "bytes": 1764,
+        "sha256": "02a75baba7823b72e29db191eb08efe16ff7ad11af2d6b5d9e2bec494a64f310"
+      },
+      "diff": "--- \n+++ \n@@ -1,4 +1,4 @@\n-import sys,json\n+import sys,json,ast,types,hashlib\n from pathlib import Path\n sys.path.insert(0,'E:/Efinity/2025.1/scripts')\n import efx_run\n@@ -9,5 +9,10 @@\n flat=[y for x in args.pgm_opts for y in x]\n assert not any(x.split('=')[0] in ['program','source','dest','settings_file','usb','jtag','flash'] for x in flat)\n assert not Path('efx_pgm_settings.ini').exists()\n-out=Path(__file__).resolve().parent/'ACTUAL_GENERATED_OPTIONS.json';assert not out.exists();out.write_text(json.dumps(dict(flags={k:v for k,v in vars(args).items() if k.startswith('do_')},pgm_opts=args.pgm_opts,export_opts=args.export_bitstream_opts,security_opts=args.security_opts,device=args.device,family=args.family,status='PASS_CONVERSION_ONLY_NO_NATIVE_EXECUTED'),indent=2))\n+tool=Path('E:/Efinity/2025.1/scripts/efx_run_pgm.py');raw=tool.read_text();tree=ast.parse(raw);fn=next(x for x in tree.body if isinstance(x,ast.FunctionDef) and x.name=='run_efx_pgm')\n+assign=next(x for x in fn.body if isinstance(x,ast.Assign) and any(isinstance(t,ast.Name) and t.id=='run_usbif' for t in x.targets))\n+loop=fn.body[fn.body.index(assign)+1];assert isinstance(loop,ast.For)\n+scope={'args':types.SimpleNamespace(opts=args.pgm_opts)};exec(compile(ast.Module(body=[assign,loop],type_ignores=[]),str(tool),'exec'),scope)\n+assert scope['run_usbif'] is False\n+out=Path(__file__).resolve().parent/'ACTUAL_GENERATED_OPTIONS.json' ;assert not out.exists();out.write_text(json.dumps(dict(run_usbif=scope['run_usbif'],run_usbif_actual_installed_code=ast.get_source_segment(raw,assign)+'\\n'+ast.get_source_segment(raw,loop),run_usbif_tool_sha256=hashlib.sha256(tool.read_bytes()).hexdigest(),flags={k:v for k,v in vars(args).items() if k.startswith('do_')},pgm_opts=args.pgm_opts,export_opts=args.export_bitstream_opts,security_opts=args.security_opts,device=args.device,family=args.family,status='PASS_CONVERSION_ONLY_NO_NATIVE_EXECUTED'),indent=2))\n print('OPTIONS_CONVERSION_ONLY_PASS')\n"
+    }
+  ],
+  "root_source101_before": {
+    "path": "reports/m5c1b_fusion_integration/review_fix_99642712/regression/SOURCE101.json",
+    "bytes": 18845,
+    "sha256": "c1eaa207fa7d68914dc79a2bfd184206737af1afb29a871437cbc04b6b0974bd"
+  },
+  "boundary": "No native yet. Parent conversion exit-before-postprocess ordering unchanged. New options preflight additionally executes only installed run_usbif assignment/loop AST using actual generated pgm_opts, never run_efx_pgm or hardware."
+}

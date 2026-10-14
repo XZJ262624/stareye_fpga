@@ -1,0 +1,18 @@
+{
+  "parent": {
+    "path": "reports/m5c1b_fusion_integration/review_fix_99642712/resource_area_bound/audit_current_timing_v4.py",
+    "bytes": 10158,
+    "sha256": "58ab01a65995539523b54c33d9dbf40e5cb85893b7231d25d514e16d79dd363e"
+  },
+  "derived": {
+    "path": "reports/m5c1b_fusion_integration/review_fix_99642712/resource_area_bound/audit_current_timing_v5.py",
+    "bytes": 10707,
+    "sha256": "1e34f696ac257b2a16ce41df5ef1b79fd1818c14d56c36e1ac5e2d14d758771b"
+  },
+  "proof": {
+    "path": "reports/m5c1b_fusion_integration/review_fix_99642712/resource_area_bound/DSP_NATIVE_NET_ALIAS_PROOF.json",
+    "bytes": 3954,
+    "sha256": "85249eae71258b236662183eee8987df946916cd40ce51f2a67433c061843fb2"
+  },
+  "diff": "--- \n+++ \n@@ -39,6 +39,13 @@\n  for mode in ['setup','hold']:\n   p=P/f'outflow/v5_B{bit}_{mode}.rpt';rows=parse(p);assert all(f'u_m5b1/fusion/reader/mult_23|B[{bit}]' in b for b in re.split(r'\\+{4} Path \\d+ \\+{4,}',p.read_text())[1:]);through.append(dict(pin=f'u_m5b1/fusion/reader/mult_23|B[{bit}]',mode=mode,count=len(rows),min_slack=min(x['slack'] for x in rows),report=rec(p)))\n ram_difference={x['pin']:x for x in json.loads((F/'RAM_PHYSICAL_CONSTANT_DIFFERENCES_CURRENT.json').read_text())['records']};assert not json.loads((F/'RAM_PHYSICAL_CONSTANT_DIFFERENCES_CURRENT.json').read_text())['nonram_disagreements']\n+\n+dsp_alias_proof=json.loads((F/'DSP_NATIVE_NET_ALIAS_PROOF.json').read_text())\n+assert dsp_alias_proof['status']=='PASS_EXACT_TWO_PIN_SAME_LUT_DRIVER_NATIVE_RENAME'\n+for x in [dsp_alias_proof['map'],dsp_alias_proof['native']]+[r['report'] for e in dsp_alias_proof['records'] for r in e['reports']]:assert rec(R/x['path'])==x\n+dsp_aliases={e['pin']:(e['logical_net'],e['native_net']) for e in dsp_alias_proof['records']}\n+assert set(dsp_aliases)=={f'u_m5b1/fusion/reader/mult_23|B[{i}]' for i in [6,8]}\n+\n def classify(pin,mode):\n  st=pins.get(pin);net=native.get(pin)\n  if pin in cuts:return dict(pin=pin,classification='EXACT_CUT',sdc=cuts[pin],structural=st,native_net=net)\n@@ -53,7 +60,7 @@\n   k=pin.split('[')[1][0];assert net==f'key_n[{k}]';assert f'set_false_path -from [get_ports {{key_n[{k}]}}] -to $key{k}_meta_d' in sdc\n   return dict(pin=pin,classification='KEY_PI_EXACT_CUT',native_net=net,structural=st)\n  if re.fullmatch(r'u_m5b1/fusion/reader/mult_23\\|B\\[[5-8]\\]',pin):\n-  assert st and st['classification']=='REGISTERED_SAME_CLOCK' and net==st['net'];ev=[x for x in through if x['pin']==pin and x['mode']==mode];assert len(ev)==1\n+  assert st and st['classification']=='REGISTERED_SAME_CLOCK' and (net==st['net'] or dsp_aliases.get(pin)==(st['net'],net));ev=[x for x in through if x['pin']==pin and x['mode']==mode];assert len(ev)==1\n   return dict(pin=pin,classification='DSP_B_UNREGISTERED_COMBINATIONAL_THROUGH_TIMED',structural=st,native_net=net,through=ev)\n  raise AssertionError(('UNCLASSIFIED_CURRENT_MISSING',pin,mode,st,net))\n # Global D expected from native pin database, actual fresh paths.\n"
+}

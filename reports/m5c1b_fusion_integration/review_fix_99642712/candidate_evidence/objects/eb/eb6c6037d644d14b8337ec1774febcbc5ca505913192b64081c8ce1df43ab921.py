@@ -1,0 +1,27 @@
+from pathlib import Path
+import argparse,datetime,hashlib,json,subprocess,time,shutil
+F=Path(__file__).resolve().parent;R=F.parents[2];TOOL=Path('E:/Modelsim_10.1c/win64')
+a=argparse.ArgumentParser();a.add_argument('--case',type=int,default=0);a.add_argument('--old',action='store_true');args=a.parse_args()
+W=F/('focused_'+('old_' if args.old else 'fixed_')+str(args.case)+'_'+datetime.datetime.now().strftime('%H%M%S'));W.mkdir()
+names=['m5b1_backend.sv','m5b1_capture.sv','m5b1_global_engine.sv','m5b1_transfer.sv','m5b1_uart.sv','m5b1_mailbox.sv','m5b1_async_fifo.sv','m5b1_arbiter.sv','m5c_pair_lease.sv'];sources=[R/'rtl/m5c_fusion'/n for n in names]
+if args.old:sources[0]=F/'m5b1_backend_candidate99642712.sv'
+sources.append(R/'tb/m5c_fusion/tb_m5c1b_uart_lease_recovery.sv')
+def rec(p):
+ b=p.read_bytes();return dict(path=p.relative_to(R).as_posix(),bytes=len(b),sha256=hashlib.sha256(b).hexdigest())
+deps=sources+[Path(__file__),F/'FOCUSED_DERIVATION.json'];inputs=[rec(p) for p in deps];snap=W/'source_snapshot';snap.mkdir()
+for i,p in enumerate(deps):shutil.copyfile(p,snap/f'{i:03d}_{p.name}')
+(W/'INPUTS.json').write_text(json.dumps(dict(records=inputs,snapshots=[rec(p) for p in snap.iterdir()]),indent=2));steps=[]
+cmds=[('vlib',[str(TOOL/'vlib.exe'),'work'],120),('compile',[str(TOOL/'vlog.exe'),'-sv','-work','work']+[str(p) for p in sources],120),('sim',[str(TOOL/'vsim.exe'),'-c','-novopt','work.tb_m5c1b_uart_lease_recovery',f'-gCASE={args.case}',f'-gEXPORT_LIMIT={20000000 if args.case==3 else 2000}','-do','run -all; quit -f'],3600)]
+for stage,cmd,limit in cmds:
+ start=time.time()
+ with (W/(stage+'.log')).open('w') as log:
+  p=subprocess.Popen(cmd,cwd=W,stdout=log,stderr=subprocess.STDOUT);owner=dict(pid=p.pid,stage=stage,command=cmd,cwd=str(W),started=datetime.datetime.now().astimezone().isoformat());(W/(stage+'_OWNER.json')).write_text(json.dumps(owner,indent=2));print('OWNED',stage,p.pid,str(W),flush=True)
+  try:code=p.wait(timeout=limit);timeout=False
+  except subprocess.TimeoutExpired:subprocess.run(['taskkill','/PID',str(p.pid),'/T','/F'],capture_output=True);code=p.wait();timeout=True
+ steps.append(dict(stage=stage,exit=code,timeout=timeout,seconds=time.time()-start,log=rec(W/(stage+'.log')),owner=owner));(W/'STEPS.json').write_text(json.dumps(steps,indent=2))
+ if code or timeout:break
+unchanged=all(rec(R/x['path'])==x for x in inputs);log=(W/'sim.log').read_text(errors='replace') if (W/'sim.log').exists() else '';fatal=[s for s in log.splitlines() if '** Fatal:' in s];passed=len(steps)==3 and all(x['exit']==0 and not x['timeout'] for x in steps) and unchanged
+if args.old:passed=passed and len(fatal)==1 and 'UART_LEASE_NOT_RECLAIMED' in fatal[0]
+else:passed=passed and not fatal and 'REVIEW_PASS UART_RECOVERY' in log
+result=dict(status=('PASS_NAMED_ORIGINAL_LEAK_SENSITIVITY' if args.old else 'PASS_FOCUSED_RECOVERY') if passed else 'FAIL',case=args.case,old_candidate=args.old,source_unchanged=unchanged,steps=steps,fatals=fatal,inputs=inputs)
+(W/'RESULT.json').write_text(json.dumps(result,indent=2));print(result['status'],str(W),flush=True);raise SystemExit(0 if passed else 1)

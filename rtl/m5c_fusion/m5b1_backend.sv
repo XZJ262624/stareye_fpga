@@ -20,7 +20,8 @@ module m5b1_backend #(parameter REQUEST_CYCLES=96000000,CAPTURE_CYCLES=96000000,
  localparam IDLE=0,HEADER=1,CAPTURE=2,CAPWAIT=3,FREEZE=4,ENGINE=5,ENGINE_WAIT=6,
   STATS=7,STATS_WAIT=8,EXPORT_START=9,EXPORT_READ=10,EXPORT_READ_WAIT=11,EXPORT_BYTES=12,
   EXPORT_FINISH=13,DRAIN=14,EXPORT_PREFETCH=15,FAULT_REPORT=16,FAULT_IDLE=17,
-  RESERVE_WAIT=18,BIND=19,BIND_WAIT=20,UART_ACQUIRE=21,UART_WAIT=22,TELEMETRY=23,TELEMETRY_WAIT=24;
+  RESERVE_WAIT=18,BIND=19,BIND_WAIT=20,UART_ACQUIRE=21,UART_WAIT=22,TELEMETRY=23,TELEMETRY_WAIT=24,
+  UART_RELEASE=25,UART_RELEASE_WAIT=26;
  wire tx_busy,tx_done,tx_error,tx_cancelled,tx_read_beat,tx_write_beat;wire [7:0] tx_beat;
  reg [7:0] export_type;
  reg [4:0] state;reg fault_reported,ever_run,job_failed;reg [31:0] local_cancels;
@@ -42,7 +43,7 @@ module m5b1_backend #(parameter REQUEST_CYCLES=96000000,CAPTURE_CYCLES=96000000,
  reg [767:0] frozen_extended,pair_descriptor[0:1];
  reg [319:0] writer_identity;
  reg [63:0] generation,uart_token;
- reg writer_owned,cancel_sent,uart_owned,uart_release;
+ reg writer_owned,cancel_sent,uart_owned,uart_release,uart_cleanup_report;
  wire reserve_ack,reserve_denied,reserve_slot,bind_ack,acquire_ack,acquire_denied;
  wire lease_latest_valid,lease_latest_slot;wire [1:0] reserved,committed;
  wire event_rejected;
@@ -139,7 +140,7 @@ module m5b1_backend #(parameter REQUEST_CYCLES=96000000,CAPTURE_CYCLES=96000000,
    state<=IDLE;fault_reported<=0;ever_run<=0;job_failed<=0;local_cancels<=0;class_slot<=1;latest_slot<=0;latest_valid<=0;exported<=0;job_id<=0;tick<=0;requests<=0;accepted<=0;busy_rejected<=0;capture_drop<=0;published_count<=0;result_age<=0;
    offset<=0;capture_age<=0;export_age<=0;arm<=0;descriptor_take<=0;frozen<=0;publish_toggle<=0;bg_fault<=0;stats<=0;byte_index<=0;export_type<=2;packet_start<=0;packet_abort<=0;
    frozen_extended<=0;pair_descriptor[0]<=0;pair_descriptor[1]<=0;writer_identity<=0;generation<=0;
-   uart_token<=0;writer_owned<=0;cancel_sent<=0;uart_owned<=0;uart_release<=0;metadata_committed<=0;telemetry_take<=0;
+   uart_token<=0;writer_owned<=0;cancel_sent<=0;uart_owned<=0;uart_release<=0;uart_cleanup_report<=0;metadata_committed<=0;telemetry_take<=0;
   end else begin
    arm<=0;descriptor_take<=0;packet_start<=0;packet_abort<=0;
    uart_release<=0;telemetry_take<=0;
@@ -229,7 +230,7 @@ module m5b1_backend #(parameter REQUEST_CYCLES=96000000,CAPTURE_CYCLES=96000000,
     EXPORT_READ_WAIT:begin
      
      if(tx_done)begin
-      if(tx_error)begin bg_fault<=1;exported<=1;packet_abort<=1;state<=IDLE;end
+      if(tx_error)begin bg_fault<=1;packet_abort<=1;uart_cleanup_report<=0;state<=UART_RELEASE;end
       else begin byte_index<=0;state<=EXPORT_PREFETCH;end
      end
     end
@@ -242,7 +243,15 @@ module m5b1_backend #(parameter REQUEST_CYCLES=96000000,CAPTURE_CYCLES=96000000,
     end
     EXPORT_FINISH:if(packet_done)begin
      if(export_type==2)begin export_type<=3;state<=EXPORT_START;end
-     else begin exported<=1;uart_release<=1;uart_owned<=0;state<=IDLE;end
+     else begin uart_cleanup_report<=0;state<=UART_RELEASE;end
+    end
+    // Ordinary exits retain the original slot/identity/token until every real
+    // read has drained and the lease core has consumed retire+release. Keeping
+    // export_exclusive asserted prevents a fusion acquire crossing that fence.
+    // No new job can replace writer_identity while these states are active.
+    UART_RELEASE:if(!stop&&!tx_busy)begin uart_release<=1;state<=UART_RELEASE_WAIT;end
+    UART_RELEASE_WAIT:if(!stop&&!pair_leased[latest_slot?3:1])begin
+     uart_owned<=0;exported<=1;state<=uart_cleanup_report?FAULT_REPORT:IDLE;
     end
     FAULT_REPORT:state<=STATS;
     FAULT_IDLE:begin end
@@ -254,7 +263,7 @@ module m5b1_backend #(parameter REQUEST_CYCLES=96000000,CAPTURE_CYCLES=96000000,
    // Keep CAPWAIT's payload/pop contract until the owned transaction drains.
    // Cancelling only a queued request also terminates without future READY.
    if(capture_timeout&&!tx_busy)begin bg_fault<=1;job_failed<=1;capture_drop<=capture_drop+1'b1;state<=DRAIN;end
-   if(export_timeout&&!tx_busy)begin bg_fault<=1;job_failed<=1;exported<=1;packet_abort<=1;state<=FAULT_REPORT;end
+   if(export_timeout&&!tx_busy)begin bg_fault<=1;job_failed<=1;packet_abort<=1;uart_cleanup_report<=1;state<=UART_RELEASE;end
    // UART fault telemetry is independent of the quarantined DDR transaction.
    // Keep the owner/busy state intact: this is not a DDR reset or synthetic ACK.
    if(stop&&ever_run&&!fault_reported)begin fault_reported<=1;latest_valid<=0;bg_fault<=1;packet_abort<=1;state<=FAULT_REPORT;end

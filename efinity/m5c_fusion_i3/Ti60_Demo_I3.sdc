@@ -664,7 +664,7 @@ set m5b1_video_camera_fifo_rgs1_source [m5b1_exact {
  {^u_m5b1/video/camera_fifo/rp\[6\]\~FF\|CLK$}
  {^u_m5b1/video/camera_fifo/rp\[7\]\~FF\|CLK$}
  {^u_m5b1/video/camera_fifo/rp\[8\]\~FF\|CLK$}
- {^u_m5b1/video/camera_fifo/rg\[9\]\~FF\|CLK$}
+ {^u_m5b1/video/camera_fifo/rp\[9\]\~FF\|CLK$}
 } video_camera_fifo_rgs1_source]
 set m5b1_video_camera_fifo_rgs1_destination [m5b1_exact {
  {^u_m5b1/video/camera_fifo/rgs1\[0\]\~FF\|D$}

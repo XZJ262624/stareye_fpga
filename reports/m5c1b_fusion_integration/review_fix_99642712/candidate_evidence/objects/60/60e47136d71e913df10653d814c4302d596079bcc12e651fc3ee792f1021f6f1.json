@@ -1,0 +1,161 @@
+{
+  "status": "PASS_GRAY_MSB_IDENTITY_AND_ACTUAL_SOURCE_BINDING",
+  "width": {
+    "address": 9,
+    "pointer": 10,
+    "MSB": 9
+  },
+  "finite_identity_checks": 2048,
+  "induction": "Base: both rp and rg reset0 via same async local rrst_n and same fallback !rrs[1]. Step: if take_r=pop&&!empty, rp_next=next_r and rg_next=(next_r>>1)^next_r; bit9 of shifted 10bit next_r is0, hence equal. If !take_r both hold equality. Thus for any pop/ready sequence/reset, rg[9]=rp[9]; no assumption on encrypted DDR readiness expression.",
+  "current": {
+    "type": "EFX_FF",
+    "ports": {
+      "D": "\\u_m5b1/video/camera_fifo/n686 [9]",
+      "CE": "ceg_net85",
+      "CLK": "clk_sys",
+      "SR": "\\u_m5b1/fifo_ready [1]",
+      "Q": "\\u_m5b1/video/camera_fifo/rp [9]"
+    },
+    "line": 18901
+  },
+  "previous": {
+    "type": "EFX_FF",
+    "ports": {
+      "D": "\\u_m5b1/video/camera_fifo/n697 [9]",
+      "CE": "ceg_net649",
+      "CLK": "clk_sys",
+      "SR": "\\u_m5b1/fifo_ready [1]",
+      "Q": "\\u_m5b1/video/camera_fifo/rg [9]"
+    },
+    "line": 18169
+  },
+  "primitive_parameters": {
+    "CLK_POLARITY": "1'b1",
+    "CE_POLARITY": "1'b0",
+    "SR_POLARITY": "1'b0",
+    "D_POLARITY": "1'b1",
+    "SR_SYNC": "1'b0",
+    "SR_VALUE": "1'b0",
+    "SR_SYNC_PRIORITY": "1'b1"
+  },
+  "sourceRTL": {
+    "path": "rtl/m5c_fusion/m5b1_async_fifo.sv",
+    "bytes": 2124,
+    "sha256": "5826a1bce3a4291d9a7cc3d1018f8db79a7699926362510ca7e760e5dc789e99"
+  },
+  "old_consumers": [
+    {
+      "cell": "u_m5b1/video/camera_fifo/add_46/i10",
+      "type": "EFX_ADD",
+      "pin": "I0"
+    },
+    {
+      "cell": "u_m5b1/video/camera_fifo/sub_26/add_2/i10",
+      "type": "EFX_ADD",
+      "pin": "I1"
+    },
+    {
+      "cell": "LUT__80578",
+      "type": "EFX_LUT4",
+      "pin": "I2"
+    },
+    {
+      "cell": "LUT__85053",
+      "type": "EFX_LUT4",
+      "pin": "I0"
+    }
+  ],
+  "current_consumers": [
+    {
+      "cell": "u_m5b1/video/camera_fifo/add_46/i10",
+      "type": "EFX_ADD",
+      "pin": "I0"
+    },
+    {
+      "cell": "u_m5b1/video/camera_fifo/sub_26/add_2/i10",
+      "type": "EFX_ADD",
+      "pin": "I1"
+    },
+    {
+      "cell": "LUT__80367",
+      "type": "EFX_LUT4",
+      "pin": "I2"
+    },
+    {
+      "cell": "LUT__90547",
+      "type": "EFX_LUT4",
+      "pin": "I0"
+    }
+  ],
+  "synchronizer_input_gates": [
+    {
+      "label": "old",
+      "cell": "LUT__85053",
+      "ports": {
+        "I0": "\\u_m5b1/video/camera_fifo/rg [9]",
+        "I1": "\\u_m5b1/fifo_ready [0]",
+        "O": "\\u_m5b1/video/camera_fifo/n317 [9]"
+      },
+      "mask": "16'h8888",
+      "expression": "sourceMSB AND fifo_ready[0]"
+    },
+    {
+      "label": "new",
+      "cell": "LUT__90547",
+      "ports": {
+        "I0": "\\u_m5b1/video/camera_fifo/rp [9]",
+        "I1": "\\u_m5b1/fifo_ready [0]",
+        "O": "\\u_m5b1/video/camera_fifo/n317 [9]"
+      },
+      "mask": "16'h8888",
+      "expression": "sourceMSB AND fifo_ready[0]"
+    }
+  ],
+  "actual_gray_synchronizer": {
+    "cell": "u_m5b1/video/camera_fifo/rgs1[9]~FF",
+    "old": {
+      "type": "EFX_FF",
+      "ports": {
+        "D": "\\u_m5b1/video/camera_fifo/n317 [9]",
+        "CE": "1'b1",
+        "CLK": "cmos_pclk",
+        "SR": "\\u_m5b1/fifo_ready [0]",
+        "Q": "\\u_m5b1/video/camera_fifo/rgs1 [9]"
+      },
+      "line": 17919
+    },
+    "current": {
+      "type": "EFX_FF",
+      "ports": {
+        "D": "\\u_m5b1/video/camera_fifo/n317 [9]",
+        "CE": "1'b1",
+        "CLK": "cmos_pclk",
+        "SR": "\\u_m5b1/fifo_ready [0]",
+        "Q": "\\u_m5b1/video/camera_fifo/rgs1 [9]"
+      },
+      "line": 18731
+    },
+    "params": {
+      "CLK_POLARITY": "1'b1",
+      "CE_POLARITY": "1'b1",
+      "SR_POLARITY": "1'b0",
+      "D_POLARITY": "1'b1",
+      "SR_SYNC": "1'b0",
+      "SR_VALUE": "1'b0",
+      "SR_SYNC_PRIORITY": "1'b1"
+    }
+  },
+  "boundary": "This proves logical sourcebit identity by unchanged FIFO induction and currentmapped same-bit fanout. It does NOT prove cross-protected-cell old/new entire DDR or D/CE upstream combinational equivalence. Inferred negative CE means hold on CE1; source relation invariant regardless common read-enable predicate. No SDC changed.",
+  "bindings": [
+    {
+      "path": "reports/m5c1b_fusion_integration/review_fix_99642712/fresh_i3_build_bound/mirror/efinity/m5c_fusion_i3/outflow/Ti60_Demo.map.v",
+      "bytes": 41168654,
+      "sha256": "7f21555f972e989f436cb32fd5f34047a4f25a742f047de462dbc6e6b2c72e0f"
+    },
+    {
+      "path": "reports/m5c1b_fusion_integration/review_fix_99642712/resource_area_experiment/mirror/efinity/m5c_fusion_i3/outflow/Ti60_Demo.map.v",
+      "bytes": 40331517,
+      "sha256": "2c0a43f2350ecf89fa32e997320a952a48bc6e09d5dae589394a669ba685f743"
+    }
+  ]
+}

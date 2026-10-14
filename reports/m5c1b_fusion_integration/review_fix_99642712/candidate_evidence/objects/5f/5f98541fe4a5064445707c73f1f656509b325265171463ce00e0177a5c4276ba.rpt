@@ -1,0 +1,123 @@
+
+Efinix Timing Path Constraint Report
+Version: 2025.1.110.5.9
+Date: Wed Oct 14 23:21:06 2026
+
+Copyright (C) 2013 - 2025 Efinix, Inc. All rights reserved.
+
+User command: report_timing -from_clock {clk_sys} -to_clock {clk_sys} -npaths 1 -nworst 1 -setup -detail full_path -file {clock_75_setup.rpt}
+
+Timing Model: I3
+	process : typical
+	temperature : -40C to 100C
+	voltage : 0.95 +/-30mV
+	speedgrade : 3
+	technology : t16ff
+	status : final
+
+Summary:
+
+ Path #  | Slack (ns) | Delay (ns) |                  Start Pin                  |                       End Pin                       | Launch Clk  | Capture Clk
+==================================================================================================================================================================
+ 1       |  0.563     |  9.594     | u_m5b1/background/frozen_extended[468]~FF|Q | i98858/u_m5b1/background/lease/token[0][1][63]~FF|D | clk_sys (R) | clk_sys (R)
+
+++++ Path 1 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : u_m5b1/background/frozen_extended[468]~FF|CLK      
+Path End      : i98858/u_m5b1/background/lease/token[0][1][63]~FF|D
+Launch Clock  : clk_sys (RISE)                                     
+Capture Clock : clk_sys (RISE)                                     
+Slack         : 0.563 (required time - arrival time)               
+Delay         : 9.594                                              
+
+Logic Level             : 18
+Non-global nets on path : 18
+Global nets on path     :  0
+
+Launch Clock Path Delay        :  2.104
++ Clock To Q + Data Path Delay :  9.727
+---------------------------------------
+End-of-path arrival time       : 11.831
+
+Constraint                     : 10.416
++ Capture Clock Path Delay     :  2.104
+- Clock Uncertainty            :  0.126
+---------------------------------------
+End-of-path required time      : 12.394
+
+Launch Clock Path
+                    name                       model name   delay (ns)  cumulative delay (ns) pins on net    location
+=======================================================================================================================
+clk_sys                                          inpad        0.000             0.000                0      (0,162)  
+clk_sys                                          inpad        0.126             0.126            10502      (0,162)  
+clk_sys                                          net          1.978             2.104            10502      (0,162)  
+u_m5b1/background/frozen_extended[468]~FF|CLK    ff           0.000             2.104            10502      (103,253)
+
+Data Path
+                       name                          model name   delay (ns)  cumulative delay (ns) pins on net    location
+=============================================================================================================================
+u_m5b1/background/frozen_extended[468]~FF|Q             ff          0.130             0.130               8       (103,253)
+u_m5b1/background/frozen_extended[468]                  net         0.557             0.687               8       (103,253)
+LUT__85306|in[1]                                        lut         0.061             0.748               8       (112,232)
+LUT__85306|out                                          lut         0.000             0.748               2       (112,232)
+n43332                                                  net         0.473             1.221               2       (112,232)
+LUT__85310|in[0]                                        lut         0.061             1.282               2       (106,246)
+LUT__85310|out                                          lut         0.000             1.282               2       (106,246)
+n43336                                                  net         0.399             1.681               2       (106,246)
+LUT__85316|in[2]                                        lut         0.061             1.742               2       (80,240) 
+LUT__85316|out                                          lut         0.000             1.742               2       (80,240) 
+n43342                                                  net         0.578             2.320               2       (80,240) 
+LUT__85331|in[0]                                        lut         0.063             2.383               2       (120,228)
+LUT__85331|out                                          lut         0.000             2.383               2       (120,228)
+n43357                                                  net         0.103             2.486               2       (120,228)
+LUT__85375|in[0]                                        lut         0.063             2.549               2       (120,229)
+LUT__85375|out                                          lut         0.000             2.549               2       (120,229)
+n43401                                                  net         0.438             2.987               2       (120,229)
+LUT__85383|in[0]                                        lut         0.061             3.048               2       (133,218)
+LUT__85383|out                                          lut         0.000             3.048               2       (133,218)
+n43409                                                  net         0.421             3.469               2       (133,218)
+LUT__85409|in[2]                                        lut         0.063             3.532               2       (120,233)
+LUT__85409|out                                          lut         0.000             3.532               3       (120,233)
+n43434                                                  net         0.172             3.704               3       (120,233)
+LUT__85411|in[0]                                        lut         0.063             3.767               3       (120,237)
+LUT__85411|out                                          lut         0.000             3.767               4       (120,237)
+n43436                                                  net         0.668             4.435               4       (120,237)
+LUT__85412|in[0]                                        lut         0.061             4.496               4       (112,180)
+LUT__85412|out                                          lut         0.000             4.496             129       (112,180)
+n43437                                                  net         0.801             5.297             129       (112,180)
+LUT__85425|in[2]                                        lut         0.061             5.358             129       (49,219) 
+LUT__85425|out                                          lut         0.000             5.358               2       (49,219) 
+n43450                                                  net         0.717             6.075               2       (49,219) 
+LUT__85428|in[0]                                        lut         0.061             6.136               2       (73,161) 
+LUT__85428|out                                          lut         0.000             6.136               2       (73,161) 
+n43453                                                  net         0.338             6.474               2       (73,161) 
+LUT__85438|in[1]                                        lut         0.061             6.535               2       (76,153) 
+LUT__85438|out                                          lut         0.000             6.535               2       (76,153) 
+n43463                                                  net         0.109             6.644               2       (76,153) 
+LUT__85439|in[3]                                        lut         0.061             6.705               2       (76,148) 
+LUT__85439|out                                          lut         0.000             6.705               2       (76,148) 
+n43464                                                  net         0.109             6.814               2       (76,148) 
+LUT__85738|in[0]                                        lut         0.063             6.877               2       (75,148) 
+LUT__85738|out                                          lut         0.000             6.877               2       (75,148) 
+n43763                                                  net         0.552             7.429               2       (75,148) 
+LUT__85940|in[0]                                        lut         0.063             7.492               2       (66,184) 
+LUT__85940|out                                          lut         0.000             7.492               2       (66,184) 
+n43965                                                  net         0.773             8.265               2       (66,184) 
+LUT__87200|in[1]                                        lut         0.061             8.326               2       (104,257)
+LUT__87200|out                                          lut         0.000             8.326               6       (104,257)
+n45218                                                  net         0.527             8.853               6       (104,257)
+LUT__113310|in[1]                                       lut         0.063             8.916               6       (129,266)
+LUT__113310|out                                         lut         0.000             8.916              67       (129,266)
+n62064                                                  net         0.745             9.661              67       (129,266)
+LUT__113426|in[3]                                       lut         0.063             9.724              67       (141,309)
+LUT__113426|out                                         lut         0.000             9.724               2       (141,309)
+i98858/u_m5b1/background/lease/token[0][1][63]~FF|D     ff          0.003             9.727               2       (141,309)
+
+Capture Clock Path
+                        name                           model name   delay (ns)  cumulative delay (ns) pins on net    location
+===============================================================================================================================
+clk_sys                                                  inpad        0.000             0.000                0      (0,162)  
+clk_sys                                                  inpad        0.126             0.126            10502      (0,162)  
+clk_sys                                                  net          1.978             2.104            10502      (0,162)  
+i98858/u_m5b1/background/lease/token[0][1][63]~FF|CLK    ff           0.000             2.104            10502      (141,309)
+
