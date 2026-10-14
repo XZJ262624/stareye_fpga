@@ -1,0 +1,19 @@
+{
+  "status": "PREDICTED_FIXTURE_WINDOW_ASSERTION_BLOCK_NOT_YET_RUNTIME_FATAL",
+  "location": "tb_aba_two_fence_v2.sv:706 repeated UI rejection calls task:720 checking BGtick<=88M",
+  "cause": "The same first-window predicate is unintentionally reapplied on every subsequent legitimate A3-vs-A1 rejection while waiting for next natural job at96M. AtUI>184M and<192M, a request still encounters genuine A1 and violates that fixture predicate despite correct rejection. Current UI~142M has not hit it yet.",
+  "responsibility": "Implementation reused the margin-containing task for repeated rejection observations; no production defect inferred.",
+  "minimal_proposal": "Separate sourceTTL/order/epoch from initial8M margin. Preserve margin atARM/B2/A3 and firstgenuineUI rejection, retainTTL/fullA1/noacquire checks for everylaterreject, preserve alloriginalrequiredgen3publication/2healthy/end checks. Newfixture only after Workfreeze; no edit/restart/stop performed.",
+  "records": [
+    {
+      "path": "reports/m5c1b_fusion_integration/selected_final_matrix_20261013_071300/replay_end_v2/aba_two_fence_1821/tb_aba_two_fence_v2.sv",
+      "bytes": 42161,
+      "sha256": "a043bcda6822a4e85be99953db462e94ee28496c483e2c4b7a0725cf40904ada"
+    },
+    {
+      "path": "reports/m5c1b_fusion_integration/selected_final_matrix_20261013_071300/replay_end_v2/aba_witness_2025/WITNESS.json",
+      "bytes": 4262,
+      "sha256": "0bb7336468d8eeaf6aa4934deb14dc512e712e461a5643510e22aed6845a897d"
+    }
+  ]
+}

@@ -1,6 +1,69 @@
 # 星眸项目交接单
 
-## 2026-10-12 M5B.1受控隔离原型实物验收PASS（当前）
+## H-M5C1B-20261014：候选与审查证据准备（当前）
+
+开发分支codex/m5c-fusion-prototype，HEAD仍f8bc4492f7247b5c242c80b76d9ca4a76347f30d，当前HEAD唯一parent为8976a276f03b4cd146c451aa081b04f71637fcf2。未来candidate必须直接以f8bc449为parent，不能混淆这两种parent关系。当前索引为空，尚无新candidate。
+
+Work已复核最终17闸门、新全构建/实际I3及离线bit文件的封存证据。下一步仅精确候选范围和可复现/可审查证据配送：正式101技术输入、实际测试/负例与原始日志、当前构建/时序/文件元数据，明确未提交大文件的绑定及审查边界。禁止整个reports树、未知未跟踪资料、工具包、密钥或私人数据进入候选。只有精确路径清单经Work冻结后Codex exec才暂存/提交，不改历史、不合并main、不推送。
+
+复杂工作由Codex exec/GPT-6 Astra独占执行；Work直接管理规划、文档、归档和最终复核。固定candidate后Work按长期授权自动发送逐文件验证的只读隔离快照给DeepSeek B，并停止提供用户委派Codex A提示词。两位审查者完成前报告相互隔离。独立审查与实物闸门必须等待用户结果，当前不操作硬件。
+
+用户等待规则：仅预计约120分钟或更久的测试可启动后台后结束对话等待，不修改实际测试超时或降低覆盖。完整构建不适用该结束等待规则，Work持续组织、检查和推进。
+
+技术输入101和旧保护文件的开发/构建时点零差异证据不改写。本次Work在封存后明确更新STATUS/PROJECT_BRIEF/DECISIONS/HANDOFF/MILESTONES五份管理文档；旧字节和前后哈希见`reports/m5c1b_fusion_integration/work_management_update_20261014/MANAGEMENT_DELTA.json`。其他保护技术文件保持原样，不伪称管理更新后全部4465项仍逐字节相同。
+
+
+## H-M5C1B-20261012-IMPLEMENT：真实接入实施授权（当前）
+
+Work已复核99copies和127精确目标，冻结reports/m5c1b_fusion_integration/WORK_IMPLEMENTATION_FREEZE.md及三准备文件，Codex exec/Astra唯一Writer开始新副本完整接入、实际map资源准入、整机仿真与完整新I3构建/STA。新branch codex/m5c-fusion-prototype，起始及未来candidate唯一parent f8bc4492f7247b5c242c80b76d9ca4a76347f30d。开发完成停写交Work后另授权精确candidate，禁止硬件/Git变更/旧源修改。
+
+## H-M5C1B-20261012：真实DDR与显示接入（当前任务，先冻结精确清单）
+
+用户明确“那就下一步”，授权推进生产接入增量。开发起点HEAD f8bc4492f7247b5c242c80b76d9ca4a76347f30d，branch codex/m5b1-global-canny-prototype；管理docs及未提交M5C.0/1A新产物已有，禁止清理。受保护技术基线candidate8976a276f03b4cd146c451aa081b04f71637fcf2，parent264962e0。M5C.1A三核心PASS，新工程须复制这些核心，不回改原件与证据。
+
+Codex exec/GPT-6 Astra Medium首先仅写reports/m5c1b_fusion_integration/的INTEGRATION_CONTRACT.md、PROPOSED_FILE_SCOPE.json、EARLY_RESOURCE_PLAN.md；只读研究实际capture/engine/backend、时钟reset/CDC、七模式controls/OSD和构建脚本，生成足够实施的端口/字段/状态/精确目标文件清单。此准备步骤停止交Work核定后才开核心写入。不得把原草案接口当已实施，不得只完成文档后冒称已接入。
+
+Work已选定目标行为：FUS默认关闭、普通七模式轮转和阈值/滤波语义保留；双键稳定长按至少1秒且释放一次切换FUS，短/长互斥、不兼触阈值或模式，SOF生效。FUS只在mode6生效；局部红色、额外历史辅助青色、灰度背景、原OSD优先并增加FUS/LOCAL与age状态。按M5C.1A冻结公式/120帧+148500000tick、无两帧进入滞回，失效保守回退。新接口和遥测具体位布局由本准备明确，保持旧1/2/3串口packet兼容，新增统计用独立版本/type不得偷改旧解包语义。
+
+接入须真实联合lease保护class/mask、实际metadataB提交事件、真实客户端受理和末R/写B drain、单调pair/token、frame/config_generation等跨域一致传递；不再用TBmodel done当生产输入。capture源SOF seq/tick/config必须同descriptor/job绑定，不能从publish计龄、不能把UI tick当pixel tick、不能把source ID当显示帧计数。按真实LCD资格/身份时序保留错拍修复。
+
+采用8行双时钟cache、每行320B class+160B mask，原子READY/消费退役、整descriptor mailbox与精确CDC约束；SOF预填前4行、标签/欠载/迟到/过期时回退并真实排空。reader只走原C2低优先，burst≤512B、不跨4KiB、不扩DDRpayload范围、不得挤入RT urgent或暂停光栅。C2子仲裁优先不可背压capture写入，再公平engine/reader，首次大UART导出与fusion互斥。两槽第三job可拒绝但健康服务下应及时切新pair或LOCAL释放，杜绝永久循环等待。
+
+建议新branch codex/m5c-fusion-prototype，后续唯一candidate parent应为f8bc449...（先禁止Git操作，待Work核定授权）。新工程efinity/m5c_fusion_i3、RTL rtl/m5c_fusion、tb/m5c_fusion、新scripts/m5c1b_*，源copy manifest逐文件指定不复制工具/outflow/数据库/锁/旧bit。禁止改M2~M5B1/1A已验证源码/报告/管脚/时钟/DDR IP/ROM/外部接口/分辨率、.gitignore/.gitattributes旧内容、首行诊断/识别/热恢复/清理/Flash。
+
+资源门≤48640XLR/204RAM10/128DSP，现45042/124/0余量窄；先做实际新工程综合准入，超门先在新范围优化真实逻辑/RAM不削弱校验、不放宽门槛，仍不可满足则NO-GO交Work。通过后完整I3编译/P&R/bit/STA，setup/hold非负、新内部no_clock/unconstrained/multiclock0/0/0与精确CDC物理验证。旧slack不继承。
+
+整机安全与效用分门，测试须经过新DMA→真实LCD→资格寄存→M5A→cache/lease/reader→fusion→OSD的生产连接，健康七模式及FUS开关完整720p逐像素，至少60帧健康服务静止有效辅助、4us条件和17us拒绝模型/饥饿恢复，配置A-B-A/帧重复跳号/各CDC随机phase/取消真实B/R/错误/硬停，原回归及对应负向。软件golden与实际字节CRC+BFS、统计原因/age/tokens绑定，不借旧PASS。硬停仅冷重新配置，soft_reset接0，跨PVT/warm仍未知。
+
+准备交回后Work冻结具体实施handoff；最终离线合格candidate交回即停写，Work自动DeepSeek B且停止给用户Codex A提示词；双审查后到实物再次停止。所有阶段禁止Programmer/JTAG/串口/Flash。当前准备不得开始仿真/综合/核心代码/Git，独占新准备报告目录即可。
+
+## 2026-10-12 M5C.1A离线融合核心PASS（当前开发状态）
+
+用户授权开始下一步并在中断后要求继续。Work冻结M5C.1A离线范围，Codex exec/GPT-6 Astra独占完成三核心：分类/结果联合slot lease、像素墙钟/显示帧龄与配置guard、逐行一致性历史辅助融合。内部开发不是Codex A/DeepSeek B独立审查。
+
+三核心单元通过；未改真实M5A连接完成12个720p帧、11059200有效像素/tap逐项比较和744次CE暂停采样，七个健康模式每个新增7个合法弱边辅助，五故障帧按oracle局部回退。十项实际负向均命中指定Fatal，包括旧租用token释放/退役、独立响应owner、首次受理伪末R同拍。此前混合故障/效用的连接FAIL日志保留，不改写为PASS。
+
+Work只读总复核2680个不同文件哈希（含2563项保护记录），HEAD仍f8bc4492f7247b5c242c80b76d9ca4a76347f30d，索引为空，10项新开发文件未提交。原生产bit大小2924727B、SHA8bc85b157426cf35e7aab31bc4acd1c8c54b5799c0e7a0424ee555f3927488c4不变。核心验收与限制见reports/m5c1a_fusion_core/IMPLEMENTATION.md、FINAL_MANIFEST.json及WORK_ACCEPTANCE.json。
+
+结论仅PASS_OFFLINE_CORE：没有生产DDR/CDC/cache/reader/C2接入，没有新综合/P&R/STA/bit或硬件验证；metadata B/末R为单元接口模型。行分类一致性不是物理静止证明，也不是当前帧完整BFS。M5A和M5B.1受控原型PASS保留；M5C整机仍开发中，M6/M7未开始。
+
+下一步由Work冻结生产接入增量，先建立真正的跨域行cache、低优先reader/C2事务复用与联合lease接线，再过≤48640XLR/204RAM10/128DSP资源及完整新STA门；不能继承旧slack。正式candidate完成后自动DeepSeek B并停止给用户Codex A，双审查后再停止给实物清单。当前不操作板卡、不启动独立审查、不创建candidate或改生产工程。此节为停写后的管理更新，旧保护清单中的管理文档记录保留其开发交回时点含义，不伪称更新后仍逐字节相同。
+
+## H-M5C1A-20261012：离线融合核心开发（已交回，后续见顶部验收）
+
+Work核定M5C.0草案后冻结reports/m5c1a_fusion_core/FROZEN_SPEC.md。Codex exec/Astra Medium唯一Writer按该精确范围开发三项离线核心及golden/TB验证；不改M5A/M5B1生产工程，不综合建bit、不操作硬件、不Git提交。起点HEAD f8bc4492f7247b5c242c80b76d9ca4a76347f30d。完成交Work复核后才冻结生产接入；M5C整体未完成。
+
+## H-M5C0-20261012：下一阶段架构与规格准备（历史准备）
+
+用户在M5B.1受控原型实物PASS后询问并授权下一步推进。下一步命名M5C.0，仅为Work本轮选定的架构/可行性准备子步骤，不把原接口预留伪称已有完整冻结规格。
+
+开发基础branch codex/m5b1-global-canny-prototype；HEAD f8bc4492f7247b5c242c80b76d9ca4a76347f30d，parent 8976a276f03b4cd146c451aa081b04f71637fcf2。技术基线仍固定candidate8976a276。
+
+委派Codex exec / GPT-6 Astra Medium：读取PROJECT_BRIEF、STATUS、DECISIONS、AI_WORKFLOW、REVIEW_PROTOCOL及M5C_INTERFACE_RESERVATION；只读核对实际RTL的结果槽/lease/导出、消费者带宽、分类tap、CDC和现有资源，提出M5C架构及可验收规格草案。明确区分既有实现与建议；不可简单把旧mask无条件OR到实时画面。研究age/config/epoch/source_kind、static/motion判定、预填充与低优先DDR读取、无效/过期/欠载/硬停的局部回退、七模式保留与新增显示方式。列明资源与服务准入门槛、软件golden/真实LCD逐像素和负向测试、构建/STA以及硬件验收要求。
+
+唯一允许写入：reports/m5c0_fusion_architecture/ 下新草案和分析证据。禁止修改docs、任何RTL/TB/约束/Efinity工程、既有报告、已验证接口/时钟/管脚/分辨率；不得打开串口、Programmer/JTAG/Flash，不得Git暂存提交/切分支/合并/推送，不清理历史资料。先验证HEAD，如不符停止报告。无需综合仿真，分析不足须明确未知，不能编造资源/服务上界。停止边界：把架构/冻结规格草案、可行性GO/NO-GO和问题清单交Work；本任务不实现融合、不创建RTLcandidate，也不替代Codex A或DeepSeek B审查。
+
+## 2026-10-12 M5B.1受控隔离原型实物验收PASS（已签收基线）
 
 固定技术candidate为`8976a276f03b4cd146c451aa081b04f71637fcf2`，parent为`264962e0c6af61e751c794c5b5f5252d00edbb6c`。Codex A与DeepSeek B均PASS_WITH_FINDINGS，三项阻断修复已关闭。用户确认同一配置未重启、AR0135连接、全程正常、七模式和阈值正常；COM13原始记录持续1871.569991秒（31分11.57秒），满足至少30分钟稳定性门。
 

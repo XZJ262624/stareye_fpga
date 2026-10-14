@@ -1,0 +1,15 @@
+{
+  "parent": {
+    "path": "reports/m5c1b_fusion_integration/offline_artifact_retry_20261014/seal.py",
+    "bytes": 6895,
+    "sha256": "671004f396a3f885d63ed018c0b7478717c2dd0c2536141b13c0985c8b2d3dca"
+  },
+  "derived": {
+    "path": "reports/m5c1b_fusion_integration/offline_artifact_retry_20261014/seal_v2.py",
+    "bytes": 7014,
+    "sha256": "a9aca4f2d7401ae305df20caf42eae05cede0407b268833f1382681279aacd9f"
+  },
+  "prior_failure": "All4 new artifacts untracked but not ignored; exact4 ignore sidecars now authorized and added to both packages. No native failure; no repeat.",
+  "diff": "--- \n+++ \n@@ -4,7 +4,10 @@\n def rec(p):\n  b=p.read_bytes();return dict(path=p.relative_to(R).as_posix(),bytes=len(b),sha256=hashlib.sha256(b).hexdigest())\n def put(n,x):\n- p=F/n;assert not p.exists();p.write_text(json.dumps(x,indent=2));return rec(p)\n+ p=F/n\n+ if p.exists():\n+  assert n=='RETRY_DERIVATION.json' and json.loads(p.read_text())==x;return rec(p)\n+ p.write_text(json.dumps(x,indent=2));return rec(p)\n def chk(x):\n  z=rec(R/x['path']);assert z['bytes']==x['bytes'] and z['sha256']==x['sha256'];return z\n assert json.loads((F/'RESULT.json').read_text())['status']=='PASS_OFFLINE_CONVERSION_ONLY'\n",
+  "scope": "Identical prior RETRY_DERIVATION reused by equality; no validation removed."
+}

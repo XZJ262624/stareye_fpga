@@ -1,0 +1,48 @@
+{
+  "status": "FAIL_FIXTURE_STARTUP_MONITOR_BEFORE_RUN",
+  "actual": "compile0; native rawexit0; unique STARVATION_UNEXPECTED_COLD_STOP at109368ps; no starvation injection or 96M request reached",
+  "causal_evidence": "TB908 tests emergency_stop whenever arst_n. Production system115 emergency_stop=stop||!run. Failstop allow_run=started&&!stop; started requires synchronized calibration/domains and256stable edges. TB releases arst_n after10negedges; firstposedge has !run, so startup emergency_stop is expected. No production defect inferred.",
+  "proposal": "New independent derived fixture only: sticky monitor_armed becomes1 on first actual dut.run; quarantine/reset_request remain unconditional after arst_n; emergency_stop assertion applies once monitor_armed, never combinationally gated by current run. At injection entry explicitly require armed/run/no stop/quarantine/reset. Preserve all queued10000/RT/drain/recovery assertions. Requires Work freeze before implementation.",
+  "records": [
+    {
+      "path": "reports/m5c1b_fusion_integration/selected_final_matrix_20261013_071300/replay_end_v2/runs/starvation7_153356/RESULT.json",
+      "bytes": 7232,
+      "sha256": "6ed4d1b7beeee4cdb32ee963abed3b9aca958f4b4e34f15404091fc2fabc1e36"
+    },
+    {
+      "path": "reports/m5c1b_fusion_integration/selected_final_matrix_20261013_071300/replay_end_v2/runs/starvation7_153356/sim.log",
+      "bytes": 10928,
+      "sha256": "fa85950519bccdb9d88de3690d1a10fec0f4aa91f650d7f4f9111372f7007517"
+    },
+    {
+      "path": "reports/m5c1b_fusion_integration/selected_final_matrix_20261013_071300/replay_end_v2/runs/starvation7_153356/compile.log",
+      "bytes": 1766,
+      "sha256": "9127b21ffc7c96fa49d74e6f24f18fdaa8c021a0736f740bb7506257ffa5fc29"
+    },
+    {
+      "path": "reports/m5c1b_fusion_integration/selected_final_matrix_20261013_071300/replay_end_v2/runs/starvation7_153356/INPUTS.json",
+      "bytes": 11506,
+      "sha256": "1e84071c52d81f19bdd0ea8dc0d70748e65802d75dacf36eed90b047978bbf94"
+    },
+    {
+      "path": "reports/m5c1b_fusion_integration/selected_final_matrix_20261013_071300/replay_end_v2/runs/starvation7_153356/SNAPSHOTS.json",
+      "bytes": 36944,
+      "sha256": "52348728a59b7c749e86b5b59ad9934e7c192b6f02a344f972be0faa23b6cdf0"
+    },
+    {
+      "path": "reports/m5c1b_fusion_integration/selected_final_matrix_20261013_071300/replay_end_v2/tb_replay_starvation.sv",
+      "bytes": 52751,
+      "sha256": "65e9f26f7aa39a03ccc61bb0089e971bb4a42eafe4bdc28ec2df0c6ec3639b60"
+    },
+    {
+      "path": "rtl/m5c_fusion/m5b1_system.sv",
+      "bytes": 12133,
+      "sha256": "c469a874da2f0fb9427680927fcfd1f752cb2afcd0035623288c306c2f5535e4"
+    },
+    {
+      "path": "rtl/m5c_fusion/m5b1_failstop.sv",
+      "bytes": 1363,
+      "sha256": "fd9f81893d54df10188396efd3f3827f7f3675db91f2f343b0e439d5a9ae1d40"
+    }
+  ]
+}

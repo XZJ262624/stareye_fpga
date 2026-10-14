@@ -1,0 +1,519 @@
+[
+  {
+    "name": "engine_small30",
+    "top": "tb_m5b1_global_engine",
+    "args": [],
+    "marker": "M5B1_GLOBAL_PASS cases=30 pixels=122880",
+    "tb": "tb/m5b1_global_canny/tb_m5b1_global_engine.sv",
+    "override": null,
+    "fatal": null,
+    "gold": []
+  },
+  {
+    "name": "engine_720p15",
+    "top": "tb_m5b1_global_engine",
+    "args": [
+      "-gWIDTH=1280",
+      "-gHEIGHT=720",
+      "+TESTS=15"
+    ],
+    "marker": "M5B1_GLOBAL_PASS cases=15 pixels=13824000",
+    "tb": "tb/m5b1_global_canny/tb_m5b1_global_engine.sv",
+    "override": null,
+    "fatal": null,
+    "gold": []
+  },
+  {
+    "name": "engine_exhaustive",
+    "top": "tb_m5b1_global_engine",
+    "args": [
+      "-gWIDTH=1280",
+      "-gHEIGHT=720",
+      "+FIRST=15",
+      "+TESTS=1"
+    ],
+    "marker": "M5B1_EXHAUSTIVE_PASS ternary_3x3=19683",
+    "tb": "tb/m5b1_global_canny/tb_m5b1_global_engine.sv",
+    "override": null,
+    "fatal": null,
+    "gold": []
+  },
+  {
+    "name": "engine_last_pixel",
+    "top": "tb_m5b1_global_engine",
+    "args": [
+      "+FIRST=16",
+      "+TESTS=1"
+    ],
+    "marker": "pairs=2 scans=4",
+    "tb": "tb/m5b1_global_canny/tb_m5b1_global_engine.sv",
+    "override": null,
+    "fatal": null,
+    "gold": []
+  },
+  {
+    "name": "engine_snake642",
+    "top": "tb_m5b1_global_engine",
+    "args": [
+      "-gWIDTH=1280",
+      "-gHEIGHT=720",
+      "+INPUT=F:\\Projects\\stareye_fpga\\reports\\m5b1_global_canny_i3\\patterns\\snake_vertical_1280x720.hex",
+      "+TESTS=1",
+      "-gMAX_PAIRS=1024",
+      "-gWALL_CYCLES=2000000000",
+      "+EXPECT_SCANS=642"
+    ],
+    "marker": "pairs=321 scans=642",
+    "tb": "tb/m5b1_global_canny/tb_m5b1_global_engine.sv",
+    "override": null,
+    "fatal": null,
+    "gold": [
+      "reports/m5b1_global_canny_i3/patterns/snake_vertical_1280x720.hex"
+    ]
+  },
+  {
+    "name": "engine_wall_default",
+    "top": "tb_m5b1_global_engine",
+    "args": [
+      "-gWIDTH=1280",
+      "-gHEIGHT=720",
+      "+INPUT=F:\\Projects\\stareye_fpga\\reports\\m5b1_global_canny_i3\\patterns\\snake_vertical_1280x720.hex",
+      "+TESTS=1",
+      "+EXPECT_FAIL=1"
+    ],
+    "marker": "M5B1_TIMEOUT_PASS",
+    "tb": "tb/m5b1_global_canny/tb_m5b1_global_engine.sv",
+    "override": null,
+    "fatal": null,
+    "gold": [
+      "reports/m5b1_global_canny_i3/patterns/snake_vertical_1280x720.hex"
+    ]
+  },
+  {
+    "name": "engine_pair_default",
+    "top": "tb_m5b1_global_engine",
+    "args": [
+      "-gWIDTH=1280",
+      "-gHEIGHT=720",
+      "+INPUT=F:\\Projects\\stareye_fpga\\reports\\m5b1_global_canny_i3\\patterns\\snake_vertical_1280x720.hex",
+      "+TESTS=1",
+      "-gWALL_CYCLES=2000000000",
+      "+EXPECT_FAIL=1"
+    ],
+    "marker": "M5B1_TIMEOUT_PASS pairs=64 scans=128",
+    "tb": "tb/m5b1_global_canny/tb_m5b1_global_engine.sv",
+    "override": null,
+    "fatal": null,
+    "gold": [
+      "reports/m5b1_global_canny_i3/patterns/snake_vertical_1280x720.hex"
+    ]
+  },
+  {
+    "name": "engine_abort",
+    "top": "tb_m5b1_engine_abort",
+    "args": [],
+    "marker": "REVIEW_PASS engine_abort",
+    "tb": "tb/m5b1_global_canny/tb_m5b1_engine_abort.sv",
+    "override": null,
+    "fatal": null,
+    "gold": []
+  },
+  {
+    "name": "tap_small",
+    "top": "tb_m5c1b_capture_identity",
+    "args": [
+      "+DIR=F:\\Projects\\stareye_fpga\\reports\\m5b1_global_canny_i3\\review_fix_264962e0\\final\\tap\\generated\\small",
+      "+TAP_FILE=F:\\Projects\\stareye_fpga\\reports\\m5b1_global_canny_i3\\review_fix_264962e0\\final\\tap\\small_classes.hex"
+    ],
+    "marker": "M5C1B_PASS SOURCE_TAG_AND_M5A",
+    "tb": "tb/m5c_fusion/tb_m5c1b_capture_identity.sv",
+    "override": null,
+    "fatal": null,
+    "gold": [
+      "reports/m5b1_global_canny_i3/review_fix_264962e0/final/tap/generated/small/cases.txt",
+      "reports/m5b1_global_canny_i3/review_fix_264962e0/final/tap/generated/small/frame_0.hex",
+      "reports/m5b1_global_canny_i3/review_fix_264962e0/final/tap/generated/small/frame_1.hex",
+      "reports/m5b1_global_canny_i3/review_fix_264962e0/final/tap/generated/small/frame_10.hex",
+      "reports/m5b1_global_canny_i3/review_fix_264962e0/final/tap/generated/small/frame_11.hex",
+      "reports/m5b1_global_canny_i3/review_fix_264962e0/final/tap/generated/small/frame_12.hex",
+      "reports/m5b1_global_canny_i3/review_fix_264962e0/final/tap/generated/small/frame_13.hex",
+      "reports/m5b1_global_canny_i3/review_fix_264962e0/final/tap/generated/small/frame_14.hex",
+      "reports/m5b1_global_canny_i3/review_fix_264962e0/final/tap/generated/small/frame_15.hex",
+      "reports/m5b1_global_canny_i3/review_fix_264962e0/final/tap/generated/small/frame_16.hex",
+      "reports/m5b1_global_canny_i3/review_fix_264962e0/final/tap/generated/small/frame_17.hex",
+      "reports/m5b1_global_canny_i3/review_fix_264962e0/final/tap/generated/small/frame_18.hex",
+      "reports/m5b1_global_canny_i3/review_fix_264962e0/final/tap/generated/small/frame_19.hex",
+      "reports/m5b1_global_canny_i3/review_fix_264962e0/final/tap/generated/small/frame_2.hex",
+      "reports/m5b1_global_canny_i3/review_fix_264962e0/final/tap/generated/small/frame_20.hex",
+      "reports/m5b1_global_canny_i3/review_fix_264962e0/final/tap/generated/small/frame_21.hex",
+      "reports/m5b1_global_canny_i3/review_fix_264962e0/final/tap/generated/small/frame_22.hex",
+      "reports/m5b1_global_canny_i3/review_fix_264962e0/final/tap/generated/small/frame_23.hex",
+      "reports/m5b1_global_canny_i3/review_fix_264962e0/final/tap/generated/small/frame_24.hex",
+      "reports/m5b1_global_canny_i3/review_fix_264962e0/final/tap/generated/small/frame_25.hex",
+      "reports/m5b1_global_canny_i3/review_fix_264962e0/final/tap/generated/small/frame_3.hex",
+      "reports/m5b1_global_canny_i3/review_fix_264962e0/final/tap/generated/small/frame_4.hex",
+      "reports/m5b1_global_canny_i3/review_fix_264962e0/final/tap/generated/small/frame_5.hex",
+      "reports/m5b1_global_canny_i3/review_fix_264962e0/final/tap/generated/small/frame_6.hex",
+      "reports/m5b1_global_canny_i3/review_fix_264962e0/final/tap/generated/small/frame_7.hex",
+      "reports/m5b1_global_canny_i3/review_fix_264962e0/final/tap/generated/small/frame_8.hex",
+      "reports/m5b1_global_canny_i3/review_fix_264962e0/final/tap/generated/small/frame_9.hex",
+      "reports/m5b1_global_canny_i3/review_fix_264962e0/final/tap/small_classes.hex"
+    ]
+  },
+  {
+    "name": "tap_stall",
+    "top": "tb_m5c1b_capture_identity",
+    "args": [
+      "-gFRAMES=4",
+      "-gSTALL=1",
+      "+DIR=F:\\Projects\\stareye_fpga\\reports\\m5b1_global_canny_i3\\review_fix_264962e0\\final\\tap\\generated\\stall",
+      "+TAP_FILE=F:\\Projects\\stareye_fpga\\reports\\m5b1_global_canny_i3\\review_fix_264962e0\\final\\tap\\stall_classes.hex"
+    ],
+    "marker": "M5C1B_PASS SOURCE_TAG_AND_M5A",
+    "tb": "tb/m5c_fusion/tb_m5c1b_capture_identity.sv",
+    "override": null,
+    "fatal": null,
+    "gold": [
+      "reports/m5b1_global_canny_i3/review_fix_264962e0/final/tap/generated/stall/cases.txt",
+      "reports/m5b1_global_canny_i3/review_fix_264962e0/final/tap/generated/stall/frame_0.hex",
+      "reports/m5b1_global_canny_i3/review_fix_264962e0/final/tap/generated/stall/frame_1.hex",
+      "reports/m5b1_global_canny_i3/review_fix_264962e0/final/tap/generated/stall/frame_2.hex",
+      "reports/m5b1_global_canny_i3/review_fix_264962e0/final/tap/generated/stall/frame_3.hex",
+      "reports/m5b1_global_canny_i3/review_fix_264962e0/final/tap/stall_classes.hex"
+    ]
+  },
+  {
+    "name": "tap_720p",
+    "top": "tb_m5c1b_capture_identity",
+    "args": [
+      "-gWIDTH=1280",
+      "-gHEIGHT=720",
+      "-gH_TOTAL=1650",
+      "-gV_TOTAL=750",
+      "-gH_BACK=260",
+      "-gV_BACK=25",
+      "-gVS_LINES=5",
+      "-gHS_CLOCKS=40",
+      "-gFRAMES=2",
+      "+DIR=F:\\Projects\\stareye_fpga\\reports\\m5b1_global_canny_i3\\review_fix_264962e0\\final\\tap\\generated\\720p",
+      "+TAP_FILE=F:\\Projects\\stareye_fpga\\reports\\m5b1_global_canny_i3\\review_fix_264962e0\\final\\tap\\720p_classes.hex"
+    ],
+    "marker": "M5C1B_PASS SOURCE_TAG_AND_M5A",
+    "tb": "tb/m5c_fusion/tb_m5c1b_capture_identity.sv",
+    "override": null,
+    "fatal": null,
+    "gold": [
+      "reports/m5b1_global_canny_i3/review_fix_264962e0/final/tap/generated/720p/cases.txt",
+      "reports/m5b1_global_canny_i3/review_fix_264962e0/final/tap/generated/720p/frame_0.hex",
+      "reports/m5b1_global_canny_i3/review_fix_264962e0/final/tap/generated/720p/frame_1.hex",
+      "reports/m5b1_global_canny_i3/review_fix_264962e0/final/tap/720p_classes.hex"
+    ]
+  },
+  {
+    "name": "tag_qualification",
+    "top": "tb_m5c1b_capture_identity",
+    "args": [
+      "-gFRAMES=4",
+      "-gSTALL=1",
+      "-gTAG_FAULT=1",
+      "+DIR=F:\\Projects\\stareye_fpga\\reports\\m5b1_global_canny_i3\\review_fix_264962e0\\final\\tap\\generated\\stall",
+      "+TAP_FILE=F:\\Projects\\stareye_fpga\\reports\\m5b1_global_canny_i3\\review_fix_264962e0\\final\\tap\\stall_classes.hex"
+    ],
+    "marker": "M5C1B_PASS SOURCE_TAG_AND_M5A",
+    "tb": "tb/m5c_fusion/tb_m5c1b_capture_identity.sv",
+    "override": null,
+    "fatal": null,
+    "gold": [
+      "reports/m5b1_global_canny_i3/review_fix_264962e0/final/tap/generated/stall/cases.txt",
+      "reports/m5b1_global_canny_i3/review_fix_264962e0/final/tap/generated/stall/frame_0.hex",
+      "reports/m5b1_global_canny_i3/review_fix_264962e0/final/tap/generated/stall/frame_1.hex",
+      "reports/m5b1_global_canny_i3/review_fix_264962e0/final/tap/generated/stall/frame_2.hex",
+      "reports/m5b1_global_canny_i3/review_fix_264962e0/final/tap/generated/stall/frame_3.hex",
+      "reports/m5b1_global_canny_i3/review_fix_264962e0/final/tap/stall_classes.hex"
+    ]
+  },
+  {
+    "name": "tag_direct",
+    "top": "tb_m5c1b_capture_identity",
+    "args": [
+      "-gTAG_DIRECT=1"
+    ],
+    "marker": "M5C1B_PASS SOURCE_TAG_DIRECT",
+    "tb": "tb/m5c_fusion/tb_m5c1b_capture_identity.sv",
+    "override": null,
+    "fatal": null,
+    "gold": []
+  },
+  {
+    "name": "negative_ack_isolation",
+    "top": "tb_m5b1_arbiter",
+    "args": [],
+    "marker": null,
+    "tb": "tb/m5b1_global_canny/tb_m5b1_arbiter.sv",
+    "override": "reports/m5c1b_fusion_integration/selected_final_matrix_20261013_071300/legacy_remaining_v1/mutants/ack_isolation/m5b1_arbiter.sv",
+    "fatal": "ACK DDR W handshake",
+    "gold": []
+  },
+  {
+    "name": "negative_real_B_fence",
+    "top": "tb_m5b1_arbiter",
+    "args": [],
+    "marker": null,
+    "tb": "tb/m5b1_global_canny/tb_m5b1_arbiter.sv",
+    "override": "reports/m5c1b_fusion_integration/selected_final_matrix_20261013_071300/legacy_remaining_v1/mutants/real_B_fence/m5b1_arbiter.sv",
+    "fatal": "unexpected watchdog or framing error",
+    "gold": []
+  },
+  {
+    "name": "negative_request_epoch",
+    "top": "tb_m5b1_arbiter",
+    "args": [],
+    "marker": null,
+    "tb": "tb/m5b1_global_canny/tb_m5b1_arbiter.sv",
+    "override": "reports/m5c1b_fusion_integration/selected_final_matrix_20261013_071300/legacy_remaining_v1/mutants/request_epoch/m5b1_arbiter.sv",
+    "fatal": "illegal request rejection missing",
+    "gold": []
+  },
+  {
+    "name": "negative_4KiB",
+    "top": "tb_m5b1_arbiter",
+    "args": [],
+    "marker": null,
+    "tb": "tb/m5b1_global_canny/tb_m5b1_arbiter.sv",
+    "override": "reports/m5c1b_fusion_integration/selected_final_matrix_20261013_071300/legacy_remaining_v1/mutants/4KiB/m5b1_arbiter.sv",
+    "fatal": "A protocol",
+    "gold": []
+  },
+  {
+    "name": "negative_range_permission",
+    "top": "tb_m5b1_arbiter",
+    "args": [],
+    "marker": null,
+    "tb": "tb/m5b1_global_canny/tb_m5b1_arbiter.sv",
+    "override": "reports/m5c1b_fusion_integration/selected_final_matrix_20261013_071300/legacy_remaining_v1/mutants/range_permission/m5b1_arbiter.sv",
+    "fatal": "illegal request rejection missing",
+    "gold": []
+  },
+  {
+    "name": "negative_changed_reduction",
+    "top": "tb_m5b1_global_engine",
+    "args": [
+      "+FIRST=16",
+      "+TESTS=1"
+    ],
+    "marker": null,
+    "tb": "tb/m5b1_global_canny/tb_m5b1_global_engine.sv",
+    "override": "reports/m5c1b_fusion_integration/selected_final_matrix_20261013_071300/legacy_remaining_v1/mutants/changed_reduction/m5b1_global_engine.sv",
+    "fatal": "last-pixel changed reduction lost",
+    "gold": []
+  },
+  {
+    "name": "negative_changed_last_pixel",
+    "top": "tb_m5b1_global_engine",
+    "args": [
+      "+FIRST=16",
+      "+TESTS=1"
+    ],
+    "marker": null,
+    "tb": "tb/m5b1_global_canny/tb_m5b1_global_engine.sv",
+    "override": "reports/m5c1b_fusion_integration/selected_final_matrix_20261013_071300/legacy_remaining_v1/mutants/changed_last_pixel/m5b1_global_engine.sv",
+    "fatal": "last-pixel changed reduction lost",
+    "gold": []
+  },
+  {
+    "name": "negative_prefill",
+    "top": "tb_m5b1_prefill",
+    "args": [],
+    "marker": null,
+    "tb": "tb/m5b1_global_canny/tb_m5b1_prefill.sv",
+    "override": "reports/m5c1b_fusion_integration/selected_final_matrix_20261013_071300/legacy_remaining_v1/mutants/prefill/m5b1_video_dma.sv",
+    "fatal": "prefill barrier admitted an empty frame",
+    "gold": []
+  },
+  {
+    "name": "negative_capture_epoch",
+    "top": "tb_m5b1_capture",
+    "args": [],
+    "marker": null,
+    "tb": "tb/m5b1_global_canny/tb_m5b1_capture.sv",
+    "override": "reports/m5c1b_fusion_integration/selected_final_matrix_20261013_071300/legacy_remaining_v1/mutants/capture_epoch/m5b1_capture.sv",
+    "fatal": "capture descriptor identity/status",
+    "gold": []
+  },
+  {
+    "name": "negative_stale_token_release",
+    "top": "tb_m5c1b_reset_faults",
+    "args": [],
+    "marker": null,
+    "tb": "tb/m5c_fusion/tb_m5c1b_reset_faults.sv",
+    "override": "reports/m5c1b_fusion_integration/selected_final_matrix_20261013_071300/legacy_remaining_v1/mutants/stale_token_release/m5c_pair_lease.sv",
+    "fatal": "STALE_SAME_PAIR_LEASE_TOKEN",
+    "gold": []
+  },
+  {
+    "name": "negative_wrong_done_owner",
+    "top": "tb_m5c1b_reset_faults",
+    "args": [],
+    "marker": null,
+    "tb": "tb/m5c_fusion/tb_m5c1b_reset_faults.sv",
+    "override": "reports/m5c1b_fusion_integration/selected_final_matrix_20261013_071300/legacy_remaining_v1/mutants/wrong_done_owner/m5c_pair_lease.sv",
+    "fatal": "INDEPENDENT_READ_RESPONSE_TAGS",
+    "gold": []
+  },
+  {
+    "name": "negative_same_edge_fake_done",
+    "top": "tb_m5c1b_reset_faults",
+    "args": [],
+    "marker": null,
+    "tb": "tb/m5c_fusion/tb_m5c1b_reset_faults.sv",
+    "override": "reports/m5c1b_fusion_integration/selected_final_matrix_20261013_071300/legacy_remaining_v1/mutants/same_edge_fake_done/m5c_pair_lease.sv",
+    "fatal": "UNSOLICITED_DONE_FIRST_ACCEPT",
+    "gold": []
+  },
+  {
+    "name": "negative_identity_truncated",
+    "top": "tb_m5c1b_reset_faults",
+    "args": [],
+    "marker": null,
+    "tb": "tb/m5c_fusion/tb_m5c1b_reset_faults.sv",
+    "override": "reports/m5c1b_fusion_integration/selected_final_matrix_20261013_071300/legacy_remaining_v1/mutants/identity_truncated/m5c_pair_lease.sv",
+    "fatal": "FULL_IDENTITY_TOKEN_WIDTH",
+    "gold": []
+  },
+  {
+    "name": "negative_legacy_latest_only_reuse",
+    "top": "tb_m5c1b_reset_faults",
+    "args": [],
+    "marker": null,
+    "tb": "tb/m5c_fusion/tb_m5c1b_reset_faults.sv",
+    "override": "reports/m5c1b_fusion_integration/selected_final_matrix_20261013_071300/legacy_remaining_v1/mutants/legacy_latest_only_reuse/m5c_pair_lease.sv",
+    "fatal": "THIRD_JOB_MUST_WAIT",
+    "gold": []
+  },
+  {
+    "name": "negative_reject_counted_accept",
+    "top": "tb_m5c1b_reader_fences",
+    "args": [],
+    "marker": null,
+    "tb": "tb/m5c_fusion/tb_m5c1b_c2.sv",
+    "override": "reports/m5c1b_fusion_integration/selected_final_matrix_20261013_071300/legacy_remaining_v1/mutants/reject_counted_accept/m5b1_transfer.sv",
+    "fatal": "READER_PERMISSION_IS_NOT_ACCEPT",
+    "gold": []
+  },
+  {
+    "name": "negative_intermediate_r_done",
+    "top": "tb_m5c1b_reader_fences",
+    "args": [],
+    "marker": null,
+    "tb": "tb/m5c_fusion/tb_m5c1b_c2.sv",
+    "override": "reports/m5c1b_fusion_integration/selected_final_matrix_20261013_071300/legacy_remaining_v1/mutants/intermediate_r_done/m5b1_transfer.sv",
+    "fatal": "READER_FINAL_R_FENCE",
+    "gold": []
+  },
+  {
+    "name": "negative_stop_fake_done",
+    "top": "tb_m5c1b_reader_fences",
+    "args": [],
+    "marker": null,
+    "tb": "tb/m5c_fusion/tb_m5c1b_c2.sv",
+    "override": "reports/m5c1b_fusion_integration/selected_final_matrix_20261013_071300/legacy_remaining_v1/mutants/stop_fake_done/m5b1_transfer.sv",
+    "fatal": "READER_HARD_STOP_OWNER",
+    "gold": []
+  },
+  {
+    "name": "negative_level_recounts",
+    "top": "tb_m5c1b_counter_events",
+    "args": [],
+    "marker": null,
+    "tb": "tb/m5c_fusion/tb_m5c1b_reset_faults.sv",
+    "override": "reports/m5c1b_fusion_integration/selected_final_matrix_20261013_071300/legacy_remaining_v1/mutants/level_recounts/m5b1_system.sv",
+    "fatal": "COUNTER_COALESCED_STICKY",
+    "gold": []
+  },
+  {
+    "name": "negative_truncate_jobs",
+    "top": "tb_m5c1b_counter_events",
+    "args": [],
+    "marker": null,
+    "tb": "tb/m5c_fusion/tb_m5c1b_reset_faults.sv",
+    "override": "reports/m5c1b_fusion_integration/selected_final_matrix_20261013_071300/legacy_remaining_v1/mutants/truncate_jobs/m5b1_system.sv",
+    "fatal": "COUNTER_JOB_64_CARRY",
+    "gold": []
+  },
+  {
+    "name": "negative_wrong_display_sequence",
+    "top": "tb_m5c1b_capture_identity",
+    "args": [
+      "-gFRAMES=4",
+      "-gSTALL=1",
+      "-gTAG_FAULT=1",
+      "+DIR=F:\\Projects\\stareye_fpga\\reports\\m5b1_global_canny_i3\\review_fix_264962e0\\final\\tap\\generated\\stall",
+      "+TAP_FILE=F:\\Projects\\stareye_fpga\\reports\\m5b1_global_canny_i3\\review_fix_264962e0\\final\\tap\\stall_classes.hex"
+    ],
+    "marker": null,
+    "tb": "tb/m5c_fusion/tb_m5c1b_capture_identity.sv",
+    "override": "reports/m5c1b_fusion_integration/selected_final_matrix_20261013_071300/legacy_remaining_v1/mutants/wrong_display_sequence/m5a_stream_top.v",
+    "fatal": "TAG_RAW_IDENTITY",
+    "gold": [
+      "reports/m5b1_global_canny_i3/review_fix_264962e0/final/tap/generated/stall/cases.txt",
+      "reports/m5b1_global_canny_i3/review_fix_264962e0/final/tap/generated/stall/frame_0.hex",
+      "reports/m5b1_global_canny_i3/review_fix_264962e0/final/tap/generated/stall/frame_1.hex",
+      "reports/m5b1_global_canny_i3/review_fix_264962e0/final/tap/generated/stall/frame_2.hex",
+      "reports/m5b1_global_canny_i3/review_fix_264962e0/final/tap/generated/stall/frame_3.hex",
+      "reports/m5b1_global_canny_i3/review_fix_264962e0/final/tap/stall_classes.hex"
+    ]
+  },
+  {
+    "name": "negative_nonsticky_qualification",
+    "top": "tb_m5c1b_capture_identity",
+    "args": [
+      "-gFRAMES=4",
+      "-gSTALL=1",
+      "-gTAG_FAULT=1",
+      "+DIR=F:\\Projects\\stareye_fpga\\reports\\m5b1_global_canny_i3\\review_fix_264962e0\\final\\tap\\generated\\stall",
+      "+TAP_FILE=F:\\Projects\\stareye_fpga\\reports\\m5b1_global_canny_i3\\review_fix_264962e0\\final\\tap\\stall_classes.hex"
+    ],
+    "marker": null,
+    "tb": "tb/m5c_fusion/tb_m5c1b_capture_identity.sv",
+    "override": "reports/m5c1b_fusion_integration/selected_final_matrix_20261013_071300/legacy_remaining_v1/mutants/nonsticky_qualification/m5a_stream_top.v",
+    "fatal": "TAG_STICKY_QUALIFICATION",
+    "gold": [
+      "reports/m5b1_global_canny_i3/review_fix_264962e0/final/tap/generated/stall/cases.txt",
+      "reports/m5b1_global_canny_i3/review_fix_264962e0/final/tap/generated/stall/frame_0.hex",
+      "reports/m5b1_global_canny_i3/review_fix_264962e0/final/tap/generated/stall/frame_1.hex",
+      "reports/m5b1_global_canny_i3/review_fix_264962e0/final/tap/generated/stall/frame_2.hex",
+      "reports/m5b1_global_canny_i3/review_fix_264962e0/final/tap/generated/stall/frame_3.hex",
+      "reports/m5b1_global_canny_i3/review_fix_264962e0/final/tap/stall_classes.hex"
+    ]
+  },
+  {
+    "top": "tb_m5c1b_backend_startup",
+    "tb": "tb/m5c_fusion/tb_m5c1b_reset_faults.sv",
+    "args": [],
+    "gold": [],
+    "name": "negative_startup_latched",
+    "marker": null,
+    "override": "reports/m5c1b_fusion_integration/selected_final_matrix_20261013_071300/legacy_remaining_v1/mutants/startup_latched/m5b1_backend.sv",
+    "fatal": "STARTUP_STOP_OWNERSHIP"
+  },
+  {
+    "top": "tb_m5c1b_backend_startup",
+    "tb": "tb/m5c_fusion/tb_m5c1b_reset_faults.sv",
+    "args": [],
+    "gold": [],
+    "name": "negative_first_run_stop_lost",
+    "marker": null,
+    "override": "reports/m5c1b_fusion_integration/selected_final_matrix_20261013_071300/legacy_remaining_v1/mutants/first_run_stop_lost/m5b1_backend.sv",
+    "fatal": "FIRST_RUN_STOP_SAME_EDGE"
+  },
+  {
+    "name": "counter_events",
+    "top": "tb_m5c1b_counter_events",
+    "tb": "tb/m5c_fusion/tb_m5c1b_reset_faults.sv",
+    "args": [],
+    "marker": "M5C1B_PASS",
+    "override": null,
+    "fatal": null,
+    "gold": []
+  }
+]

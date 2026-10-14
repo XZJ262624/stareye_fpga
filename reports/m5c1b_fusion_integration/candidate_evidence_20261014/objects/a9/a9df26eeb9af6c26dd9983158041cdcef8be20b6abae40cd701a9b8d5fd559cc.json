@@ -1,0 +1,63 @@
+{
+  "status": "PASS_EXACT_CONFIG_GENERATION_COMPARATOR_SENSITIVITY",
+  "events": [
+    {
+      "line": 4081,
+      "text": "# ABA_REAL_OFF seq=76 time=1264054291000 gen=1 H=64"
+    },
+    {
+      "line": 4083,
+      "text": "# ABA_FENCE stage=1 time=1264083489000 UI=121359512 seq=76 state=0 reqbusy=0 reqvalid=0 offerbusy=0 offervalid=0 relbusy=0 relvalid=0 capbusy=0 capvalid=0 capdrained=1 readerdrained=1 cacheempty=1 confirmed=0 readerbusy=0 responsequiet=1 displayquiet=1 block=1 leased=0000 pending=0 ready=0 export=0 mailbusy=0 mailvalid=0 building=0 rawvalid=0 packetbusy=0 src=64 ui=64 start=64 done=64 take=64"
+    },
+    {
+      "line": 4084,
+      "text": "# ABA_ARM_REAL_A1 seq=76 tick=25359512 sourceframe=61 sourcetick=75489150 identity=00000101000000000000000101015002d04020b01000000000000000047fdf7e00000000000000010000000000000001000000000000003d0012d0500017204000000000047fdf7e0000000000000001000000000000003b0000000000000001"
+    },
+    {
+      "line": 4091,
+      "text": "# ABA_B2_BEGIN seq=77 UI=122953482 gen=2 H=80 L=40 enable=1 telemetry_pending=0 src=65 ui=65 take=64"
+    },
+    {
+      "line": 4092,
+      "text": "# ABA_SOURCE_REQUEST seq=77 config=000000000000000201015002d05028b010000000"
+    },
+    {
+      "line": 4093,
+      "text": "# SYSTEM_UI_SIGNATURE_REJECT req=000000000000000201015002d05028b010000000 result=000000000000000101015002d04020b010000000 req_generation=2 result_generation=1 result_identity=00000000000000010000000000000001000000000000003b00000000000000010000000000000001 req_seq=77 config_rejects=1 aba_rejects=0"
+    },
+    {
+      "line": 4100,
+      "text": "# ABA_A3_BEGIN seq=78 UI=124550257 gen=3 H=64 L=32 sourcecount=66 uicount=66 takecount=65"
+    },
+    {
+      "line": 4101,
+      "text": "# ABA_SOURCE_REQUEST seq=78 config=000000000000000301015002d04020b010000000"
+    },
+    {
+      "line": 4102,
+      "text": "# ** Fatal: SYSTEM_UI_SIGNATURE_REJECT_ACQUIRE req=000000000000000301015002d04020b010000000 result=000000000000000101015002d04020b010000000 seq=78"
+    }
+  ],
+  "first_A3": 78,
+  "request_generation": 3,
+  "result_generation": 1,
+  "low96_equal": true,
+  "B2_low96_different_rejected": true,
+  "A1_full_descriptor_signature_matches": true,
+  "compile_exit": 0,
+  "raw_sim_exit": 0,
+  "unique_fatal": "SYSTEM_UI_SIGNATURE_REJECT_ACQUIRE req=000000000000000301015002d04020b010000000 result=000000000000000101015002d04020b010000000 seq=78",
+  "elapsed_seconds": 4306.774382352829,
+  "scope": "Expected fault injection rejection only, not ordinary positive simulation. No complete mutant UART or gen3 recovery claim.",
+  "observability": "Original immutable TB logs full preedge signatures and observes after #1 req_take/acquire/offer/state/active_descriptor/session/token. Fatal proves this real post-edge rejection invariant failed. Individual acquire/state numeric values are not printed; acquire<=1/state<=ACQUIRE causality is the bound unique comparator RTL branch, not a separate waveform measurement.",
+  "oracle_source": {
+    "path": "reports/m5c1b_fusion_integration/selected_final_matrix_20261013_071300/replay_end_v2/aba_window_v3_2107/tb_aba_two_fence_v3.sv",
+    "bytes": 42334,
+    "sha256": "082a0a6b71d7c7804442c85faac6521722d5d4cf0fadbd5bcdc10d535db4fbfe"
+  },
+  "mutant": {
+    "path": "reports/m5c1b_fusion_integration/selected_final_matrix_20261013_071300/replay_end_v2/aba_generation_negative_20261014/mutant_display_session.sv",
+    "bytes": 11516,
+    "sha256": "11069a615666086c638b74e2cce35be1a0d5c0498ce55194b58cc59eaaf95e70"
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "parent": {
+    "path": "audit_current_timing_v2.py",
+    "bytes": 9818,
+    "sha256": "a487cad0a0a8b3cbcda10ca854c30959584d660cc76d02fd7792df416bc9bd90"
+  },
+  "derived": {
+    "path": "audit_current_timing_v3.py",
+    "bytes": 9890,
+    "sha256": "db6877b2fac9efc74caf7d4bb5cbc00dacc091e308edc42413a1568af4693d5c"
+  },
+  "prior_failure": "V2 literal substring count for report marker 2 also counted markers 20..29. No missing native output; use exact full-line marker occurrence and newline-delimited slicing.",
+  "diff": "--- \n+++ \n@@ -6,7 +6,7 @@\n def put(name,a):\n  p=F/name\n  if p.exists():\n-  assert name=='GLOBAL_D_COVERAGE_CURRENT.json' and json.loads(p.read_text())==a;return\n+  assert name in ['GLOBAL_D_COVERAGE_CURRENT.json','CONTROL_COVERAGE_CURRENT.json'] and json.loads(p.read_text())==a;return\n  p.write_text(json.dumps(a,indent=2))\n def parse(p):\n  text=p.read_text(errors='replace');assert re.search(r'Timing Model\\s*:\\s*I3',text),str(p)\n@@ -69,7 +69,7 @@\n for g in groups:\n  if not g['name'].endswith('_destination'):continue\n  name=g['name'];p=P/f'outflow/bundle_{name}_setup.rpt';rows=parse(p);assert set(x['end'] for x in rows)==set(g['pins']) and len(rows)==len(g['pins']);cq=[x['cq_data'] for x in rows];arr=[x['arrival'] for x in rows];assert None not in cq and max(cq)<=5 and None not in arr and max(arr)-min(arr)<=5\n- idx=next(i for i,x in enumerate(query) if x.startswith('report_timing -hold ') and f'bundle_{name}_hold.rpt' in x);start=re.search(r'puts \"(.*)\"',query[idx-1])[1];end=re.search(r'puts \"(.*)\"',query[idx+1])[1];assert log.count(start)==1 and log.count(end)==1;ex=log.split(start,1)[1].split(end,1)[0];assert ex.count('No timing path is found')==1\n+ idx=next(i for i,x in enumerate(query) if x.startswith('report_timing -hold ') and f'bundle_{name}_hold.rpt' in x);start=re.search(r'puts \"(.*)\"',query[idx-1])[1];end=re.search(r'puts \"(.*)\"',query[idx+1])[1];assert log.splitlines().count(start)==1 and log.splitlines().count(end)==1;ex=log.split(start+'\\n',1)[1].split(end+'\\n',1)[0];assert ex.count('No timing path is found')==1\n  hp=P/f'outflow/bundle_{name}_hold.rpt';assert not hp.exists() or not re.search(r'\\+{4} Path \\d+',hp.read_text());bundle.append(dict(group=name,count=len(rows),max_cq_data=max(cq),skew=max(arr)-min(arr),hold='EXPECTED_EXACT_CUT',native_hold_marker_excerpt=ex,setup=rec(p)))\n assert len(bundle)==24 and sum(x['count'] for x in bundle)==1487\n put('BUNDLE_CURRENT_AUDIT.json',dict(status='PASS_CURRENT24_GROUP1487_SETUP_AND_EXACT_HOLD_CUT',groups=bundle))\n",
+  "scope": "RAM36 override unchanged; all timing gates unchanged; existing global/control evidence JSON equality checked without rewriting."
+}

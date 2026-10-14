@@ -1,0 +1,36 @@
+from pathlib import Path
+import json,hashlib,re,collections
+O=Path(__file__).resolve().parent;R=O.parents[3];F=O/'fixture_retry_1717';F.mkdir(exist_ok=False)
+def rec(p):
+ b=p.read_bytes();return dict(path=p.relative_to(R).as_posix(),bytes=len(b),sha256=hashlib.sha256(b).hexdigest())
+def fatals(s):return collections.Counter(re.findall(r'\$fatal\(.*?;',s,re.S))
+parents=[];derived=[]
+p=O/'tb_replay_starvation.sv';s=p.read_text();t=s.replace('module tb_replay_starvation;','module tb_retry_starvation;\n reg monitor_armed=0;')
+t=t.replace('initial if(SCENARIO==7)begin','always @(posedge ui_clk)if(!arst_n)monitor_armed<=0;else if(dut.run&&!monitor_armed)begin monitor_armed<=1;$display("STARVATION_MONITOR_ARMED UI=%0d run=%b emergency=%b",ui_cycles,dut.run,dut.arbiter.emergency_stop);end\n initial if(SCENARIO==7)begin')
+t=t.replace('if(!dut.fusion.cache_empty||!dut.fusion.reader_drained||dut.fusion.context_confirmed)', 'if(!monitor_armed||!dut.run||dut.stop||quarantine||reset_request||dut.arbiter.emergency_stop)$fatal(1,"STARVATION_ENTRY_NOT_ARMED_RUN");\n  if(!dut.fusion.cache_empty||!dut.fusion.reader_drained||dut.fusion.context_confirmed)')
+t=t.replace('if(quarantine||reset_request||dut.arbiter.emergency_stop)$fatal(1,"STARVATION_UNEXPECTED_COLD_STOP");','if(quarantine||reset_request||(monitor_armed&&dut.arbiter.emergency_stop))$fatal(1,"STARVATION_UNEXPECTED_COLD_STOP");')
+assert not(fatals(s)-fatals(t));q=F/'tb_retry_starvation.sv';q.write_text(t);parents.append(rec(p));derived.append(rec(q))
+startup=t.replace('module tb_retry_starvation;','module tb_retry_startup;')
+startup=startup.replace('endmodule','initial begin wait(monitor_armed);repeat(16)@(negedge ui_clk);if(!dut.run||dut.arbiter.emergency_stop||!monitor_armed)$fatal(1,"STARTUP_PREFLIGHT_NOT_ARMED");$display("M5C1B_PASS STARTUP_PREFLIGHT_ONLY armed=%b run=%b",monitor_armed,dut.run);$finish;end\n initial begin #100000;$fatal(1,"STARTUP_PREFLIGHT_TIMEOUT");end\nendmodule')
+q=F/'tb_retry_startup.sv';q.write_text(startup);derived.append(rec(q))
+p=O.parent/'remaining_cases_v1/selected_fault_ddr_model_v9.sv';s=p.read_text();t=s.replace('module selected_fault_ddr_model_v9','module selected_fault_ddr_model_retry')
+old='(rng%4!=0||(transaction_limit!=0&&age+len-beat+2>=transaction_limit))&&\n     (transaction_limit==0||age+2*(len-beat+1)+16>=transaction_limit)'
+new='((transaction_id==3&&transaction_limit==1632&&beat==len) ? (age>=1631) :\n      ((rng%4!=0||(transaction_limit!=0&&age+len-beat+2>=transaction_limit))&&\n       (transaction_limit==0||age+2*(len-beat+1)+16>=transaction_limit)))'
+assert t.count(old)==1;t=t.replace(old,new)
+t=t.replace('if(rvalid&&rready)begin','if(rvalid&&rready)begin\n   if(transaction_id==3&&transaction_limit==1632&&beat==len)begin $display("EXACT1632_TERMINAL age=%0d id=%0d base=%h len=%0d rready=%b rresp=%b",age,transaction_id,base<<4,len,rready,rresp);if(age!=1632)$fatal(1,"EXACT1632_TERMINAL_AGE");end')
+t=t.replace('transaction_id=aid;transaction_limit=aid==3?service_delay:SERVICE_BOUND;accepted=accepted+1;','transaction_id=aid;transaction_limit=aid==3?service_delay:SERVICE_BOUND;accepted=accepted+1;\n   if(!atype&&aid==3&&transaction_limit==1632)$display("EXACT1632_REAL_A address=%h id=%0d len=%0d",aaddr,aid,alen);')
+assert not(fatals(s)-fatals(t));q=F/'selected_fault_ddr_model_retry.sv';q.write_text(t);parents.append(rec(p));derived.append(rec(q))
+p=O/'tb_replay_faults.sv';s=p.read_text();t=s.replace('module tb_replay_faults;','module tb_retry_fault1;').replace('selected_fault_ddr_model_v9 memory','selected_fault_ddr_model_retry memory')
+t=t.replace('endmodule','always @(posedge ui_clk)if(arst_n&&avalid&&aready&&!atype&&aid==3&&model_service_delay==1632) $display("EXACT1632_SYSTEM_A address=%h len=%0d owner=%0d secondary=%0d SID=%0d nonce=%0d",aaddr,alen,dut.arbiter.owner,dut.bg_mux.owner,dut.fusion.active_session,dut.fusion.reader.nonce);\nendmodule')
+assert not(fatals(s)-fatals(t));q=F/'tb_retry_fault1.sv';q.write_text(t);parents.append(rec(p));derived.append(rec(q))
+p=O/'run_replay.py';s=p.read_text();t=s.replace("O=Path(__file__).resolve().parent;M=O.parent;", "F=Path(__file__).resolve().parent;O=F.parent;M=O.parent;")
+t=t.replace("args=a.parse_args()", "a.add_argument('--startup-preflight',action='store_true');args=a.parse_args();assert args.kind in ['faults','starvation'];assert args.scenario==(1 if args.kind=='faults' else 7)")
+t=t.replace("O/('tb_replay_'+args.kind+'.sv')", "F/('tb_retry_startup.sv' if args.startup_preflight else 'tb_retry_fault1.sv' if args.kind=='faults' else 'tb_retry_starvation.sv')")
+t=t.replace("sources += [model,", "if args.kind=='faults':model=F/'selected_fault_ddr_model_retry.sv'\nsources += [model,")
+t=t.replace("deps=list(dict.fromkeys(deps));", "deps += [F/'DERIVATION.json',O/'derive_retry_1717.py',M.parent/'REPLAY_FIXTURE_RETRY_FREEZE_20261013_1717.md']\nfor x in json.loads((F/'DERIVATION.json').read_text())['derived']:assert rec(R/x['path'])==x\ndeps=list(dict.fromkeys(deps));")
+t=t.replace("budget=43200 if args.kind=='aba' else 21600", "budget=180 if args.startup_preflight else 21600")
+t=t.replace("'work.'+case['top']", "'work.'+('tb_retry_startup' if args.startup_preflight else 'tb_retry_fault1' if args.kind=='faults' else 'tb_retry_starvation')")
+t=t.replace("'PASS_COMPILE_ONLY_NOT_SIMULATED' if args.compile_only else", "'PASS_COMPILE_ONLY_NOT_SIMULATED' if args.compile_only else 'PASS_STARTUP_PREFLIGHT_ONLY' if args.startup_preflight else")
+q=F/'run_retry.py';q.write_text(t);parents.append(rec(p));derived.append(rec(q))
+(F/'DERIVATION.json').write_text(json.dumps(dict(parent=parents,derived=derived,generator=rec(Path(__file__)),scope='New fixture only. All original $fatal statement strings retained; startup coldstop predicate uses sticky armed; only aid3 READ terminal generation for latched1632 delayed. Full-system parameters and all coverage unchanged.',freeze=rec(O.parent.parent/'REPLAY_FIXTURE_RETRY_FREEZE_20261013_1717.md')),indent=2))
+print(rec(F/'DERIVATION.json'))

@@ -1,0 +1,19 @@
+{
+  "parent": {
+    "path": "reports/m5c1b_fusion_integration/fresh_i3_build_20261014/audit_current_timing.py",
+    "bytes": 9333,
+    "sha256": "e9a76fd14c601ba9af1516f831625b8f73cde755d90d95d648c184fe987a1c24"
+  },
+  "derived": {
+    "path": "reports/m5c1b_fusion_integration/fresh_i3_build_20261014/audit_current_timing_v2.py",
+    "bytes": 9818,
+    "sha256": "a487cad0a0a8b3cbcda10ca854c30959584d660cc76d02fd7792df416bc9bd90"
+  },
+  "exact_override": {
+    "path": "reports/m5c1b_fusion_integration/fresh_i3_build_20261014/RAM_PHYSICAL_CONSTANT_DIFFERENCES.json",
+    "bytes": 190536,
+    "sha256": "e02a06c9e94dc1b83e6a4713cba8a5cf3063d38427db82f6a3dfaf8b3a2eeaf4"
+  },
+  "diff": "--- audit_current_timing.py\n+++ audit_current_timing_v2.py\n@@ -4,7 +4,10 @@\n def rec(p):\n  b=p.read_bytes();return dict(path=p.relative_to(R).as_posix(),bytes=len(b),sha256=hashlib.sha256(b).hexdigest())\n def put(name,a):\n- p=F/name;assert not p.exists();p.write_text(json.dumps(a,indent=2))\n+ p=F/name\n+ if p.exists():\n+  assert name=='GLOBAL_D_COVERAGE_CURRENT.json' and json.loads(p.read_text())==a;return\n+ p.write_text(json.dumps(a,indent=2))\n def parse(p):\n  text=p.read_text(errors='replace');assert re.search(r'Timing Model\\s*:\\s*I3',text),str(p)\n  rows=[]\n@@ -35,11 +38,15 @@\n for bit in range(5,9):\n  for mode in ['setup','hold']:\n   p=P/f'outflow/v5_B{bit}_{mode}.rpt';rows=parse(p);assert all(f'u_m5b1/fusion/reader/mult_23|B[{bit}]' in b for b in re.split(r'\\+{4} Path \\d+ \\+{4,}',p.read_text())[1:]);through.append(dict(pin=f'u_m5b1/fusion/reader/mult_23|B[{bit}]',mode=mode,count=len(rows),min_slack=min(x['slack'] for x in rows),report=rec(p)))\n+ram_difference={x['pin']:x for x in json.loads((F/'RAM_PHYSICAL_CONSTANT_DIFFERENCES.json').read_text())['records']};assert len(ram_difference)==36\n def classify(pin,mode):\n  st=pins.get(pin);net=native.get(pin)\n  if pin in cuts:return dict(pin=pin,classification='EXACT_CUT',sdc=cuts[pin],structural=st,native_net=net)\n  if mode=='hold' and pin in holdcuts:return dict(pin=pin,classification='EXACT_HOLD_CUT',sdc=holdcuts[pin],structural=st,native_net=net)\n  if net in ['gnd','vcc']:\n+  if pin in ram_difference:\n+   ev=ram_difference[pin];assert ev['native_net']==net and ev['logical']==st and ev['primitive']=='EFX_RAM10'\n+   return dict(pin=pin,classification=ev['classification'],native_net=net,structural=st,mapping_evidence=ev)\n   assert st is None or st['classification']=='CONSTANT',(pin,st,net)\n   return dict(pin=pin,classification='NATIVE_CONSTANT',native_net=net,structural=st,vendor_or_unparsed=st is None)\n  if pin in ['u_controls/key_meta[0]~FF|D','u_controls/key_meta[1]~FF|D']:\n",
+  "scope": "Only 36 enumerated EFX_RAM10 physical WADDR/RADDR constant differences; all other native/logical disagreements retain original assertion. Existing global D output verified byte-content-equivalent without rewriting."
+}

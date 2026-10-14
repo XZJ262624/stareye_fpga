@@ -1,0 +1,544 @@
+{
+  "status": "PREPARED_NOT_RUN",
+  "parents": [
+    {
+      "path": "scripts/m5b1_global_sim.py",
+      "bytes": 2509,
+      "sha256": "a3710d64be2f872be234beab17ee19310e586e8490414ac4d827b247604892d2"
+    },
+    {
+      "path": "scripts/m5b1_mutations.py",
+      "bytes": 3654,
+      "sha256": "5fafc2c951ce6227e0d97e708639a9e48847b0b9e5930f4fe472cd362a90dfa2"
+    },
+    {
+      "path": "scripts/m5c1b_validate.py",
+      "bytes": 14607,
+      "sha256": "cfdc819affe075c0f213b828550e2ba459f4d05e895096aadbe53be260dd3df1"
+    },
+    {
+      "path": "scripts/m5b1_tap_sim.py",
+      "bytes": 3517,
+      "sha256": "996090e9075a374020811ab0fce2635b744b20ce55aa7ce04b33980df8184644"
+    }
+  ],
+  "mutants": [
+    {
+      "name": "ack_isolation",
+      "source": {
+        "path": "rtl/m5c_fusion/m5b1_arbiter.sv",
+        "bytes": 9225,
+        "sha256": "01e7b16838696b37f5b787171c49b9c0e4ccd21baf97a945bf4c2a8cbe30d78d"
+      },
+      "derived": {
+        "path": "reports/m5c1b_fusion_integration/selected_final_matrix_20261013_071300/legacy_remaining_v1/mutants/ack_isolation/m5b1_arbiter.sv",
+        "bytes": 9097,
+        "sha256": "a6a2da8aaab3d55b10527baae84655ef72f4b484fbc82828e9663e12a34fa1f5"
+      },
+      "replacements": [
+        [
+          "&&!ddr_reset_ack",
+          ""
+        ]
+      ],
+      "occurrences": [
+        8
+      ]
+    },
+    {
+      "name": "real_B_fence",
+      "source": {
+        "path": "rtl/m5c_fusion/m5b1_arbiter.sv",
+        "bytes": 9225,
+        "sha256": "01e7b16838696b37f5b787171c49b9c0e4ccd21baf97a945bf4c2a8cbe30d78d"
+      },
+      "derived": {
+        "path": "reports/m5c1b_fusion_integration/selected_final_matrix_20261013_071300/legacy_remaining_v1/mutants/real_B_fence/m5b1_arbiter.sv",
+        "bytes": 9215,
+        "sha256": "bcd00daca258c6c0aa48516e3342e221b3690787a019ba2ebb34b711ada14cba"
+      },
+      "replacements": [
+        [
+          "B:if(bvalid&&bready)",
+          "B:if(1'b1)"
+        ]
+      ],
+      "occurrences": [
+        1
+      ]
+    },
+    {
+      "name": "request_epoch",
+      "source": {
+        "path": "rtl/m5c_fusion/m5b1_arbiter.sv",
+        "bytes": 9225,
+        "sha256": "01e7b16838696b37f5b787171c49b9c0e4ccd21baf97a945bf4c2a8cbe30d78d"
+      },
+      "derived": {
+        "path": "reports/m5c1b_fusion_integration/selected_final_matrix_20261013_071300/legacy_remaining_v1/mutants/request_epoch/m5b1_arbiter.sv",
+        "bytes": 9200,
+        "sha256": "8d621e6d7731e23a72c3ce8b0cfc05ce1f230706cd879881e5b5e9630e96167c"
+      },
+      "replacements": [
+        [
+          "c_epoch[choice*64+:64]==epoch &&",
+          "1'b1 &&"
+        ]
+      ],
+      "occurrences": [
+        1
+      ]
+    },
+    {
+      "name": "4KiB",
+      "source": {
+        "path": "rtl/m5c_fusion/m5b1_arbiter.sv",
+        "bytes": 9225,
+        "sha256": "01e7b16838696b37f5b787171c49b9c0e4ccd21baf97a945bf4c2a8cbe30d78d"
+      },
+      "derived": {
+        "path": "reports/m5c1b_fusion_integration/selected_final_matrix_20261013_071300/legacy_remaining_v1/mutants/4KiB/m5b1_arbiter.sv",
+        "bytes": 9166,
+        "sha256": "afab962e35ba1eaf86e0614a14c87945c6c49df30f1c31ce72e7badd83a8eec4"
+      },
+      "replacements": [
+        [
+          "(selected_address[11:0]+(({5'b0,selected_len}+13'd1)<<4))<=4096 &&",
+          "1'b1 &&"
+        ]
+      ],
+      "occurrences": [
+        1
+      ]
+    },
+    {
+      "name": "range_permission",
+      "source": {
+        "path": "rtl/m5c_fusion/m5b1_arbiter.sv",
+        "bytes": 9225,
+        "sha256": "01e7b16838696b37f5b787171c49b9c0e4ccd21baf97a945bf4c2a8cbe30d78d"
+      },
+      "derived": {
+        "path": "reports/m5c1b_fusion_integration/selected_final_matrix_20261013_071300/legacy_remaining_v1/mutants/range_permission/m5b1_arbiter.sv",
+        "bytes": 9176,
+        "sha256": "e2178b39eaed04067b4b5aa213b0ce06fb0fe53e73fba52c5df0f56a31350b67"
+      },
+      "replacements": [
+        [
+          "&&bg_range_ok(selected_address,selected_end,c_atype[2])",
+          "&&1'b1"
+        ]
+      ],
+      "occurrences": [
+        1
+      ]
+    },
+    {
+      "name": "changed_reduction",
+      "source": {
+        "path": "rtl/m5c_fusion/m5b1_global_engine.sv",
+        "bytes": 11207,
+        "sha256": "363471c5b1c00577ac2bfecdefd93906a45090e6f1f66d8919f15c414b4bbe5b"
+      },
+      "derived": {
+        "path": "reports/m5c1b_fusion_integration/selected_final_matrix_20261013_071300/legacy_remaining_v1/mutants/changed_reduction/m5b1_global_engine.sv",
+        "bytes": 11207,
+        "sha256": "b4263e5988cd3599d801c74c0ff913f18b36bd9eaf7775576b6385f729200d5d"
+      },
+      "replacements": [
+        [
+          "pair_changed<=1;",
+          "pair_changed<=0;"
+        ]
+      ],
+      "occurrences": [
+        1
+      ]
+    },
+    {
+      "name": "changed_last_pixel",
+      "source": {
+        "path": "rtl/m5c_fusion/m5b1_global_engine.sv",
+        "bytes": 11207,
+        "sha256": "363471c5b1c00577ac2bfecdefd93906a45090e6f1f66d8919f15c414b4bbe5b"
+      },
+      "derived": {
+        "path": "reports/m5c1b_fusion_integration/selected_final_matrix_20261013_071300/legacy_remaining_v1/mutants/changed_last_pixel/m5b1_global_engine.sv",
+        "bytes": 11235,
+        "sha256": "e0a20082e88c324e8dd566d656a0fcb133216ccf54ebb396274573fa8045d727"
+      },
+      "replacements": [
+        [
+          "pair_changed<=1;",
+          "if(!(last_column&&last_row))pair_changed<=1;"
+        ]
+      ],
+      "occurrences": [
+        1
+      ]
+    },
+    {
+      "name": "prefill",
+      "source": {
+        "path": "rtl/m5c_fusion/m5b1_video_dma.sv",
+        "bytes": 9681,
+        "sha256": "be136373c2bd09fcbfe794af5ee4af28e80c15b93a4ba627595f7b1ad5401791"
+      },
+      "derived": {
+        "path": "reports/m5c1b_fusion_integration/selected_final_matrix_20261013_071300/legacy_remaining_v1/mutants/prefill/m5b1_video_dma.sv",
+        "bytes": 9670,
+        "sha256": "dd759f1e105cfd1d37de739997fb630151c16f586f650192f2eab21dff2a625c"
+      },
+      "replacements": [
+        [
+          "display_rc>=256",
+          "1'b1"
+        ]
+      ],
+      "occurrences": [
+        1
+      ]
+    },
+    {
+      "name": "capture_epoch",
+      "source": {
+        "path": "rtl/m5c_fusion/m5b1_capture.sv",
+        "bytes": 4648,
+        "sha256": "cd26d5269fe6ed11ba4b16186d1b3697890a4bf1cdb2512b138039ea404911e8"
+      },
+      "derived": {
+        "path": "reports/m5c1b_fusion_integration/selected_final_matrix_20261013_071300/legacy_remaining_v1/mutants/capture_epoch/m5b1_capture.sv",
+        "bytes": 4598,
+        "sha256": "6f5aaef8d9015cfbae6af7444500bb83b4a5045003267315bd342a6d65cb90f3"
+      },
+      "replacements": [
+        [
+          "tap_epoch!=desc[63:0]||",
+          ""
+        ],
+        [
+          "tap_epoch!=arm_data[63:0]||",
+          ""
+        ]
+      ],
+      "occurrences": [
+        1,
+        1
+      ]
+    },
+    {
+      "name": "stale_token_release",
+      "source": {
+        "path": "rtl/m5c_fusion/m5c_pair_lease.sv",
+        "bytes": 9470,
+        "sha256": "36a092795c572dc142d3e81cc9029a7667a11e7c99028dc5fa9543fba62dd3e8"
+      },
+      "derived": {
+        "path": "reports/m5c1b_fusion_integration/selected_final_matrix_20261013_071300/legacy_remaining_v1/mutants/stale_token_release/m5c_pair_lease.sv",
+        "bytes": 9382,
+        "sha256": "49219855b8d5c68ce1c46aefc10da94d7a55082ddb4642f2712143926a76df53"
+      },
+      "replacements": [
+        [
+          "release_token==token[0][0],release_token==token[0][1],release_token==token[1][0],release_token==token[1][1]",
+          "1'b1,1'b1,1'b1,1'b1"
+        ]
+      ],
+      "occurrences": [
+        1
+      ]
+    },
+    {
+      "name": "wrong_done_owner",
+      "source": {
+        "path": "rtl/m5c_fusion/m5c_pair_lease.sv",
+        "bytes": 9470,
+        "sha256": "36a092795c572dc142d3e81cc9029a7667a11e7c99028dc5fa9543fba62dd3e8"
+      },
+      "derived": {
+        "path": "reports/m5c1b_fusion_integration/selected_final_matrix_20261013_071300/legacy_remaining_v1/mutants/wrong_done_owner/m5c_pair_lease.sv",
+        "bytes": 9470,
+        "sha256": "e2183f9a1e4b81fbe26214993e05d19fc58739dea88b30eef6a32d3dc580c826"
+      },
+      "replacements": [
+        [
+          "nreads[done_slot][done_uart]=nreads[done_slot][done_uart]-1'b1;",
+          "nreads[read_slot][read_uart]=nreads[read_slot][read_uart]-1'b1;"
+        ]
+      ],
+      "occurrences": [
+        1
+      ]
+    },
+    {
+      "name": "same_edge_fake_done",
+      "source": {
+        "path": "rtl/m5c_fusion/m5c_pair_lease.sv",
+        "bytes": 9470,
+        "sha256": "36a092795c572dc142d3e81cc9029a7667a11e7c99028dc5fa9543fba62dd3e8"
+      },
+      "derived": {
+        "path": "reports/m5c1b_fusion_integration/selected_final_matrix_20261013_071300/legacy_remaining_v1/mutants/same_edge_fake_done/m5c_pair_lease.sv",
+        "bytes": 9471,
+        "sha256": "a4c853eb90499bb1171f2951a30e7366302148acc89a209f2ed546c1b2d947a5"
+      },
+      "replacements": [
+        [
+          "if(reads[done_slot][done_uart]==0",
+          "if(nreads[done_slot][done_uart]==0"
+        ]
+      ],
+      "occurrences": [
+        1
+      ]
+    },
+    {
+      "name": "identity_truncated",
+      "source": {
+        "path": "rtl/m5c_fusion/m5c_pair_lease.sv",
+        "bytes": 9470,
+        "sha256": "36a092795c572dc142d3e81cc9029a7667a11e7c99028dc5fa9543fba62dd3e8"
+      },
+      "derived": {
+        "path": "reports/m5c1b_fusion_integration/selected_final_matrix_20261013_071300/legacy_remaining_v1/mutants/identity_truncated/m5c_pair_lease.sv",
+        "bytes": 9498,
+        "sha256": "d7eb4c1a8db4fd7bdb7bf905395a9487c6a32117a07b2ec15311b180c2815cef"
+      },
+      "replacements": [
+        [
+          "read_identity==identity[0],read_identity==identity[1]",
+          "read_identity[255:0]==identity[0][255:0],read_identity[255:0]==identity[1][255:0]"
+        ]
+      ],
+      "occurrences": [
+        1
+      ]
+    },
+    {
+      "name": "legacy_latest_only_reuse",
+      "source": {
+        "path": "rtl/m5c_fusion/m5c_pair_lease.sv",
+        "bytes": 9470,
+        "sha256": "36a092795c572dc142d3e81cc9029a7667a11e7c99028dc5fa9543fba62dd3e8"
+      },
+      "derived": {
+        "path": "reports/m5c1b_fusion_integration/selected_final_matrix_20261013_071300/legacy_remaining_v1/mutants/legacy_latest_only_reuse/m5c_pair_lease.sv",
+        "bytes": 9358,
+        "sha256": "f9111b96ec5b3e4c3501b4f987450cb8d5db681d0db45b0bd45d6df48ce46176"
+      },
+      "replacements": [
+        [
+          "held[k][0]||held[k][1]||pending[k][0]||pending[k][1]||cache[k][0]||cache[k][1]||\n    reads[k][0]!=0||reads[k][1]!=0",
+          "1'b0"
+        ]
+      ],
+      "occurrences": [
+        1
+      ]
+    },
+    {
+      "name": "reject_counted_accept",
+      "source": {
+        "path": "rtl/m5c_fusion/m5b1_transfer.sv",
+        "bytes": 3852,
+        "sha256": "e4b67a91ba00042ec10d48dbf0950ec06ea3e337961faaeffff68d52fce6d3e0"
+      },
+      "derived": {
+        "path": "reports/m5c1b_fusion_integration/selected_final_matrix_20261013_071300/legacy_remaining_v1/mutants/reject_counted_accept/m5b1_transfer.sv",
+        "bytes": 3908,
+        "sha256": "3a2fdc0b112da013935dc7c613c693c13c6953039d80da131cb102f2f15a8258"
+      },
+      "replacements": [
+        [
+          "segment_accept=client_accepted&&!rejected;",
+          "segment_accept=client_accepted;"
+        ]
+      ],
+      "occurrences": [
+        1
+      ]
+    },
+    {
+      "name": "intermediate_r_done",
+      "source": {
+        "path": "rtl/m5c_fusion/m5b1_transfer.sv",
+        "bytes": 3852,
+        "sha256": "e4b67a91ba00042ec10d48dbf0950ec06ea3e337961faaeffff68d52fce6d3e0"
+      },
+      "derived": {
+        "path": "reports/m5c1b_fusion_integration/selected_final_matrix_20261013_071300/legacy_remaining_v1/mutants/intermediate_r_done/m5b1_transfer.sv",
+        "bytes": 3910,
+        "sha256": "914db64653a7e7a3249121966aad4163925ebc6aedee36d651db026ea31bb1fc"
+      },
+      "replacements": [
+        [
+          "segment_done=(state==3&&bvalid&&!stop)||(read_beat&&rlast);",
+          "segment_done=(state==3&&bvalid&&!stop)||read_beat;"
+        ]
+      ],
+      "occurrences": [
+        1
+      ]
+    },
+    {
+      "name": "stop_fake_done",
+      "source": {
+        "path": "rtl/m5c_fusion/m5b1_transfer.sv",
+        "bytes": 3852,
+        "sha256": "e4b67a91ba00042ec10d48dbf0950ec06ea3e337961faaeffff68d52fce6d3e0"
+      },
+      "derived": {
+        "path": "reports/m5c1b_fusion_integration/selected_final_matrix_20261013_071300/legacy_remaining_v1/mutants/stop_fake_done/m5b1_transfer.sv",
+        "bytes": 3925,
+        "sha256": "94b13c64726e8e561b9b76546296fac29c773e048a0d7ce0f94e73f90bfdbc01"
+      },
+      "replacements": [
+        [
+          "segment_done=(state==3&&bvalid&&!stop)||(read_beat&&rlast);",
+          "segment_done=stop||(state==3&&bvalid&&!stop)||(read_beat&&rlast);"
+        ]
+      ],
+      "occurrences": [
+        1
+      ]
+    },
+    {
+      "name": "level_recounts",
+      "source": {
+        "path": "rtl/m5c_fusion/m5b1_system.sv",
+        "bytes": 12133,
+        "sha256": "c469a874da2f0fb9427680927fcfd1f752cb2afcd0035623288c306c2f5535e4"
+      },
+      "derived": {
+        "path": "reports/m5c1b_fusion_integration/selected_final_matrix_20261013_071300/legacy_remaining_v1/mutants/level_recounts/m5b1_system.sv",
+        "bytes": 12119,
+        "sha256": "c47539a083406e0a8eacae73e806f9cc67d50923f5bd74620df2f00d3d57e9a8"
+      },
+      "replacements": [
+        [
+          "|(fault_levels&~fault_seen)",
+          "|fault_levels"
+        ]
+      ],
+      "occurrences": [
+        1
+      ]
+    },
+    {
+      "name": "truncate_jobs",
+      "source": {
+        "path": "rtl/m5c_fusion/m5b1_system.sv",
+        "bytes": 12133,
+        "sha256": "c469a874da2f0fb9427680927fcfd1f752cb2afcd0035623288c306c2f5535e4"
+      },
+      "derived": {
+        "path": "reports/m5c1b_fusion_integration/selected_final_matrix_20261013_071300/legacy_remaining_v1/mutants/truncate_jobs/m5b1_system.sv",
+        "bytes": 12150,
+        "sha256": "683b29806e345be8b30a578f746f7a5bc8c10e713470d5f0098cc2de15175cbd"
+      },
+      "replacements": [
+        [
+          "rejected_job_count<=rejected_job_count+1'b1;",
+          "rejected_job_count<={32'd0,(rejected_job_count[31:0]+32'd1)};"
+        ]
+      ],
+      "occurrences": [
+        1
+      ]
+    },
+    {
+      "name": "wrong_display_sequence",
+      "source": {
+        "path": "rtl/m5c_fusion/m5a_copy/m5a_stream_top.v",
+        "bytes": 9729,
+        "sha256": "69762aa6179f397244a2e7e56904bc616e1c8ab64ca56b85425eeba50208cf34"
+      },
+      "derived": {
+        "path": "reports/m5c1b_fusion_integration/selected_final_matrix_20261013_071300/legacy_remaining_v1/mutants/wrong_display_sequence/m5a_stream_top.v",
+        "bytes": 9721,
+        "sha256": "6e3491f39ff46e28f824b3adf37bda76e06667f3f93a0ff55ccd265eb7df6333"
+      },
+      "replacements": [
+        [
+          "tag_write_buffer<={source_sof_seq,",
+          "tag_write_buffer<={64'd0,"
+        ]
+      ],
+      "occurrences": [
+        1
+      ]
+    },
+    {
+      "name": "nonsticky_qualification",
+      "source": {
+        "path": "rtl/m5c_fusion/m5a_copy/m5a_stream_top.v",
+        "bytes": 9729,
+        "sha256": "69762aa6179f397244a2e7e56904bc616e1c8ab64ca56b85425eeba50208cf34"
+      },
+      "derived": {
+        "path": "reports/m5c1b_fusion_integration/selected_final_matrix_20261013_071300/legacy_remaining_v1/mutants/nonsticky_qualification/m5a_stream_top.v",
+        "bytes": 9726,
+        "sha256": "337b4e85e73114abe51f7efffc80ed9a5e18bba7ead5536b66e546f6472a7590"
+      },
+      "replacements": [
+        [
+          "if(in_de&&!tag_armed&&!tap_input_qualified)tag_qualified[last_source_tag]<=0;",
+          "if(in_de&&!tag_armed)tag_qualified[last_source_tag]<=tap_input_qualified;"
+        ]
+      ],
+      "occurrences": [
+        1
+      ]
+    },
+    {
+      "name": "startup_latched",
+      "source": {
+        "path": "rtl/m5c_fusion/m5b1_backend.sv",
+        "bytes": 19432,
+        "sha256": "eede2cf59681a1d16e75c78523f56ffa7891215b5313d5ff288129f3bfba46a0"
+      },
+      "derived": {
+        "path": "reports/m5c1b_fusion_integration/selected_final_matrix_20261013_071300/legacy_remaining_v1/mutants/startup_latched/m5b1_backend.sv",
+        "bytes": 19415,
+        "sha256": "e8f212801690cda4d96023df4c7548b105b978627e32b88688958c82fa1ff0f9"
+      },
+      "replacements": [
+        [
+          ".stop(stop&&(ever_run||run))",
+          ".stop(stop)"
+        ]
+      ],
+      "occurrences": [
+        1
+      ]
+    },
+    {
+      "name": "first_run_stop_lost",
+      "source": {
+        "path": "rtl/m5c_fusion/m5b1_backend.sv",
+        "bytes": 19432,
+        "sha256": "eede2cf59681a1d16e75c78523f56ffa7891215b5313d5ff288129f3bfba46a0"
+      },
+      "derived": {
+        "path": "reports/m5c1b_fusion_integration/selected_final_matrix_20261013_071300/legacy_remaining_v1/mutants/first_run_stop_lost/m5b1_backend.sv",
+        "bytes": 19425,
+        "sha256": "bb469f71c91fb21bf5be40d2503004ef95ba89eaba9a071d8a0d4ed0c1673cb4"
+      },
+      "replacements": [
+        [
+          ".stop(stop&&(ever_run||run))",
+          ".stop(stop&&ever_run)"
+        ]
+      ],
+      "occurrences": [
+        1
+      ]
+    }
+  ],
+  "boundary": "Only isolated mutants; all positive modules actual selected source. Nine legacy mutants plus current exact lease/read/counter targets; old generic pending-result mutant replaced by existing five fixed-pair lease targets, no stale text PASS. Tap golden/production inputs must all be bound at invocation.",
+  "cases": {
+    "path": "reports/m5c1b_fusion_integration/selected_final_matrix_20261013_071300/legacy_remaining_v1/CASES.json",
+    "bytes": 21400,
+    "sha256": "59309b1c93c690c21ea0ce16c885e32f8f38bd2f35a707c98cde0f5cb0c691aa"
+  }
+}

@@ -1,6 +1,31 @@
 # 星眸项目背景
 
-## 2026-10-12 M5B.1受控隔离原型实物验收PASS（当前）
+## 2026-10-14 M5C.1B离线工程验证通过，候选准备中（当前）
+
+局部流式Canny、低频DDR全局Canny及历史结果辅助融合的生产接入RTL已经完成本轮离线验证。最终矩阵为15项完整数据流正例、1项仅冷停隔离正例、1项身份保护负例；旧失败夹具保留且不计通过。Work复核2735条矩阵记录、700条新构建记录和252条文件生成记录，无差异。
+
+从冻结101项技术输入重新完成综合、接口、布局、布线及实际I3时序：47697 XLR（含1064 routing）、192 RAM10、1 DSP；最小setup/hold +0.173/+0.016 ns。24组1487个跨域数据端点满足CQ+data及组内到达偏差5 ns门；新增内部无时钟/未约束/多时钟0/0/0。14个时钟196种时钟对有完整原生记录。36个物理RAM常量脚与通用网表端口映射差异逐名核验，软件审计错误及修订均保留。
+
+已离线生成bit：2990616字节，SHA-256 `4df65bdea3c849ecd13aae703ad21436bee10be3fd4aeff533d12129d067ffd6`。文件仍忽略/未跟踪；没有下载、JTAG操作、SPI Active或写Flash。候选尚未提交，Codex A/DeepSeek B本轮独立审查尚未开始，M5C实物验收尚未进行，M6/M7未开始。M5A及M5B既有实物基线不变。
+
+限制继续保留：逐行分类一致性只是历史结果辅助启发式，不证明物理静止或当前帧全局BFS；整机串口仿真使用明确加速模型，默认完整首次导出仅payload约7.5秒，首次可用融合需实测；4微秒DDR服务是条件模型；仅实际I3且hold较窄，外部7输入/135输出延迟边界、跨PVT、warm reset及热恢复未放行，硬停仅冷重新配置恢复。
+
+最终入口：`reports/m5c1b_fusion_integration/selected_final_matrix_20261013_071300/replay_end_v2/aba_generation_negative_20261014/FINAL_MATRIX_HANDBACK.json`、`reports/m5c1b_fusion_integration/fresh_i3_build_20261014/FINAL_HANDBACK.json`、`reports/m5c1b_fusion_integration/offline_artifact_retry_20261014/FINAL_HANDBACK.json`。以下早期状态为历史，不覆盖本节。
+
+
+## 2026-10-12 M5C.1A离线融合核心PASS（当前开发状态）
+
+用户授权开始下一步并在中断后要求继续。Work冻结M5C.1A离线范围，Codex exec/GPT-6 Astra独占完成三核心：分类/结果联合slot lease、像素墙钟/显示帧龄与配置guard、逐行一致性历史辅助融合。内部开发不是Codex A/DeepSeek B独立审查。
+
+三核心单元通过；未改真实M5A连接完成12个720p帧、11059200有效像素/tap逐项比较和744次CE暂停采样，七个健康模式每个新增7个合法弱边辅助，五故障帧按oracle局部回退。十项实际负向均命中指定Fatal，包括旧租用token释放/退役、独立响应owner、首次受理伪末R同拍。此前混合故障/效用的连接FAIL日志保留，不改写为PASS。
+
+Work只读总复核2680个不同文件哈希（含2563项保护记录），HEAD仍f8bc4492f7247b5c242c80b76d9ca4a76347f30d，索引为空，10项新开发文件未提交。原生产bit大小2924727B、SHA8bc85b157426cf35e7aab31bc4acd1c8c54b5799c0e7a0424ee555f3927488c4不变。核心验收与限制见reports/m5c1a_fusion_core/IMPLEMENTATION.md、FINAL_MANIFEST.json及WORK_ACCEPTANCE.json。
+
+结论仅PASS_OFFLINE_CORE：没有生产DDR/CDC/cache/reader/C2接入，没有新综合/P&R/STA/bit或硬件验证；metadata B/末R为单元接口模型。行分类一致性不是物理静止证明，也不是当前帧完整BFS。M5A和M5B.1受控原型PASS保留；M5C整机仍开发中，M6/M7未开始。
+
+下一步由Work冻结生产接入增量，先建立真正的跨域行cache、低优先reader/C2事务复用与联合lease接线，再过≤48640XLR/204RAM10/128DSP资源及完整新STA门；不能继承旧slack。正式candidate完成后自动DeepSeek B并停止给用户Codex A，双审查后再停止给实物清单。当前不操作板卡、不启动独立审查、不创建candidate或改生产工程。此节为停写后的管理更新，旧保护清单中的管理文档记录保留其开发交回时点含义，不伪称更新后仍逐字节相同。
+
+## 2026-10-12 M5B.1受控隔离原型实物验收PASS（已签收基线）
 
 固定技术candidate为`8976a276f03b4cd146c451aa081b04f71637fcf2`，parent为`264962e0c6af61e751c794c5b5f5252d00edbb6c`。Codex A与DeepSeek B均PASS_WITH_FINDINGS，三项阻断修复已关闭。用户确认同一配置未重启、AR0135连接、全程正常、七模式和阈值正常；COM13原始记录持续1871.569991秒（31分11.57秒），满足至少30分钟稳定性门。
 

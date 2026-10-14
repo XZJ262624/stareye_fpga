@@ -1,0 +1,21 @@
+{
+  "freeze": {
+    "path": "reports/m5c1b_fusion_integration/OFFLINE_CONVERSION_RECEIPT_RETRY_20261014.md",
+    "bytes": 1903,
+    "sha256": "ed482c5ab8b9f1ea83d1fb0d33d0a93b231a69ac5d01ea4c5ba92bad74a580cb"
+  },
+  "parent_runner": {
+    "path": "reports/m5c1b_fusion_integration/offline_artifact_20261014/run_conversion.py",
+    "bytes": 3737,
+    "sha256": "777ee64e77ea8988d15abc134803cd542c36556e9a843b5576ef78a57889bcff"
+  },
+  "current_runner": {
+    "path": "reports/m5c1b_fusion_integration/offline_artifact_retry_20261014/run_conversion.py",
+    "bytes": 3948,
+    "sha256": "8549a58d4f9629a75df8f190804032d672c55f3d1a6dd92ad3eb22d18c94d9be"
+  },
+  "diff": "--- \n+++ \n@@ -26,6 +26,7 @@\n  try:code=proc.wait(timeout=1200);timeout=False\n  except subprocess.TimeoutExpired:\n   subprocess.run(['taskkill','/PID',str(proc.pid),'/T','/F'],capture_output=True);code=proc.wait();timeout=True\n+put('NATIVE_EXIT_RECEIPT.json',dict(pid=proc.pid,exit=code,timeout=timeout,seconds=time.time()-start,ended=datetime.datetime.now().astimezone().isoformat(),command=cmd,outer_log=rec(F/'tool.log')))\n archive('POST_NATIVE_ARCHIVE.json')\n afterxml=ET.parse(P/'Ti60_Demo.xml').getroot();allowed={'last_change','last_run_flow','last_run_state','sw_version','config_result_in_sync','design_ood','place_ood','route_ood'};changes={k:dict(old=beforexml.get(k),new=afterxml.get(k)) for k in set(beforexml.attrib)|set(afterxml.attrib) if beforexml.get(k)!=afterxml.get(k)};assert set(changes)<=allowed\n for k in allowed:beforexml.attrib.pop(k,None);afterxml.attrib.pop(k,None)\n@@ -33,7 +34,7 @@\n for x in inputs['source']+inputs['database']:\n  check(x['original'])\n  if not x['copy']['path'].endswith('/Ti60_Demo.xml') and not x['copy']['path'].endswith('\\\\Ti60_Demo.xml'):check(x['copy'])\n-log=(F/'tool.log').read_text(errors='replace');native=[x for x in log.splitlines() if 'efx_pgm.exe ' in x];assert len(native)==1,native\n+log=(P/'outflow/Ti60_Demo.log').read_text(errors='replace');native=[x for x in log.splitlines() if 'efx_pgm.exe ' in x];assert len(native)==1,native\n assert '--source ' in native[0] and '--dest ' in native[0] and not any(t in native[0].split() for t in ['--program','--usb','--jtag','--flash'])\n artifacts=[rec(P/'outflow'/('Ti60_Demo'+s)) for s in ['.bit','.bit.bin','.hex','.hex.bin']];assert all(x['bytes']>0 for x in artifacts)\n assert code==0 and not timeout\n",
+  "same_prepare_bytes": true,
+  "same_option_parser_bytes": true,
+  "original_attempt_status": "NOT_FINAL_GATE_UNCHANGED"
+}

@@ -1,0 +1,157 @@
+{
+  "status": "WORK_APPROVED_REVISED_PRECOMPILE_NOT_RUN",
+  "packet_type": 1,
+  "payload_bytes": 256,
+  "byte_order": "little endian",
+  "sampling": "Actual STATS pre-edge freeze; all independent ledgers use nonblocking updates. A same-edge request is excluded from this packet. Reserve-denied wins over coincident request busy increment; publication resets age after request increment. Completed metadata B precedes engine finished/publication fence, which precedes STATS.",
+  "fields": [
+    {
+      "offset": 0,
+      "bytes": 4,
+      "name": "requests",
+      "expected": "Independent modulo96M UI active run&&!stop clock ledger, reset at reset; increment every real request interval, not DUT tick/counter."
+    },
+    {
+      "offset": 4,
+      "bytes": 4,
+      "name": "accepted",
+      "expected": "Count actual reserve_ack while reserve request pending; match real lease slot ownership and resulting capture arm."
+    },
+    {
+      "offset": 8,
+      "bytes": 4,
+      "name": "busy_rejected",
+      "expected": "Request interval while backend not IDLE plus reserve_denied while pending; same-edge single-counter priority recorded explicitly."
+    },
+    {
+      "offset": 12,
+      "bytes": 4,
+      "name": "capture_drop",
+      "expected": "Independent invalid capture descriptor event at CAPTURE/FREEZE or own capture-active deadline with drained transfer; normal subcase requires zero and no invalid/timeout event."
+    },
+    {
+      "offset": 16,
+      "bytes": 4,
+      "name": "published",
+      "expected": "Real successful physical metadata B for current job plus engine finished/published fence and matching accepted descriptor. Never DUT published_count/publication counter."
+    },
+    {
+      "offset": 20,
+      "bytes": 4,
+      "name": "result_age",
+      "expected": "Request-interval count since last independently fenced publication; publication resets age."
+    },
+    {
+      "offset": 24,
+      "bytes": 4,
+      "name": "camera_max",
+      "expected": "Independent maximum camera occupancy camera_bytes sampled each UI edge, reset0."
+    },
+    {
+      "offset": 28,
+      "bytes": 4,
+      "name": "display_min",
+      "expected": "Independent minimum display_bytes while actual video lease held, reset8192."
+    },
+    {
+      "offset": 32,
+      "bytes": 12,
+      "name": "max_wait[3]",
+      "expected": "Per-client pre-edge valid&&!ready increments saturating u32 waiting, else clears; max compares prior waiting. Only reset resets these maxima, not DDR ACK."
+    },
+    {
+      "offset": 44,
+      "bytes": 12,
+      "name": "max_service[3]",
+      "expected": "Real client address accept initializes age0; each following owned edge increments up to actual TX_LIMIT; real finalR/B uses pre-terminal age for max. Only reset resets max; ACK drains active-age state but cannot fabricate terminal."
+    },
+    {
+      "offset": 56,
+      "bytes": 4,
+      "name": "engine_scans_pairs",
+      "expected": "Little-endian pairs low16/scans high16. Sum successful physical B-committed payload bytes wholly within workA01072000..0108e1ff or workB0108f000..010ab1ff; subtract initialization115200. Require remaining bytes divisible115200, scans even, pairs=scans/2. Exclude unacknowledged W, result copy and metadata. Normal completed publication only."
+    },
+    {
+      "offset": 60,
+      "bytes": 4,
+      "name": "engine_elapsed",
+      "expected": "Independent u32 saturating ledger reset0 at actual ENGINE start with busy=0; increment on each pre-edge busy=1 including METAW terminal edge which clears busy by NBA. ENGINE_WAIT finished fence next edge; STATS samples final ledger one further edge later. Never metadata_elapsed or DUT elapsed."
+    },
+    {
+      "offset": 64,
+      "bytes": 4,
+      "name": "engine_changed",
+      "expected": "Independent signed golden class1 pixels reachable in BFS mask (mask && class1), not DUT reached/changed counter; normal complete-engine publication only."
+    },
+    {
+      "offset": 68,
+      "bytes": 4,
+      "name": "system_status",
+      "expected": "Reconstruct declared backend status interface from cal_done/cal_pass/quarantine/stop/error_reason/ack; input serialization scope explicit."
+    },
+    {
+      "offset": 72,
+      "bytes": 8,
+      "name": "job_id",
+      "expected": "Independent64bit reserve-accept job ledger; cross-check physical capture metadata job field."
+    },
+    {
+      "offset": 80,
+      "bytes": 8,
+      "name": "source_id",
+      "expected": "Actual consumed successful capture descriptor source ID with existing physical LCD/M5A identity oracle; not backend frozen counter copy."
+    },
+    {
+      "offset": 88,
+      "bytes": 4,
+      "name": "flags",
+      "expected": "Explicit sampled control/diagnostic inputs job failure/stop/engine failure/capture-drop sync; normal case zero required by separate protocol/descriptor/deadline ledger."
+    },
+    {
+      "offset": 92,
+      "bytes": 4,
+      "name": "capture_min",
+      "expected": "Independent minimum actual capture FIFO count*16, reset8192."
+    },
+    {
+      "offset": 96,
+      "bytes": 4,
+      "name": "capture_max",
+      "expected": "Independent maximum actual capture FIFO count*16, reset0."
+    },
+    {
+      "offset": 100,
+      "bytes": 4,
+      "name": "FIFO_fault_bits",
+      "expected": "Direct declared FIFO diagnostic input serialization; independently checked zero in normal traffic."
+    },
+    {
+      "offset": 104,
+      "bytes": 28,
+      "name": "protocol_error_counts",
+      "expected": "Independent physical B/R response, ID/LAST, accepted permission/epoch and transaction-watchdog histories; normal mixed run requires zero across all7words."
+    },
+    {
+      "offset": 132,
+      "bytes": 4,
+      "name": "local_cancels",
+      "expected": "Count actual transfer cancelled pulses, not local_cancels register."
+    },
+    {
+      "offset": 136,
+      "bytes": 120,
+      "name": "reserved",
+      "expected": "Exactly zero."
+    }
+  ],
+  "full_stream": "Unchanged strict no-recovery complete header/length/CRC framing, full230400Bclass/115200Bmask andtype4 snapshot/event checks. Type1 compares all256 bytes with an independent expected record.",
+  "boundaries": [
+    "Declared status/FIFO inputs are serialization checks; not an independent proof of their whole producer semantics. Their zero-error normal condition separately checked.",
+    "Normal mixed run only for engine_changed BFS expectation; deliberately aborted/fault engine needs a separate partial-work oracle and is not included.",
+    "Coverage remains pending until concrete implementation, compilation, native event records and software decoding pass. No active run gains retroactive instrumentation."
+  ],
+  "implementation_boundaries": [
+    "Normal complete publications only; source descriptor latched from real capture consume and compared to published engine descriptor; independent physical B is required.",
+    "No same-edge newly scheduled NBA counter value enters STATS expectation."
+  ]
+}

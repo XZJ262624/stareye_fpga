@@ -1,0 +1,63 @@
+{
+  "status": "FAIL_ABA_BOUNDARY_TELEMETRY_CHANGED_AFTER_WAIT",
+  "actual_events": [
+    "SOURCE 129 1 111 0000000000000000000000000000000200000001000000010000000000000000000000000000000000000000000000000996bb320000000000000081 2162136803000",
+    "UI 111 129 0000000000000000000000000000000200000001000000010000000000000000000000000000000000000000000000000996bb320000000000000081 207578412 2162136838000",
+    "START 111 129 207578447 2162137203000"
+  ],
+  "fatal_time_ps": 2162182277380,
+  "causal": "The initial compound wait had succeeded (execution reached line712), but then TB waits a later negedge lcd_vs and negedge pix_clk without holding or requalifying the quiet predicate. SOURCE129 accepted2162136803000ps, UI111 accepted2162136838000ps, packet111 START2162137203000ps precede fatal by45.074380us. No DONE/TAKE111 exists. Producer payload_ready holds until registered take after real packet_done, so at least !telemetry_ready is false at the later boundary. Other conjunct values were not printed and remain unknown. No B2/A3 marker or genuine ABA event occurred; published2 is gen1 progress, not ABA PASS.",
+  "proposal": "Work decision required. New diagnostic-only fixture can record every drain conjunct at wait satisfaction, each real SOF and failure, plus source/UI/start/done/take. Do not bypass current drain checks or inject generations in a busy interval. A new natural sequencing contract must reconcile telemetry lasting about74us with the actual frame_done-to-next VS gap about45us before running a new positive. One option for review is establishing the reference/lease/request/context fence before SOF while explicitly treating the independent frozen telemetry mailbox as separately draining; this changes the old all-mailboxes-at-SOF contract and is NOT authorized here. Alternative legal stimulus scheduling needs demonstrated reachability. No negative until genuine A1/A3.",
+  "records": [
+    {
+      "path": "reports/m5c1b_fusion_integration/selected_final_matrix_20261013_071300/replay_end_v2/runs/aba_positive_131555/RESULT.json",
+      "bytes": 7377,
+      "sha256": "4daf368a9ea8c4eed75c836ac2a0999227c7becb7ddb5479dfdd7609d4bba17a"
+    },
+    {
+      "path": "reports/m5c1b_fusion_integration/selected_final_matrix_20261013_071300/replay_end_v2/runs/aba_positive_131555/INPUTS.json",
+      "bytes": 11835,
+      "sha256": "b61d3b1431812039ee05c9265942a5ac33c574e5019b211cc027d998b4e608b2"
+    },
+    {
+      "path": "reports/m5c1b_fusion_integration/selected_final_matrix_20261013_071300/replay_end_v2/runs/aba_positive_131555/SNAPSHOTS.json",
+      "bytes": 37962,
+      "sha256": "813e391268a80e48c0dac5067619f1d85008338c8e382e20d5ac461bc4e07146"
+    },
+    {
+      "path": "reports/m5c1b_fusion_integration/selected_final_matrix_20261013_071300/replay_end_v2/runs/aba_positive_131555/compile.log",
+      "bytes": 1748,
+      "sha256": "b7ff39577e71a983e13923430354e12bfe999fb96a040aece122da0f43991a13"
+    },
+    {
+      "path": "reports/m5c1b_fusion_integration/selected_final_matrix_20261013_071300/replay_end_v2/runs/aba_positive_131555/sim.log",
+      "bytes": 1080944,
+      "sha256": "dcdec8e92075dbc86b083e86e4ddb49d55b6b2b7008368983eb727daba439223"
+    },
+    {
+      "path": "reports/m5c1b_fusion_integration/selected_final_matrix_20261013_071300/replay_end_v2/runs/aba_positive_131555/end_events.txt",
+      "bytes": 48797,
+      "sha256": "3d25ac0b2e74e8996fba5b517c4d8af7d99d54a82f43434cf511878b04a2d422"
+    },
+    {
+      "path": "reports/m5c1b_fusion_integration/selected_final_matrix_20261013_071300/replay_end_v2/runs/aba_positive_131555/uart_meta.txt",
+      "bytes": 70015,
+      "sha256": "bbc0203f16e6a401aca648d915d28edacd16e70e8abb952ecfd72203526f08a5"
+    },
+    {
+      "path": "reports/m5c1b_fusion_integration/selected_final_matrix_20261013_071300/replay_end_v2/tb_replay_aba.sv",
+      "bytes": 37233,
+      "sha256": "63bea8374aefdf7e9d72fae2d9f88d304bb5dd0cb45d2f9f3460267605488ba2"
+    },
+    {
+      "path": "rtl/m5c_fusion/m5c_telemetry.sv",
+      "bytes": 5503,
+      "sha256": "78c2aee69cb2e7d1555cc11974eac47ed24c671110b1a88d963ece3575a1d1ea"
+    },
+    {
+      "path": "rtl/m5c_fusion/m5b1_backend.sv",
+      "bytes": 19432,
+      "sha256": "eede2cf59681a1d16e75c78523f56ffa7891215b5313d5ff288129f3bfba46a0"
+    }
+  ]
+}
