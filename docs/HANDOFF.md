@@ -1,5 +1,37 @@
 # 星眸项目交接单
 
+## 2026-10-15：当前交接—Work核定精确candidate范围
+
+仅按reports/m5c_diagnostics/candidate_evidence_stage2_20261015/CANDIDATE_SCOPE.json提交新candidate，parent必须3b49a1f701798a817fed42b8097f724cbc9d6160，分支不变；Git具体执行授权由Work范围回执给出。不再改技术源或补测试。提交后停止writer，Work核commit/parent/全部blob与快照后自动DeepSeek B并停交用户Codex A提示词。bit未放行硬件。当前结果与限制见WORK_REVIEW_GATE，旧交接/草案保持历史。
+
+## 2026-10-15：当前交接—精确采用及新candidate准备
+
+当前执行reports/m5c_diagnostics/stage2_adoption_preparation_20261015/WORK_CANDIDATE_PREPARATION_FREEZE.md及WORK_ADOPTION_APPROVAL.json。整机/native+软件和物理/offline资格齐，Codex exec先做post-exit新seal、仅observer_v2/SDC精确采用，再104源重绑定及候选精确清单/证据准备。禁止Git暂存提交，待Work具体范围核准；后续固定candidate双独立审查及用户实物门仍须停。用户目前无需操作板卡。
+
+## 2026-10-15：当前交接—85%预算接续父版物理链
+
+当前执行docs/RESOURCE_POLICY.md及reports/m5c_diagnostics/stage2_resource_decision_20261015_1841/WORK_85_PERCENT_EXECUTION_FREEZE.md。用户XLR85%门51680含routing，其他门不变；Codex exec/Astra停止非必要旧80%重构，核已place50461父版封存后新回执重评并续route/STA/bit。旧NO_GO不改写，active整机继续，不操作硬件。下方旧冻结为历史。
+
+## 2026-10-15：当前交接—资源NO_GO后的诊断格式化重构
+
+当前执行reports/m5c_diagnostics/stage2_resource_decision_20261015_1841/WORK_SERIALIZATION_REVISION_FREEZE.md。Work已核实place50461超1821；Codex exec/Astra仅在隔离诊断逻辑内实施新的有界PREP/SEAL/存储架构，保持所有输出字段与业务保护。原活动整机输入不动，原型无新bit。内部架构核定已完成，不需等待用户重复确认；资源通过前禁止route/STA。
+
+## 2026-10-15：用户已明确恢复
+
+用户“恢复”已撤销暂停。当前执行reports/m5c_diagnostics/stage2_pause_20261015/WORK_RESUME_AUTHORIZATION.md及STAGE2_WORK_FREEZE。Codex exec先核已完成封存与工具/当前输入，再在新目录从time0重跑中断enabled整机case；bound_v2 map核hash后续interface/place与后续物理门。已通过64门/短门保留，不全部重跑。下方暂停交接为历史，不再作为禁止恢复指令。
+
+## 2026-10-15：暂停交接
+
+用户明确暂停以搬电脑。停止开发、仿真/构建和自动接续；Work正在收集owner精确停止回执，未收到用户恢复指令不得重新启动。保留现有数据和失败历史。恢复时先读STATUS当前节、暂停回执和STAGE2_WORK_FREEZE，区分已完成map/64门与中断enabled case，按对应阶段续跑，不重新运行所有已通过门。
+
+## 2026-10-15：当前交接—诊断生产接入、验证与资源门
+
+Stage1独立观察器已9正向/4指定负向通过，Work复核210封存文件零差异；只接受独立模块资格。当前执行 `reports/m5c_diagnostics/STAGE2_WORK_FREEZE.md`，基线3b49a1f7不变。Codex exec/Astra继续旁接真实生产信号、新type5 UART/CDC接入及coupled测试，资源门通过后完整新I3构建与证据。没有新candidate或bit，未放行硬件。下文Stage1冻结为历史交接。
+
+## 2026-10-15：当前交接—实物效果诊断观察器首批开发
+
+唯一当前交接为 `reports/m5c1b_fusion_integration/work_review_repair_20261015/hardware_analysis_20261015/OBSERVER_DEVELOPMENT_FREEZE.md`。基线candidate `3b49a1f701798a817fed42b8097f724cbc9d6160` 已双审查PASS_WITH_FINDINGS，实物效果仍未关闭。工程分析发现同源理论弱类新增6987，但真实文字行匹配低、内部新增稀少，具体像素差异来源尚未区分。Work冻结只旁接计数诊断，Codex exec/Astra独占新观察器/软件oracle/聚焦测试写入；首批不改生产RTL，不启动全构建，内部交Work核定接入范围。用户暂不需硬件动作。下方旧交接保留为历史，不覆盖本节。
+
 ## 2026-10-14 23:44：新离线bit与配置采用通过，准备固定修复candidate（唯一当前入口）
 
 本轮修复基线candidate为 `99642712cfb912f484006f4cd74aba4bdaa8d57b`，分支 `codex/m5c-fusion-prototype`。该candidate的Codex A结论FAIL仍有效，新离线bit已生成，本轮进入固定修复candidate及独立复审准备；实际candidate/parent以Work审查节点回执为准，未通过双独立复审前不允许实物验收。下方较早章节是各自时点的历史记录；“候选尚未提交”“本轮审查未开始”和旧资源/时序数值均不得当作当前修复状态。

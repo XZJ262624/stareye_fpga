@@ -1,4 +1,4 @@
-module m5b1_system(
+module m5b1_system #(parameter DIAGNOSTICS=0)(
  input ui_clk,cam_clk,pix_clk,rst_n,pll_locked,cal_done,cal_pass,
  input cam_vs,cam_valid,input [7:0] cam_data,input pix_sof,pix_request,
  output [7:0] pix_data,output [63:0] frame_id,output [63:0] epoch,output pix_qualified,
@@ -12,6 +12,8 @@ module m5b1_system(
  output fusion_context_block,input fusion_context_quiet,fusion_context_tail_fault,
  input fusion_retire,input [11:0] fusion_retire_row,input fusion_flush,output fusion_prefilled,output fusion_stop,
  output fusion_export_status,fusion_ddr_error_status,fusion_hardstop_status,
+ input diag_ready,diag_window,input [7:0] diag_byte,input diag_byte_valid,
+ output [8:0] diag_index,output diag_done,diag_cancel,output [63:0] diag_token,output diag_slot,
  input fusion_frame_done,input [479:0] fusion_telemetry_snapshot,
  output [7:0] aid,alen,wid,output [31:0] aaddr,output [2:0] asize,
  output [1:0] aburst,alock,output avalid,atype,input aready,
@@ -51,6 +53,7 @@ module m5b1_system(
  end
  wire [319:0] telemetry_header;wire [7:0] telemetry_byte;wire [8:0] telemetry_index;
  wire [767:0] telemetry_descriptor;wire [63:0] telemetry_session;
+ assign diag_token=lease_token;assign diag_slot=lease_slot;
  assign bwp=backend_wp;assign brp=backend_rp|fusion_rp;
  assign fusion_stop=stop||!run||lease_fault||session_fault;
  assign fusion_export_status=export_exclusive;
@@ -68,13 +71,14 @@ module m5b1_system(
   .rejected(rejected[1:0]),.write_permission(wp),.read_permission(rp),.camera_bytes(camera_bytes),.display_bytes(display_bytes),.urgent(urgent),.safe_window(safe_window),
   .fifo_ready(fifo_ready[3:0]),.camera_max(camera_max),.display_min(display_min),.fifo_faults(video_fifo_faults));
  assign cw[1]=0;assign cwl[1]=0;assign cwd[255:128]=0;assign crr[0]=1;
- m5b1_backend background(.ui_clk(ui_clk),.pix_clk(pix_clk),.rst_n(rst_n),.run(run),.stop(stop),.epoch(epoch),
+ m5b1_backend #(.DIAGNOSTICS(DIAGNOSTICS)) background(.ui_clk(ui_clk),.pix_clk(pix_clk),.rst_n(rst_n),.run(run),.stop(stop),.epoch(epoch),
   .tap_valid(tap_valid),.tap_class(tap_class),.tap_x(tap_x),.tap_y(tap_y),.tap_high(tap_high),.tap_low(tap_low),.tap_filter(tap_filter),
   .tap_frame_id(tap_frame_id),.tap_epoch(tap_epoch),.tap_timestamp(tap_timestamp),.tap_display_seq(tap_display_seq),.tap_config_generation(tap_config_generation),
   .fusion_acquire(lease_acquire),.fusion_slot(lease_slot),.fusion_identity(lease_identity),.fusion_token(lease_token),
   .fusion_release(lease_release),.fusion_retire(lease_retire),.fusion_read_accept(read_accept),.fusion_read_done(read_done),
   .fusion_ack(lease_ack),.fusion_denied(lease_denied),.pair_leased(pair_leased),.result_valid(result_valid),.result_slot(result_slot),
   .result_descriptor(result_descriptor),.export_exclusive(export_exclusive),.capture_priority(capture_priority),.lease_fault(lease_fault),.job_rejected_event(job_rejected_event),
+  .diag_ready(diag_ready&&!telemetry_pending),.diag_window(diag_window),.diag_byte(diag_byte),.diag_byte_valid(diag_byte_valid),.diag_index(diag_index),.diag_done(diag_done),.diag_cancel(diag_cancel),
   .telemetry_ready(telemetry_ready),.telemetry_descriptor(telemetry_header),.telemetry_byte(telemetry_byte),.telemetry_index(telemetry_index),.telemetry_take(telemetry_take),
   .max_wait(max_wait),.max_service(max_service),.camera_max(camera_max),.display_min(display_min),
   .system_status({19'b0,ack,error_reason,4'b0,stop,quarantine,cal_pass,cal_done}),.error_counts(error_counts),.video_fifo_faults(video_fifo_faults),

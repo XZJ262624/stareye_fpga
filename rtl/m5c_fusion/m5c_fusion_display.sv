@@ -13,6 +13,11 @@ module m5c_fusion_display(
  output [63:0] read_session,input prefilled,ref_ready,input [1:0] ref_class,input ref_mask,
  input [11:0] ref_x,ref_y,input [63:0] ref_session,output retire,output [11:0] retire_row,output flush,
  output eligible,output [31:0] age_frames,age_ticks,output promoted,output frame_ok,
+ output diag_context_valid,diag_sof,diag_admit,diag_kill,
+ output [63:0] diag_session,diag_compare_session,
+ output diag_compare_valid,diag_current_qualified,diag_reference_qualified,
+ output [1:0] diag_current_class,output [11:0] diag_compare_x,diag_compare_y,
+ output diag_tag_good,diag_bounds,diag_weak,diag_support,diag_global,diag_row_complete,diag_row_equal,diag_row_tag,
  output frame_done,output [479:0] telemetry_snapshot);
  wire [767:0] descriptor=offer_descriptor;reg [63:0] session;reg have_offer,released,tap_seen,broken;
  reg request_pending,sof_seen;wire sof_edge=ce&&raw_sof&&!sof_seen;
@@ -44,6 +49,16 @@ module m5c_fusion_display(
   descriptor[63:0]!=epoch||age_frames>120||age_ticks>148500000;
  wire row_attempt=frame_admitted&&have_offer&&!broken&&enable;
  reg [31:0] reason_events;
+ assign diag_context_valid=have_offer&&!broken&&!context_block&&!context_tail_fault;
+ assign diag_session=session;assign diag_compare_session=dsession;
+ assign diag_sof=ce&&first_tap;
+ assign diag_admit=eligible&&prefilled&&have_offer&&!broken&&!context_block&&!context_tail_fault;
+ assign diag_kill=stop||context_block||context_tail_fault;
+ assign diag_compare_valid=ce&&dvalid;
+ assign diag_current_qualified=dqualified&&frame_admitted&&!broken&&!context_block&&!context_tail_fault;
+ assign diag_reference_qualified=ref_tag_good;
+ assign diag_current_class=dclass;assign diag_compare_x=dx;assign diag_compare_y=dy;
+
  // One OR reduction prevents simultaneous reasons from overwriting each other.
  always @*begin
   reason_events=0;
@@ -67,6 +82,8 @@ module m5c_fusion_display(
   .tap_valid(dvalid),.tap_qualified(dqualified),.tap_x(dx),.tap_y(dy),.current_class(dclass),.current_support(dsupport),
   .ref_ready(ref_tag_good),.ref_class(ref_class),.ref_global(ref_mask),.ref_identity(identity),.ref_x(ref_x),.ref_y(ref_y),
   .support_radius(descriptor[272]?4'd3:4'd2),.final_de(final_de),.final_x(final_x),.final_y(final_y),.local_edge(local_edge),
+  .diag_tag_good(diag_tag_good),.diag_bounds(diag_bounds),.diag_weak(diag_weak),.diag_support(diag_support),.diag_global(diag_global),
+  .diag_row_complete(diag_row_complete),.diag_row_equal(diag_row_equal),.diag_row_tag(diag_row_tag),
   .fused_edge(fused_edge),.promoted(promoted),.frame_ok(frame_ok),.row_retire(retire),.retired_y(retire_row));
  assign fused_rgb=!final_de?24'd0:mode==6&&enable?(local_edge?24'hff0000:promoted?24'h00ffff:{raw_gray,raw_gray,raw_gray}):base_rgb;
  // Raster owns per-frame statistics even while the fusion context is blocked.

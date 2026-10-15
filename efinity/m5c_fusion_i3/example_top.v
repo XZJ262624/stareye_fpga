@@ -946,6 +946,13 @@ module example_top #(parameter M5A_FILTER_ENABLE=1, parameter SIM_DATA=0)
     wire [23:0] fused_rgb;wire fusion_eligible,fusion_promoted,fusion_frame_ok;
     wire [31:0] fusion_age_frames,fusion_age_ticks;
     wire fusion_release_ready,fusion_release_final;wire fusion_frame_done;wire [479:0] fusion_telemetry_snapshot;
+    // Diagnostics is observation-only; record transport has no DDR client.
+    wire diag_ctx,diag_sof,diag_admit,diag_kill,diag_cv,diag_cq,diag_rq;
+    wire [63:0] diag_sid,diag_csid,diag_token,diag_word;
+    wire diag_source_slot,diag_tag,diag_bounds,diag_weak,diag_support,diag_global,diag_rc,diag_re,diag_rt;
+    wire [1:0] diag_class;wire [11:0] diag_x,diag_y;
+    wire diag_pix_ready,diag_take,diag_pix_cancel,diag_ui_ready,diag_done,diag_cancel,diag_valid,diag_window;
+    wire diag_prst,diag_urst;wire [5:0] diag_read_word;wire [8:0] diag_index;wire [7:0] diag_byte;
     wire fusion_export_ui,fusion_ddr_error_ui,fusion_hardstop_ui;
     (* async_reg="true", syn_srlstyle="registers", syn_keep="true" *) reg [1:0] fusion_export_sync,fusion_ddr_error_sync,fusion_hardstop_sync;
     always @(posedge clk_pixel or negedge rstn_pixel)
@@ -958,7 +965,7 @@ module example_top #(parameter M5A_FILTER_ENABLE=1, parameter SIM_DATA=0)
       if(!rstn_pixel)fusion_stop_sync<=3;else fusion_stop_sync<={fusion_stop_sync[0],fusion_stop_ui};
     reg m5b1_vs_d=1'b1;
     always @(posedge clk_pixel or negedge rstn_pixel)if(!rstn_pixel)m5b1_vs_d<=1'b1;else m5b1_vs_d<=lcd_vs;
-    m5b1_system u_m5b1(.ui_clk(w_ddr3_ui_clk),.cam_clk(cmos_pclk),.pix_clk(clk_pixel),.rst_n(rstn_sys),
+    m5b1_system #(.DIAGNOSTICS(1)) u_m5b1(.ui_clk(w_ddr3_ui_clk),.cam_clk(cmos_pclk),.pix_clk(clk_pixel),.rst_n(rstn_sys),
       .pll_locked(w_pll_lock),.cal_done(w_ddr3_cal_done),.cal_pass(w_ddr3_cal_pass),
       .cam_vs(cmos_frame_vsync),.cam_valid(cmos_frame_href),.cam_data(cmos_frame_Gray[7:0]),
       .pix_sof(m5b1_vs_d&&!lcd_vs),.pix_request(lcd_request),.pix_data(lcd_data),.frame_id(m5b1_frame_id),.epoch(m5b1_epoch),.pix_qualified(m5b1_pix_qualified),
@@ -972,6 +979,7 @@ module example_top #(parameter M5A_FILTER_ENABLE=1, parameter SIM_DATA=0)
       .fusion_ref_ready(fusion_ref_ready),.fusion_ref_class(fusion_ref_class),.fusion_ref_mask(fusion_ref_mask),.fusion_ref_x(fusion_ref_x),.fusion_ref_y(fusion_ref_y),.fusion_ref_session(fusion_ref_session),
       .fusion_retire(fusion_retire),.fusion_retire_row(fusion_retire_row),.fusion_flush(fusion_flush),.fusion_prefilled(fusion_prefilled),.fusion_stop(fusion_stop_ui),
       .fusion_export_status(fusion_export_ui),.fusion_ddr_error_status(fusion_ddr_error_ui),.fusion_hardstop_status(fusion_hardstop_ui),
+      .diag_ready(diag_ui_ready),.diag_window(diag_window),.diag_byte(diag_byte),.diag_byte_valid(diag_valid),.diag_index(diag_index),.diag_done(diag_done),.diag_cancel(diag_cancel),.diag_token(diag_token),.diag_slot(diag_source_slot),
       .fusion_frame_done(fusion_frame_done),.fusion_telemetry_snapshot(fusion_telemetry_snapshot),
       .aid(w_ddr3_aid),.alen(w_ddr3_alen),.wid(w_ddr3_wid),.aaddr(w_ddr3_aaddr),.asize(w_ddr3_asize),
       .aburst(w_ddr3_aburst),.alock(w_ddr3_alock),.avalid(w_ddr3_avalid),.atype(w_ddr3_atype),.aready(w_ddr3_aready),
@@ -1051,7 +1059,25 @@ module example_top #(parameter M5A_FILTER_ENABLE=1, parameter SIM_DATA=0)
         .pixel_release(fusion_release),.release_final(fusion_release_final),.release_session(fusion_release_session),.release_ready(fusion_release_ready),.read_session(fusion_read_session),
         .prefilled(fusion_prefilled),.ref_ready(fusion_ref_ready),.ref_class(fusion_ref_class),.ref_mask(fusion_ref_mask),.ref_x(fusion_ref_x),.ref_y(fusion_ref_y),.ref_session(fusion_ref_session),
         .retire(fusion_retire),.retire_row(fusion_retire_row),.flush(fusion_flush),.eligible(fusion_eligible),.age_frames(fusion_age_frames),.age_ticks(fusion_age_ticks),
+        .diag_context_valid(diag_ctx),.diag_sof(diag_sof),.diag_admit(diag_admit),.diag_kill(diag_kill),.diag_session(diag_sid),.diag_compare_session(diag_csid),
+        .diag_compare_valid(diag_cv),.diag_current_qualified(diag_cq),.diag_reference_qualified(diag_rq),.diag_current_class(diag_class),.diag_compare_x(diag_x),.diag_compare_y(diag_y),
+        .diag_tag_good(diag_tag),.diag_bounds(diag_bounds),.diag_weak(diag_weak),.diag_support(diag_support),.diag_global(diag_global),.diag_row_complete(diag_rc),.diag_row_equal(diag_re),.diag_row_tag(diag_rt),
         .promoted(fusion_promoted),.frame_ok(fusion_frame_ok),.frame_done(fusion_frame_done),.telemetry_snapshot(fusion_telemetry_snapshot));
+
+    m5c_diag_observer_v2 u_diag_observer(.clk(clk_pixel),.rst_n(diag_prst),.read_clk(w_ddr3_ui_clk),.record_cancel(diag_pix_cancel),
+        .context_event(diag_ctx),.context_valid(diag_ctx),.context_session(diag_sid),.context_token(diag_token),.current_epoch(m5b1_epoch),
+        .source_descriptor(fusion_descriptor),.context_slot(diag_source_slot),.frame_sof(diag_sof),.frame_admit(diag_admit),.frame_session(display_seq),.pixel_ticks(pixel_ticks),
+        .kill(diag_kill),.abort_reason({31'd0,diag_kill}),.final_de(sobel_de),.frame_eof(fusion_frame_done),.final_x(final_x),.final_y(final_y),
+        .final_qualified(!fusion_context_block&&!fusion_context_tail_fault),.legal_bounds(diag_bounds),.tag_good(diag_tag),.frame_ok(fusion_frame_ok),.invalidate(!fusion_eligible),
+        .delayed_weak(diag_weak),.delayed_support(diag_support),.delayed_global(diag_global),.local_edge(local_edge),.row_complete(diag_rc),.row_equal(diag_re),.row_tag_good(diag_rt),.promoted(fusion_promoted),
+        .mode(display_mode),.admit_mode(control_mode),.enable(fusion_enable),.fused_rgb(fused_rgb),.osd_rgb(osd_rgb),.osd_de(osd_de),
+        .compare_valid(diag_cv),.current_qualified(diag_cq),.reference_qualified(diag_rq),.compare_x(diag_x),.compare_y(diag_y),.reference_x(fusion_ref_x),.reference_y(fusion_ref_y),
+        .current_class(diag_class),.reference_class(fusion_ref_class),.reference_mask(fusion_ref_mask),.compare_session(diag_csid),.reference_session(fusion_ref_session),
+        .record_ready(diag_pix_ready),.record_take(diag_take),.read_word(diag_read_word),.word_data(diag_word),.dropped(),.active());
+    m5c_diag_record_bridge u_diag_bridge(.pix_clk(clk_pixel),.ui_clk(w_ddr3_ui_clk),.arst_n(rstn_sys&&rstn_pixel),
+        .pix_ready(diag_pix_ready),.pix_take(diag_take),.pix_cancel(diag_pix_cancel),.pix_rst_n(diag_prst),.ui_rst_n(diag_urst),
+        .ui_ready(diag_ui_ready),.ui_done(diag_done),.ui_cancel(diag_cancel),.byte_index(diag_index),.read_word(diag_read_word),.word_data(diag_word),.byte_data(diag_byte),.byte_valid(diag_valid));
+    m5c_diag_slot_guard u_diag_slot(.pix_clk(clk_pixel),.ui_clk(w_ddr3_ui_clk),.pix_rst_n(diag_prst),.ui_rst_n(diag_urst),.frame_done(fusion_frame_done),.window_open(diag_window));
 
 	//	HDMI Interface. 
 	

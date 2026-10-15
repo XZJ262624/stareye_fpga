@@ -1,5 +1,47 @@
 # 星眸项目状态
 
+## 2026-10-15：当前状态—诊断candidate范围冻结待提交
+
+整机native+独立软件、85%资源、完整I3/CDC及offlinebit均已通过各自离线门，Work核证据与104最终源绑定。候选当前权威入口为reports/m5c_diagnostics/candidate_evidence_stage2_20261015/WORK_REVIEW_GATE.md及CANDIDATE_SCOPE.json，实际commit以提交后Work回执为准，parent3b49a1f7。现在只按精确scope准备提交；提交后停写并进入双独立审查，尚未实物放行。M5C可见增强和默认启动等边界仍未关闭。
+
+## 2026-10-15：当前状态—整机与离线物理验证通过，candidate准备
+
+持久整机已正常结束并独立软件PASS，healthy8覆盖7模式、9发布、355456原始UART字节；diagnostic实际3包。资源50461/196/1符合用户85%，完整I3+.136/+.013、25组1552端点、7849FF控制审计与offline bit均完成有限资格。Work核104输入，批准仅采用已测RAM observer_v2+合格SDC；XML/settings保持。原completion清单2个运行尾写文件历史保留，待post-exit新seal后candidate冻结。现无新candidate/独立审查/实物资格，bit未放行下载。当前交接WORK_CANDIDATE_PREPARATION_FREEZE。
+
+## 2026-10-15 20:14：85%父版布线已启动，整机执行恢复
+
+85%政策后代理曾interrupted，物理链未及时续跑；本次Work恢复执行，Codex exec核516项封存/native/源/DB后已实际启动bound_v3 route（owner43320/session82820），不重map/place，不改旧NO_GO。旧enabled180024进程/session已消失，无RESULT，只留6健康帧，不算通过；新独立run恢复按WORK_SYSTEM_EXECUTION_RECOVERY保留全部7模式/2diag/CRC/end门。尚无route/STA/新bit通过，仍未进入独立审查或实物。
+
+## 2026-10-15：当前状态—用户将XLR预算提升至85%
+
+最新docs/RESOURCE_POLICY.md：XLR含routing≤51680，RAM204/DSP128及其余门不变。已place父版50461/196/1按新预算余1219XLR，原80%NO_GO保留历史，不宣称资源减少。执行WORK_85_PERCENT_EXECUTION_FREEZE，停止仅为旧门重构，核封存/native后优先续父版route/STA；enabled原整机继续，尚未最终PASS。尚无新route/STA/bit资格。
+
+## 2026-10-15：当前状态—诊断资源超限，批准隔离串行化重构
+
+实际place50461XLR/196RAM/1DSP，超既定XLR门1821，未进入route/STA/bit。64回归及native选择器资格保留，但不能当资源通过。常量slice优化只减少95LUT/2FF，不足以宣告解决。Work按stage2_resource_decision_20261015_1841/WORK_SERIALIZATION_REVISION_FREEZE.md批准只在诊断存储/格式化内改变PREP/SEAL为≤1024拍有界阶段，保留完整字段/计数/实际事件/lease/算法/TTL和全部资源时序门，先验证再测资源。活动enabled整机原输入继续，尚未最终PASS。此前预计完成时间需重新评估。
+
+## 2026-10-15：用户已恢复，正在重核并重启中断工作
+
+用户已明确“恢复”，暂停已撤销。重核完成门及工具/源hash后重启enabled整机case（新目录，旧中断不计PASS）；bound_v2 map可核hash后续interface/place。尚无新整机或资源/时序资格。详见WORK_RESUME_AUTHORIZATION，以下暂停状态仅为历史记录。
+
+暂停收尾确认：本任务仿真/验收接续native已按owner停止，bound_v2 map已结束且未进入place。详见reports/m5c_diagnostics/WORK_PAUSE_CONFIRMATION.md。当前可关机搬电脑，必须等用户明确恢复才续跑；中断整机case需新目录重跑，已通过结果保留。
+
+## 2026-10-15：用户要求暂停搬电脑
+
+Work已停止开发委派并正在收尾本任务native/自动接续；最终停止确认以reports/m5c_diagnostics下暂停回执为准，不能把本节当进程已停证据。恢复必须等用户明确通知。已通过的64门与短门保留；bound_v2 map已实际完成，尚无place/资源/时序资格；正在运行的enabled整机可能需从该case重跑，不从全部项目重跑。严禁后台自动开始后续stage、仿真、构建或硬件操作。
+
+## 2026-10-15：当前状态—64回归通过，RAM推断修正，物理约束重绑定获准
+
+Stage2当前原功能46正向/18指定负向全部完成。首综合把诊断记录映为2560FF，隔离单写口优化经短门后实际map改为4RAM10；尚未place，不宣资源或时序通过。Work已独立核128旧capture重复配置代数端点的原始map端口/参数与源态恒等，批准最小精确名字重绑定，回执见reports/m5c_diagnostics/stage2_resource_ram_20261015_161812/WORK_CAPTURE_ALIAS_APPROVAL.json。Codex exec继续隔离bound map/place及native新增CDC审计；外部status普通D/CE路径保留正常计时。开启诊断整机仍在运行，已观察健康帧但完整type5/end门未闭合。没有新bit或硬件放行。
+
+## 2026-10-15：当前状态—独立观察器验证通过，生产接入启动
+
+Stage1完成9个正向和4个指定负向短仿真，独立40word oracle通过，Work复核210项封存零差异。尚无生产接入、资源实测、UART线级或新构建资格。按STAGE2_WORK_FREEZE由Codex exec/Astra继续生产接入和离线验证；资源余633XLR仍为主要风险。无新bit，M5C实物效果未关闭，用户暂不需操作板卡。
+
+## 2026-10-15：当前状态—M5C实物效果排查，最小观察器开发启动
+
+当前基线 `3b49a1f701798a817fed42b8097f724cbc9d6160`，双审查均PASS_WITH_FINDINGS；不是下文旧candidate的FAIL状态。用户视觉稳定约31min，但首录制板时只覆盖约6min。新180秒录制完整，白纸H240具资格帧720行匹配，文字仍新增稀少；实物可见增强及完整30min原始证据未关闭。只读工程排查已结束，详细结论见Work硬件分析节点。现在按OBSERVER_DEVELOPMENT_FREEZE进入独立观察器RTL/软件oracle/短验证首批，尚未接入生产或生成新bit。M5C未完成，M6/M7未开始，暂不需用户操作硬件。下方为历史状态。
+
 ## 2026-10-14 23:44：新离线bit与配置采用通过，准备固定修复candidate（唯一当前入口）
 
 本轮修复基线candidate为 `99642712cfb912f484006f4cd74aba4bdaa8d57b`，分支 `codex/m5c-fusion-prototype`。该candidate的Codex A结论FAIL仍有效，新离线bit已生成，本轮进入固定修复candidate及独立复审准备；实际candidate/parent以Work审查节点回执为准，未通过双独立复审前不允许实物验收。下方较早章节是各自时点的历史记录；“候选尚未提交”“本轮审查未开始”和旧资源/时序数值均不得当作当前修复状态。

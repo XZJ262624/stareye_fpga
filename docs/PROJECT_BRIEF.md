@@ -1,5 +1,17 @@
 # 星眸项目背景
 
+## 2026-10-15：当前入口—诊断candidate待固定双审
+
+本轮诊断实现与全部选用离线门完成，精确范围冻结，待追加commit后独立A/B审查。当前入口为docs/HANDOFF最新节和reports/m5c_diagnostics/candidate_evidence_stage2_20261015/WORK_REVIEW_GATE.md。资源50461/196/1，XLR85%预算，I3+.136/+.013；尚无本轮实物资格，M5C效果与默认启动边界保留。实际candidate身份由Work提交后回执确定。
+
+## 2026-10-15：最新资源政策
+
+用户将XLR预算提升85%：51680含routing；RAM204/DSP128及其他门不变。以docs/RESOURCE_POLICY.md和HANDOFF最新节为准，旧48640和仅为旧门重构交接保留历史。优先已place50461父版核证后续物理链，M5C实物效果仍未关闭。
+
+## 2026-10-15：当前入口—M5C效果诊断
+
+当前开发基线为已双审查的 `3b49a1f701798a817fed42b8097f724cbc9d6160`，实物效果尚待诊断，当前交接以docs/HANDOFF.md最新节及OBSERVER_DEVELOPMENT_FREEZE为准。M5A局部与M5B全局均保留；本轮先增加旁接观察能力，不放宽融合算法或TTL。下方旧candidate/准备阶段均为历史。
+
 ## 2026-10-14 23:44：新离线bit与配置采用通过，准备固定修复candidate（唯一当前入口）
 
 本轮修复基线candidate为 `99642712cfb912f484006f4cd74aba4bdaa8d57b`，分支 `codex/m5c-fusion-prototype`。该candidate的Codex A结论FAIL仍有效，新离线bit已生成，本轮进入固定修复candidate及独立复审准备；实际candidate/parent以Work审查节点回执为准，未通过双独立复审前不允许实物验收。下方较早章节是各自时点的历史记录；“候选尚未提交”“本轮审查未开始”和旧资源/时序数值均不得当作当前修复状态。

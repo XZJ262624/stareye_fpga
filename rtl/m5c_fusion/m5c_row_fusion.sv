@@ -9,6 +9,7 @@ module m5c_row_fusion #(parameter WIDTH=1280,HEIGHT=720,H_TOTAL=1650,REF_STAGE=1
  input [319:0] ref_identity,input [11:0] ref_x,ref_y,
  input [3:0] support_radius,
  input final_de,input [11:0] final_x,final_y,input local_edge,
+ output diag_tag_good,diag_bounds,diag_weak,diag_support,diag_global,diag_row_complete,diag_row_equal,diag_row_tag,
  output fused_edge,promoted,output reg frame_ok,
  output reg row_retire,output reg [11:0] retired_y);
  reg [319:0] frame_identity;
@@ -38,6 +39,10 @@ module m5c_row_fusion #(parameter WIDTH=1280,HEIGHT=720,H_TOTAL=1650,REF_STAGE=1
  assign promoted=!context_block&&!context_tail_fault&&final_de&&!local_edge&&frame_ok&&!invalidate&&tag_good&&bounds&&
   row_complete[obank]&&row_equal[obank]&&row_y[obank]==final_y&&row_cookie[obank]==frame_cookie&&
   delayed[2] && delayed[1] && delayed[0];
+ assign diag_tag_good=tag_good;assign diag_bounds=bounds;
+ assign diag_weak=delayed[2];assign diag_support=delayed[1];assign diag_global=delayed[0];
+ assign diag_row_complete=row_complete[obank];assign diag_row_equal=row_equal[obank];
+ assign diag_row_tag=row_y[obank]==final_y&&row_cookie[obank]==frame_cookie;
  assign fused_edge=local_edge||promoted;
  integer k;
  always @(posedge clk or negedge rst_n)begin

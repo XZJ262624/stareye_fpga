@@ -1,4 +1,4 @@
-module m5b1_backend #(parameter REQUEST_CYCLES=96000000,CAPTURE_CYCLES=96000000,EXPORT_CYCLES=960000000)(
+module m5b1_backend #(parameter REQUEST_CYCLES=96000000,CAPTURE_CYCLES=96000000,EXPORT_CYCLES=960000000,DIAGNOSTICS=0)(
  input ui_clk,pix_clk,rst_n,run,stop,input [63:0] epoch,
  input tap_valid,input [1:0] tap_class,input [11:0] tap_x,tap_y,input [7:0] tap_high,tap_low,input tap_filter,
  input [63:0] tap_frame_id,tap_epoch,tap_timestamp,tap_display_seq,tap_config_generation,
@@ -7,6 +7,8 @@ module m5b1_backend #(parameter REQUEST_CYCLES=96000000,CAPTURE_CYCLES=96000000,
  output fusion_ack,fusion_denied,output [3:0] pair_leased,
  output result_valid,result_slot,output [767:0] result_descriptor,
  output export_exclusive,capture_priority,output lease_fault,output job_rejected_event,
+ input diag_ready,diag_window,input [7:0] diag_byte,input diag_byte_valid,
+ output [8:0] diag_index,output diag_done,diag_cancel,
  input telemetry_ready,input [319:0] telemetry_descriptor,input [7:0] telemetry_byte,
  output [8:0] telemetry_index,output reg telemetry_take,
  input [95:0] max_wait,max_service,input [13:0] camera_max,display_min,
@@ -118,11 +120,21 @@ module m5b1_backend #(parameter REQUEST_CYCLES=96000000,CAPTURE_CYCLES=96000000,
   export_head<=export_mem[byte_index[8:4]];
  end
  reg packet_start,packet_abort;wire packet_busy,packet_done,payload_ready;
+ wire diag_busy;reg diag_slot;
+ wire diag_grant=DIAGNOSTICS&&diag_slot&&diag_ready&&diag_window&&run&&!stop&&state==IDLE&&
+  !packet_busy&&!packet_start&&!telemetry_ready&&!telemetry_take&&!want_reserve&&!arm_busy&&!writer_owned&&
+  REQUEST_CYCLES>700000&&tick<REQUEST_CYCLES-700000;
+ always @(posedge ui_clk or negedge rst_n)begin
+  if(!rst_n)diag_slot<=0;
+  else if(!diag_window||stop||diag_grant)diag_slot<=0;
+  else if(state==TELEMETRY_WAIT&&packet_done)diag_slot<=1;
+ end
  assign telemetry_index=byte_index;
  wire [7:0] payload=state==TELEMETRY_WAIT?telemetry_byte:state==STATS_WAIT?stats[byte_index*8+:8]:export_head[byte_index[3:0]*8+:8];
  wire payload_valid=state==STATS_WAIT||state==EXPORT_BYTES||state==TELEMETRY_WAIT;
- m5b1_packet_tx packet(.clk(ui_clk),.rst_n(rst_n),.abort(packet_abort),.start(packet_start),.packet_type(state==TELEMETRY_WAIT?8'd4:state==STATS_WAIT?8'd1:export_type),
+ m5b1_packet_tx #(.DIAGNOSTICS(DIAGNOSTICS)) packet(.clk(ui_clk),.rst_n(rst_n),.abort(packet_abort),.start(packet_start),.packet_type(state==TELEMETRY_WAIT?8'd4:state==STATS_WAIT?8'd1:export_type),
   .length((state==STATS_WAIT||state==TELEMETRY_WAIT)?32'd256:(export_type==2?32'd230400:32'd115200)),.descriptor(state==TELEMETRY_WAIT?telemetry_descriptor:frozen),
+  .diag_grant(diag_grant),.diag_byte(diag_byte),.diag_byte_valid(diag_byte_valid),.diag_index(diag_index),.diag_busy(diag_busy),.diag_done(diag_done),.diag_cancel(diag_cancel),
   .payload(payload),.payload_valid(payload_valid),.payload_ready(payload_ready),.busy(packet_busy),.done(packet_done),.uart_tx(uart_tx));
  assign job_busy=state!=IDLE;
  always @*begin
