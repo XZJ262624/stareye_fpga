@@ -947,6 +947,7 @@ module example_top #(parameter M5A_FILTER_ENABLE=1, parameter SIM_DATA=0)
     wire [31:0] fusion_age_frames,fusion_age_ticks;
     wire fusion_release_ready,fusion_release_final;wire fusion_frame_done;wire [479:0] fusion_telemetry_snapshot;
     // Diagnostics is observation-only; record transport has no DDR client.
+    wire diag_sv,diag_s64,diag_s128,diag_sl,diag_il;
     wire diag_ctx,diag_sof,diag_admit,diag_kill,diag_cv,diag_cq,diag_rq;
     wire [63:0] diag_sid,diag_csid,diag_token,diag_word;
     wire diag_source_slot,diag_tag,diag_bounds,diag_weak,diag_support,diag_global,diag_rc,diag_re,diag_rt;
@@ -1062,14 +1063,16 @@ module example_top #(parameter M5A_FILTER_ENABLE=1, parameter SIM_DATA=0)
         .diag_context_valid(diag_ctx),.diag_sof(diag_sof),.diag_admit(diag_admit),.diag_kill(diag_kill),.diag_session(diag_sid),.diag_compare_session(diag_csid),
         .diag_compare_valid(diag_cv),.diag_current_qualified(diag_cq),.diag_reference_qualified(diag_rq),.diag_current_class(diag_class),.diag_compare_x(diag_x),.diag_compare_y(diag_y),
         .diag_tag_good(diag_tag),.diag_bounds(diag_bounds),.diag_weak(diag_weak),.diag_support(diag_support),.diag_global(diag_global),.diag_row_complete(diag_rc),.diag_row_equal(diag_re),.diag_row_tag(diag_rt),
+        .diag_shadow_valid(diag_sv),.diag_shadow64(diag_s64),.diag_shadow128(diag_s128),.diag_strong_loss(diag_sl),.diag_illegal(diag_il),
         .promoted(fusion_promoted),.frame_ok(fusion_frame_ok),.frame_done(fusion_frame_done),.telemetry_snapshot(fusion_telemetry_snapshot));
 
-    m5c_diag_observer_v2 u_diag_observer(.clk(clk_pixel),.rst_n(diag_prst),.read_clk(w_ddr3_ui_clk),.record_cancel(diag_pix_cancel),
+    m5c_diag_observer_v3 u_diag_observer(.clk(clk_pixel),.rst_n(diag_prst),.read_clk(w_ddr3_ui_clk),.record_cancel(diag_pix_cancel),
         .context_event(diag_ctx),.context_valid(diag_ctx),.context_session(diag_sid),.context_token(diag_token),.current_epoch(m5b1_epoch),
         .source_descriptor(fusion_descriptor),.context_slot(diag_source_slot),.frame_sof(diag_sof),.frame_admit(diag_admit),.frame_session(display_seq),.pixel_ticks(pixel_ticks),
         .kill(diag_kill),.abort_reason({31'd0,diag_kill}),.final_de(sobel_de),.frame_eof(fusion_frame_done),.final_x(final_x),.final_y(final_y),
         .final_qualified(!fusion_context_block&&!fusion_context_tail_fault),.legal_bounds(diag_bounds),.tag_good(diag_tag),.frame_ok(fusion_frame_ok),.invalidate(!fusion_eligible),
         .delayed_weak(diag_weak),.delayed_support(diag_support),.delayed_global(diag_global),.local_edge(local_edge),.row_complete(diag_rc),.row_equal(diag_re),.row_tag_good(diag_rt),.promoted(fusion_promoted),
+        .shadow_valid(diag_sv),.shadow64(diag_s64),.shadow128(diag_s128),.strong_loss_row(diag_sl),.illegal_row(diag_il),
         .mode(display_mode),.admit_mode(control_mode),.enable(fusion_enable),.fused_rgb(fused_rgb),.osd_rgb(osd_rgb),.osd_de(osd_de),
         .compare_valid(diag_cv),.current_qualified(diag_cq),.reference_qualified(diag_rq),.compare_x(diag_x),.compare_y(diag_y),.reference_x(fusion_ref_x),.reference_y(fusion_ref_y),
         .current_class(diag_class),.reference_class(fusion_ref_class),.reference_mask(fusion_ref_mask),.compare_session(diag_csid),.reference_session(fusion_ref_session),

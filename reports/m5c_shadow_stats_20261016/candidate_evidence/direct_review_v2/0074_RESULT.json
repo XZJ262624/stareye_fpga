@@ -1,0 +1,84 @@
+{
+  "case": 0,
+  "label": "negative_schema",
+  "inputs": [
+    {
+      "path": "F:\\Projects\\stareye_fpga\\reports\\m5c_shadow_stats_20261016\\observer_20261016_133248\\schema_mutant.sv",
+      "bytes": 9368,
+      "sha256": "9fd022670a850d8d689e1cda35bc98e5ffdf8608e1d60af99ca5d424ca51e0bb"
+    },
+    {
+      "path": "F:\\Projects\\stareye_fpga\\tb\\m5c_diagnostics\\tb_shadow_observer.sv",
+      "bytes": 6965,
+      "sha256": "a8fee7a7a1613ac552dc7ed9079b176974e688445da0f34e514aa419b7b1b8cf"
+    },
+    {
+      "path": "F:\\Projects\\stareye_fpga\\rtl\\m5c_fusion\\m5a_copy\\m5a_osd.v",
+      "bytes": 6150,
+      "sha256": "b110f8406997a13e85cb9509504cb32e2e6f14fa6c7e272c8817a42fb839a399"
+    }
+  ],
+  "steps": [
+    {
+      "command": [
+        "E:\\Modelsim_10.1c\\win64\\vlib.exe",
+        "work"
+      ],
+      "exit": 0,
+      "timeout": false,
+      "seconds": 0.03067636489868164,
+      "log": {
+        "path": "F:\\Projects\\stareye_fpga\\reports\\m5c_shadow_stats_20261016\\observer_20261016_133248\\negative_schema\\step0.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "command": [
+        "E:\\Modelsim_10.1c\\win64\\vlog.exe",
+        "-sv",
+        "-work",
+        "work",
+        "F:\\Projects\\stareye_fpga\\reports\\m5c_shadow_stats_20261016\\observer_20261016_133248\\schema_mutant.sv",
+        "F:\\Projects\\stareye_fpga\\rtl\\m5c_fusion\\m5a_copy\\m5a_osd.v",
+        "F:\\Projects\\stareye_fpga\\tb\\m5c_diagnostics\\tb_shadow_observer.sv"
+      ],
+      "exit": 0,
+      "timeout": false,
+      "seconds": 0.06802535057067871,
+      "log": {
+        "path": "F:\\Projects\\stareye_fpga\\reports\\m5c_shadow_stats_20261016\\observer_20261016_133248\\negative_schema\\step1.log",
+        "bytes": 227,
+        "sha256": "4ffc76b821ec10ff0fbee5d2fdc0dc2e39d66f66b46a6e982fad8195bdc37c12"
+      }
+    },
+    {
+      "command": [
+        "E:\\Modelsim_10.1c\\win64\\vsim.exe",
+        "-c",
+        "-novopt",
+        "-lib",
+        "work",
+        "tb_shadow_observer",
+        "-gCASE=0",
+        "+OUT=F:/Projects/stareye_fpga/reports/m5c_shadow_stats_20261016/observer_20261016_133248/negative_schema",
+        "-l",
+        "sim.log",
+        "-do",
+        "run -all; quit -code 0",
+        "+EXPECT=F:/Projects/stareye_fpga/reports/m5c_shadow_stats_20261016/observer_20261016_133248/positive_0/expected_0.hex",
+        "+FATAL_NAME=SHADOW_SCHEMA_VERSION"
+      ],
+      "exit": 0,
+      "timeout": false,
+      "seconds": 2.444329261779785,
+      "log": {
+        "path": "F:\\Projects\\stareye_fpga\\reports\\m5c_shadow_stats_20261016\\observer_20261016_133248\\negative_schema\\step2.log",
+        "bytes": 1613,
+        "sha256": "e862d79395cf3b0cf70457b74d19c18059994737af2508630451400ab5a427e6"
+      }
+    }
+  ],
+  "status": "PASS_EXPECTED_NAMED_FATAL",
+  "raw_native_exit": 0
+}

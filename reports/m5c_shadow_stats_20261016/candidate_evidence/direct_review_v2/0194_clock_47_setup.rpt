@@ -1,0 +1,75 @@
+
+Efinix Timing Path Constraint Report
+Version: 2025.1.110.5.9
+Date: Fri Oct 16 14:42:33 2026
+
+Copyright (C) 2013 - 2025 Efinix, Inc. All rights reserved.
+
+User command: report_timing -from_clock {clk_pixel} -to_clock {clk_sys} -npaths 1 -nworst 1 -setup -detail full_path -file {clock_47_setup.rpt}
+
+Timing Model: I3
+	process : typical
+	temperature : -40C to 100C
+	voltage : 0.95 +/-30mV
+	speedgrade : 3
+	technology : t16ff
+	status : final
+
+Summary:
+
+ Path #  | Slack (ns) | Delay (ns) |            Start Pin            |               End Pin               |  Launch Clk   | Capture Clk
+========================================================================================================================================
+ 1       |  3.007     |  1.743     | u_m5b1/telemetry/held[266]~FF|Q | u_m5b1/telemetry/raw_stage[10]~FF|D | clk_pixel (R) | clk_sys (R)
+
+++++ Path 1 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : u_m5b1/telemetry/held[266]~FF|CLK   
+Path End      : u_m5b1/telemetry/raw_stage[10]~FF|D 
+Launch Clock  : clk_pixel (RISE)                    
+Capture Clock : clk_sys (RISE)                      
+Slack         : 3.007 (required time - arrival time)
+Delay         : 1.743                               
+
+Logic Level             : 2
+Non-global nets on path : 2
+Global nets on path     : 0
+
+Launch Clock Path Delay        : 2.095
++ Clock To Q + Data Path Delay : 1.876
+--------------------------------------
+End-of-path arrival time       : 3.971
+
+Constraint                     : 5.000
++ Capture Clock Path Delay     : 2.104
+- Clock Uncertainty            : 0.126
+--------------------------------------
+End-of-path required time      : 6.978
+
+Launch Clock Path
+              name                 model name   delay (ns)  cumulative delay (ns) pins on net    location
+===========================================================================================================
+clk_pixel                            inpad        0.000             0.000                0       (0,159)
+clk_pixel                            inpad        0.126             0.126             8144       (0,159)
+clk_pixel                            net          1.969             2.095             8144       (0,159)
+u_m5b1/telemetry/held[266]~FF|CLK    ff           0.000             2.095             8144       (17,59)
+
+Data Path
+               name                  model name   delay (ns)  cumulative delay (ns) pins on net    location
+=============================================================================================================
+u_m5b1/telemetry/held[266]~FF|Q         ff          0.130             0.130              2         (17,59) 
+u_m5b1/telemetry/held[266]              net         0.860             0.990              2         (17,59) 
+LUT__109496|in[0]                       lut         0.063             1.053              2         (15,78) 
+LUT__109496|out                         lut         0.000             1.053              2         (15,78) 
+n59766                                  net         0.759             1.812              2         (15,78) 
+LUT__109499|in[0]                       lut         0.061             1.873              2         (29,129)
+LUT__109499|out                         lut         0.000             1.873              2         (29,129)
+u_m5b1/telemetry/raw_stage[10]~FF|D     ff          0.003             1.876              2         (29,129)
+
+Capture Clock Path
+                name                   model name   delay (ns)  cumulative delay (ns) pins on net    location
+===============================================================================================================
+clk_sys                                  inpad        0.000             0.000                0       (0,162) 
+clk_sys                                  inpad        0.126             0.126            10545       (0,162) 
+clk_sys                                  net          1.978             2.104            10545       (0,162) 
+u_m5b1/telemetry/raw_stage[10]~FF|CLK    ff           0.000             2.104            10545       (29,129)
+

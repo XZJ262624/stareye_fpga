@@ -1,0 +1,36 @@
+{
+  "status": "PASS_SELECTED_COMMAND_SOURCE_CLOSURE_V3",
+  "versions": [
+    {
+      "parent": {
+        "path": "scripts/m5c_shadow_inventory_commands.py",
+        "bytes": 3377,
+        "sha256": "424cef6ee046ebd98075ea815f0f5fc0b94208ea68ee7ef1cb50ae51436598f9"
+      },
+      "derived": {
+        "path": "scripts/m5c_shadow_inventory_commands_v2.py",
+        "bytes": 3946,
+        "sha256": "b1f64ad558131589164670b59a1d4760b1ff1652c8cb60848432dfb056063b3f"
+      },
+      "diff": "--- \n+++ \n@@ -17,10 +17,14 @@\n    for x in v.values():yield from visit(x)\n  elif isinstance(v,list):\n   for x in v:yield from visit(x)\n-inputs={};owners=[]\n+inputs={};owners=[];selected_versions={}\n+for m in pack['mapping']:\n+ selected_versions.setdefault(norm(m['original']['path']),{})[m['original']['sha256']]=m['original']\n for m in pack['mapping']:\n  p=Path(m['original']['path'])\n- if p.name=='INPUTS.json':inputs[norm(p.parent)]={norm(x['path']):x for x in visit(json.loads(read(m)))}\n+ if p.name in ['INPUTS.json','RESULT.json']:\n+  z=json.loads(read(m));z=z if p.name=='INPUTS.json' else z.get('inputs',[])\n+  inputs.setdefault(norm(p.parent),{}).update({norm(x['path']):x for x in visit(z)})\n  if p.name.startswith('OWNER') and p.suffix=='.json':owners.append(m)\n rows=[];gaps=[];includes=[]\n for m in owners:\n@@ -38,10 +42,14 @@\n   elif val.startswith(('+','-')) or Path(val).suffix.lower() not in ['.sv','.v','.svh','.vh']:continue\n   p=Path(val);p=p if p.is_absolute() else cwd/p\n   x=bound.get(norm(p))\n+  evidence_kind='RUN_DECLARED_INPUT'\n+  if x is None and arg.startswith('+'):\n+   versions=selected_versions.get(norm(p),{})\n+   if len(versions)==1:x=next(iter(versions.values()));evidence_kind='UNIQUE_SEALED_GENERATED_RUNTIME_DATA'\n   if x is None:gaps.append(dict(owner=m['original']['path'],argument=arg,reason='NO_EXACT_RUN_INPUT_BINDING'));continue\n   obj=byhash.get(x['sha256'])\n   if obj is None:gaps.append(dict(owner=m['original']['path'],argument=arg,reason='NO_TRANSPORT_OBJECT'));continue\n-  deps.append(dict(input=x,object=obj))\n+  deps.append(dict(input=x,object=obj,binding=evidence_kind))\n   if p.suffix.lower() not in ['.sv','.v','.svh','.vh']:continue\n   raw=gzip.decompress((R/obj['path']).read_bytes()).decode(errors='strict')\n   for name in re.findall(r'`include\\s+\"([^\"]+)\"',raw):\n@@ -50,6 +58,6 @@\n    if found and found['sha256'] in byhash:includes.append(dict(source=x,include=name,input=found,object=byhash[found['sha256']]))\n    else:gaps.append(dict(owner=m['original']['path'],source=x['path'],include=name,reason='INCLUDE_NOT_EXPLICITLY_BOUND'))\n  rows.append(dict(owner=m['original'],command=cmd,cwd=str(cwd),dependencies=deps))\n-out=O/'SHORT_COMMAND_INVENTORY.json';assert not out.exists()\n+out=O/'SHORT_COMMAND_INVENTORY_V2.json';assert not out.exists()\n out.write_text(json.dumps(dict(status='PASS_EXPLICIT_COMMAND_DEPENDENCIES' if not gaps else 'COMMAND_DEPENDENCY_GAPS',commands=rows,includes=includes,gaps=gaps,boundary='Explicit selected OWNER commands and lexical HDL includes only. This is not a claim about implicit Python imports, vendor tool installations, or final enabled-system inputs.'),indent=2))\n print('COMMANDS',len(rows),'INCLUDES',len(includes),'GAPS',len(gaps));print(gaps[:10])\n"
+    },
+    {
+      "parent": {
+        "path": "scripts/m5c_shadow_inventory_commands_v2.py",
+        "bytes": 3946,
+        "sha256": "b1f64ad558131589164670b59a1d4760b1ff1652c8cb60848432dfb056063b3f"
+      },
+      "derived": {
+        "path": "scripts/m5c_shadow_inventory_commands_v3.py",
+        "bytes": 3939,
+        "sha256": "04bd669c0b608ea402d9026fa49bbd8d3fc2b9dde1e8c88a88d19df098c35d88"
+      },
+      "diff": "--- \n+++ \n@@ -25,7 +25,7 @@\n  if p.name in ['INPUTS.json','RESULT.json']:\n   z=json.loads(read(m));z=z if p.name=='INPUTS.json' else z.get('inputs',[])\n   inputs.setdefault(norm(p.parent),{}).update({norm(x['path']):x for x in visit(z)})\n- if p.name.startswith('OWNER') and p.suffix=='.json':owners.append(m)\n+ if ('OWNER' in p.stem) and p.suffix=='.json':owners.append(m)\n rows=[];gaps=[];includes=[]\n for m in owners:\n  z=json.loads(read(m));cmd=z.get('cmd',z.get('command'))\n@@ -58,6 +58,6 @@\n    if found and found['sha256'] in byhash:includes.append(dict(source=x,include=name,input=found,object=byhash[found['sha256']]))\n    else:gaps.append(dict(owner=m['original']['path'],source=x['path'],include=name,reason='INCLUDE_NOT_EXPLICITLY_BOUND'))\n  rows.append(dict(owner=m['original'],command=cmd,cwd=str(cwd),dependencies=deps))\n-out=O/'SHORT_COMMAND_INVENTORY_V2.json';assert not out.exists()\n+out=O/'SHORT_COMMAND_INVENTORY_V3.json';assert not out.exists()\n out.write_text(json.dumps(dict(status='PASS_EXPLICIT_COMMAND_DEPENDENCIES' if not gaps else 'COMMAND_DEPENDENCY_GAPS',commands=rows,includes=includes,gaps=gaps,boundary='Explicit selected OWNER commands and lexical HDL includes only. This is not a claim about implicit Python imports, vendor tool installations, or final enabled-system inputs.'),indent=2))\n print('COMMANDS',len(rows),'INCLUDES',len(includes),'GAPS',len(gaps));print(gaps[:10])\n"
+    }
+  ],
+  "history": "V1 reported70 gaps because it read only INPUTS.json and OWNER-prefix. V2 also uses actual RESULT.inputs and uniquely sealed runtime expected files. V3 also matches compile_OWNER/sim_OWNER/vlib_OWNER, adding actual38 recovery recipes. Original reports retained.",
+  "actual_commands": 226,
+  "actual_lexical_includes": 0,
+  "unresolved_explicit_dependencies": 0,
+  "boundary": "Completed short/recovery inputs only. Enabled-system includes/end/gold separately closed after run; Python/checker dependency closure separately declared."
+}

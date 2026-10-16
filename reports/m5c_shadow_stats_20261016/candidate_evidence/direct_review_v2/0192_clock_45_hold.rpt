@@ -1,0 +1,72 @@
+
+Efinix Timing Path Constraint Report
+Version: 2025.1.110.5.9
+Date: Fri Oct 16 14:42:33 2026
+
+Copyright (C) 2013 - 2025 Efinix, Inc. All rights reserved.
+
+User command: report_timing -from_clock {clk_pixel} -to_clock {clk_pixel} -npaths 1 -nworst 1 -hold -detail full_path -file {clock_45_hold.rpt}
+
+Timing Model: I3
+	process : typical
+	temperature : -40C to 100C
+	voltage : 0.95 +/-30mV
+	speedgrade : 3
+	technology : t16ff
+	status : final
+
+Summary:
+
+ Path #  | Slack (ns) | Delay (ns) |                  Start Pin                   |                   End Pin                    |  Launch Clk   |  Capture Clk
+================================================================================================================================================================
+ 1       |  0.008     |  0.102     | u_m5b1/background/capture/pack_data[43]~FF|Q | u_m5b1/background/capture/push_data[43]~FF|D | clk_pixel (R) | clk_pixel (R)
+
+++++ Path 1 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : u_m5b1/background/capture/pack_data[43]~FF|CLK
+Path End      : u_m5b1/background/capture/push_data[43]~FF|D  
+Launch Clock  : clk_pixel (RISE)                              
+Capture Clock : clk_pixel (RISE)                              
+Slack         : 0.008 (arrival time - required time)          
+Delay         : 0.102                                         
+
+Logic Level             : 1
+Non-global nets on path : 1
+Global nets on path     : 0
+
+Launch Clock Path Delay        : 1.234
++ Clock To Q + Data Path Delay : 0.155
+--------------------------------------
+End-of-path arrival time       : 1.389
+
+Constraint                     : 0.000
++ Capture Clock Path Delay     : 1.311
++ Clock Uncertainty            : 0.070
+--------------------------------------
+End-of-path required time      : 1.381
+
+Launch Clock Path
+                     name                       model name   delay (ns)  cumulative delay (ns) pins on net    location
+========================================================================================================================
+clk_pixel                                         inpad        0.000             0.000                0      (0,159)  
+clk_pixel                                         inpad        0.070             0.070             8144      (0,159)  
+clk_pixel                                         net          1.164             1.234             8144      (0,159)  
+u_m5b1/background/capture/pack_data[43]~FF|CLK    ff           0.000             1.234             8144      (143,125)
+
+Data Path
+                    name                      model name   delay (ns)  cumulative delay (ns) pins on net    location
+======================================================================================================================
+u_m5b1/background/capture/pack_data[43]~FF|Q     ff           0.072            0.072              2        (143,125)
+u_m5b1/background/capture/pack_data[43]          net          0.068            0.140              2        (143,125)
+LUT__95442|in[1]                                 lut          0.034            0.174              2        (146,125)
+LUT__95442|out                                   lut          0.000            0.174              2        (146,125)
+u_m5b1/background/capture/push_data[43]~FF|D     ff          -0.019            0.155              2        (146,125)
+
+Capture Clock Path
+                     name                       model name   delay (ns)  cumulative delay (ns) pins on net    location
+========================================================================================================================
+clk_pixel                                         inpad        0.000             0.000                0      (0,159)  
+clk_pixel                                         inpad        0.070             0.070             8144      (0,159)  
+clk_pixel                                         net          1.241             1.311             8144      (0,159)  
+u_m5b1/background/capture/push_data[43]~FF|CLK    ff           0.000             1.311             8144      (146,125)
+

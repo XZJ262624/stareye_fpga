@@ -1,0 +1,13 @@
+# 固定candidate准备边界（不是Git执行授权）
+
+本轮技术开发基线为1786858c7ae9a0c756cc37c43beceb93eca92b9e。离线资格未齐，不能先提交或进入实物。
+
+用户另行授权的M3A/M3B目录迁移、相关入口脚本和根.gitignore/.gitattributes变更保留在主工作区，不纳入本轮核心candidate。Work的五份根管理文档也先保留工作区修改；新候选须有自足的WORK_REVIEW_GATE/范围/限制入口，明确候选内旧管理文档的历史时点。不得为取得全树clean而还原、清理或顺手提交这些其他任务。
+
+允许准备的技术范围为实施冻结内的旁接RTL/顶层/XML及必要精确SDC、新测试、新m5c_shadow_*脚本、新审查证据。只采用逐文件、逐版本的实测绑定；大原生数据库、工具包、bit和用户原始/私人capture不进入外发快照。负向派生和失败历史按真实状态保留，不能包装成有效通过。
+
+字节保存使用新scripts/.gitattributes（仅m5c_shadow_*）与本报告目录.gitattributes。根属性中的未提交M3规则不必进入本轮candidate。原有RTL/TB/工程已受父版-text规则保护。
+
+Git阶段仍待Work核准具体路径及预期blob清单。授权后仅精确暂存并核每个暂存blob与测试记录，实际parent/范围/commit由Work核定。主工作区可以保留已声明的其他任务改动；独立审查使用固定candidate的干净独立视图，不对持续变化的根目录作技术放行。
+
+新candidate固定后，Work负责验证隔离快照逐文件一致并自动发送DeepSeek B，同时停止交用户Codex A提示词。双方独立结束前不交换报告。本轮不运行Programmer、下载、SPI Active或Flash，离线bit即使已生成也不自动允许实物。

@@ -1,0 +1,108 @@
+{
+  "case": 3,
+  "label": "positive_3",
+  "inputs": [
+    {
+      "path": "F:\\Projects\\stareye_fpga\\rtl\\m5c_diagnostics\\m5c_diag_observer_v3.sv",
+      "bytes": 9368,
+      "sha256": "e46ea6be92835d3be88d2f2a8745f0e6ce69abbfbec6cd1aefd9214662680f3a"
+    },
+    {
+      "path": "F:\\Projects\\stareye_fpga\\tb\\m5c_diagnostics\\tb_shadow_observer.sv",
+      "bytes": 6965,
+      "sha256": "a8fee7a7a1613ac552dc7ed9079b176974e688445da0f34e514aa419b7b1b8cf"
+    },
+    {
+      "path": "F:\\Projects\\stareye_fpga\\rtl\\m5c_fusion\\m5a_copy\\m5a_osd.v",
+      "bytes": 6150,
+      "sha256": "b110f8406997a13e85cb9509504cb32e2e6f14fa6c7e272c8817a42fb839a399"
+    }
+  ],
+  "steps": [
+    {
+      "command": [
+        "E:\\Modelsim_10.1c\\win64\\vlib.exe",
+        "work"
+      ],
+      "exit": 0,
+      "timeout": false,
+      "seconds": 0.031023740768432617,
+      "log": {
+        "path": "F:\\Projects\\stareye_fpga\\reports\\m5c_shadow_stats_20261016\\observer_20261016_133248\\positive_3\\step0.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "command": [
+        "E:\\Modelsim_10.1c\\win64\\vlog.exe",
+        "-sv",
+        "-work",
+        "work",
+        "F:\\Projects\\stareye_fpga\\rtl\\m5c_diagnostics\\m5c_diag_observer_v3.sv",
+        "F:\\Projects\\stareye_fpga\\rtl\\m5c_fusion\\m5a_copy\\m5a_osd.v",
+        "F:\\Projects\\stareye_fpga\\tb\\m5c_diagnostics\\tb_shadow_observer.sv"
+      ],
+      "exit": 0,
+      "timeout": false,
+      "seconds": 0.05315089225769043,
+      "log": {
+        "path": "F:\\Projects\\stareye_fpga\\reports\\m5c_shadow_stats_20261016\\observer_20261016_133248\\positive_3\\step1.log",
+        "bytes": 227,
+        "sha256": "4ffc76b821ec10ff0fbee5d2fdc0dc2e39d66f66b46a6e982fad8195bdc37c12"
+      }
+    },
+    {
+      "command": [
+        "E:\\Modelsim_10.1c\\win64\\vsim.exe",
+        "-c",
+        "-novopt",
+        "-lib",
+        "work",
+        "tb_shadow_observer",
+        "-gCASE=3",
+        "+OUT=F:/Projects/stareye_fpga/reports/m5c_shadow_stats_20261016/observer_20261016_133248/positive_3",
+        "-l",
+        "sim.log",
+        "-do",
+        "run -all; quit -code 0"
+      ],
+      "exit": 0,
+      "timeout": false,
+      "seconds": 2.2422800064086914,
+      "log": {
+        "path": "F:\\Projects\\stareye_fpga\\reports\\m5c_shadow_stats_20261016\\observer_20261016_133248\\positive_3\\step2.log",
+        "bytes": 1288,
+        "sha256": "9aa95ced7b0df973a416fb6bf438721a737c8045be9e406482e4a2c4ace1e1dc"
+      }
+    }
+  ],
+  "status": "PASS_POSITIVE",
+  "oracle": {
+    "status": "PASS_INDEPENDENT_OBSERVER_WORDS_AND_PACKET_FORMAT",
+    "case": 3,
+    "records": [
+      {
+        "counts": [
+          31,
+          19,
+          19,
+          19,
+          19,
+          6,
+          6,
+          12,
+          19,
+          19,
+          3,
+          0
+        ],
+        "flags": 199,
+        "first_valid": true,
+        "record_seq": 1,
+        "crc32": "f820e4e5",
+        "boundary": "Packet formatted from actual RAM words on host; not a UART simulation. Saturation case seeds counter flops at max-1 in TB only."
+      }
+    ]
+  }
+}

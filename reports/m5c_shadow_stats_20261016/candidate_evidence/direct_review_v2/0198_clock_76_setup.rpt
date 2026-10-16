@@ -1,0 +1,73 @@
+
+Efinix Timing Path Constraint Report
+Version: 2025.1.110.5.9
+Date: Fri Oct 16 14:42:36 2026
+
+Copyright (C) 2013 - 2025 Efinix, Inc. All rights reserved.
+
+User command: report_timing -from_clock {clk_sys} -to_clock {cmos_pclk} -npaths 1 -nworst 1 -setup -detail full_path -file {clock_76_setup.rpt}
+
+Timing Model: I3
+	process : typical
+	temperature : -40C to 100C
+	voltage : 0.95 +/-30mV
+	speedgrade : 3
+	technology : t16ff
+	status : final
+
+Summary:
+
+ Path #  | Slack (ns) | Delay (ns) |              Start Pin              |                End Pin                | Launch Clk  |  Capture Clk
+==============================================================================================================================================
+ 1       |  3.473     |  1.238     | u_m5b1/video/camera_fifo/rp[9]~FF|Q | u_m5b1/video/camera_fifo/rgs1[9]~FF|D | clk_sys (R) | cmos_pclk (R)
+
+++++ Path 1 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : u_m5b1/video/camera_fifo/rp[9]~FF|CLK
+Path End      : u_m5b1/video/camera_fifo/rgs1[9]~FF|D
+Launch Clock  : clk_sys (RISE)                       
+Capture Clock : cmos_pclk (RISE)                     
+Slack         : 3.473 (required time - arrival time) 
+Delay         : 1.238                                
+
+Logic Level             : 1
+Non-global nets on path : 2
+Global nets on path     : 0
+
+Launch Clock Path Delay        : 2.104
++ Clock To Q + Data Path Delay : 1.371
+--------------------------------------
+End-of-path arrival time       : 3.475
+
+Constraint                     : 5.000
++ Capture Clock Path Delay     : 2.074
+- Clock Uncertainty            : 0.126
+--------------------------------------
+End-of-path required time      : 6.948
+
+Launch Clock Path
+                name                   model name   delay (ns)  cumulative delay (ns) pins on net    location
+===============================================================================================================
+clk_sys                                  inpad        0.000             0.000                0       (0,162) 
+clk_sys                                  inpad        0.126             0.126            10545       (0,162) 
+clk_sys                                  net          1.978             2.104            10545       (0,162) 
+u_m5b1/video/camera_fifo/rp[9]~FF|CLK    ff           0.000             2.104            10545       (185,87)
+
+Data Path
+                name                   model name   delay (ns)  cumulative delay (ns) pins on net    location
+===============================================================================================================
+u_m5b1/video/camera_fifo/rp[9]~FF|Q       ff          0.130             0.130              5         (185,87)
+u_m5b1/video/camera_fifo/rp[9]            net         0.637             0.767              5         (185,87)
+LUT__93590|in[0]                          lut         0.061             0.828              5         (202,77)
+LUT__93590|out                            lut         0.000             0.828              2         (202,77)
+u_m5b1/video/camera_fifo/n318             net         0.540             1.368              2         (202,77)
+u_m5b1/video/camera_fifo/rgs1[9]~FF|D     ff          0.003             1.371              2         (199,54)
+
+Capture Clock Path
+                 name                    model name   delay (ns)  cumulative delay (ns) pins on net    location
+=================================================================================================================
+cmos_pclk                                  inpad        0.000             0.000               0       (111,323)
+cmos_pclk                                  inpad        0.126             0.126             305       (111,323)
+cmos_pclk                                  net          1.948             2.074             305       (111,323)
+u_m5b1/video/camera_fifo/rgs1[9]~FF|CLK    ff           0.000             2.074             305       (199,54) 
+

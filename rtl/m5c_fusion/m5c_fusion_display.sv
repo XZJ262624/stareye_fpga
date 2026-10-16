@@ -18,6 +18,7 @@ module m5c_fusion_display(
  output diag_compare_valid,diag_current_qualified,diag_reference_qualified,
  output [1:0] diag_current_class,output [11:0] diag_compare_x,diag_compare_y,
  output diag_tag_good,diag_bounds,diag_weak,diag_support,diag_global,diag_row_complete,diag_row_equal,diag_row_tag,
+ output diag_shadow_valid,diag_shadow64,diag_shadow128,diag_strong_loss,diag_illegal,
  output frame_done,output [479:0] telemetry_snapshot);
  wire [767:0] descriptor=offer_descriptor;reg [63:0] session;reg have_offer,released,tap_seen,broken;
  reg request_pending,sof_seen;wire sof_edge=ce&&raw_sof&&!sof_seen;
@@ -84,6 +85,7 @@ module m5c_fusion_display(
   .support_radius(descriptor[272]?4'd3:4'd2),.final_de(final_de),.final_x(final_x),.final_y(final_y),.local_edge(local_edge),
   .diag_tag_good(diag_tag_good),.diag_bounds(diag_bounds),.diag_weak(diag_weak),.diag_support(diag_support),.diag_global(diag_global),
   .diag_row_complete(diag_row_complete),.diag_row_equal(diag_row_equal),.diag_row_tag(diag_row_tag),
+  .diag_shadow_valid(diag_shadow_valid),.diag_shadow64(diag_shadow64),.diag_shadow128(diag_shadow128),.diag_strong_loss(diag_strong_loss),.diag_illegal(diag_illegal),
   .fused_edge(fused_edge),.promoted(promoted),.frame_ok(frame_ok),.row_retire(retire),.retired_y(retire_row));
  assign fused_rgb=!final_de?24'd0:mode==6&&enable?(local_edge?24'hff0000:promoted?24'h00ffff:{raw_gray,raw_gray,raw_gray}):base_rgb;
  // Raster owns per-frame statistics even while the fusion context is blocked.

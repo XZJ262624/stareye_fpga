@@ -1,0 +1,73 @@
+
+Efinix Timing Path Constraint Report
+Version: 2025.1.110.5.9
+Date: Fri Oct 16 14:42:46 2026
+
+Copyright (C) 2013 - 2025 Efinix, Inc. All rights reserved.
+
+User command: report_timing -from_clock {tdqss_clk} -to_clock {tdqss_clk} -npaths 1 -nworst 1 -hold -detail full_path -file {clock_180_hold.rpt}
+
+Timing Model: I3
+	process : typical
+	temperature : -40C to 100C
+	voltage : 0.95 +/-30mV
+	speedgrade : 3
+	technology : t16ff
+	status : final
+
+Summary:
+
+ Path #  | Slack (ns) | Delay (ns) |  Start Pin   | End Pin  |  Launch Clk   |  Capture Clk
+============================================================================================
+ 1       |  0.057     |  0.223     | addr[6]~FF|Q |  addr[6] | tdqss_clk (R) | tdqss_clk (R)
+
+++++ Path 1 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : addr[6]~FF|CLK                      
+Path End      : addr[6]                             
+Launch Clock  : tdqss_clk (RISE)                    
+Capture Clock : tdqss_clk (RISE)                    
+Slack         : 0.057 (arrival time - required time)
+Delay         : 0.223                               
+
+Logic Level             : 0
+Non-global nets on path : 1
+Global nets on path     : 0
+
+Launch Clock Path Delay        : 1.194
++ Clock To Q + Data Path Delay : 0.295
+--------------------------------------
+End-of-path arrival time       : 1.489
+
+Constraint                     :  0.000
++ Capture Clock Path Delay     :  1.222
++ Clock Uncertainty            :  0.070
+- Output Delay                 : -0.140
+---------------------------------------
+End-of-path required time      :  1.432
+
+Launch Clock Path
+     name       model name   delay (ns)  cumulative delay (ns) pins on net    location
+========================================================================================
+tdqss_clk         inpad        0.000             0.000               0        (110,0) 
+tdqss_clk         inpad        0.070             0.070             146        (110,0) 
+tdqss_clk         net          1.124             1.194             146        (110,0) 
+addr[6]~FF|CLK    ff           0.000             1.194             146        (214,51)
+
+Data Path
+    name      model name   delay (ns)  cumulative delay (ns) pins on net    location
+======================================================================================
+addr[6]~FF|Q    ff           0.072             0.072              2         (214,51)
+addr[6]         net          0.195             0.267              2         (214,51)
+addr[6]         outpad       0.028             0.295              2         (219,58)
+addr[6]         outpad       0.000             0.295              0         (219,58)
+
+Capture Clock Path
+         name            model name   delay (ns)  cumulative delay (ns) pins on net    location
+=================================================================================================
+tdqss_clk                  inpad        0.000             0.000               0        (110,0) 
+tdqss_clk                  inpad        0.070             0.070             146        (110,0) 
+tdqss_clk                  net          1.124             1.194             146        (110,0) 
+tdqss_clk~CLKOUT~218~59    outpad       0.028             1.222             146        (219,59)
+tdqss_clk~CLKOUT~218~59    outpad       0.000             1.222               0        (219,59)
+

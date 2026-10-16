@@ -10,6 +10,7 @@ module m5c_row_fusion #(parameter WIDTH=1280,HEIGHT=720,H_TOTAL=1650,REF_STAGE=1
  input [3:0] support_radius,
  input final_de,input [11:0] final_x,final_y,input local_edge,
  output diag_tag_good,diag_bounds,diag_weak,diag_support,diag_global,diag_row_complete,diag_row_equal,diag_row_tag,
+ output diag_shadow_valid,diag_shadow64,diag_shadow128,diag_strong_loss,diag_illegal,
  output fused_edge,promoted,output reg frame_ok,
  output reg row_retire,output reg [11:0] retired_y);
  reg [319:0] frame_identity;
@@ -44,6 +45,35 @@ module m5c_row_fusion #(parameter WIDTH=1280,HEIGHT=720,H_TOTAL=1650,REF_STAGE=1
  assign diag_row_complete=row_complete[obank];assign diag_row_equal=row_equal[obank];
  assign diag_row_tag=row_y[obank]==final_y&&row_cookie[obank]==frame_cookie;
  assign fused_edge=local_edge||promoted;
+ // Passive schema2 shadow; no output feeds the production datapath/control.
+ // Reuse the ORIGINAL row_complete/y/cookie lifetime. A new row clears all
+ // its tiles before completion; no independent narrowed identity is stored.
+ reg [19:0] shadow_tiles[0:3];
+ reg shadow_illegal[0:3],shadow_strong_loss[0:3];
+ integer sk;
+ wire shadow_geometry=WIDTH==1280&&HEIGHT==720&&final_x<1280&&final_y<720;
+ assign diag_shadow_valid=shadow_geometry&&row_complete[obank]&&row_y[obank]==final_y&&row_cookie[obank]==frame_cookie;
+ assign diag_shadow64=shadow_geometry?shadow_tiles[obank][final_x[10:6]]:1'b0;
+ assign diag_shadow128=shadow_geometry?(shadow_tiles[obank][{final_x[10:7],1'b0}]&&shadow_tiles[obank][{final_x[10:7],1'b1}]):1'b0;
+ assign diag_strong_loss=shadow_strong_loss[obank];
+ assign diag_illegal=shadow_illegal[obank];
+ always @(posedge clk or negedge rst_n)begin
+  if(!rst_n)begin
+   for(sk=0;sk<4;sk=sk+1)begin shadow_tiles[sk]<=0;shadow_illegal[sk]<=0;shadow_strong_loss[sk]<=0;end
+  end else if(context_block||context_tail_fault)begin
+   for(sk=0;sk<4;sk=sk+1)begin shadow_tiles[sk]<=0;shadow_illegal[sk]<=0;shadow_strong_loss[sk]<=0;end
+  end else if(ce&&tap_valid&&tap_x<1280)begin
+   if(tap_x==0)begin
+    shadow_tiles[bank]<={19'h7ffff,pixel_equal};
+    shadow_illegal[bank]<=current_class==3||ref_class==3;
+    shadow_strong_loss[bank]<=ref_class==2&&current_class!=2;
+   end else begin
+    if(!pixel_equal)shadow_tiles[bank][tap_x[10:6]]<=0;
+    if(current_class==3||ref_class==3)shadow_illegal[bank]<=1;
+    if(ref_class==2&&current_class!=2)shadow_strong_loss[bank]<=1;
+   end
+  end
+ end
  integer k;
  always @(posedge clk or negedge rst_n)begin
   if(!rst_n)begin

@@ -1,0 +1,85 @@
+
+Efinix Timing Path Constraint Report
+Version: 2025.1.110.5.9
+Date: Fri Oct 16 14:42:35 2026
+
+Copyright (C) 2013 - 2025 Efinix, Inc. All rights reserved.
+
+User command: report_timing -from_clock {clk_sys} -to_clock {clk_pixel} -npaths 1 -nworst 1 -setup -detail full_path -file {clock_73_setup.rpt}
+
+Timing Model: I3
+	process : typical
+	temperature : -40C to 100C
+	voltage : 0.95 +/-30mV
+	speedgrade : 3
+	technology : t16ff
+	status : final
+
+Summary:
+
+ Path #  | Slack (ns) | Delay (ns) |     Start Pin      |                End Pin                | Launch Clk  |  Capture Clk
+=============================================================================================================================
+ 1       |  1.150     |  3.586     | diag_token[3]~FF|Q | u_diag_observer/memory__D$2|WDATA[13] | clk_sys (R) | clk_pixel (R)
+
+++++ Path 1 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : diag_token[3]~FF|CLK                 
+Path End      : u_diag_observer/memory__D$2|WDATA[13]
+Launch Clock  : clk_sys (RISE)                       
+Capture Clock : clk_pixel (RISE)                     
+Slack         : 1.150 (required time - arrival time) 
+Delay         : 3.586                                
+
+Logic Level             : 5
+Non-global nets on path : 6
+Global nets on path     : 0
+
+Launch Clock Path Delay        : 2.104
++ Clock To Q + Data Path Delay : 3.715
+--------------------------------------
+End-of-path arrival time       : 5.819
+
+Constraint                     : 5.000
++ Capture Clock Path Delay     : 2.095
+- Clock Uncertainty            : 0.126
+--------------------------------------
+End-of-path required time      : 6.969
+
+Launch Clock Path
+        name          model name   delay (ns)  cumulative delay (ns) pins on net    location
+==============================================================================================
+clk_sys                 inpad        0.000             0.000                0      (0,162)  
+clk_sys                 inpad        0.126             0.126            10545      (0,162)  
+clk_sys                 net          1.978             2.104            10545      (0,162)  
+diag_token[3]~FF|CLK    ff           0.000             2.104            10545      (109,256)
+
+Data Path
+                name                   model name   delay (ns)  cumulative delay (ns) pins on net    location
+===============================================================================================================
+diag_token[3]~FF|Q                    ff               0.130            0.130              16       (109,256)
+diag_token[3]                         net              0.597            0.727              16       (109,256)
+LUT__116413|in[2]                     lut              0.061            0.788              16       (86,250) 
+LUT__116413|out                       lut              0.000            0.788               2       (86,250) 
+n64043                                net              0.587            1.375               2       (86,250) 
+LUT__116414|in[3]                     lut              0.061            1.436               2       (65,219) 
+LUT__116414|out                       lut              0.000            1.436               2       (65,219) 
+n64044                                net              0.445            1.881               2       (65,219) 
+LUT__116415|in[2]                     lut              0.061            1.942               2       (58,208) 
+LUT__116415|out                       lut              0.000            1.942               2       (58,208) 
+n64045                                net              0.764            2.706               2       (58,208) 
+LUT__116423|in[3]                     lut              0.061            2.767               2       (37,197) 
+LUT__116423|out                       lut              0.000            2.767               2       (37,197) 
+n64053                                net              0.431            3.198               2       (37,197) 
+LUT__116424|in[2]                     lut              0.061            3.259               2       (44,195) 
+LUT__116424|out                       lut              0.000            3.259               2       (44,195) 
+u_diag_observer/memory_wd[3]          net              0.457            3.716               2       (44,195) 
+u_diag_observer/memory__D$2|WDATA[13] ram_8192x20     -0.001            3.715               2       (63,182) 
+
+Capture Clock Path
+              name                model name   delay (ns)  cumulative delay (ns) pins on net    location
+==========================================================================================================
+clk_pixel                        inpad           0.000             0.000                0       (0,159) 
+clk_pixel                        inpad           0.126             0.126             8144       (0,159) 
+clk_pixel                        net             1.969             2.095             8144       (0,159) 
+u_diag_observer/memory__D$2|WCLK ram_8192x20     0.000             2.095             8144       (63,182)
+

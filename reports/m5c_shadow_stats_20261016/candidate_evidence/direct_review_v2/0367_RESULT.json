@@ -1,0 +1,53 @@
+{
+  "status": "PASS_ALL_ROW_SENSITIVITIES",
+  "cases": [
+    {
+      "status": "PASS_EXPECTED_CAUSAL_FATAL",
+      "case": "index64",
+      "expected": "SHADOW64_ORACLE row=1 x=0",
+      "actual": [
+        "# ** Fatal: SHADOW64_ORACLE row=1 x=0"
+      ],
+      "steps": [
+        0,
+        0,
+        0
+      ],
+      "old": "shadow_tiles[obank][final_x[10:6]]",
+      "new": "shadow_tiles[obank][final_x[10:6]^5'd1]",
+      "inverse_text_exact": true
+    },
+    {
+      "status": "PASS_EXPECTED_CAUSAL_FATAL",
+      "case": "index128",
+      "expected": "SHADOW128_ORACLE row=1 x=0",
+      "actual": [
+        "# ** Fatal: SHADOW128_ORACLE row=1 x=0"
+      ],
+      "steps": [
+        0,
+        0,
+        0
+      ],
+      "old": "{final_x[10:7],1'b0}]&&shadow_tiles[obank][{final_x[10:7],1'b1}",
+      "new": "{final_x[10:7]^4'd1,1'b0}]&&shadow_tiles[obank][{final_x[10:7]^4'd1,1'b1}",
+      "inverse_text_exact": true
+    },
+    {
+      "status": "PASS_EXPECTED_CAUSAL_FATAL",
+      "case": "complete",
+      "expected": "SHADOW_EARLY_COMPLETE",
+      "actual": [
+        "# ** Fatal: SHADOW_EARLY_COMPLETE"
+      ],
+      "steps": [
+        0,
+        0,
+        0
+      ],
+      "old": "diag_shadow_valid=shadow_geometry&&row_complete[obank]&&",
+      "new": "diag_shadow_valid=shadow_geometry&&",
+      "inverse_text_exact": true
+    }
+  ]
+}
