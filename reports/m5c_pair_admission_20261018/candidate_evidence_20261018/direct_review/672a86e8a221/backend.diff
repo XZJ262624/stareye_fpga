@@ -1,0 +1,34 @@
+--- before
++++ after
+@@ -60,6 +60,14 @@
+  wire pair_tx_start,pair_tx_write,pair_tx_cancel;wire [31:0] pair_tx_addr;wire [7:0] pair_tx_len;wire [127:0] pair_tx_data;
+  wire pair_packet_start,pair_packet_abort,pair_payload_valid;wire [7:0] pair_packet_type,pair_payload;
+  wire [31:0] pair_packet_length,pair_failure;wire [3:0] pair_attempts;
++ // Consume the independent mailbox promptly; preserve the latest observed full SID.
++ reg [63:0] pair_latest_request_session;
++ reg pair_latest_request_valid;
++ always @(posedge ui_clk or negedge pair_local_rst_n)
++  if(!pair_local_rst_n)begin pair_latest_request_session<=0;pair_latest_request_valid<=0;end
++  else if(pair_request)begin pair_latest_request_session<=pair_request_session;pair_latest_request_valid<=1;end
++ wire pair_effective_request_valid=pair_request||pair_latest_request_valid;
++ wire [63:0] pair_effective_request_session=pair_request?pair_request_session:pair_latest_request_session;
+  reg fresh_publication_seen;
+  always @(posedge ui_clk or negedge pair_local_rst_n)
+   if(!pair_local_rst_n)fresh_publication_seen<=0;
+@@ -70,13 +78,13 @@
+  // the pair controller cannot export until release/retire and packet quiet.
+  wire pair_selection_window=(state==IDLE&&!packet_busy&&!packet_start)||
+   state==TELEMETRY||state==TELEMETRY_WAIT;
+- assign pair_selected=pair_request&&pair_request_session==pair_session&&fusion_acquire&&fresh_publication_seen&&
++ assign pair_selected=pair_effective_request_valid&&pair_effective_request_session==pair_session&&fusion_acquire&&fresh_publication_seen&&
+   active_pair_descriptor==result_descriptor&&!pair_terminal&&!pair_hold&&pair_selection_window&&
+   !tx_busy&&!eng_busy&&!arm_busy&&!writer_owned&&!stop;
+  assign pair_fail_selected=pair_wait_expired&&!pair_terminal&&!pair_hold&&state==IDLE&&
+   !tx_busy&&!eng_busy&&!arm_busy&&!writer_owned&&!packet_busy&&!packet_start&&!stop;
+- // Consume a stale or evaluated request without changing ordinary fusion acquire.
+- assign pair_request_take=pair_request&&(pair_terminal||pair_wait_expired||pair_request_session<pair_session||(pair_request_session==pair_session&&fusion_acquire));
++ // ACK every visible message, independently of ordinary fusion acquisition.
++ assign pair_request_take=pair_request;
+  wire want_reserve=run&&!stop&&tick==REQUEST_CYCLES-1&&state==IDLE&&!arm_busy&&!writer_owned&&!pair_hold&&!pair_selected&&!pair_fail_selected;
+  // One event for a scheduling request not admitted, or its later slot denial.
+  assign job_rejected_event=run&&!stop&&((tick==REQUEST_CYCLES-1&&!want_reserve)||

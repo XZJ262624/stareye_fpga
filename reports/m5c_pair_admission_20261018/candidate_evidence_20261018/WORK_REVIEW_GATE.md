@@ -1,0 +1,13 @@
+# 最新请求SID修复：技术审查入口
+
+审查身份由Work创建固定candidate后单独声明；本包基于parent 3c693037b79b4129856a2c43f2bcfe54ce18d623。唯一canonical功能改动为m5c_pair_backend：及时ACK请求邮箱，保存最新完整64位SID+valid，当前有效请求优先，实际acquire SID必须匹配后才消耗fresh publication和attempt。display、TTL、协议和lease排空不改。
+
+证据顺序：direct_review/INDEX.json列原字节小型文本；TRANSPORT_INDEX.json列所有版本和无损对象；KNOWN_LIMITS.md列范围。verify_transport.py默认只读，验证新/继承对象原始SHA与大小，不执行历史生成器。prepare_transport.py和prepare_scope.py为打包来源，不作为审查默认执行入口。
+
+1. 因果：实际display session及双mailbox在telemetry_pending延迟后取得旧SID；历史source_seq=target-1且年龄合法场景复现。不能从这个模型断言全部实物八失败同一根因。
+2. 修复短门：实际backend stale acquire不消耗fresh/attempt，下个当前SID同publication成功；真实取消恢复、reset握手后清缓存、same-edge匹配/不匹配、高32控制、单点移除SID门的指定Fatal。短夹具未合格尝试与探索边界保留。
+3. 固定V3远端：真实2020.4编译、100us兼容、完整视频与本地可信oracle重算。旧INPUTS backend一项错误必须读RUNTIME_INPUT_RECONCILIATION及FIRST_STRICT_FAILURE；原件不改。
+4. 当前physical：新65UI状态及原bundle覆盖，107源/8DB版本绑定，实际资源47816/200/1；I3 +0.205/+0.026ns，三继承PLL SR六项显式untimed，不作整体全timed结论。
+5. Offline：仅文件生成、无硬件。bitSHA3039830deb789e75c7a0e1cac0c7d5915b205abc222dec20176636f61490816e。
+
+快照应包含本轮selected技术文件及必要parent依赖；不得夹带QQ私有workflow、用户硬件raw、nativeDB/bit/工具或根M3/docs工作。B可读direct_review原字节，不能解压的大对象复核能力须如实声明。A可运行只读reader。双方独立完成前不得互看结果。

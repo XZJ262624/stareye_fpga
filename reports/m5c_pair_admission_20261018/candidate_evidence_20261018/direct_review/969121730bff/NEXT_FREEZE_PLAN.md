@@ -1,0 +1,10 @@
+# 后续输入冻结与执行提案（尚未启动）
+
+仅backend新增latest64+valid及及时ACK；当前SHA25dc750eaa7ed216b58081986fb7a2ba1586bcdb0e63b09b944b695e295fbff1。Work已核107canonical中106不变、108原生产保护不变。
+
+1. 新physical子目录和独立prepare/run脚本，复用reason20_repair的归档/原生runner逻辑，但不执行其历史prepare入口：该入口会覆盖旧LATEST指针且套旧ALIAS260。新脚本明确复制当前canonical107输入、当前合格SDC和XML，11settings仅base_path字符串可逆重定位；不复制旧DB冒充freshmap。资源51680/204/128不变。
+2. fresh map先发现完整现有68组及3790组内+2keymeta实际对象。新增latest64UI寄存D来自同UI requestmailbox ddata，是接收域的正常同步路径；原held→ddata跨域64bundle仍须逐位核实际映射及5ns/hold/skew，优化若合并ddata到latest物理寄存则将实际跨域目标完整重绑定，不能一概将latest设falsepath。latest_valid、select逻辑D/CE/SR和局部reset释放正常控制覆盖；发现新增/改名canonical先给具体原native/当前map证明Work核定，不盲套旧alias。
+3. 新资源map→actual selector/interface/place→route→全I3/CDC/控制/正常setuphold及三legacyPLL SR明确untimed边界。逐stage全部内容归档在nextnative之前，所有旧物理与bit保留。仅待Work源冻结授权才启动。
+4. 远端V3以已验证remote_pack5_reason20_20261017/package的固定manifest枚举复制，排除local_validation/tool/work/scratch。63模拟输入仅backend改字节，其他62严格原字节；V2 full TB及选择ledger、gold、checker、service384/RT负载、完整921600/1152B/metadata/CRC/BFS/end/下一pub要求和原sim/wall预算保持。新包manifest/compat receipt identity必须重新计算，禁止继承V2 compat PASS。
+5. 便携runner保持ModelSim2020.4 +acc优化和同包/tool的compile+100us兼容门，完整full从time0，14400s wall；本机只bounded compile/compat检查，长full交第二PC。V2原ZIP/原目录/收据不改，新V3是WIP仿真包不是candidate或上板放行。
+6. 若map canonical或输入有任何额外功能变更，先报告精确差分再重绑。Git/硬件/新candidate仍未授权。

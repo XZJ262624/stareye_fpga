@@ -1,0 +1,11 @@
+# Work：V3离线功能与本机有限物理资格验收
+
+接受当前固定V3条件模型下离线功能结果与fresh物理实现的受约束路径资格，允许进入隔离离线bit转换准备。不是独立审查PASS、硬件放行或全芯片无例外时序通过。
+
+- 回传ZIP实际12449739B，SHA `cf9c8e544df9277fe6a7691cdcb742eed3cefa61955d501d90534298f5dc1707`。外层5对象hash通过，两个阶段各100输入与本地冻结V3逐字节相等；manifest SHA `dfc34d600fcc88cf356f81ce523af5a20903a2cf9a3d1f7afb442dd062230ce9`。
+- Work独立核真实stage退出、完成marker和日志诊断；独立解109包/1302076B/CRC与全身份，参考921600像素用另一union-find算法复算与mask相等，current921600字节与gold相等。真实账本1152currentB/1metadataB、release后IDLE/下一发布/end由原始证据及可信checker核，用户声明不能替代这些记录。
+- 元数据发现必须保留：full/work/INPUTS.json后写backend仍使用V2历史23120B/SHA4cf64…，当前实际为23623B/SHA25dc750e…ff1。原记录和首次严格核对失败原样保留，不修写回传包，不宣称63条均为当前hash。当前身份由固定V3manifest、manager input_manifest、各stage入口/结束实际verify100、精确compile argv/order、native编译记录、manager输入未变与返回100快照闭合；本地重算不是补造远端prehash。这是需独审关注的非阻断证据记录缺陷。
+- 本机701封存文件2031356003B逐项hash已核，manifest SHA `db4b7de94f4f2afb778ae88332f1d43dc97dd7e3084b73595cb76344f9958ddf`。12原生stage exit0；资源47816XLR/200RAM10/1DSP；Work独立normal报告各200路径min setup/hold +0.205/+0.026ns；29组1638端点CQ+data2.735ns/skew2.445ns。新增195端点390模式记录为388实际I3+2实际常量，无未解释项。
+- 仅三继承PLL异步SR端点的六条setup/hold仍明确未计时，继续保留冷重新配置恢复、外部7输入/135输出、加密IP、跨PVT、warm reset、实际DDR服务和板卡增强边界。UART为加速模型，accepted-domain只是实际控制oracle。
+
+根会话核验回执见`reports/m5c_pair_capture_20261016/work_review_20261017/work_check/WORK_REMOTE_V3_{INPUT,PIXEL,RUNTIME_GATE}_REVIEW.json`及本轮physical seal/status回执。最终原始证据以Codex exec新intake封存为索引，不将QQ工作流私有元数据纳入candidate或外发审查。
