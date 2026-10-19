@@ -1,0 +1,229 @@
+`timescale 1ns/1ps
+// Actual transfer + actual arbiter. Independent ownership and payload ledger.
+module tb_pair_deadline_inflight;
+ parameter CASE=0,EXPORT_LIMIT=2000,FENCE=0;
+ reg send_normal=0,send_diag=0;wire telemetry_ready,telemetry_pending;
+ reg frame_done=0;reg [479:0] pixel_snapshot=0;wire [319:0] telemetry_header;wire [7:0] telemetry_byte;wire [8:0] telemetry_index;wire telemetry_take,telemetry_fault;
+ wire pair_take,pair_busy;wire [63:0] pair_sid,active_sid;wire [767:0] active_desc;
+ reg [63:0] normal_sid=64'd7,diag_sid=64'd7;
+ wire session_fault;wire [767:0] offer_desc;wire [63:0] offer_sid;
+ wire offer_valid;
+ integer cycle=0;
+ wire cap_arm,cap_cancel,cap_arm_busy,cap_empty,cap_pop;wire [9:0] cap_count;wire [31:0] cap_reason;wire [127:0] cap_data;
+ reg pixel_release=0,cap_sof=0,cap_de=0,cap_kill=0;reg [11:0] cx=0,cy=0;reg [63:0] ticks=0;
+ reg [127:0] current_mem[0:63],metadata_mem[0:31];reg [31:0] mem_addr=0;integer current_B=0,pair_metadata_B=0,pair_A=0,first_sample_busy=0,held_W_cycles=0;
+ reg current_tx=0,pairmeta_tx=0;integer first_arm_cycle=0,final_b_cycle=0,release_cycle=0;
+ reg run_enable=1;wire fusion_acquire,fusion_release,fusion_retire,fusion_slot;wire [319:0] fusion_identity;wire [63:0] fusion_token;wire fusion_ack,fusion_denied,lease_fault;wire [3:0] pair_leased;
+ reg clk=0,pix=0,rst_n=0,safe_window=1;always #6 pix=~pix;
+ always #5 clk=~clk;
+ reg deadline_after_select=0; always @(posedge clk)if(rst_n&&backend.pair_selected)deadline_after_select<=1;
+ wire request_pair;wire cap_done;wire cap_take;reg [63:0] sid=64'd7;
+ wire [767:0] result_desc;
+ wire [31:0] address;wire [7:0] length;reg rt_req=0,rt_busy=0;integer rt_completed=0,rt_tick=0;
+ wire tx_busy,done,error,cancelled,ta,tw,tl,tr,read_beat,write_beat;
+ wire [31:0] taddr;wire [7:0] tlen,tid,index;wire tty;wire [127:0] td;
+ assign address=taddr;assign length=tlen;
+ wire [2:0] car,cwr,cb,cr,crl,rejected;wire [23:0] cbi,cri;wire [5:0] cbr,crp;wire [383:0] crd;
+ wire [7:0] aid,alen,wid;wire [31:0] aaddr;wire [2:0] asize;wire [1:0] aburst,alock;
+ wire avalid,atype,wlast,wvalid,bready,rready;wire [127:0] wdata;wire [15:0] wstrb;
+ reg aready=0,wready=0,bvalid=0,rvalid=0,rlast=0;reg [7:0] bid=0,rid=0;reg [127:0] rdata=0;
+ reg hold_a=0,hold_w=0,hold_b=0,hold_r=0,hold_last=0;
+ wire arb_busy,quarantine,reset_request;wire [31:0] accepts,completes,rejects;
+ function [127:0] token(input integer n);begin token={32'h01234567,32'h89abcdef,32'hfeedface,32'h13579bdf^n};end endfunction
+ reg tap_valid=0;reg [11:0] tap_x=0,tap_y=0;wire [6:0] wp,rp;wire uart;
+ m5c_pair_backend #(.REQUEST_CYCLES(5000000),.EXPORT_CYCLES(EXPORT_LIMIT)) backend(.pair_local_rst_n(rst_n),.pair_request(request_pair),.pair_request_session(pair_sid),.pair_request_take(pair_take),.pair_wait_expired(deadline_after_select),.active_pair_descriptor(active_desc),.pair_session(active_sid),.pair_arm(cap_arm),.pair_cancel(cap_cancel),.pair_arm_busy(cap_arm_busy),.pair_done(cap_done),.pair_done_take(cap_take),.pair_reason(cap_reason),.pair_empty(cap_empty),.pair_count(cap_count),.pair_data(cap_data),.pair_pop(cap_pop),.ui_clk(clk),.pix_clk(pix),.rst_n(rst_n),.run(run_enable),.stop(1'b0),.epoch(64'd1),
+ .tap_valid(tap_valid),.tap_class(2'b0),.tap_x(tap_x),.tap_y(tap_y),.tap_high(8'd64),.tap_low(8'd32),.tap_filter(1'b1),
+ .tap_frame_id(64'd7),.tap_epoch(64'd1),.tap_timestamp(64'd99),.tap_display_seq(64'd1),.tap_config_generation(64'd0),
+ .fusion_acquire(fusion_acquire),.fusion_slot(fusion_slot),.fusion_identity(fusion_identity),.fusion_token(fusion_token),.fusion_release(fusion_release),.fusion_retire(fusion_retire),.fusion_read_accept(1'b0),.fusion_read_done(1'b0),.result_descriptor(result_desc),.fusion_ack(fusion_ack),.fusion_denied(fusion_denied),.lease_fault(lease_fault),.pair_leased(pair_leased),
+ .telemetry_ready(telemetry_ready),.telemetry_descriptor(telemetry_header),.telemetry_byte(telemetry_byte),.telemetry_index(telemetry_index),.telemetry_take(telemetry_take),.max_wait(96'b0),.max_service(96'b0),.camera_max(14'b0),.display_min(14'b0),
+ .system_status(32'b0),.error_counts(224'b0),.video_fifo_faults(4'b0),.uart_tx(uart),.job_busy(),.publish_toggle(),.bg_fault(),.capture_reset_done(),
+ .avalid(ta),.aready(car[2]),.aaddr(taddr),.alen(tlen),.aid(tid),.atype(tty),.wdata(td),.wvalid(tw),.wlast(tl),.wready(cwr[2]),
+ .bvalid(cb[2]),.bid(cbi[23:16]),.bresp(cbr[5:4]),.rvalid(cr[2]),.rlast(crl[2]),.rdata(crd[383:256]),.rid(cri[23:16]),.rresp(crp[5:4]),.rready(tr),.rejected(rejected[2]),.write_permission(wp),.read_permission(rp));
+ defparam backend.packet.uart.CLOCK=960000;
+ assign tx_busy=backend.tx_busy;assign done=backend.tx_done;assign error=backend.tx_error;assign cancelled=backend.tx_cancelled;
+ assign read_beat=backend.tx_read_beat;assign write_beat=backend.tx_write_beat;assign index=backend.tx_beat;
+ m5c_pair_arbiter #(.BG_REFILL(2)) arbiter(.pair_write_permission({backend.pair_metadata_write,backend.pair_current_write}),.pair_read_permission({backend.pair_metadata_read,backend.pair_current_read}),.clk(clk),.rst_n(rst_n),.soft_reset(1'b0),.ddr_reset_ack(1'b0),.urgent(2'b0),.safe_window(safe_window),
+  .emergency_stop(1'b0),.epoch(64'd1),.c_epoch({64'd1,64'd1,64'd1}),.video_write_permission(4'hf),.video_read_permission(4'hf),.bg_write_permission(wp),.bg_read_permission(rp),
+  .max_wait(),.max_service(),.qos_exceeded(),.error_counts(),.accepts(accepts),.completes(completes),.rejects(rejects),
+  .c_avalid({ta,rt_req,1'b0}),.c_aready(car),.c_aaddr({taddr,32'h00400000,32'b0}),.c_alen({tlen,8'd3,8'b0}),.c_aid({tid,8'h11,8'b0}),.c_atype({tty,2'b0}),
+  .c_wvalid({tw,2'b0}),.c_wlast({tl,2'b0}),.c_wready(cwr),.c_wdata({td,256'b0}),.c_wstrb(48'hffffffffffff),
+  .c_bvalid(cb),.c_bready(3'b111),.c_bid(cbi),.c_bresp(cbr),.c_rvalid(cr),.c_rlast(crl),.c_rready({tr,2'b11}),.c_rdata(crd),.c_rid(cri),.c_rresp(crp),
+  .rejected(rejected),.quarantine(quarantine),.reset_request(reset_request),.error_reason(),.busy(arb_busy),
+  .aid(aid),.alen(alen),.wid(wid),.aaddr(aaddr),.asize(asize),.aburst(aburst),.alock(alock),.avalid(avalid),.atype(atype),.aready(aready),
+  .wdata(wdata),.wstrb(wstrb),.wlast(wlast),.wvalid(wvalid),.wready(wready),.bid(bid),.bresp(2'b0),.bvalid(bvalid),.bready(bready),
+  .rid(rid),.rresp(2'b0),.rdata(rdata),.rlast(rlast),.rvalid(rvalid),.rready(rready));
+ integer ms=0,mb=0,ml=0,logical_base=0,commands=0,finished_bus=0,owned=0,retired=0,rejected_count=0;
+ integer terminals=0,cancel_terminals=0,started=0,cases=0,saved_commands,saved_accepts;
+ reg [7:0] saved_id;reg astall=0,wstall=0;reg [52:0] aheld;reg [152:0] wheld;
+ always @(negedge clk)if(rst_n)begin
+  aready=ms==0&&!hold_a;wready=ms==1&&!hold_w;
+  if(ms==2&&!rvalid&&!hold_r&&!(hold_last&&mb==ml))begin rid=saved_id;if(mem_addr>=32'h01100000&&mem_addr<32'h01100400)rdata=current_mem[(mem_addr-32'h01100000)/16+mb];else if(mem_addr==32'h011e1000)rdata=metadata_mem[mb];else rdata=0;rlast=mb==ml;rvalid=1;end
+  if(ms==3&&!bvalid&&!hold_b)begin bid=saved_id;bvalid=1;end
+ end
+ always @(posedge clk)if(rst_n)begin
+  if(quarantine||reset_request)$fatal(1,"unexpected protocol quarantine");
+  if(astall&&{aid,aaddr,alen,asize,atype,avalid}!==aheld)$fatal(1,"CANCEL_OWNED_A_CHANGED");
+  if(wstall&&{wid,wstrb,wlast,wvalid,wdata}!==wheld)$fatal(1,"CANCEL_OWNED_W_CHANGED");
+  astall=avalid&&!aready;aheld={aid,aaddr,alen,asize,atype,avalid};
+  wstall=wvalid&&!wready;wheld={wid,wstrb,wlast,wvalid,wdata};
+  if(ta&&car[2])owned=owned+1;
+  if(rejected[2])rejected_count=rejected_count+1;
+  if(cb[2]||(cr[2]&&tr&&crl[2]))retired=retired+1;
+  
+  if(avalid&&aready)begin
+   if(ms!=0||(aaddr&4095)+(alen+1)*16>4096)$fatal(1,"bad owned address");
+   mem_addr=aaddr;current_tx=atype&&aaddr>=32'h01100000&&aaddr<32'h01100400;pairmeta_tx=atype&&aaddr==32'h011e1000;if(current_tx)pair_A=pair_A+1;commands=commands+1;ms=atype?1:2;mb=0;ml=alen;saved_id=aid;logical_base=(aaddr-address)/16;
+  end
+  if(wvalid&&wready)begin
+   if(ms!=1||wlast!=(mb==ml))$fatal(1,"CANCEL_OWNED_PAYLOAD_CORRUPT");
+   if(current_tx)current_mem[(mem_addr-32'h01100000)/16+mb]=wdata;if(pairmeta_tx)metadata_mem[mb]=wdata;if(mb==ml)ms=3;else mb=mb+1;
+  end
+  if(bvalid&&bready)begin if(current_tx)begin current_B=current_B+1;final_b_cycle=cycle;end if(pairmeta_tx)pair_metadata_B=pair_metadata_B+1;bvalid<=0;ms=0;finished_bus=finished_bus+1;end
+  if(rvalid&&rready)begin rvalid<=0;if(mb==ml)begin ms=0;finished_bus=finished_bus+1;end else mb=mb+1;end
+  if(commands!=finished_bus+(ms!=0))$fatal(1,"DDR conservation");
+  if(done)begin terminals=terminals+1;if(cancelled)cancel_terminals=cancel_terminals+1;end
+  // Arbiter client response registers are sampled before its next NBA clear.
+  #0.01;
+  if(accepts!=completes+rejects+arb_busy)$fatal(1,"client conservation");
+ end
+ integer px,py,uart_file,uart_bytes=0,denied_age=0,deny_bg_commands=0,bg_commands=0,deny_rt=0;
+ reg denied=0,saw_queued=0;localparam LIMIT=EXPORT_LIMIT;
+ initial uart_file=$fopen("system_uart.hex","w");
+ initial begin
+  repeat(5)@(negedge clk);rst_n=1;
+  repeat(12000)@(negedge pix);
+  forever begin
+   for(py=0;py<720;py=py+1)for(px=0;px<1280;px=px+1)begin
+    @(negedge pix);tap_valid=1;tap_x=px;tap_y=py;
+   end
+   @(negedge pix);tap_valid=0;repeat(2000)@(negedge pix);
+  end
+ end
+ always @(posedge clk)if(rst_n)begin
+  rt_tick<=rt_tick+1;
+  if(!rt_busy&&!rt_req&&rt_tick%1024==0)rt_req<=1;
+  if(rt_req&&car[1])begin rt_req<=0;rt_busy<=1;end
+  if(cr[1]&&crl[1])begin rt_busy<=0;rt_completed=rt_completed+1;end
+  if(avalid&&aready&&aid==3)bg_commands=bg_commands+1;
+  if(backend.packet.uart.valid&&backend.packet.uart.ready)begin $fdisplay(uart_file,"%02x",backend.packet.uart.data);uart_bytes=uart_bytes+1;end
+ end
+
+ m5b1_mailbox #(.WIDTH(64)) pair_box(.sclk(pix),.dclk(clk),.arst_n(rst_n),.send(send_diag),.sdata(diag_sid),.busy(pair_busy),.valid(request_pair),.ddata(pair_sid),.take(pair_take));
+ m5c_display_session ds(.ui_clk(clk),.pix_clk(pix),.rst_n(rst_n),.stop(1'b0),
+ .request_frame(send_normal),.request_seq(normal_sid),.request_config(result_desc[735:576]),
+ .pixel_release(pixel_release),.pixel_release_final(1'b1),.pixel_release_session(active_sid),
+ .result_valid(backend.result_valid),.result_slot(backend.result_slot),.result_descriptor(result_desc),.export_exclusive(backend.export_exclusive),
+ .acquire(fusion_acquire),.lease_slot(fusion_slot),.lease_identity(fusion_identity),.lease_token(fusion_token),
+ .acquire_ack(fusion_ack),.acquire_denied(fusion_denied),.pair_leased(pair_leased),.lease_release(fusion_release),.lease_retire(fusion_retire),.session_fault(session_fault),
+ .telemetry_pending(telemetry_pending),.telemetry_descriptor(active_desc),.telemetry_session(active_sid),
+ .offer_valid(offer_valid),.offer_take(1'b1),.offer_descriptor(offer_desc),.offer_session(offer_sid),
+ .context_quiet(1'b1),.context_tail_fault(1'b0),.ce(1'b1),.read_valid(1'b0),.read_x(12'd0),.read_y(12'd0),.read_session(64'd0),
+ .retire(1'b0),.retire_row(12'd0),.flush(1'b1),.aready(1'b0),.rvalid(1'b0),.rlast(1'b0),.rdata(128'd0),.rid(8'd0),.rresp(2'd0),.rejected(1'b0));
+ integer pubs=0,selected=0,acks=0,consumed=0,stale=0,matching_reject=0,metadata_b=0;
+ reg meta_pending=0;integer events;
+ initial events=$fopen("events.txt","w");
+ always @(posedge pix)if(rst_n&&(send_normal||send_diag))begin
+  $fdisplay(events,"PIX t=%0t mode=%0d normal=%b nsid=%h nbusy=%b diag=%b dsid=%h dbusy=%b",$time,CASE>=8?CASE-8:6,send_normal,normal_sid,ds.req_busy,send_diag,diag_sid,pair_busy);$fflush(events);
+ end
+ always @(posedge clk)if(rst_n)begin
+  cycle=cycle+1;
+  if(backend.publication_accept)begin pubs=pubs+1;$fdisplay(events,"PUBLICATION t=%0t cycle=%0d job=%0d",$time,cycle,backend.job_id);end
+  if(avalid&&aready)meta_pending=(aaddr==32'h010e6000||aaddr==32'h010e6080)&&atype;
+  if(bvalid&&bready&&meta_pending)begin metadata_b=metadata_b+1;meta_pending=0;end
+
+
+  if(session_fault||fusion_denied)$fatal(1,"DIAG_REAL_SESSION_FAULT");
+  if(fusion_ack)begin acks=acks+1;if(!pair_leased[fusion_slot?2:0])$fatal(1,"DIAG_ACK_WITHOUT_REAL_LEASE");end
+  if(backend.pair_selected)selected=selected+1;
+  if(pair_take&&request_pair)begin
+   consumed=consumed+1;
+   if(pair_sid<active_sid)stale=stale+1;
+   else if(backend.pair_selected)begin end
+   else if(pair_sid==active_sid&&fusion_acquire)matching_reject=matching_reject+1;
+   else begin /* Latest-request protocol ACKs before acquire. */ end
+  end
+  if(fusion_acquire||fusion_ack||pair_take||backend.pair_selected||ds.req_take)begin
+   $fdisplay(events,"UI t=%0t cyc=%0d req=%b pairSID=%h activeSID=%h normalvalid=%b normalSID=%h acq=%b ack=%b fresh=%b eq=%b state=%0d tx=%b eng=%b arm=%b writer=%b packet=%b start=%b hold=%b terminal=%b selected=%b take=%b pending=%b",$time,cycle,request_pair,pair_sid,active_sid,ds.req_valid,ds.req_data[223:160],fusion_acquire,fusion_ack,backend.fresh_publication_seen,active_desc==result_desc,backend.state,backend.tx_busy,backend.eng_busy,backend.arm_busy,backend.writer_owned,backend.packet_busy,backend.packet_start,backend.pair_hold,backend.pair_terminal,backend.pair_selected,pair_take,telemetry_pending);$fflush(events);
+  end
+ end
+ task pulse(input integer normal,input integer diag);begin
+  @(negedge pix);send_normal=normal;send_diag=diag;
+  @(negedge pix);send_normal=0;send_diag=0;
+ end endtask
+
+ m5c_telemetry telemetry(.pix_clk(pix),.ui_clk(clk),.rst_n(rst_n),.frame_done(frame_done),.pixel_snapshot(pixel_snapshot),
+ .active_descriptor(active_desc),.active_session(active_sid),.active_token(fusion_token),.active_slot(fusion_slot),.rejected_jobs(64'd0),.protocol_faults(64'd0),
+ .payload_ready(telemetry_ready),.header_descriptor(telemetry_header),.payload_take(telemetry_take),.byte_index(telemetry_index),.payload_byte(telemetry_byte),.snapshot_pending(telemetry_pending),.snapshot_fault(telemetry_fault));
+ integer arm_count=0;always @(posedge clk)if(rst_n&&backend.pair_arm)begin arm_count=arm_count+1;$fdisplay(events,"PAIR_ARM cyc=%0d sid=%h token=%h",cycle,active_sid,fusion_token);$fflush(events);end
+ integer eof_count=0,build_count=0,t4_start=0,t4_done=0,takes=0,packet_window=0;reg oldpending=1,oldready=0;
+ always @(posedge pix)if(rst_n&&frame_done)begin eof_count=eof_count+1;$fdisplay(events,"EOF t=%0t sourceSID=%0d seq=%0d",$time,pixel_snapshot[191:128],pixel_snapshot[63:0]);$fflush(events);end
+ always @(posedge clk)if(rst_n)begin
+  if(telemetry_fault)$fatal(1,"REAL_TELEMETRY_FAULT");
+  if(telemetry.accepting)build_count=build_count+1;
+  if(backend.packet.start&&backend.packet.packet_type==4)t4_start=t4_start+1;
+  if(backend.packet_done&&backend.packet.packet_type==4)t4_done=t4_done+1;
+  if(telemetry_take)takes=takes+1;
+  if(backend.packet_busy&&!telemetry_pending&&backend.packet.packet_type==4)packet_window=packet_window+1;
+  if(oldpending!==telemetry_pending||oldready!==telemetry_ready||telemetry_take||backend.packet_done||backend.packet.start)begin
+   $fdisplay(events,"TELEM t=%0t cyc=%0d pending=%b ready=%b take=%b start=%b type=%0d done=%b packetbusy=%b building=%b mailvalid=%b sourcebusy=%b state=%0d",$time,cycle,telemetry_pending,telemetry_ready,telemetry_take,backend.packet.start,backend.packet.packet_type,backend.packet_done,backend.packet_busy,telemetry.building,telemetry.mail_valid,telemetry.mail_busy,backend.state);$fflush(events);
+  end
+  oldpending=telemetry_pending;oldready=telemetry_ready;
+ end
+
+ defparam backend.pair_controller.CURRENT_BYTES=1600;
+ defparam backend.pair_controller.REFERENCE_CLASS_BYTES=512;
+ defparam backend.pair_controller.REFERENCE_MASK_BYTES=512;
+ m5c_pair_capture #(.WIDTH(200),.HEIGHT(8),.SEPARATE_ELIGIBILITY(1)) capture(.ui_clk(clk),.pix_clk(pix),.arst_n(rst_n),.arm(cap_arm),.arm_session(active_sid),.cancel(cap_cancel),.arm_busy(cap_arm_busy),.done_valid(cap_done),.done_reason(cap_reason),.done_take(cap_take),
+ .source_tap_valid(cap_sof||cap_de),.source_tap_qualified(1'b1),.ce(1'b1),.frame_sof(cap_sof),.frame_admit(1'b1),.mode_cov(1'b1),.fusion_enabled(1'b1),.kill(cap_kill),.identity_ok(1'b1),.capture_eligible(1'b1),
+ .session(active_sid),.current_source_frame(64'd9),.display_seq(active_sid),.pixel_ticks(ticks),.final_de(cap_de),.final_x(cx),.final_y(cy),.final_class(2'd0),.support(1'b1),.local_edge(1'b0),.accepted_domain(1'b0),.row_complete(1'b1),.row_tag(1'b1),
+ .data(cap_data),.empty(cap_empty),.pop(cap_pop),.count(cap_count));
+ always @(posedge pix)if(rst_n)ticks<=ticks+1;
+ integer yy,xx,pair_completed=0;
+ always @(posedge clk)if(rst_n)begin
+  if(cap_arm)begin first_arm_cycle=cycle;$fdisplay(events,"CAPTURE_ARM cycle=%0d SID=%h token=%h",cycle,active_sid,fusion_token);end
+  if(wvalid&&!wready&&current_tx)held_W_cycles=held_W_cycles+1;
+  if(backend.pair_release)begin release_cycle=cycle;if(tx_busy||!cap_empty)$fatal(1,"PAIR_RELEASE_BEFORE_REAL_DRAIN");$fdisplay(events,"RELEASE cycle=%0d lastCurrentB=%0d held=%b",cycle,final_b_cycle,pair_leased);end
+  if(backend.packet_done&&backend.packet.packet_type==10)pair_completed=pair_completed+1;
+  if(backend.pair_export&&(backend.state==backend.TELEMETRY||backend.state==backend.TELEMETRY_WAIT))$fatal(1,"PAIR_STOLE_TYPE4_UART");
+ end
+ initial begin
+  wait(capture.state==capture.WAIT);@(negedge pix);cap_sof=1;
+  @(negedge pix);cap_sof=0;repeat(16)@(negedge pix);
+  for(yy=0;yy<8;yy=yy+1)for(xx=0;xx<200;xx=xx+1)begin
+   @(negedge pix);cap_de=1;cx=xx;cy=yy;
+   if(yy==0&&xx==0)begin first_sample_busy=backend.packet_busy;if(!first_arm_cycle||!first_sample_busy)$fatal(1,"CAPTURE_FIRST_SAMPLE_NOT_OVERLAPPING_TYPE4");end
+  end
+  @(negedge pix);cap_de=0;
+ end
+ initial if(CASE==1)begin
+  wait(capture.state==capture.CAPTURE);hold_w=1;wait(pair_A==1);
+  @(negedge pix);cap_kill=1;repeat(32)@(negedge clk);hold_w=0;
+ end
+ initial begin
+  wait(rst_n);wait(pubs==1&&backend.state==backend.IDLE&&!backend.packet_busy);
+  @(negedge clk);if(metadata_b!=1||backend.tick>4990000)$fatal(1,"FIXTURE_PUBLICATION_WINDOW");
+  pixel_snapshot[63:0]=6;pixel_snapshot[127:64]=2000000;pixel_snapshot[191:128]=0;
+  @(negedge pix);frame_done=1;@(negedge pix);frame_done=0;
+  repeat(4500)@(negedge clk);pulse(1,1);wait(acks==1);wait(cap_done);
+  @(negedge pix);pixel_snapshot[63:0]=active_sid;pixel_snapshot[127:64]=ticks;pixel_snapshot[191:128]=active_sid;frame_done=1;pixel_release=1;
+  @(negedge pix);frame_done=0;pixel_release=0;
+  wait(pair_completed==1);wait(!backend.pair_hold&&pair_leased==0);repeat(10)@(negedge clk);
+  if(selected!=1||first_sample_busy!=1||takes!=2||t4_start!=2||t4_done!=2||build_count!=2||eof_count!=2||release_cycle<=final_b_cycle)$fatal(1,"LIFECYCLE_INCOMPLETE");
+  if(CASE==0&&(backend.pair_failure!=0||current_B!=2||pair_metadata_B!=1))$fatal(1,"LIFECYCLE_SUCCESS_COUNTS");
+  if(CASE==1&&(backend.pair_failure!=3||current_B!=1||held_W_cycles<32||pair_metadata_B!=0))$fatal(1,"LIFECYCLE_CANCEL_DRAIN");
+  wait(pubs==2&&backend.state==backend.IDLE&&!backend.packet_busy);
+  if(lease_fault||session_fault||pair_leased!=0||!backend.fresh_publication_seen||metadata_b!=2)$fatal(1,"LIFECYCLE_NEXT_PUBLICATION");
+  if(b_hold_edges!=32||r_hold_edges!=32)$fatal(1,"DEADLINE_BACKPRESSURE_NOT_EXERCISED");
+  $display("BACKPRESSURE_PROOF B=%0d lastR=%0d",b_hold_edges,r_hold_edges);
+  $display("DEADLINE_INFLIGHT_PASS case=%0d pubs=%0d selection=%0d currentB=%0d pairMetadataB=%0d type4=%0d/%0d/%0d heldW=%0d lastB=%0d release=%0d",CASE,pubs,selected,current_B,pair_metadata_B,t4_start,t4_done,takes,held_W_cycles,final_b_cycle,release_cycle);$fclose(events);$fclose(uart_file);$finish;
+ end
+ integer b_hold_edges=0,r_hold_edges=0;
+ initial begin
+ wait(pair_A==1);@(negedge clk);hold_b=1;wait(ms==3);repeat(32)begin @(negedge clk);b_hold_edges=b_hold_edges+1;if(!pair_leased||backend.pair_release)$fatal(1,"DEADLINE_B_LEASE_DROPPED");end
+ hold_b=0;
+ wait(backend.pair_controller.state==backend.pair_controller.READWAIT&&ms==2);@(negedge clk);hold_last=1;wait(mb==ml&&!rvalid);
+ repeat(32)begin @(negedge clk);r_hold_edges=r_hold_edges+1;if(!pair_leased||backend.pair_release)$fatal(1,"DEADLINE_LAST_R_LEASE_DROPPED");end
+ hold_last=0;
+ end
+ initial begin #500000000;$fatal(1,"SELECTION_DIAG_WATCHDOG");end
+endmodule

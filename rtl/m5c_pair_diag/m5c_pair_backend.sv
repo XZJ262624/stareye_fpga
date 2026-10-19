@@ -78,7 +78,7 @@ module m5c_pair_backend #(parameter REQUEST_CYCLES=96000000,CAPTURE_CYCLES=96000
  // the pair controller cannot export until release/retire and packet quiet.
  wire pair_selection_window=(state==IDLE&&!packet_busy&&!packet_start)||
   state==TELEMETRY||state==TELEMETRY_WAIT;
- assign pair_selected=pair_effective_request_valid&&pair_effective_request_session==pair_session&&fusion_acquire&&fresh_publication_seen&&
+ assign pair_selected=!pair_wait_expired&&pair_effective_request_valid&&pair_effective_request_session==pair_session&&fusion_acquire&&fresh_publication_seen&&
   active_pair_descriptor==result_descriptor&&!pair_terminal&&!pair_hold&&pair_selection_window&&
   !tx_busy&&!eng_busy&&!arm_busy&&!writer_owned&&!stop;
  assign pair_fail_selected=pair_wait_expired&&!pair_terminal&&!pair_hold&&state==IDLE&&

@@ -1,0 +1,11 @@
+--- V4
++++ V4.1
+@@ -1,6 +1,8 @@
+ """Portable stdlib-only stage bridge; never changes original RTL or assertions."""
+ from pathlib import Path
+ import sys,json,hashlib,subprocess,re,shutil,time,platform
++# Resolve this package's helper even with isolated/embeddable Python search paths.
++sys.path.insert(0,str(Path(__file__).resolve().parent))
+ from current_inputs import capture
+ P=Path(__file__).resolve().parents[1]
+ def record(p):

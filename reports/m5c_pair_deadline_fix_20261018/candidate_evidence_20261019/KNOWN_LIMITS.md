@@ -1,0 +1,13 @@
+# 当前截止门修复的有限资格与限制
+
+本次唯一canonical功能差异为pair backend的pair_selected增加!pair_wait_expired。父99ea359c因截止后仍能新select的A审查FAIL保留；此次为修复候选，独立A/B尚未开始。不改生产融合策略、时钟/管脚/分辨率、TTL、八次attempt或租约排空。
+
+短测全部原结果保留：旧版及删门突变出现指定DEADLINE_NEW_SELECT_AFTER_EXPIRY；修复版同拍/先到截止、telemetry窗口、真实系统7200-SOF计数同步、多SOF SID更新与在途完成/取消排空有界证据通过。历史编译/fixture失败、inflight v3/v4旧断言失败仍为失败，不能按新v5通过回填。B及末R延迟交付32拍，不是RVALID保持测试；multi-SOF只到真实控制admission，不是完整像素或DDR预填充；七短UART为显式缩小平面。未新增八完整尝试的大视频覆盖。
+
+V4实际wrapper sibling import失败，完整视频未运行；V4.1仅显式导入当前包目录适配。完整远端V4.1采用ModelSim2020.4条件DDR和加速UART，109包1302076B、参考BFS/current各921600点、currentB1152/metaB1、35健康帧/七模式、发布2次、真实释放及end有本次证据。accepted-domain oracle读取qualified控制，不是独立资格真值。默认UART完整载荷至少27.53秒，远端加速不证明实物默认吞吐或真实DDR服务上界。V3旧INPUTS错误原件和历史失败不修写；本次V4.1有16份真实阶段PRE/POST每份63输入绑定。
+
+当前fresh I3为48721XLR/200RAM10/1DSP；normal setup +0.171ns、hold +0.003ns。完整normal setup/hold和截止1335端点2670记录提供可读原字节。三继承PLL异步SR的六条setup/hold记录明确UNTIMED，外部7输入/135输出、加密DDR/IP、29束1638端点CQ+data2.519ns/skew2.205ns范围保留。不得称全芯片timed PASS、跨PVT或warm reset已验证；冷重新配置硬停边界保留。
+
+新离线bit2999481B，SHA256 1dea663a906669991aaf6e486575722e31f8d5af5f48e6739d28dc9d74a925f5。do_program/run_usbif/do_security均false，只有文件转换、无硬件。XML字节勘误：工具更新last_change/last_run_flow并删除末尾一个CRLF；逆转两属性后再补CRLF才与canonical/qualified原件完全一致。原RESULT只比较解析后XML，未检测尾空白；原RESULT和258条seal均保留，由XML_CHANGE_RECONCILIATION及Work独核追加说明。
+
+gzip对象为运输原字节，不是新增验证。只读reader不运行归档代码、仿真、构建或硬件。原生数据库/map大网表/bit/工具本体为外部hash边界；用户raw、QQ outer/request/launch/workflow/events、秘密均不进入快照。input_manifest只删除package定位字段，明确derived并保留原hash，不能伪称完整原件。继承parent技术对象不表示重新验证全部历史证据。当前未上板，真实显示增强、板卡稳定性及M5C整体未签收。

@@ -1,0 +1,11 @@
+# Work有限验收：截止门修复V4.1条件仿真与当前物理实现
+
+branch codex/m5c-fusion-prototype，当前HEAD/新candidate parent仍99ea359c6a5f5432296e992ec76495e441c9d1a0。仅功能RTL变更是backend增加!pair_wait_expired，SHA8a78aa7030d6bdcd27d8e50c1e633e3d9353709c1ae2cfb814606fe37a18c82c。
+
+Work逐字节核V4.1回传两个独立run各104输入与本地固定manifest一致，实际compat/full正常标记及最终软件收据、16份实际PRE/POST各63条与工作文件一致；full INPUTS正确绑定FULL_POST。实际109包1302076字节CRC/身份通过；独立union-find参考921600像素与掩码完全一致，current921600字节与实际黄金记录一致。raw日志35健康帧、七模式均增长、pub2、真实1152current B和1metadata B、release后IDLE及end quiet收尾成立。不是仅按退出码或沿用旧V3通过。回执remote_v4_1_acceptance_20261019/WORK_ACCEPTANCE.json；源ZIP SHA f62faec09679d6d9c3626adad461b25f61b521be4ebaff1315792de69257c40f。
+
+Work流式核physical_deadline_233017封存700项2030152642字节全部一致，manifest SHA8b5164f73b2fdd9478db166a1d8e7ceb8bbedce6c1d2592ce70797722c814b23，12原生阶段exit0。独立解析normal setup/hold各200路径最小+.171/+.003ns；新增截止1335端点2670 setup/hold记录均为当前正常I3实际报告。Work初始107源绑定核仅backend变化；11settings路径可逆，SDC不改。资源48721XLR/200RAM10/1DSP；29束1638端点CQ+data2.519ns/skew2.205ns有本轮报告与闭环。
+
+此为有限当前I3与条件仿真签收。三继承PLL异步SR端点六条setup/hold仍明确UNTIMED，hold仅+.003ns，外部7输入/135输出、加密DDR/IP、真实DDR服务上界、默认UART完整吞吐、accepted-domain控制oracle、warm reset/跨PVT/实物增强均未据此通过。不增加约束豁免，不扩大为全芯片timed PASS或硬件放行。
+
+批准下一步仅准备新隔离offline方案并由Work核其具体107源/8个当前route DB/工具/设置闭包后执行离线bit转换，再准备candidate白名单。不运行Programmer、不USB/JTAG/串口、不SPI/Flash。当前无Git stage/commit授权。旧99ea审查FAIL、V3错误输入记录、V4导入FAIL及所有原始材料保留，追加新candidate后重新独立A/B，禁止在当前主会话替代Codex A。

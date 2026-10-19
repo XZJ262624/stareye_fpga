@@ -1,0 +1,9 @@
+# 截止门修复候选的固定技术入口
+
+本入口冻结branch codex/m5c-fusion-prototype与唯一parent 99ea359c6a5f5432296e992ec76495e441c9d1a0及提交技术范围。实际candidate、branch和parent由Work外部固定blob回执和独立审查提示提供；提交前提案状态不替代正式commit身份，不在提交内自引用candidate哈希。
+
+功能diff仅rtl/m5c_pair_diag/m5c_pair_backend.sv的pair_selected真实选择截止门；SHA256 8a78aa7030d6bdcd27d8e50c1e633e3d9353709c1ae2cfb814606fe37a18c82c。候选证据继承99ea固定技术scope闭包；本轮short/remote/physical/offline按SELECTION/TRANSPORT_INDEX逐原路径和版本映射，原失败不重写。
+
+本次有限资格见KNOWN_LIMITS。特别保留+.003ns hold、三PLL SR六条UNTIMED、外部7/135、加速UART/条件DDR、accepted-domain、冷配置/热复位/PVT/真实显示和硬件未知边界。offline XML除两元数据还删除末CRLF，追加精确逆变换勘误，不篡改原RESULT和seal。新bit仅hash元数据，不进Git或独审快照。
+
+Work须核精确白名单及每个暂存blob后另行授权candidate提交；固定后Work独立核commit/parent/branch及逐blob快照，再发送只读DeepSeek B并将Codex A提示词交用户另一个可见chat。Codex exec不替代独立A审查，不自动开展硬件。所有其他M3/管理docs/根属性/用户未跟踪资料不纳入本次增量。
