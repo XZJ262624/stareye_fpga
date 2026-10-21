@@ -1,0 +1,10 @@
+from common import *
+W=O/('source_negative_'+time.strftime('%H%M%S'));W.mkdir();T=R/'tb/shape_standalone';P=R/'efinity/shape_standalone_i3';src=[R/n for n in json.loads((O/'COMPILE_SOURCE_FILES.json').read_text())]+[T/'m5c1b_ddr_service_model.sv',T/'tb_standalone_source_negative.sv'];deps=src+[P/'src/lcd_para.v',Path(__file__),Path(__file__).parent/'common.py'];pre=[rec(p)for p in deps];save(W/'INPUTS_PRE.json',pre)
+try:
+ tests=[]
+ for n,c in[('vlib',[str(M/'vlib.exe'),'work']),('vmap_create',[str(M/'vmap.exe'),'-c']),('vmap_work',[str(M/'vmap.exe'),'-modelsimini','modelsim.ini','work',(W/'work').as_posix()])]:tests.append(execute(W,n,c))
+ tests.append(execute(W,'compile',[str(M/'vlog.exe'),'-modelsimini','modelsim.ini','-sv','-work','work','+incdir+'+(P/'src').as_posix(),*map(str,src)]));(W/'run.do').write_text('onerror {quit -code 11}\nonbreak {quit -code 12}\nrun -all\nquit -code 0\n')
+ for i,m in[(2,'PASS_STANDALONE_BAD_CAMERA_EOF'),(3,'PASS_STANDALONE_IDLE_PLL_COLD_FAILSTOP')]:tests.append(execute(W/str(i),'native',[str(M/'vsim.exe'),'-c','-novopt','-onfinish','exit','-modelsimini',(W/'modelsim.ini').as_posix(),'-lib','work','tb_standalone_source_negative','+CASE='+str(i),'-wlf','NUL','-do','do {'+(W/'run.do').as_posix()+'}'],m,timeout=120))
+ save(O/'SOURCE_NEGATIVE_RECEIPT.json',dict(passed=True,tests=tests,scope='Actual shared production SUT:32pixel camera EOF cannot publish/qualify any DDR slot/class; idle PLL loss remains sticky after PLL returns with zeroA/zero fakeACK. Does not claim mid-transaction PLL drainage or warm DDR recovery. Lifecycle reset/next-valid-frame recovery is covered by exact core/adapter finite gates separately.'));print('STANDALONE_SOURCE_NEGATIVES_COMPLETE',flush=True)
+finally:
+ post=[rec(p)for p in deps];save(W/'INPUTS_POST.json',post);assert pre==post

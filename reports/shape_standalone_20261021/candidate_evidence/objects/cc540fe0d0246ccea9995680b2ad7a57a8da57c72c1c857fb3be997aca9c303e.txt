@@ -1,0 +1,5 @@
+from common import *
+a=json.loads((O/'ACTIVE_PHYSICAL.json').read_text());F=R/a['path'];assert json.loads((F/'interface/RESULT.json').read_text())['passed'];W=F/'advance_v4';W.mkdir()
+for script,args in[('prepare_query_v2.py',[]),('build_physical_v2.py',['query']),('build_physical_v2.py',['place']),('build_physical_v2.py',['route'])]:
+ label=script.removesuffix('.py')+('_'+args[0]if args else'');execute(W,label,[str(E/'python311/bin/python.exe'),'-B',str(Path(__file__).parent/script),*args],timeout=7200)
+save(O/'ROUTE_STAGE_RECEIPT.json',dict(passed=True,physical=F.relative_to(R).as_posix(),route_result=rec(F/'route/RESULT.json'),scope='Fresh map/interface/strict native selectors and actual CDC command application/place/route only; full endpoint STA/CDC remains pending.'));print('STANDALONE_ROUTE_STAGE_COMPLETE_FULL_AUDIT_PENDING',flush=True)

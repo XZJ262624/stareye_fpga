@@ -1,0 +1,9 @@
+"""Wait for this exact active video gate, then seal only its real successful result."""
+from common import *
+import sys
+snapshot=json.loads((O/'ACTIVE_SYSTEM720P.json').read_text());V=R/snapshot['path'];assert snapshot['frames']==72;start=time.time();print('STANDALONE_FINAL_SEAL_WAITER_PID',os.getpid(),'VIDEO',V,flush=True)
+while not(V/'RESULT.json').exists():
+ assert json.loads((O/'ACTIVE_SYSTEM720P.json').read_text())==snapshot,'ACTIVE_VIDEO_CHANGED'
+ if(V/'native_RESULT.json').exists():assert json.loads((V/'native_RESULT.json').read_text())['passed'],'REAL_VIDEO_FAILED_NO_SEAL'
+ assert time.time()-start<3600,'WAIT_REAL_VIDEO_TIMEOUT';time.sleep(5)
+assert json.loads((V/'RESULT.json').read_text())['passed'];p=Path(__file__).parent/'seal_offline_v1.py';subprocess.run([sys.executable,'-B',str(p)],cwd=R,check=True);print('STANDALONE_FINAL_SEAL_WAITER_COMPLETE',flush=True)

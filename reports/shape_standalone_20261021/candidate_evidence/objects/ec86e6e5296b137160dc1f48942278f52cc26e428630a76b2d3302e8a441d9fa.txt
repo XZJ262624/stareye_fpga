@@ -1,0 +1,82 @@
+from common import *
+import xml.etree.ElementTree as ET
+Q=R/'rtl/shape_standalone';P=R/'efinity/shape_standalone_i3';old=R/'efinity/gaussian_shape_cap_i3';copy=json.loads((O/'ORIGINAL_SOURCE_COPY_MANIFEST.json').read_text())
+# Preserve debouncing/arming/CE/SOF semantics from the proven MED controls.
+origin=R/'rtl/m5c_fusion/m5a_copy/m5a_controls.v';c=origin.read_text();c=c.replace('module m5a_controls','module shape_standalone_controls').replace(' output reg fusion_enable,output reg [63:0] config_generation',' output reg [63:0] config_generation,\n output [7:0] effective_threshold,output [2:0] effective_mode,output [63:0] effective_generation')
+c=c.replace('reg long_seen,pending_fusion;','reg long_seen;').replace('threshold<=64;mode<=2;pending_threshold<=64;pending_mode<=2;','threshold<=64;mode<=6;pending_threshold<=64;pending_mode<=6;').replace('pending_fusion<=0;fusion_enable<=0;','').replace('if(long_seen)pending_fusion<=!pending_fusion;','if(long_seen)begin end').replace('(pending_mode==6)?3\'d0:pending_mode+3\'d1',"(pending_mode==0)?3'd5:(pending_mode==5)?3'd6:3'd0").replace('fusion_enable<=pending_fusion;','')
+c=c.replace(' always @(posedge clk or negedge rst_n) begin'," assign effective_threshold=ce&&frame_start?pending_threshold:threshold;\n assign effective_mode=ce&&frame_start?pending_mode:mode;\n assign effective_generation=(ce&&frame_start&&threshold!=pending_threshold&&config_generation!=64'hffffffffffffffff)?config_generation+64'd1:config_generation;\n always @(posedge clk or negedge rst_n) begin")
+assert 'pending_fusion' not in c and 'fusion_enable' not in c;(Q/'shape_standalone_controls.v').write_text(c)
+# Add an actual ROI guide after the shape text (never fed back into recognition).
+osd=Q/'shape/shape_osd.sv';s=osd.read_text();needle='   else out_rgb<=rgb;';assert s.count(needle)==1;s=s.replace(needle,"   else if(((x==384||x==895)&&y>=168&&y<=551)||((y==168||y==551)&&x>=384&&x<=895))out_rgb<=24'h408040;\n"+needle);osd.write_text(s)
+t=(old/'example_top.v').read_text();a=t.index('    wire [63:0] m5b1_frame_id');b=t.index('\t//\tHDMI Interface.',a);lcdA=t.index('\t//  LCD Timing Driver',a);lcdB=t.index('    wire [7:0] control_threshold;',lcdA);lcd=t[lcdA:lcdB]
+decl='''    wire [63:0] m5b1_frame_id,m5b1_epoch,pixel_ticks,display_seq,config_generation,source_generation;
+    wire m5b1_pix_qualified;
+    reg m5b1_lcd_qualified=0;reg [63:0] m5b1_lcd_frame_id=0,m5b1_lcd_epoch=0;
+    always @(posedge clk_pixel or negedge rstn_pixel)
+      if(!rstn_pixel)begin m5b1_lcd_qualified<=0;m5b1_lcd_frame_id<=0;m5b1_lcd_epoch<=0;end
+      else begin m5b1_lcd_qualified<=m5b1_pix_qualified;m5b1_lcd_frame_id<=m5b1_frame_id;m5b1_lcd_epoch<=m5b1_epoch;end
+    reg control_vs_d=1'b1;always @(posedge clk_pixel or negedge rstn_pixel)if(!rstn_pixel)control_vs_d<=1;else control_vs_d<=lcd_vs;
+    wire source_sof=control_vs_d&&!lcd_vs;
+    reg [63:0] standalone_ticks=0,standalone_sequence=0;reg standalone_time_fault=0;
+    always @(posedge clk_pixel or negedge rstn_pixel)
+     if(!rstn_pixel)begin standalone_ticks<=0;standalone_sequence<=0;standalone_time_fault<=0;end
+     else begin
+      if(standalone_ticks==64'hffffffffffffffff)standalone_time_fault<=1;else standalone_ticks<=standalone_ticks+1'b1;
+      if(source_sof)begin if(standalone_sequence==64'hffffffffffffffff)standalone_time_fault<=1;else standalone_sequence<=standalone_sequence+1'b1;end
+     end
+    assign pixel_ticks=standalone_ticks;assign display_seq=standalone_sequence;
+    wire [7:0] control_threshold,source_threshold,display_threshold,final_gray;
+    wire [2:0] control_mode,source_mode,display_mode;wire final_filter;
+    wire [11:0] final_x,final_y;wire local_edge,shape_support,shape_raster_fault;
+    wire [1:0] shape_class;wire shape_valid;wire [63:0] shape_display_config,shape_display_epoch;
+    wire shape_visible=shape_valid&&shape_display_config==config_generation&&shape_display_epoch==m5b1_lcd_epoch&&config_generation!=64'hffffffffffffffff&&!standalone_time_fault;
+    wire [23:0] display_rgb,osd_rgb;wire osd_de,osd_hs,osd_vs;
+    assign uart_tx_o=1'b1;
+    shape_standalone_frontend u_m5b1(.ui_clk(w_ddr3_ui_clk),.cam_clk(cmos_pclk),.pix_clk(clk_pixel),.rst_n(rstn_sys),
+      .pll_locked(w_pll_lock),.cal_done(w_ddr3_cal_done),.cal_pass(w_ddr3_cal_pass),
+      .cam_vs(cmos_frame_vsync),.cam_valid(cmos_frame_href),.cam_data(cmos_frame_Gray[7:0]),
+      .pix_sof(source_sof),.pix_request(lcd_request),.pix_data(lcd_data),.frame_id(m5b1_frame_id),.epoch(m5b1_epoch),.pix_qualified(m5b1_pix_qualified),.led(led_o),
+      .aid(w_ddr3_aid),.alen(w_ddr3_alen),.wid(w_ddr3_wid),.aaddr(w_ddr3_aaddr),.asize(w_ddr3_asize),
+      .aburst(w_ddr3_aburst),.alock(w_ddr3_alock),.avalid(w_ddr3_avalid),.atype(w_ddr3_atype),.aready(w_ddr3_aready),
+      .wdata(w_ddr3_wdata),.wstrb(w_ddr3_wstrb),.wlast(w_ddr3_wlast),.wvalid(w_ddr3_wvalid),.wready(w_ddr3_wready),
+      .bid(w_ddr3_bid),.bresp(w_ddr3_bresp),.bvalid(w_ddr3_bvalid),.bready(w_ddr3_bready),
+      .rid(w_ddr3_rid),.rresp(w_ddr3_rresp),.rdata(w_ddr3_rdata),.rlast(w_ddr3_rlast),.rvalid(w_ddr3_rvalid),.rready(w_ddr3_rready));
+'''
+chain='''    shape_standalone_controls u_controls(.clk(clk_pixel),.ce(1'b1),.arst_n(rstn_pixel),.key_n(key_n),.frame_start(source_sof),
+      .threshold(control_threshold),.mode(control_mode),.pending_threshold(),.pending_mode(),.config_generation(config_generation),
+      .effective_threshold(source_threshold),.effective_mode(source_mode),.effective_generation(source_generation));
+    m5a_stream_top #(.WIDTH(1280),.HEIGHT(720),.H_TOTAL(1650)) u_m5a_stream(
+      .clk(clk_pixel),.ce(1'b1),.arst_n(rstn_pixel),.in_gray(lcd_gray),.in_de(lcd_de),.in_hs(lcd_hs),.in_vs(lcd_vs),.in_sof(~lcd_vs),
+      .filter_request(1'b1),.threshold(source_threshold),.mode(source_mode),.out_rgb(display_rgb),.out_de(sobel_de),.out_hs(sobel_hs),.out_vs(sobel_vs),
+      .out_raw(final_gray),.out_legacy_mag(),.out_legacy_bin(),.out_nms(),.out_threshold(display_threshold),.out_mode(display_mode),.out_filter_enable(final_filter),
+      .out_overlay_valid(),.out_overlay_edge(),.out_nms_valid(),.out_canny_valid(shape_support),.out_canny_edge(local_edge),.out_x(final_x),.out_y(final_y),.raster_fault(shape_raster_fault),
+      .tap_input_frame_id(m5b1_lcd_frame_id),.tap_input_epoch(m5b1_lcd_epoch),.tap_input_qualified(m5b1_lcd_qualified),
+      .source_pixel_tick(pixel_ticks),.source_display_seq(display_seq),.source_config_generation(source_generation),
+      .tap_valid(),.tap_class(),.tap_x(),.tap_y(),.tap_high(),.tap_low(),.tap_filter(),.tap_frame_id(),.tap_epoch(),.tap_timestamp(),.tap_display_seq(),.tap_config_generation(),
+      .fusion_tap_valid(),.fusion_tap_qualified(),.fusion_tap_support());
+    shape_stream_adapter_contract_v2 u_shape(.clk(clk_pixel),.rst_n(rstn_pixel),.ce(1'b1),
+      .source_sof(source_sof),.source_de(lcd_de),.source_qualified(m5b1_lcd_qualified&&source_generation!=64'hffffffffffffffff&&!standalone_time_fault),
+      .source_frame_id(m5b1_lcd_frame_id),.source_epoch(m5b1_lcd_epoch),.source_config(source_generation),.source_display_seq(display_seq),
+      .final_de(sobel_de),.final_support(shape_support),.final_edge(local_edge),.final_raster_fault(shape_raster_fault),.final_x(final_x),.final_y(final_y),
+      .display_class(shape_class),.display_valid(shape_valid),.display_frame_id(),.display_epoch(shape_display_epoch),.display_config(shape_display_config),.display_source_seq(),
+      .result_done(),.result_valid(),.result_class(),.result_frame_id(),.result_epoch(),.result_config(),.result_source_seq(),
+      .adapter_fault(),.recognition_sof(),.recognition_eof(),.aligned_frame_id(),.aligned_epoch(),.aligned_config(),.aligned_source_seq(),.aligned_qualified());
+    shape_osd u_osd(.clk(clk_pixel),.ce(1'b1),.arst_n(rstn_pixel),.rgb(display_rgb),.de(sobel_de),.hs(sobel_hs),.vs(sobel_vs),
+      .threshold(display_threshold),.mode(display_mode),.filter_id({1'b0,final_filter}),.shape_class(shape_class),.shape_valid(shape_visible),
+      .fusion_enable(1'b0),.fusion_active(1'b0),.fusion_age_valid(1'b0),.fusion_age(32'd0),.out_rgb(osd_rgb),.out_de(osd_de),.out_hs(osd_hs),.out_vs(osd_vs));
+    //
+'''
+(P/'example_top.v').write_text(t[:a]+decl+lcd+chain+t[b:])
+ns={'efx':'http://www.efinixinc.com/enf_proj'};root=ET.parse(P/'Ti60_Demo.xml');di=root.getroot().find('efx:design_info',ns);assert di is not None
+original_design=[dict(n.attrib) for n in di.findall('efx:design_file',ns)]
+for n in list(di.findall('efx:design_file',ns)):di.remove(n)
+project_src=[P/Path(x['original']['path']).relative_to('efinity/gaussian_shape_cap_i3') for x in copy['files'] if x['original']['path'].startswith('efinity/gaussian_shape_cap_i3/src/') and Path(x['original']['path']).suffix in ['.v','.sv'] and Path(x['original']['path']).name!='lcd_para.v']
+rtl=sorted(Q.rglob('*.v'))+sorted(Q.rglob('*.sv'));files=[P/'example_top.v']+project_src+rtl
+for p in files:ET.SubElement(di,'{'+ns['efx']+'}design_file',dict(name=p.relative_to(P).as_posix() if p.is_relative_to(P) else '../../'+p.relative_to(R).as_posix(),version='system_verilog' if p.suffix=='.sv' else 'default',library='default'))
+ET.register_namespace('efx',ns['efx']);ET.register_namespace('xsi','http://www.w3.org/2001/XMLSchema-instance');root.write(P/'Ti60_Demo.xml',encoding='unicode')
+# Initial map constraints retain original clocks/key entry constraints only.
+# Fresh exact in-use DMA CDC groups are generated and proved from this new map before P&R.
+original_sdc=(P/'Ti60_Demo_I3.sdc').read_text();prefix=original_sdc.split('# M5B1 explicit CDC endpoints.',1)[0];(P/'Ti60_Demo_I3.sdc').write_text(prefix+'\n# Standalone foreground CDC exact mapped groups will follow before query/place.\n')
+save(O/'IMPLEMENTATION_DERIVATION.json',dict(controls_original=rec(origin),controls_new=rec(Q/'shape_standalone_controls.v'),top_original=rec(old/'example_top.v'),top_new=rec(P/'example_top.v'),original_design_entries=original_design,new_design_files=[p.relative_to(R).as_posix() for p in files],new_RTL_files=len(rtl),source_count=len(files),constraints_status='Map only clock/key prefix; exact new in-use DMA CDC selection mandatory before any place/route.',ROI='Explicit guide only; recognition consumes pre-OSD real local edge/support.'))
+save(O/'COMPILE_SOURCE_FILES.json',[p.relative_to(R).as_posix() for p in files]);heartbeat('NEW_MED_STANDALONE_IMPLEMENTED_PRE_COMPILE',native_running=False,host_MED_assessment_running=True)
+print('STANDALONE_TOP_AND_XML_IMPLEMENTED',len(files),len(rtl),flush=True)

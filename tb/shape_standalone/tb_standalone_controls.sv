@@ -1,0 +1,31 @@
+`timescale 1ns/1ps
+module tb_standalone_controls;
+ reg clk=0,ce=1,rst=0,sof=0;always #5 clk=~clk;reg[1:0] keys=3;
+ wire[7:0] hi,ph,eh;wire[2:0] mode,pm,em;wire[63:0] gen,eg;
+ shape_standalone_controls #(.DEBOUNCE_CYCLES(4),.LONG_CYCLES(64)) dut(.clk(clk),.ce(ce),.arst_n(rst),.key_n(keys),.frame_start(sof),.threshold(hi),.mode(mode),.pending_threshold(ph),.pending_mode(pm),.config_generation(gen),.effective_threshold(eh),.effective_mode(em),.effective_generation(eg));
+ integer checks=0,i;reg[7:0] old_hi;reg[2:0] old_mode;reg[63:0] old_gen;
+ task tick;begin @(posedge clk);#1;@(negedge clk);end endtask
+ task press(input[1:0] k,input integer cycles);begin keys=k;repeat(cycles)tick;keys=3;repeat(14)tick;end endtask
+ task commit;
+ begin old_hi=hi;old_mode=mode;old_gen=gen;sof=1;#1;
+  if(eh!==ph||em!==pm||eg!==(ph!=old_hi&&old_gen!=64'hffffffffffffffff ? old_gen+1:old_gen))$fatal(1,"CONTROL_EFFECTIVE_SOF");
+  tick;sof=0;
+  if(hi!==ph||mode!==pm||gen!==(ph!=old_hi&&old_gen!=64'hffffffffffffffff ? old_gen+1:old_gen))$fatal(1,"CONTROL_COMMIT_OR_GENERATION");checks=checks+1;
+ end endtask
+ initial begin
+  keys=0;repeat(4)tick;rst=1;repeat(100)tick;keys=3;repeat(20)tick;
+  if(hi!=64||mode!=6||pm!=6||gen!=0)$fatal(1,"CONTROL_STARTUP_HELD_KEY");
+  press(2,20);if(hi!=64||ph!=80||gen!=0)$fatal(1,"CONTROL_MIDFRAME_COMMIT");
+  ce=0;sof=1;repeat(3)tick;if(hi!=64||gen!=0||eh!=64)$fatal(1,"CONTROL_CE_DISABLED_SOF");sof=0;ce=1;commit;
+  press(1,20);commit;if(hi!=64||gen!=2)$fatal(1,"CONTROL_K2");
+  for(i=0;i<3;i=i+1)begin old_gen=gen;press(0,20);commit;if(gen!=old_gen||mode!==(i==0?3'd0:i==1?3'd5:3'd6))$fatal(1,"CONTROL_MODE_ONLY_NO_ALGORITHM_CHANGE");end
+  old_mode=mode;old_gen=gen;press(0,90);commit;if(mode!=old_mode||gen!=old_gen)$fatal(1,"CONTROL_LONG_KEYS_INVENTED_FUSION");
+  for(i=0;i<20;i=i+1)begin press(2,20);commit;end if(hi!=255)$fatal(1,"CONTROL_HIGH_SATURATION");
+  for(i=0;i<20;i=i+1)begin press(1,20);commit;end if(hi!=0)$fatal(1,"CONTROL_LOW_SATURATION");
+  // Explicit unit-state injection tests the otherwise unreachable64bit boundary.
+  dut.config_generation=64'hfffffffffffffffe;press(2,20);commit;if(gen!=64'hffffffffffffffff)$fatal(1,"CONTROL_MAX_ENTER");
+  press(2,20);commit;if(gen!=64'hffffffffffffffff||eg!=64'hffffffffffffffff)$fatal(1,"CONTROL_MAX_WRAP");
+  $display("PASS_STANDALONE_CONTROLS checks=%0d modes=0/5/6 fixedFilter=GAU generationOnlyThreshold=1 stateInjectionMAX=1",checks);$finish;
+ end
+ initial begin #200000;$fatal(1,"CONTROL_WATCHDOG");end
+endmodule

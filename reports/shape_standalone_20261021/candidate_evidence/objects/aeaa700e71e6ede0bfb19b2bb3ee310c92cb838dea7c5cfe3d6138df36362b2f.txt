@@ -1,0 +1,12 @@
+from common import *
+W=O/('system_probe_'+time.strftime('%H%M%S'));W.mkdir();T=R/'tb/shape_standalone';P=R/'efinity/shape_standalone_i3';src=[R/n for n in json.loads((O/'COMPILE_SOURCE_FILES.json').read_text())]+[T/'m5c1b_ddr_service_model.sv',T/'tb_standalone_system_probe.sv'];deps=src+[P/'src/lcd_para.v',Path(__file__),Path(__file__).parent/'common.py'];pre=[rec(p) for p in deps];save(W/'INPUTS_PRE.json',pre)
+d=json.loads((O/'PHASE_RESULT.json').read_text());d['phase']='NEW_SHARED_SYSTEM_COMPILE_REAL_DDR100US_BAD_B';save(O/'PHASE_RESULT.json',d);heartbeat(d['phase'],native_running=True)
+try:
+ results=[]
+ for n,c in [('vlib',[str(M/'vlib.exe'),'work']),('vmap_create',[str(M/'vmap.exe'),'-c']),('vmap_work',[str(M/'vmap.exe'),'-modelsimini','modelsim.ini','work',(W/'work').as_posix()])]:results.append(execute(W,n,c))
+ results.append(execute(W,'compile',[str(M/'vlog.exe'),'-modelsimini','modelsim.ini','-sv','-work','work','+incdir+'+(P/'src').as_posix(),*map(str,src)]));(W/'run.do').write_text('onerror {quit -code 11}\nonbreak {quit -code 12}\nrun -all\nquit -code 0\n')
+ for i,marker in [(0,'PASS_STANDALONE_SYSTEM_PROBE100US'),(1,'PASS_STANDALONE_SYSTEM_BAD_B_REAL_DRAIN')]:
+  X=W/str(i);results.append(execute(X,'native',[str(M/'vsim.exe'),'-c','-novopt','-onfinish','exit','-modelsimini',(W/'modelsim.ini').as_posix(),'-lib','work','tb_standalone_system_probe','+CASE='+str(i),'-wlf','NUL','-do','do {'+(W/'run.do').as_posix()+'}'],marker,timeout=120))
+ save(O/'SYSTEM_PROBE_RECEIPT.json',dict(passed=True,tests=results,scope='Final production shared SUT elaborates/runs100us with real independent DDR model; unused client2 inert. Injected first real B error completes physical B before sticky cold failstop; no COMPLETE slot/class/fake reset ACK. No claim mid-W/R warm recovery or complete720p pipeline.'));print('STANDALONE_SYSTEM_PROBE_COMPLETE',flush=True)
+finally:
+ post=[rec(p) for p in deps];save(W/'INPUTS_POST.json',post);assert pre==post

@@ -1,0 +1,70 @@
+
+Efinix Timing Path Constraint Report
+Version: 2025.1.110.5.9
+Date: Wed Oct 21 17:51:28 2026
+
+Copyright (C) 2013 - 2025 Efinix, Inc. All rights reserved.
+
+User command: report_timing -from_clock {tac_clk} -to_clock {core_clk} -npaths 1 -nworst 1 -setup -detail full_path -file {clock_161_setup.rpt}
+
+Timing Model: I3
+	process : typical
+	temperature : -40C to 100C
+	voltage : 0.95 +/-30mV
+	speedgrade : 3
+	technology : t16ff
+	status : final
+
+Summary:
+
+ Path #  | Slack (ns) | Delay (ns) |                                                       Start Pin                                                       |                                                                 End Pin                                                                 | Launch Clk  | Capture Clk
+=================================================================================================================================================================================================================================================================================================================================
+ 1       |  2.051     |  0.213     | ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_rdpush/pushCC_pushPtr[6]~FF|Q | ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_rdpush/pushToPopGray_buffercc/buffers_0[6]~FF|D | tac_clk (R) | core_clk (R)
+
+++++ Path 1 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_rdpush/pushCC_pushPtr[6]~FF|CLK                
+Path End      : ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_rdpush/pushToPopGray_buffercc/buffers_0[6]~FF|D
+Launch Clock  : tac_clk (RISE)                                                                                                                         
+Capture Clock : core_clk (RISE)                                                                                                                        
+Slack         : 2.051 (required time - arrival time)                                                                                                   
+Delay         : 0.213                                                                                                                                  
+
+Logic Level             : 0
+Non-global nets on path : 1
+Global nets on path     : 0
+
+Launch Clock Path Delay        : 2.128
++ Clock To Q + Data Path Delay : 0.346
+--------------------------------------
+End-of-path arrival time       : 2.474
+
+Constraint                     : 2.604
++ Capture Clock Path Delay     : 2.047
+- Clock Uncertainty            : 0.126
+--------------------------------------
+End-of-path required time      : 4.525
+
+Launch Clock Path
+                                                         name                                                            model name   delay (ns)  cumulative delay (ns) pins on net    location
+=================================================================================================================================================================================================
+tac_clk                                                                                                                    inpad        0.000             0.000               0        (111,0) 
+tac_clk                                                                                                                    inpad        0.126             0.126             332        (111,0) 
+tac_clk                                                                                                                    net          2.002             2.128             332        (111,0) 
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_rdpush/pushCC_pushPtr[6]~FF|CLK    ff           0.000             2.128             332        (116,89)
+
+Data Path
+                                                                 name                                                                    model name   delay (ns)  cumulative delay (ns) pins on net    location
+=================================================================================================================================================================================================================
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_rdpush/pushCC_pushPtr[6]~FF|Q                       ff          0.130             0.130              4         (116,89)
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_rdpush/pushCC_pushPtr[6]                            net         0.213             0.343              4         (116,89)
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_rdpush/pushToPopGray_buffercc/buffers_0[6]~FF|D     ff          0.003             0.346              4         (121,89)
+
+Capture Clock Path
+                                                                  name                                                                     model name   delay (ns)  cumulative delay (ns) pins on net    location
+===================================================================================================================================================================================================================
+core_clk                                                                                                                                     inpad        0.000             0.000               0       (219,164)
+core_clk                                                                                                                                     inpad        0.126             0.126             812       (219,164)
+core_clk                                                                                                                                     net          1.921             2.047             812       (219,164)
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_rdpush/pushToPopGray_buffercc/buffers_0[6]~FF|CLK    ff           0.000             2.047             812       (121,89) 
+

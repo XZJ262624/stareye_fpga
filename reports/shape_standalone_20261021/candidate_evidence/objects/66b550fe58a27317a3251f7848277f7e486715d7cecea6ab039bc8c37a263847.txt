@@ -1,0 +1,26 @@
+"""Select a single GAU path because actual frozen MED negative samples fail."""
+from common import *
+import shutil,xml.etree.ElementTree as ET
+Q=R/'rtl/shape_standalone';P=R/'efinity/shape_standalone_i3';D=O/'med_sample_assessment';result=json.loads((D/'RESULT.json').read_text());assert not result['passed'];groups={x['group']:json.loads((R/x['result']['path']).read_text()) for x in result['results']};assert groups['fixed100']['negative_false_accept']==0 and groups['new128']['negative_false_accept']==2
+history=O/'MED_PROFILE_PRE_PIXEL_GATE';history.mkdir();
+for p in [P/'example_top.v',P/'Ti60_Demo.xml',O/'ARCHITECTURE_AND_SCOPE.json',O/'COMPILE_SOURCE_FILES.json',O/'IMPLEMENTATION_DERIVATION.json']:shutil.copyfile(p,history/p.name)
+copies=[]
+for p in sorted((R/'rtl/gaussian_integration/m5a_copy').glob('*.v')):
+ if p.name in ['m5a_controls.v','m5a_osd.v']:continue
+ q=Q/'gaussian_m5a'/p.name;q.parent.mkdir(exist_ok=True);assert not q.exists();shutil.copyfile(p,q);copies.append(dict(source=rec(p),copy=rec(q)))
+for p in sorted((R/'rtl/gaussian_integration/filter').glob('*.v')):
+ q=Q/'filter'/p.name;q.parent.mkdir(exist_ok=True);assert not q.exists();shutil.copyfile(p,q);copies.append(dict(source=rec(p),copy=rec(q)))
+top=P/'example_top.v';s=top.read_text();assert s.count('.filter_request(1\'b1)')==1;s=s.replace(".filter_request(1'b1)",".filter_request(2'd2)").replace('wire final_filter;','wire [1:0] final_filter;').replace(".filter_id({1'b0,final_filter})",'.filter_id(final_filter)');top.write_text(s)
+ns={'efx':'http://www.efinixinc.com/enf_proj'};tree=ET.parse(P/'Ti60_Demo.xml');di=tree.getroot().find('efx:design_info',ns);assert di is not None
+for n in list(di.findall('efx:design_file',ns)):
+ if '/shape_standalone/m5a/' in n.attrib['name']:di.remove(n)
+for x in copies:
+ p=R/x['copy']['path'];ET.SubElement(di,'{'+ns['efx']+'}design_file',dict(name='../../'+p.relative_to(R).as_posix(),version='system_verilog' if p.suffix=='.sv' else 'default',library='default'))
+ET.register_namespace('efx',ns['efx']);ET.register_namespace('xsi','http://www.w3.org/2001/XMLSchema-instance');tree.write(P/'Ti60_Demo.xml',encoding='unicode')
+files=[]
+for n in di.findall('efx:design_file',ns):files.append((P/n.attrib['name']).resolve().relative_to(R).as_posix())
+assert not any('/shape_standalone/m5a/' in x for x in files);save(O/'COMPILE_SOURCE_FILES.json',files)
+arch=json.loads((history/'ARCHITECTURE_AND_SCOPE.json').read_text());arch['status']='IMPLEMENTATION_RUNNING_FIXED_GAU_SELECTED_BY_FROZEN_NEGATIVE_EVIDENCE';arch['filter']=dict(selected='Fixed GAU=2, no filter switch or dual-Canny demo',MED_actual=dict(fixed100_positive_correct=60,fixed100_negative_false_accept=0,new128_positive_correct=64,new128_negative_false_accept=2,failed_ids=[88,92],receipt=rec(D/'RESULT.json')),reason='MED removes frozen cap_bar negative distinguishing edge; false acceptance violates zero-negative gate. Use existing fully verified GAU spatial chain without altering cap classifier/truth.',existing_GAU='Prior actual component60/60+0/40 and64/64+0/64; new profile native component gates will run again.',logical_path='GAU only selected at input constant2. Shared prototype source retains median-valid plumbing; fresh map must prove unused median data selection absent, and no global/fusion/pair hardware.')
+arch['deleted_instances']=['Global engine/backend','fusion/session/age/line caches','pair capture/controller/lease/UART transport','fusion diagnostics/telemetry/shadow pipeline','Dynamic MED/GAU mode selection'];arch['source_closure_used_GAU_copies']=copies;arch['MED_attempt_retained_not_compiled']=rec(history/'COMPILE_SOURCE_FILES.json');arch['compile_source_count']=len(files);save(O/'ARCHITECTURE_AND_SCOPE_V2.json',arch)
+save(O/'FILTER_SELECTION_EVIDENCE.json',dict(status='FIXED_GAU_SINGLE_PATH_JUSTIFIED_MED_NEGATIVE_GATE_FAILED_NO_CLASSIFIER_CHANGE',MED=rec(D/'RESULT.json'),GAU_source_copies=copies,top=rec(top),XML=rec(P/'Ti60_Demo.xml'),GAU_historical_component_receipts=[rec(R/'reports/gaussian_cap_integration_20261020/components_fixed100/COMPONENT_RECEIPT.json'),rec(R/'reports/gaussian_cap_integration_20261020/components_new128/COMPONENT_RECEIPT.json')],new_native_required=True,no_old_accuracy_relabelled=True))
+d=json.loads((O/'PHASE_RESULT.json').read_text());d['phase']='FIXED_GAU_NEGATIVE_GATE_SELECTION_AND_CORE_SHORTS';save(O/'PHASE_RESULT.json',d);heartbeat(d['phase'],native_running=False);print('STANDALONE_FIXED_GAU_MINIMAL_PROFILE_SELECTED',len(files),flush=True)

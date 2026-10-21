@@ -1,0 +1,9 @@
+from common import *
+base=R/'scripts/gaussian_cap_integration/audit_cones_metadata_cap_v2_derived.py';s=base.read_text();s=s.replace("P=F/'mirror/efinity/gaussian_shape_cap_i3'","P=F/'mirror/efinity/shape_standalone_i3'")
+a=s.index("shape=json.loads((F/'SHAPE_MAPPED_ENDPOINTS.json')");b=s.index("groups=json.loads((F/'CURRENT_EXACT_GROUPS.json')",a)
+s=s[:a]+"selected={n for n,c in cells.items() if 'u_shape_system/' in n and c['kind'] in ['EFX_FF','EFX_RAM10','EFX_DSP48']}\n"+s[b:]
+s=s.replace("allowed={p for g in groups if not g['name'].endswith('_source') for p in g['pins']};records=[];unknown=[];cross=[]","allowed={p for g in groups if not g['name'].endswith('_source') for p in g['pins']};allowed.update(f'u_shape_system/u_controls/key_meta[{i}]~FF|D' for i in range(2));records=[];unknown=[];cross=[]")
+s=s.replace("if any(x[0]=='UNKNOWN_OR_PRIMARY' for x in src):unknown.append(row)","if any(x[0]=='UNKNOWN_OR_PRIMARY' for x in src) and row['classification']!='EXACT_DECLARED_BOUNDARY':unknown.append(row)")
+s=s.replace("'SHAPE_GUARD_MAPPED_CONES_METADATA_V4.json'","'STANDALONE_ALL_MAPPED_CONES_V1.json'")
+q=Path(__file__).parent/'mapped_cones_v1_derived.py';assert not q.exists();q.write_text(s);compile(s,str(q),'exec');save(O/'MAPPED_CONE_TOOL_DERIVATION.json',dict(original=rec(base),derived=rec(q),changes=['New isolated project','Select every new production SUT FF/RAM/DSP including all prefixed/split tags, not only historical shape/guard subsets','Primary key input roots accepted only at the two exact original key cuts; other primary/unknown roots remain unresolved'],no_timing_or_CDC_waiver=True))
+print('STANDALONE_ALL_SUT_MAPPED_CONES_DERIVED')

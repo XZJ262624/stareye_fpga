@@ -1,0 +1,34 @@
+from common import *
+P=R/'efinity/shape_standalone_i3';old=R/'reports/gaussian_cap_integration_20261020/physical_recovery_v2_20261020_203714/CURRENT_EXACT_GROUPS.json'
+allg=json.loads(old.read_text())['groups'];groups=[];removed=[]
+for g in allg:
+ n=g['name'];keep=n.startswith('m5b1_video_') or n in ['m5b1_toggle_first','m5b1_status_first','m5b1_reset_release','m5b1_bridge_ready_first','m5b1_camera_reset_release']
+ if not keep:removed.append(n);continue
+ pins=[p for p in g['pins'] if '/background/' not in p and not re.search(r'fifo_ready\[[45]\]',p)]
+ pins=[p.replace('u_m5b1/','u_shape_system/u_m5b1/',1) if p.startswith('u_m5b1/') else p for p in pins]
+ assert pins;groups.append(dict(name=n,pins=pins,count=len(pins)))
+assert len(groups)==17
+original=R/'efinity/gaussian_shape_cap_i3/Ti60_Demo_I3.sdc';prefix=original.read_text().split('# M5B1 explicit CDC endpoints.')[0];prefix=prefix.replace('^u_controls/key_meta','^u_shape_system/u_controls/key_meta')
+text=prefix+'''# Standalone foreground-only exact CDC. Values and retained physical boundary semantics unchanged.
+proc shape_exact {selectors label} {
+ set combined [list]
+ foreach selector $selectors {
+  set found [get_pins -regexp $selector]
+  if {[llength $found] != 1} {error "STANDALONE_SELECTOR_NOT_SINGLETON $label $selector count=[llength $found]"}
+  foreach pin $found {lappend combined $pin}
+ }
+ if {[llength $combined] != [llength $selectors]} {error "STANDALONE_SELECTOR_COUNT $label"}
+ return $combined
+}
+'''
+for g in groups:
+ text+='set '+g['name']+' [shape_exact {\n'+'\n'.join(' {^'+re.escape(p)+'$}' for p in g['pins'])+'\n} '+g['name']+']\n'
+for g in groups:
+ n=g['name']
+ if n.endswith('_source'):
+  dest=n[:-7]+'_destination';assert any(d['name']==dest for d in groups)
+  text+='set_max_delay -from $'+n+' -to $'+dest+' 5.0\nset_false_path -hold -from $'+n+' -to $'+dest+'\n'
+ elif not n.endswith('_destination'):text+='set_false_path -to $'+n+'\n'
+(P/'Ti60_Demo_I3.sdc').write_text(text)
+save(O/'STANDALONE_EXACT_GROUPS.json',dict(groups=groups,source_reference=rec(old),retained_first_stage_subset=True,removed_groups=removed,total=sum(g['count'] for g in groups),deleted_instances=['background','bg_mux','fusion','pair','telemetry'],numeric_values_unchanged=True,hierarchy_added='u_shape_system/',prefix_reference=rec(original),fresh_native_singleton_query_required=True))
+print('STANDALONE_FOREGROUND_SDC_READY',[(g['name'],g['count']) for g in groups])

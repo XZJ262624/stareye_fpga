@@ -1,0 +1,12 @@
+from common import *
+W=next(O.glob('core_gates_*'));X=O/('kernel_root_recovery_'+time.strftime('%H%M%S'));X.mkdir();assert json.loads((W/'kernel356/native_RESULT.json').read_text())['passed'] is False
+assert '+ROOT=' in (W/'kernel356/native.log').read_text() and 'CAP_INPUT_UNREADABLE' in (W/'kernel356/native.log').read_text();pre=json.loads((W/'INPUTS_PRE.json').read_text());assert pre==json.loads((W/'INPUTS_POST.json').read_text());verify(pre)
+prior=[]
+for label in ['core104','lifecycle','sizes','budget','adapter','edges']:
+ p=W/label/'native_RESULT.json';assert json.loads(p.read_text())['passed'];prior.append(rec(p))
+root=R/'reports/gaussian_cap_integration_20261020/kernel_cases';pre=pre+[rec(W/'modelsim.ini'),rec(W/'compile_RESULT.json'),rec(Path(__file__))];save(X/'INPUTS_PRE.json',pre)
+try:
+ result=execute(X,'native',[str(M/'vsim.exe'),'-c','-novopt','-onfinish','exit','-modelsimini',(W/'modelsim.ini').as_posix(),'-lib','work','tb_cap_kernel_matrix','+ROOT='+root.as_posix(),'-wlf','NUL','-do','do {'+(W/'run.do').as_posix()+'}'],'PASS_CAP_NATIVE_KERNEL_MATRIX',timeout=1800)
+ save(O/'CORE_GATE_RECEIPT.json',dict(passed=True,status='PASS_CORE104_ADAPTER_LIFECYCLE_SIZES_BUDGET_AND_KERNEL356',prior_passed=prior,kernel=result,original_compile=rec(W/'compile_RESULT.json'),source_pre=rec(W/'INPUTS_PRE.json'),source_post=rec(W/'INPUTS_POST.json'),preserved_failure=rec(W/'kernel356/native_RESULT.json'),recovery='Original driver duplicate ROOT and first recovery absolute-backslash ModelSim path failures preserved. This invocation supplies exactly one correct356 ROOT and slash-normalized measured INI; same compiled source and prior successful gates not rerun.'))
+ print('STANDALONE_CORE_GATE_RECOVERY_COMPLETE',flush=True)
+finally:save(X/'INPUTS_POST.json',pre);verify(pre)

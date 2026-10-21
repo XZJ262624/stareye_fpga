@@ -1,0 +1,14 @@
+from common import *
+import shutil
+old=R/json.loads((O/'ACTIVE_PHYSICAL.json').read_text())['path'];oldP=R/json.loads((O/'ACTIVE_PHYSICAL.json').read_text())['project'];proposal=O/'SELECTOR_RECOVERY_PROPOSAL_V3';pr=json.loads((proposal/'PROPOSAL.json').read_text());verify([pr['map'],pr['source'],pr['frontend'],pr['old_sdc'],pr['candidate_sdc']])
+F=O/('physical_recovery_v3_'+time.strftime('%Y%m%d_%H%M%S'));F.mkdir();P=F/'mirror/efinity/shape_standalone_i3';shutil.copytree(old/'mirror',F/'mirror');S=F/'source_scope_before';S.mkdir()
+for p in[O/'SOURCE_MANIFEST.json',O/'SOURCE_CLOSURE.json',O/'STANDALONE_EXACT_GROUPS.json',O/'ACTIVE_PHYSICAL.json',R/'efinity/shape_standalone_i3/Ti60_Demo_I3.sdc']:(S/p.name).write_bytes(p.read_bytes())
+before=json.loads((O/'SOURCE_MANIFEST.json').read_text());verify(before);candidate=(proposal/'candidate_Ti60_Demo_I3.sdc').read_bytes();(P/'Ti60_Demo_I3.sdc').write_bytes(candidate);canonical=R/'efinity/shape_standalone_i3/Ti60_Demo_I3.sdc';canonical.write_bytes(candidate)
+after=[rec(R/x['path'])for x in before];changed=[(x,y)for x,y in zip(before,after)if x!=y];assert len(changed)==1 and changed[0][0]['path']==canonical.relative_to(R).as_posix()
+G=json.loads((O/'STANDALONE_EXACT_GROUPS.json').read_text());removed={m['pin']for m in pr['missing_exactly']}
+for g in G['groups']:g['pins']=[p for p in g['pins']if p not in removed];g['count']=len(g['pins'])
+G.update(total=sum(g['count']for g in G['groups']),dead_diagnostic_removal=rec(proposal/'PROPOSAL.json'));assert G['total']==321;save(O/'STANDALONE_EXACT_GROUPS.json',G);save(O/'SOURCE_MANIFEST.json',after)
+for stage in['map','interface']:
+ (F/stage).mkdir();shutil.copyfile(old/stage/'RESULT.json',F/stage/'RESULT.json')
+save(F/'RECOVERY_IMPORT_PROVENANCE.json',dict(original_physical=old.relative_to(R).as_posix(),source_before=rec(S/'SOURCE_MANIFEST.json'),source_after=rec(O/'SOURCE_MANIFEST.json'),changed_root_sources=changed,imported_results=[rec(old/s/'RESULT.json')for s in['map','interface']],map_unchanged=rec(P/'outflow/Ti60_Demo.map.v'),proposal=rec(proposal/'PROPOSAL.json'),scope_basis='Handoff explicitly authorizes removing unused profile diagnostics and continuing ordinary implementation; these two absent diagnostic chains have no live aliases or consumer. This is no live endpoint migration. Work has been sent full proof; no Work approval claimed.',production_RTL_changed=False,all_live_selectors_and_values_unchanged=True,no_old_physical_PASS_reused=True))
+save(O/'ACTIVE_PHYSICAL.json',dict(path=F.relative_to(R).as_posix(),project=P.relative_to(R).as_posix()));print('STANDALONE_EXACT_DEAD_DIAGNOSTIC_SCOPE_RECOVERY',F,flush=True)

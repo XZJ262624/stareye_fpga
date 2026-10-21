@@ -1,0 +1,15 @@
+from common import *
+T=R/'tb/shape_standalone';p=T/'tb_standalone_system720p_v2.sv';s=p.read_text();assert s.count("key_n=control_sofs==38?2'b01:2'b00;")==1
+s=s.replace('module tb_standalone_system720p_v2;','module tb_standalone_system720p_v3;').replace("key_n=control_sofs==38?2'b01:2'b00;","key_n=control_sofs==38?2'b10:2'b00;")
+old='repeat(20)@(negedge pix_clk);key_n=3;';new=old+'''
+    repeat(14)@(negedge pix_clk);
+    if(control_sofs==38&&dut.u_controls.pending_threshold!==8'd80)$fatal(1,"REAL_INCREASE_KEY_NOT80 got=%0d",dut.u_controls.pending_threshold);
+    $display("STANDALONE_CONTROL_EVENT source_sof=%0d threshold_event=%b pendingH=%0d pendingMode=%0d",control_sofs,control_sofs==38,dut.u_controls.pending_threshold,dut.u_controls.pending_mode);
+''';assert s.count(old)==1;s=s.replace(old,new)
+old='source_mode[seq]=dut.source_mode;';new=old+'''
+    if(dut.source_threshold!==(CAMERA_FRAMES>=72&&seq>=39?8'd80:8'd64)||dut.source_generation!==(CAMERA_FRAMES>=72&&seq>=39?64'd1:64'd0))$fatal(1,"SOURCE_REAL_EVENT_THRESHOLD_CONFIG seq=%0d H=%0d generation=%0d",seq,dut.source_threshold,dut.source_generation);
+''';assert s.count(old)==1;s=s.replace(old,new)
+old='b=(output_high==64?0:8)+(output_id/4)%8;e=gold[b*N+out_pos];';new='if(output_high!=64&&output_high!=80)$fatal(1,"FINAL_UNSUPPORTED_REAL_THRESHOLD H=%0d",output_high);'+old;assert s.count(old)==1;s=s.replace(old,new)
+q=T/'tb_standalone_system720p_v3.sv';assert not q.exists();q.write_text(s);F=O/'system720p_72_173637';assert json.loads((F/'native_RESULT.json').read_text())['passed']==False
+save(O/'SYSTEM720P_KEY_POLARITY_FIXTURE_RECOVERY.json',dict(original=rec(p),new=rec(q),failed_native=rec(F/'native_RESULT.json'),failed_log=rec(F/'native.log'),pre=rec(F/'INPUTS_PRE.json'),post=rec(F/'INPUTS_POST.json'),production_control=rec(R/'rtl/shape_standalone/shape_standalone_controls.v'),already_passed_unit_control=rec(T/'tb_standalone_controls.sv'),root_cause="Source control seen1 (active-low key_n=10) increases; seen2 (01) decreases. Fixture targetedH80 but drove01, producing correct H48 atseq39.",changes=['Exactseq38 single-key vector01→10','Explicit pendingH80 assertion after qualified release','Source-first exactH64/generation0 throughseq38 andH80/generation1 fromseq39','Earlier final-pixel unsupported-H assertion before choosing a gold bank'],golden_or_truth_changed=False,production_source_changed=False,earlier_run_scope='No H80 qualification. First38H64 qualified frames passed, then unsupportedH48 fatal; final overall FAIL. Eight-frame probe remains separately PASS.'))
+print('SYSTEM720P_REAL_KEY_POLARITY_CORRECTED_NEW_TEST')

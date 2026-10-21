@@ -1,0 +1,26 @@
+from common import *
+D=Path(__file__).parent;rows=[]
+def write(base,name,fn):
+ s=fn(base.read_text());q=D/name;assert not q.exists();q.write_text(s);compile(s,str(q),'exec');rows.append(dict(original=rec(base),derived=rec(q)))
+def shared(s):return s.replace('from physical_runtime_v2 import active','from standalone_physical_runtime import active').replace("P=F/'mirror/efinity/gaussian_shape_cap_i3'","P=F/'mirror/efinity/shape_standalone_i3'")
+def contract(s):
+ s=shared(s).replace("'SHAPE_GUARD_MAPPED_CONES.json'","'STANDALONE_PIXEL_MAPPED_CONES_V2.json'")
+ s=s.replace("'u_m5b1/bridge/failed~FF|SR'","'u_shape_system/u_m5b1/bridge/failed~FF|SR'").replace(r"r'u_controls/key_meta\[[01]\]~FF\|D'",r"r'u_shape_system/u_controls/key_meta\[[01]\]~FF\|D'").replace('assert len(bundles)==29','assert len(bundles)==6')
+ a=s.index("old=json.loads((R/'reports/shape_recognition_");b=s.index('\ndsp=[]',a)
+ s=s[:a]+'''clocks=[];nopath=0
+for pair in json.loads((F/'CLOCK_PAIR_PLAN.json').read_text()):
+ for mode in ['setup','hold']:
+  rp=P/f'outflow/clock_{pair["index"]}_{mode}.rpt';timed=rp.exists();row=dict(**pair,mode=mode,timed=timed)
+  if timed:
+   rr=parse(rp);assert len(rr)==1 and rr[0]['slack']>=0;row.update(slack=rr[0]['slack'],report=rec(rp))
+  else:nopath+=1;row['classification']='CURRENT_NATIVE_EXPLICIT_NO_PATH_NOT_TIMING_PASS'
+  clocks.append(row)
+assert len(clocks)==2*len(json.loads((F/'CLOCK_PAIR_PLAN.json').read_text()))
+assert (F/'sta2_04_clock_pairs/native.log').read_text().count('No timing path is found')==nopath
+''' +s[b:]
+ return s
+write(R/'scripts/gaussian_cap_integration/audit_contract_sta_cap_v2.py','audit_contract_sta_v1.py',contract)
+write(R/'scripts/gaussian_cap_integration/audit_external_cap_v2.py','audit_external_v1.py',shared)
+write(R/'scripts/gaussian_cap_integration/audit_ram_addresses_cap_v2.py','audit_shape_ram_addresses_v1.py',lambda s:shared(s).replace("n.startswith('u_shape/')","'/u_shape/' in n"))
+save(O/'FINAL_AUDIT_TOOL_DERIVATION.json',dict(records=rows,scope='New profile current native reports only;6 live CDC bundles; every actual native clock pair with explicit no-path status. Deleted global/pair clock incidences are not required to remain identical. No timing, clock, endpoint or resource limits relaxed. Original7/135 external boundaries still independently compared.',encrypted_DDR_FF='All6731native FFs covered by native_sta_v2 plan including1987 encrypted FFs; source lookup absent for encrypted constants never relabels a nonconstant.'))
+print('STANDALONE_FINAL_AUDITS_DERIVED')

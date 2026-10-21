@@ -1,0 +1,26 @@
+"""Place the already implemented foreground/LCD/recognition/OSD connection in one production module."""
+from common import *
+P=R/'efinity/shape_standalone_i3';Q=R/'rtl/shape_standalone';t=(P/'example_top.v').read_text();a=t.index('    wire [63:0] m5b1_frame_id');b=t.index('\t//\tHDMI Interface.',a);original=t[a:b]
+mapping={'w_ddr3_ui_clk':'ui_clk','cmos_pclk':'cam_clk','rstn_sys':'rst_n','rstn_pixel':'pix_rst_n','clk_pixel':'pix_clk','w_pll_lock':'pll_locked','w_ddr3_cal_done':'cal_done','w_ddr3_cal_pass':'cal_pass','cmos_frame_vsync':'cam_vs','cmos_frame_href':'cam_valid','cmos_frame_Gray':'cam_data','uart_tx_o':'uart_tx','led_o':'led'}
+for name in ['aid','alen','wid','aaddr','asize','aburst','alock','avalid','atype','aready','wdata','wstrb','wlast','wvalid','wready','bid','bresp','bvalid','bready','rid','rresp','rdata','rlast','rvalid','rready']:mapping['w_ddr3_'+name]=name
+body=original.replace('cmos_frame_Gray[7:0]','cmos_frame_Gray')
+for old,new in mapping.items():body=re.sub(r'(?<!\.)\b'+re.escape(old)+r'\b',new,body)
+inverse=body
+for old,new in mapping.items():inverse=re.sub(r'(?<!\.)\b'+re.escape(new)+r'\b',old,inverse)
+inverse=inverse.replace('.cam_data(cmos_frame_Gray)', '.cam_data(cmos_frame_Gray[7:0])');assert inverse==original
+body=body.replace('shape_standalone_controls u_controls','shape_standalone_controls #(.DEBOUNCE_CYCLES(DEBOUNCE_CYCLES),.LONG_CYCLES(LONG_CYCLES)) u_controls')
+front=(Q/'frontend/shape_standalone_frontend.sv').read_text();axi=front[front.index(' output [7:0] aid,alen,wid,'):front.index(' wire run,stop,ack,')]
+header='''`timescale 1ns/1ps
+module shape_standalone_system #(parameter DEBOUNCE_CYCLES=1488000,LONG_CYCLES=74400000)(
+ input ui_clk,cam_clk,pix_clk,rst_n,pix_rst_n,pll_locked,cal_done,cal_pass,
+ input [1:0] key_n,input cam_vs,cam_valid,input [7:0] cam_data,
+ output [23:0] display_rgb_out,output display_de_out,display_hs_out,display_vs_out,
+ output uart_tx,output [5:0] led,
+'''+axi+''' wire lcd_de,lcd_hs,lcd_vs,lcd_request;wire [7:0] lcd_gray,lcd_data;
+ wire sobel_hs,sobel_vs,sobel_de;
+'''
+q=Q/'shape_standalone_system.sv';assert not q.exists();q.write_text(header+body+''' assign display_rgb_out=osd_rgb;assign display_de_out=osd_de;assign display_hs_out=osd_hs;assign display_vs_out=osd_vs;
+endmodule
+''')
+save(O/'SHARED_SYSTEM_COMPOSITION.json',dict(original_current_top=rec(P/'example_top.v'),new_system=rec(q),body_wire_renames=mapping,exact_inverse_of_original_body=True,only_added_parameterization='Control debounce/long values expose unchanged production defaults; finite simulation may use4/64.',purpose='Both production top and full720p native system test instantiate this same foreground DDR→lcd_driver→fixedGAU→adapter/cap→OSD module. No test mirror of the production connection.',installed_in_project=False))
+print('STANDALONE_SHARED_PRODUCTION_SYSTEM_PREPARED',flush=True)

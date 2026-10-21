@@ -1,0 +1,70 @@
+
+Efinix Timing Path Constraint Report
+Version: 2025.1.110.5.9
+Date: Wed Oct 21 17:51:26 2026
+
+Copyright (C) 2013 - 2025 Efinix, Inc. All rights reserved.
+
+User command: report_timing -from_clock {cmos_pclk} -to_clock {cmos_pclk} -npaths 1 -nworst 1 -hold -detail full_path -file {clock_90_hold.rpt}
+
+Timing Model: I3
+	process : typical
+	temperature : -40C to 100C
+	voltage : 0.95 +/-30mV
+	speedgrade : 3
+	technology : t16ff
+	status : final
+
+Summary:
+
+ Path #  | Slack (ns) | Delay (ns) |                 Start Pin                 |                           End Pin                            |  Launch Clk   |  Capture Clk
+=============================================================================================================================================================================
+ 1       |  0.027     |  0.136     | u_shape_system/u_m5b1/video/pack[84]~FF|Q | u_shape_system/u_m5b1/video/camera_fifo/mem__D$d12|WDATA[18] | cmos_pclk (R) | cmos_pclk (R)
+
+++++ Path 1 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : u_shape_system/u_m5b1/video/pack[84]~FF|CLK                 
+Path End      : u_shape_system/u_m5b1/video/camera_fifo/mem__D$d12|WDATA[18]
+Launch Clock  : cmos_pclk (RISE)                                            
+Capture Clock : cmos_pclk (RISE)                                            
+Slack         : 0.027 (arrival time - required time)                        
+Delay         : 0.136                                                       
+
+Logic Level             : 0
+Non-global nets on path : 1
+Global nets on path     : 0
+
+Launch Clock Path Delay        : 1.172
++ Clock To Q + Data Path Delay : 0.097
+--------------------------------------
+End-of-path arrival time       : 1.269
+
+Constraint                     : 0.000
++ Capture Clock Path Delay     : 1.172
++ Clock Uncertainty            : 0.070
+--------------------------------------
+End-of-path required time      : 1.242
+
+Launch Clock Path
+                   name                      model name   delay (ns)  cumulative delay (ns) pins on net    location
+=====================================================================================================================
+cmos_pclk                                      inpad        0.000             0.000               0       (111,323)
+cmos_pclk                                      inpad        0.070             0.070             305       (111,323)
+cmos_pclk                                      net          1.102             1.172             305       (111,323)
+u_shape_system/u_m5b1/video/pack[84]~FF|CLK    ff           0.000             1.172             305       (115,60) 
+
+Data Path
+                            name                              model name   delay (ns)  cumulative delay (ns) pins on net    location
+======================================================================================================================================
+u_shape_system/u_m5b1/video/pack[84]~FF|Q                    ff               0.072            0.072              3         (115,60)
+u_shape_system/u_m5b1/video/pack[84]                         net              0.136            0.208              3         (115,60)
+u_shape_system/u_m5b1/video/camera_fifo/mem__D$d12|WDATA[18] ram_8192x20     -0.111            0.097              3         (117,42)
+
+Capture Clock Path
+                         name                            model name   delay (ns)  cumulative delay (ns) pins on net    location
+=================================================================================================================================
+cmos_pclk                                               inpad           0.000             0.000               0       (111,323)
+cmos_pclk                                               inpad           0.070             0.070             305       (111,323)
+cmos_pclk                                               net             1.102             1.172             305       (111,323)
+u_shape_system/u_m5b1/video/camera_fifo/mem__D$d12|WCLK ram_8192x20     0.000             1.172             305       (117,42) 
+

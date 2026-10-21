@@ -1,0 +1,18 @@
+from common import *
+import shutil
+W=O/('core_gates_'+time.strftime('%H%M%S'));W.mkdir();T=R/'tb/shape_standalone';B=R/'reports/shape_recognition_20261019/remote_full_v1/contract_package_v5';oldT=B/'tb/shape_recognition';copies=[]
+for n in ['tb_shape_recognizer_epoch.sv','tb_shape_adapter_contract.sv','tb_shape_contract_edges.sv','shape_portable_io.svh']:
+ p=oldT/n;q=T/n;assert not q.exists();shutil.copyfile(p,q);copies.append(dict(original=rec(p),copy=rec(q)))
+p=R/'tb/gaussian_cap_integration/tb_cap_kernel_matrix.sv';q=T/p.name;assert not q.exists();shutil.copyfile(p,q);copies.append(dict(original=rec(p),copy=rec(q)));save(W/'FIXTURE_COPY.json',copies)
+src=[R/'rtl/shape_standalone/shape/shape_recognizer_epoch.sv',R/'rtl/shape_standalone/shape/shape_stream_adapter_contract_v2.sv']+list(T.glob('*.sv'));data=B/'shape_data';kernel=R/'reports/gaussian_cap_integration_20261020/kernel_cases';deps=src+[T/'shape_portable_io.svh']+sorted((data/'data').glob('*.hex'))+sorted(kernel.rglob('*.hex'))+[Path(__file__),Path(__file__).parent/'common.py'];pre=[rec(p) for p in deps];save(W/'INPUTS_PRE.json',pre)
+d=json.loads((O/'PHASE_RESULT.json').read_text(encoding='utf-8-sig'));d['phase']='CORE_ADAPTER_KERNEL_NATIVE_GATES';save(O/'PHASE_RESULT.json',d);heartbeat('CORE_ADAPTER_KERNEL_NATIVE_GATES',native_running=True)
+try:
+ result=[]
+ for name,cmd in [('vlib',[str(M/'vlib.exe'),'work']),('vmap_create',[str(M/'vmap.exe'),'-c']),('vmap_work',[str(M/'vmap.exe'),'-modelsimini','modelsim.ini','work',(W/'work').as_posix()])]:result.append(execute(W,name,cmd))
+ result.append(execute(W,'compile',[str(M/'vlog.exe'),'-modelsimini','modelsim.ini','-sv','-work','work','+incdir+'+T.as_posix(),*map(str,src)]));(W/'run.do').write_text('onerror {quit -code 11}\nonbreak {quit -code 12}\nrun -all\nquit -code 0\n')
+ tests=[('core104','tb_shape_recognizer_epoch',['+WHICH=0'],'PASS_RTL_MODEL_104'),('lifecycle','tb_shape_recognizer_epoch',['+WHICH=1'],'PASS_LIFECYCLE'),('sizes','tb_shape_recognizer_epoch',['+WHICH=3'],'PASS_SIZE_DEADLINE_BOUNDARIES'),('budget','tb_shape_recognizer_epoch',['+WHICH=2','-gLIMIT=2'],'PASS_BUDGET_EXHAUSTION'),('adapter','tb_shape_adapter_contract',[],'PASS_ADAPTER_LIFECYCLE'),('edges','tb_shape_contract_edges',[],'PASS_CONTRACT_EDGE_PHASES'),('kernel356','tb_cap_kernel_matrix',['+ROOT='+kernel.as_posix()],'PASS_CAP_NATIVE_KERNEL_MATRIX')]
+ for label,top,args,marker in tests:
+  heartbeat('CORE_NATIVE_'+label,native_running=True);x=W/label;x.mkdir();result.append(execute(x,'native',[str(M/'vsim.exe'),'-c','-novopt','-onfinish','exit','-modelsimini','../modelsim.ini','-lib','work',top,'+ROOT='+data.as_posix(),*args,'-wlf','NUL','-do','do {'+(W/'run.do').as_posix()+'}'],marker,timeout=1800))
+ save(W/'RESULT.json',dict(passed=True,status='PASS_STANDALONE_COPIED_CAP_CORE_ADAPTER_104_356_LIFECYCLE',tests=result));save(O/'CORE_GATE_RECEIPT.json',dict(passed=True,result=rec(W/'RESULT.json'),core=rec(src[0])));print('STANDALONE_CORE_GATES_COMPLETE',flush=True)
+finally:
+ post=[rec(p) for p in deps];save(W/'INPUTS_POST.json',post);assert pre==post

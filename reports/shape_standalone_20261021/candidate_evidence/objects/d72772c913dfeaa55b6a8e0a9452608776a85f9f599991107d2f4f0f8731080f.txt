@@ -1,0 +1,17 @@
+"""Actual new MED spatial pixels against unchanged frozen truth/model; not reuse GAU scores."""
+from common import *
+import sys,importlib.util
+def module(name,p):
+ s=importlib.util.spec_from_file_location(name,p);m=importlib.util.module_from_spec(s);s.loader.exec_module(m);return m
+H=R/'reports/gaussian_integration_20261020/cap_host_gate_20261020';C=R/'reports/gaussian_integration_20261020/stage2_components_20261020_180220';S=R/'scripts/gaussian_integration';sp=S/'stage2/spatial_gold.py';model=S/'cap_host_v1/model_b.py';spatial=module('standalone_spatial_med',sp).spatial;classify=module('standalone_model_b',model).classify
+W=O/'med_sample_assessment';W.mkdir(exist_ok=False);cases=json.loads((C/'CASES.json').read_text());defs=json.loads((H/'DEFINITIONS_BEFORE_MODEL_GOLD.json').read_text());sources=[sp,model,C/'CASES.json',H/'DEFINITIONS_BEFORE_MODEL_GOLD.json',Path(__file__),Path(__file__).parent/'common.py'];records=[];save(W/'INPUTS_PRE.json',[rec(p) for p in sources]);start=time.time()
+for group,items in [('fixed100',cases),('new128',defs['cases'])]:
+ result=[]
+ for case in items:
+  cid=case['id'];rawfile=H/'data'/f'gray_{cid:03}.bin' if group=='new128' else R/case['gold']['path'];raw=rawfile.read_bytes() if group=='new128' else bytearray(int(line,16)&255 for line in rawfile.read_text().splitlines());assert len(raw)==544*416
+  words,edge=spatial(raw,544,416,1,64);rows=[sum(edge[(y+16)*544+x+16]<<x for x in range(512)) for y in range(384)];pred,valid,features=classify(rows)
+  row=dict(id=cid,truth=case['truth'],prediction=pred,valid=valid,correct=pred==case['truth'],features=features,input=rec(rawfile),MED_word_sha256=hashlib.sha256(b''.join(x.to_bytes(13,'little') for x in words)).hexdigest());result.append(row)
+  save(W/'PROGRESS.json',dict(status='RUNNING_MED_ONLY_HOST_PIXELS',group=group,completed=len(result),total=len(items),positive_correct=sum(x['truth']!=0 and x['correct'] for x in result),negative_false_accept=sum(x['truth']==0 and x['prediction']!=0 for x in result),seconds=time.time()-start));print('MED_SAMPLE',group,cid,pred,case['truth'],flush=True)
+ save(W/(group+'_RESULT.json'),dict(records=result,positive_correct=sum(x['truth']!=0 and x['correct'] for x in result),positive_total=sum(x['truth']!=0 for x in result),negative_false_accept=sum(x['truth']==0 and x['prediction']!=0 for x in result)));records.append(dict(group=group,result=rec(W/(group+'_RESULT.json'))))
+save(W/'INPUTS_POST.json',[rec(p) for p in sources]);assert json.loads((W/'INPUTS_PRE.json').read_text())==json.loads((W/'INPUTS_POST.json').read_text());results=[json.loads((R/x['result']['path']).read_text()) for x in records];passed=all(x['positive_correct']*100>=95*x['positive_total'] and x['negative_false_accept']==0 for x in results)
+save(W/'RESULT.json',dict(passed=passed,status='PASS_MED_SPATIAL_HOST_TRUTH_NOT_RTL' if passed else 'FAIL_MED_SPATIAL_HOST_TRUTH_NO_RETUNING',filter='MED_FIXED_1',results=records,seconds=time.time()-start,scope='Independent spatial model MED recomputed from same frozen raw gray and compared to unchanged truth/modelB. No Gaussian accuracy or expected reused as MED. Actual RTL component gates still mandatory.'));print('MED_SAMPLE_ASSESSMENT_COMPLETE',passed,flush=True)

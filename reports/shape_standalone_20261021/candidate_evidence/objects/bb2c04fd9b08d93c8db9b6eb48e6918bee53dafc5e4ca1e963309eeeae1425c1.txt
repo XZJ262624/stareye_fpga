@@ -1,0 +1,6 @@
+from common import *
+p=Path(__file__).parent/'mapped_cones_v1_derived.py';s=p.read_text();needle="selected={n for n,c in cells.items() if 'u_shape_system/' in n and c['kind'] in ['EFX_FF','EFX_RAM10','EFX_DSP48']}";assert s.count(needle)==1
+s=s.replace(needle,"selected={n for n,c in cells.items() if 'u_shape_system/' in n and '/u_m5b1/' not in n and c['kind'] in ['EFX_FF','EFX_RAM10','EFX_DSP48']}")
+s=s.replace("'STANDALONE_ALL_MAPPED_CONES_V1.json'","'STANDALONE_PIXEL_MAPPED_CONES_V2.json'");q=Path(__file__).parent/'pixel_mapped_cones_v2_derived.py';assert not q.exists();q.write_text(s);compile(s,str(q),'exec')
+save(O/'PIXEL_CONE_SCOPE_DERIVATION.json',dict(original=rec(p),derived=rec(q),scope='All standalone pixel processing/control/LCD metadata/counters/adapter/cap/OSD FF/RAM/DSP including every prefixed FIFO and current_tag. Foreground DDR/failstop uses unchanged modules and separate real native full endpoint/CDC boundary checks.',prior_all_SUT_diagnostic='Retained STANDALONE_ALL_MAPPED_CONES_V1 shows opaque encrypted DDR roots and inherited physical PLL ports not represented by readable top netlist; do not classify them as constants/sameclock or erase the diagnostic.',no_native_endpoint_coverage_reduction=True))
+print('PIXEL_FULL_CONES_V2_PREPARED')

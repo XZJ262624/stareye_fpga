@@ -1,0 +1,91 @@
+
+Efinix Timing Path Constraint Report
+Version: 2025.1.110.5.9
+Date: Wed Oct 21 17:51:29 2026
+
+Copyright (C) 2013 - 2025 Efinix, Inc. All rights reserved.
+
+User command: report_timing -from_clock {tdqss_clk} -to_clock {tdqss_clk} -npaths 1 -nworst 1 -setup -detail full_path -file {clock_180_setup.rpt}
+
+Timing Model: I3
+	process : typical
+	temperature : -40C to 100C
+	voltage : 0.95 +/-30mV
+	speedgrade : 3
+	technology : t16ff
+	status : final
+
+Summary:
+
+ Path #  | Slack (ns) | Delay (ns) |                                                                                   Start Pin                                                                                   |                                                                    End Pin                                                                     |  Launch Clk   |  Capture Clk
+===================================================================================================================================================================================================================================================================================================================================================================================================
+ 1       |  0.332     |  1.932     | ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/controller_main/bram_u1/u_efx_fifo_top/xefx_fifo_ctl/async_clk.waddr_cntr_gry_sync[6]~FF|Q | ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/controller_main/bram_u1/u_efx_fifo_top/xefx_fifo_ram/ram|RE | tdqss_clk (R) | tdqss_clk (R)
+
+++++ Path 1 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/controller_main/bram_u1/u_efx_fifo_top/xefx_fifo_ctl/async_clk.waddr_cntr_gry_sync[6]~FF|CLK
+Path End      : ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/controller_main/bram_u1/u_efx_fifo_top/xefx_fifo_ram/ram|RE                                 
+Launch Clock  : tdqss_clk (RISE)                                                                                                                                                               
+Capture Clock : tdqss_clk (RISE)                                                                                                                                                               
+Slack         : 0.332 (required time - arrival time)                                                                                                                                           
+Delay         : 1.932                                                                                                                                                                          
+
+Logic Level             : 7
+Non-global nets on path : 8
+Global nets on path     : 0
+
+Launch Clock Path Delay        : 2.112
++ Clock To Q + Data Path Delay : 2.146
+--------------------------------------
+End-of-path arrival time       : 4.258
+
+Constraint                     : 2.604
++ Capture Clock Path Delay     : 2.112
+- Clock Uncertainty            : 0.126
+--------------------------------------
+End-of-path required time      : 4.590
+
+Launch Clock Path
+                                                                                     name                                                                                        model name   delay (ns)  cumulative delay (ns) pins on net    location
+=========================================================================================================================================================================================================================================================
+tdqss_clk                                                                                                                                                                          inpad        0.000             0.000               0        (110,0) 
+tdqss_clk                                                                                                                                                                          inpad        0.126             0.126             146        (110,0) 
+tdqss_clk                                                                                                                                                                          net          1.986             2.112             146        (110,0) 
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/controller_main/bram_u1/u_efx_fifo_top/xefx_fifo_ctl/async_clk.waddr_cntr_gry_sync[6]~FF|CLK    ff           0.000             2.112             146        (198,42)
+
+Data Path
+                                                                                    name                                                                                       model name   delay (ns)  cumulative delay (ns) pins on net    location
+=======================================================================================================================================================================================================================================================
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/controller_main/bram_u1/u_efx_fifo_top/xefx_fifo_ctl/async_clk.waddr_cntr_gry_sync[6]~FF|Q ff              0.130             0.130              3         (198,42)
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/controller_main/bram_u1/u_efx_fifo_top/xefx_fifo_ctl/async_clk.waddr_cntr_gry_sync[6]      net             0.312             0.442              3         (198,42)
+LUT__40066|in[1]                                                                                                                                                              lut             0.061             0.503              3         (202,43)
+LUT__40066|out                                                                                                                                                                lut             0.000             0.503              3         (202,43)
+n19266                                                                                                                                                                        net             0.102             0.605              3         (202,43)
+LUT__40067|in[2]                                                                                                                                                              lut             0.061             0.666              3         (202,44)
+LUT__40067|out                                                                                                                                                                lut             0.000             0.666              3         (202,44)
+n19267                                                                                                                                                                        net             0.138             0.804              3         (202,44)
+LUT__40068|in[1]                                                                                                                                                              lut             0.063             0.867              3         (204,44)
+LUT__40068|out                                                                                                                                                                lut             0.000             0.867              3         (204,44)
+n19268                                                                                                                                                                        net             0.061             0.928              3         (204,44)
+LUT__40070|in[3]                                                                                                                                                              lut             0.063             0.991              3         (204,43)
+LUT__40070|out                                                                                                                                                                lut             0.000             0.991              2         (204,43)
+n19270                                                                                                                                                                        net             0.221             1.212              2         (204,43)
+LUT__40071|in[1]                                                                                                                                                              lut             0.063             1.275              2         (204,48)
+LUT__40071|out                                                                                                                                                                lut             0.000             1.275              2         (204,48)
+n19271                                                                                                                                                                        net             0.171             1.446              2         (204,48)
+LUT__40074|in[2]                                                                                                                                                              lut             0.063             1.509              2         (204,52)
+LUT__40074|out                                                                                                                                                                lut             0.000             1.509              4         (204,52)
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/controller_main/bram_u1/u_efx_fifo_top/xefx_fifo_ctl/equal_31/n13                          net             0.229             1.738              3         (204,52)
+LUT__40075|in[1]                                                                                                                                                              lut             0.061             1.799              4         (209,59)
+LUT__40075|out                                                                                                                                                                lut             0.000             1.799              2         (209,59)
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/controller_main/bram_u1/u_efx_fifo_top/xefx_fifo_ram/re_int                                net             0.263             2.062              2         (209,59)
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/controller_main/bram_u1/u_efx_fifo_top/xefx_fifo_ram/ram|RE                                ram_8192x20     0.084             2.146              2         (210,42)
+
+Capture Clock Path
+                                                                      name                                                                        model name   delay (ns)  cumulative delay (ns) pins on net    location
+==========================================================================================================================================================================================================================
+tdqss_clk                                                                                                                                        inpad           0.000             0.000               0        (110,0) 
+tdqss_clk                                                                                                                                        inpad           0.126             0.126             146        (110,0) 
+tdqss_clk                                                                                                                                        net             1.986             2.112             146        (110,0) 
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/controller_main/bram_u1/u_efx_fifo_top/xefx_fifo_ram/ram|RCLK ram_8192x20     0.000             2.112             146        (210,42)
+

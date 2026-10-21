@@ -1,0 +1,23 @@
+`timescale 1ns/1ps
+module tb_standalone_system_probe;
+ reg ui_clk=0,cam_clk=0,pix_clk=0,rst_n=0;always #5.208333 ui_clk=~ui_clk;always #5 cam_clk=~cam_clk;always #6.720430 pix_clk=~pix_clk;
+ reg[1:0]key_n=3;reg cam_vs=1,cam_valid=0;reg[7:0]cam_data=0;reg inject_b_error=0;
+ wire[23:0]rgb;wire de,hs,vs,uart;wire[5:0]led;
+ wire[7:0]aid,alen,wid,bid,rid;wire[31:0]aaddr;wire[2:0]asize;wire[1:0]aburst,alock,bresp,rresp;
+ wire avalid,atype,aready,wlast,wvalid,wready,bvalid,bready,rlast,rvalid,rready;wire[127:0]wdata,rdata;wire[15:0]wstrb;wire[31:0]accepted,completed,max_service;
+ shape_standalone_system #(.DEBOUNCE_CYCLES(4),.LONG_CYCLES(64)) dut(.ui_clk(ui_clk),.cam_clk(cam_clk),.pix_clk(pix_clk),.rst_n(rst_n),.pix_rst_n(rst_n),.pll_locked(rst_n),.cal_done(rst_n),.cal_pass(rst_n),.key_n(key_n),.cam_vs(cam_vs),.cam_valid(cam_valid),.cam_data(cam_data),.display_rgb_out(rgb),.display_de_out(de),.display_hs_out(hs),.display_vs_out(vs),.uart_tx(uart),.led(led),.aid(aid),.alen(alen),.wid(wid),.aaddr(aaddr),.asize(asize),.aburst(aburst),.alock(alock),.avalid(avalid),.atype(atype),.aready(aready),.wdata(wdata),.wstrb(wstrb),.wlast(wlast),.wvalid(wvalid),.wready(wready),.bid(bid),.bresp(bresp),.bvalid(bvalid),.bready(bready),.rid(rid),.rresp(rresp),.rdata(rdata),.rlast(rlast),.rvalid(rvalid),.rready(rready));
+ m5c1b_ddr_service_model memory(.clk(ui_clk),.rst_n(rst_n),.stall(1'b0),.service_delay(32'd0),.inject_b_error(inject_b_error),.inject_r_error(1'b0),.accepted(accepted),.completed(completed),.max_service(max_service),.aid(aid),.alen(alen),.wid(wid),.aaddr(aaddr),.asize(asize),.aburst(aburst),.alock(alock),.avalid(avalid),.atype(atype),.aready(aready),.wdata(wdata),.wstrb(wstrb),.wlast(wlast),.wvalid(wvalid),.wready(wready),.bid(bid),.bresp(bresp),.bvalid(bvalid),.bready(bready),.rid(rid),.rresp(rresp),.rdata(rdata),.rlast(rlast),.rvalid(rvalid),.rready(rready));
+ integer which,i;initial begin
+  which=0;if($value$plusargs("CASE=%d",which))begin end
+  #1000;rst_n=1;#100000;
+  if(!dut.u_m5b1.run||dut.u_m5b1.stop||dut.u_m5b1.video_fault||dut.u_m5b1.quarantine||uart!==1'b1||dut.shape_visible||accepted!=0)$fatal(1,"STARTUP_NOT_CLEAN run=%b stop=%b video=%b q=%b uart=%b shape=%b A=%0d",dut.u_m5b1.run,dut.u_m5b1.stop,dut.u_m5b1.video_fault,dut.u_m5b1.quarantine,uart,dut.shape_visible,accepted);
+  if(dut.u_m5b1.ca[2]!==0||dut.u_m5b1.bwp!==0||dut.u_m5b1.brp!==0||dut.u_m5b1.ack!==0)$fatal(1,"UNUSED_CLIENT_OR_FAKE_ACK");
+  if(which==0)begin $display("PASS_STANDALONE_SYSTEM_PROBE100US A=%0d class_visible=%b C2=%b ACK=%b",accepted,dut.shape_visible,dut.u_m5b1.ca[2],dut.u_m5b1.ack);$finish;end
+  inject_b_error=1;@(negedge cam_clk);cam_vs=0;repeat(20)@(negedge cam_clk);cam_vs=1;
+  for(i=0;i<2048;i=i+1)begin cam_valid=1;cam_data=i;@(negedge cam_clk);end cam_valid=0;
+  wait(completed==1);repeat(40)@(negedge ui_clk);
+  if(accepted!=1||completed!=1||memory.state!=0||dut.u_m5b1.arb_busy||!dut.u_m5b1.stop||!dut.u_m5b1.quarantine||dut.u_m5b1.ack||dut.shape_visible||dut.u_m5b1.video.complete!=0)$fatal(1,"B_ERROR_NOT_CLOSED accepted=%0d completed=%0d busy=%b stop=%b q=%b complete=%b",accepted,completed,dut.u_m5b1.arb_busy,dut.u_m5b1.stop,dut.u_m5b1.quarantine,dut.u_m5b1.video.complete);
+  $display("PASS_STANDALONE_SYSTEM_BAD_B_REAL_DRAIN A=%0d B=%0d maxservice=%0d cold_failstop=%b ack=%b",accepted,completed,max_service,dut.u_m5b1.stop,dut.u_m5b1.ack);$finish;
+ end
+ initial begin #1000000;$fatal(1,"SYSTEM_PROBE_TIMEOUT");end
+endmodule

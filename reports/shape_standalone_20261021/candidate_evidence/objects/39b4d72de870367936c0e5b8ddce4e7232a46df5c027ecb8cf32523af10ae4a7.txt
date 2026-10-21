@@ -1,0 +1,9 @@
+from common import *
+a=json.loads((O/'ACTIVE_PHYSICAL.json').read_text());F=R/a['path'];start=time.time()
+while not(F/'interface/RESULT.json').exists():
+ if(F/'map/RESULT.json').exists():assert json.loads((F/'map/RESULT.json').read_text())['passed']
+ assert time.time()-start<1200;time.sleep(5)
+assert json.loads((F/'interface/RESULT.json').read_text())['passed']
+for script,args in [('prepare_query_v1.py',[]),('build_physical_v1.py',['query']),('build_physical_v1.py',['place']),('build_physical_v1.py',['route'])]:
+ cmd=[str(E/'python311/bin/python.exe'),'-B',str(Path(__file__).parent/script),*args];p=subprocess.run(cmd,creationflags=subprocess.CREATE_NO_WINDOW);assert p.returncode==0,(script,args,p.returncode)
+save(O/'ROUTE_STAGE_RECEIPT.json',dict(passed=True,physical=F.relative_to(R).as_posix(),route_result=rec(F/'route/RESULT.json'),scope='Fresh map/interface/native selectors/place/route only; full endpoint STA/CDC remains pending.'));print('STANDALONE_ROUTE_STAGE_COMPLETE_FULL_AUDIT_PENDING',flush=True)

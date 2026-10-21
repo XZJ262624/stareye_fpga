@@ -1,0 +1,18 @@
+from common import *
+base=Path(__file__).parent/'native_sta_v1.py';s=base.read_text();needle="gg={k:[] for k in ['D','CE','SR','RAM','DSP']}";assert s.count(needle)==1
+insert='''
+# Encrypted DDR partition FFs are omitted from readable map.v. Enumerate them
+# from the real native five-port FF signature, suffix and exact map report count.
+native_ports={}
+for pin in pins:
+ name,port=pin.rsplit('|',1);native_ports.setdefault(name,set()).add(port)
+native_ff={n for n,ports in native_ports.items()if {'D','CE','SR','CLK','Q'}<=ports}
+assert all(n.endswith('~FF')for n in native_ff)
+visible_ff={n for n,k in cells.items()if k=='EFX_FF'};assert visible_ff<=native_ff
+map_report=(P/'outflow/Ti60_Demo.map.rpt').read_text();reported_ff=int(re.search(r'EFX_FF\\s*:\\s*(\\d+)',map_report)[1]);assert len(native_ff)==reported_ff
+opaque=sorted(native_ff-visible_ff)
+for n in opaque:assert n not in cells;cells[n]='EFX_FF'
+save(F/'NATIVE_ALL_FF_COVERAGE.json',dict(status='ALL_NATIVE_FIVE_PORT_FFS_MATCH_SYNTHESIS_RESOURCE_COUNT',native_FF_count=len(native_ff),readable_map_FF_count=len(visible_ff),encrypted_partition_FF_count=len(opaque),encrypted_partition_cells=opaque,all_native_FF_cells=sorted(native_ff),native_signature=['D','CE','SR','CLK','Q'],suffix='~FF',map_report=rec(P/'outflow/Ti60_Demo.map.rpt'),allpins=rec(P/'selected_allpins.txt'),note='These encrypted DDR FFs must receive their own D/CE/SR setup/hold coverage. Readable map FF count alone is insufficient.'))
+'''
+s=s.replace(needle,insert+'\n'+needle);q=Path(__file__).parent/'native_sta_v2.py';assert not q.exists();q.write_text(s);compile(s,str(q),'exec');save(O/'NATIVE_ALL_FF_TOOL_DERIVATION.json',dict(original=rec(base),derived=rec(q),change='Include all actual native FFs including1987 encrypted DDR partition FFs absent from readable map; nativefiveports/~FF/EFX_FF resource count exact reconciliation, no coverage deletion.',no_production_source_change=True))
+print('NATIVE_ALL_FF_COVERAGE_PREPARED')

@@ -1,0 +1,11 @@
+from common import *
+import sys
+frames=int(sys.argv[1]);assert frames in[8,72];W=O/('system720p_'+str(frames)+'_'+time.strftime('%H%M%S'));W.mkdir();T=R/'tb/shape_standalone';P=R/'efinity/shape_standalone_i3';K=R/'reports/gaussian_cap_remote_v2_20261021/package/gaussian_matrix_gold';X=O/'full720p_oracle';src=[R/n for n in json.loads((O/'COMPILE_SOURCE_FILES.json').read_text())]+[T/n for n in['m5c1b_ddr_service_model.sv','reference_shape_osd.sv','tb_standalone_system720p.sv']];deps=src+[P/'src/lcd_para.v',Path(__file__),Path(__file__).parent/'common.py',X/'expected.hex',X/'expected_valid.hex',X/'ORACLE_BINDING.json']+[K/f'f2_{i}_{h}.hex'for h in[64,80]for i in range(8)];pre=[rec(p)for p in deps];save(W/'INPUTS_PRE.json',pre);save(O/'ACTIVE_SYSTEM720P.json',dict(path=W.relative_to(R).as_posix(),frames=frames))
+try:
+ tests=[]
+ for n,c in [('vlib',[str(M/'vlib.exe'),'work']),('vmap_create',[str(M/'vmap.exe'),'-c']),('vmap_work',[str(M/'vmap.exe'),'-modelsimini','modelsim.ini','work',(W/'work').as_posix()])]:tests.append(execute(W,n,c))
+ tests.append(execute(W,'compile',[str(M/'vlog.exe'),'-modelsimini','modelsim.ini','-sv','-work','work','+incdir+'+(P/'src').as_posix(),*map(str,src)]));(W/'run.do').write_text('onerror {quit -code 11}\nonbreak {quit -code 12}\nrun -all\nquit -code 0\n')
+ tests.append(execute(W,'native',[str(M/'vsim.exe'),'-c','-novopt','-onfinish','exit','-modelsimini',(W/'modelsim.ini').as_posix(),'-lib','work','tb_standalone_system720p','-gCAMERA_FRAMES='+str(frames),'+GOLDROOT='+K.as_posix(),'+EXPECTEDROOT='+X.as_posix(),'-wlf','NUL','-do','do {'+(W/'run.do').as_posix()+'}'],'PASS_STANDALONE_SYSTEM720P',timeout=1800 if frames==8 else7200))
+ save(W/'RESULT.json',dict(passed=True,frames=frames,full_qualification=frames==72,tests=tests));print('STANDALONE_SYSTEM720P_COMPLETE',frames,flush=True)
+finally:
+ post=[rec(p)for p in deps];save(W/'INPUTS_POST.json',post);assert pre==post

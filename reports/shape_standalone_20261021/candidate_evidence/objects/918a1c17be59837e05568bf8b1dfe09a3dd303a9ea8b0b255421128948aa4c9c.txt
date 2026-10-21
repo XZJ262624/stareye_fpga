@@ -1,0 +1,16 @@
+from common import *
+import xml.etree.ElementTree as ET
+P=R/'efinity/shape_standalone_i3';Q=R/'rtl/shape_standalone'
+assert json.loads((O/'COMPONENT_GATE_RECEIPT.json').read_text())['passed']
+d=json.loads((O/'PHASE_RESULT.json').read_text());d['phase']='INSTALL_SHARED_PRODUCTION_SYSTEM_AND_FOREGROUND_CONSTRAINTS';save(O/'PHASE_RESULT.json',d);heartbeat(d['phase'],native_running=False)
+snap=O/'BEFORE_SHARED_SYSTEM_INSTALL';snap.mkdir()
+for p in [P/'example_top.v',P/'Ti60_Demo.xml',P/'Ti60_Demo_I3.sdc',O/'COMPILE_SOURCE_FILES.json']:(snap/p.name).write_bytes(p.read_bytes())
+p=P/'example_top.v';t=p.read_text();a=t.index('    wire [63:0] m5b1_frame_id');b=t.index('\t//\tHDMI Interface.',a)
+ports={'ui_clk':'w_ddr3_ui_clk','cam_clk':'cmos_pclk','pix_clk':'clk_pixel','rst_n':'rstn_sys','pix_rst_n':'rstn_pixel','pll_locked':'w_pll_lock','cal_done':'w_ddr3_cal_done','cal_pass':'w_ddr3_cal_pass','key_n':'key_n','cam_vs':'cmos_frame_vsync','cam_valid':'cmos_frame_href','cam_data':'cmos_frame_Gray[7:0]','display_rgb_out':'osd_rgb','display_de_out':'osd_de','display_hs_out':'osd_hs','display_vs_out':'osd_vs','uart_tx':'uart_tx_o','led':'led_o'}
+for n in ['aid','alen','wid','aaddr','asize','aburst','alock','avalid','atype','aready','wdata','wstrb','wlast','wvalid','wready','bid','bresp','bvalid','bready','rid','rresp','rdata','rlast','rvalid','rready']:ports[n]='w_ddr3_'+n
+body='    wire [23:0] osd_rgb; wire osd_de,osd_hs,osd_vs;\n    shape_standalone_system u_shape_system(\n'+',\n'.join('      .'+k+'('+v+')' for k,v in ports.items())+');\n\n'
+p.write_text(t[:a]+body+t[b:]);assert p.read_text().startswith(t[:a]) and p.read_text().endswith(t[b:])
+ns='http://www.efinixinc.com/enf_proj';ET.register_namespace('efx',ns);ET.register_namespace('xsi','http://www.w3.org/2001/XMLSchema-instance');tree=ET.parse(P/'Ti60_Demo.xml');info=tree.getroot().find('{'+ns+'}design_info');ET.SubElement(info,'{'+ns+'}design_file',name='../../rtl/shape_standalone/shape_standalone_system.sv',version='system_verilog',library='default');tree.write(P/'Ti60_Demo.xml',encoding='unicode')
+src=json.loads((O/'COMPILE_SOURCE_FILES.json').read_text());src.append('rtl/shape_standalone/shape_standalone_system.sv');save(O/'COMPILE_SOURCE_FILES.json',src)
+save(O/'SHARED_SYSTEM_INSTALL_RECEIPT.json',dict(passed=True,ports=ports,system=rec(Q/'shape_standalone_system.sv'),top=rec(p),XML=rec(P/'Ti60_Demo.xml'),previous=snap.relative_to(R).as_posix(),unchanged_board_prefix_suffix=True,source_count=len(src),earlier_component_binding='Earlier100/128 gates bind the pre-wrapper top. The actual pixel/core/OSD modules remain byte identical; shared system exact body inverse is separately recorded. Final wrapper requires fresh compile/elaboration.'))
+print('SHARED_SYSTEM_INSTALLED',len(src))

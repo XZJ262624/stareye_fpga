@@ -1,0 +1,10 @@
+from common import *
+import datetime,collections
+p=Path(__file__).parent/'seal_offline_v1.py';s=p.read_text(encoding='utf8');needle="assert actual==set(protected['GAU_V2_files'])";assert s.count(needle)==1
+replacement="""assert set(json.loads((K/'manifest.json').read_text())['files'])==set(protected['GAU_V2_files']) and set(protected['GAU_V2_files'])<=actual
+extra=sorted(actual-set(protected['GAU_V2_files']));assert len(extra)==405
+extra_rows=[dict(path=n,bytes=(K/n).stat().st_size,mtime_unix=(K/n).stat().st_mtime)for n in extra]
+assert max(x['mtime_unix']for x in extra_rows)<datetime.datetime.fromisoformat(json.loads((O/'PHASE_RESULT.json').read_text())['started']).timestamp()
+save(O/'PROTECTED_GENERATED_OUTPUT_SCOPE_RECONCILIATION.json',dict(passed=True,declared_manifest_inputs=908,missing_declared_inputs=[],preexisting_generated_outputs=extra_rows,generated_count=len(extra),newest_generated_output_unix=max(x['mtime_unix']for x in extra_rows),scope='OriginalV2manifest908declaredinputs remain the exact protectedinput set. Additional405old local simulationoutputs/worklibraries are not manifestinputs; everymtime precedes this task16:36start. No old file is removed/modified and all908inputhashes are verified below. The original collectionequality guard confused sourceclosure with preexistingruntimeoutputs.',failed_sealer=rec(Path(__file__).parent/'seal_offline_v1.py')))
+"""
+s=s.replace(needle,replacement).replace('import sys\n','import sys,datetime\n',1);q=Path(__file__).parent/'seal_offline_v2.py';assert not q.exists();q.write_text(s,encoding='utf8');compile(s,str(q),'exec');save(O/'FINAL_SEAL_RECOVERY_V2.json',dict(original=rec(p),new=rec(q),change='Use frozenmanifest908inputset equality plus subset of actualdirectory, verify every908hash; separately account exact405earliergeneratedoutputs andrequireallbeforetaskstart. Preserve old collectionguardfailure; no test/production/oracle/oldpackagewrite or PREPOSTchange.',current_manifest=rec(R/'reports/gaussian_cap_remote_v2_20261021/package/manifest.json')));print('SEAL_DECLARED_INPUT_SCOPE_RECOVERED')

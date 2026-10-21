@@ -1,0 +1,27 @@
+候选前审查材料草稿：实际配置文件/资产/证据已完成；尚未创建candidate，Work须填入固定commit/parent并核准后才能发送和开始独审。
+实际HEX：{'path': 'reports/shape_standalone_20261021/candidate_assets/artifacts/Ti60_Demo.hex', 'bytes': 2313474, 'sha256': '9754187101e1ede9462bfa81fe14cdff8d50f7a71cec32e1b5d3b4907defa319'}
+实际payload：771158B SHA19b05048e8bf9cdc09cf9410e00f84973b312ad4e0ae6e1e0a9d64f1d6af8dbb，CRC94649cab。
+冻结727黄金数据已归档：{'path': 'reports/shape_standalone_20261021/candidate_assets/frozen_test_assets.zip', 'bytes': 34158761, 'sha256': 'a48b7a300da54f69370900fd5b8b9291343b3c2501bc395e51ee44aa853e3c0a'}。已在新隔离根真实解包核全部字节并完成114源+727gold的100us compile。完整72帧未重复。
+审查原始证据按candidate_evidence/SOURCE_TO_OBJECT_INDEX.json映射到纯文本objects，可用scripts/shape_standalone/read_candidate_evidence_v1.py --path <原路径>读取并核SHA；补充隔离100us证据见SUPPLEMENTAL_OBJECT_INDEX。正式生产源仍在正常rtl/efinity路径，无需通过索引读。
+固定commit/parent仍为必须填写的停止项。
+
+身份：DeepSeek B第二独立审查者。仅只读审查Work提供的固定candidate隔离快照，不改文件、不构建下载硬件、不访问其他审查者报告。快照不包含Git元数据时，branch/commit/parent以Work核验声明为准，不得自行推断。不得把本地未提交工作区、原始私人资料、工具包、密钥或.env纳入快照。
+
+branch=codex/m5c-fusion-prototype
+candidate=<真实固定commit>
+parent=<Work实核candidate parent>
+snapshot_manifest=<Work逐文件核实的路径/size/SHA清单>
+scope=<最终批准范围>
+bitstream=candidate_assets/ARTIFACT_METADATA.json及上面实际产物绑定
+
+审查对象为独立简易图像识别profile，固定GAU/当前帧local Canny→cap圆/矩形/UNKNOWN→真实OSD，前台DDR/1280×720显示保留，后台全局/fusion/pair及专用UART删除。原相机配置、板卡时钟/管脚/复位边界未改变。三显示模式6→0→5→6；阈值H64默认，真实bit0单键升16、bit1降16并SOF发布config generation；display-only模式不冒改算法代际。ROI x384..895/y168..551，16边距、bbox80..280；静态细框仅ROI提示，不参与识别。
+
+重点独立核源闭包、模块裁减与仍使用的DDR真实A/B/R及排空安全、CDC/FIFO复位边界、有效帧资格、source fid/seq/config/epoch与PREV/UNKNOWN失效、GAU/局部边缘对齐、EOF预算/阈值切换、不以常量/框替代识别。
+
+查看开发者测试证据：104核、356矩阵、生命周期/尺寸/预算/adapter；实际上游像素fixed100正60/60且误受0/40、new128正64/64且误受0/64；实际controls与完整720p OSD；真实输入无效及冷启动failstop；最终72帧完整共享生产SUT逐像素67,276,800、75out/73healthy/73results、A65254全部done65254、16场景阈值组合。一次H64→80真实按键事件，36是H80源帧数。历史fixture按键驱反导致H48的FAIL保留，新v3 TB严格断言H80；当前clean runner仅100us资格，完整72的真实runner/模板依赖有显式SHA reconciliation，不能混称同一运行。
+
+物理为本版fresh map/interface/place/route/fullSTA/CDC，资源15400XLR(含routing0)/105RAM/9DSP，normal setup+0.195ns、hold+0.009ns；6731所有真实FF D/CE/SR六组、579metadataFF、RAM/DSP端点、14全时钟对、321CDCpins+2keys、ROM禁用时钟/DSP全组合/RAM映射均需看原始证明。此前选择器/collection误用失败和撤销证据保留，不能用旧物理PASS。板级7input/135output及6PLL异步SR为明确未资格边界。完整视频不模拟传感器/硬PHY/TMDS电气，也不证明暖DDR复位恢复或PLL中途事务排空。未采用MED方案的2/64误受不得掩盖；共享MED排序硬件仍存在且计入资源。
+
+入口：OFFLINE_FINAL_RECEIPT.json、FULL720P_FINAL_RECEIPT.json、PHYSICAL_CLOSED_RECEIPT.json、SOURCE_MANIFEST.json、FINAL_EVIDENCE_MANIFEST.json及Work批准的证据/测试资产索引。主要114文件与已提供的727黄金压缩资产共同构成依赖；必须核逐文件manifest、实际解压字节及独立复现范围。不得以旧GAU V2回传代替本版资格。
+
+问题表严格使用：严重程度、文件/位置、问题、证据、影响、建议。最终结论只能PASS、PASS_WITH_FINDINGS或FAIL，并声明身份为DeepSeek B第二独立审查者、实际审查范围和未执行项。缺固定commit或必要证据时明确列出，不能推断。独立审查结束前不得查看另一审查结论。

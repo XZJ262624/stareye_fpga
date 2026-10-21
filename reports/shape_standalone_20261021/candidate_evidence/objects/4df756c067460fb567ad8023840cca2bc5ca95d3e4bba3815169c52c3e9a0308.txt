@@ -1,0 +1,11 @@
+from common import *
+W=O/('controls_osd_'+time.strftime('%H%M%S'));W.mkdir();T=R/'tb/shape_standalone';src=[R/'rtl/shape_standalone/shape_standalone_controls.v',R/'rtl/shape_standalone/shape/shape_osd.sv',T/'reference_shape_osd.sv',T/'tb_standalone_controls.sv',T/'tb_standalone_osd.sv'];pre=[rec(p) for p in src]+[rec(Path(__file__)),rec(Path(__file__).parent/'common.py')];save(W/'INPUTS_PRE.json',pre)
+try:
+ results=[]
+ for name,cmd in [('vlib',[str(M/'vlib.exe'),'work']),('vmap_create',[str(M/'vmap.exe'),'-c']),('vmap_work',[str(M/'vmap.exe'),'-modelsimini','modelsim.ini','work',(W/'work').as_posix()])]:results.append(execute(W,name,cmd))
+ results.append(execute(W,'compile',[str(M/'vlog.exe'),'-modelsimini','modelsim.ini','-sv','-work','work',*map(str,src)]));(W/'run.do').write_text('onerror {quit -code 11}\nonbreak {quit -code 12}\nrun -all\nquit -code 0\n')
+ for name,top,marker in [('controls','tb_standalone_controls','PASS_STANDALONE_CONTROLS'),('osd','tb_standalone_osd','PASS_STANDALONE_OSD')]:
+  X=W/name;X.mkdir();results.append(execute(X,'native',[str(M/'vsim.exe'),'-c','-novopt','-onfinish','exit','-modelsimini','../modelsim.ini','-lib','work',top,'-wlf','NUL','-do','do {'+(W/'run.do').as_posix()+'}'],marker,timeout=900))
+ save(O/'CONTROLS_OSD_GATE_RECEIPT.json',dict(passed=True,status='PASS_STANDALONE_ACTUAL_CONTROLS_AND_FULL720P_OSD_RENDERER',tests=results,scope='Real controls/OSD logic, three full720p class/UNKNOWN renders, independent old font comparison plus ROI andGAU glyph oracle. Controls generation MAX is explicit unit-state injection; not a camera/DDR integrated frame qualification.'));print('STANDALONE_CONTROLS_OSD_COMPLETE',flush=True)
+finally:
+ post=[rec(R/x['path']) for x in pre];save(W/'INPUTS_POST.json',post);assert pre==post

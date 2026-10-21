@@ -1,0 +1,7 @@
+from common import *
+p=R/'scripts/gaussian_cap_integration/native_sta_cap_v2.py';s=p.read_text()
+s=s.replace("D=R/'reports/gaussian_cap_integration_20261020'","D=R/'reports/shape_standalone_20261021'")
+s=s.replace('from physical_runtime_v2 import active','from standalone_physical_runtime import active').replace("[m5b1_exact ","[shape_exact ").replace('len(groups)==68','len(groups)==17').replace('groups=68','groups=17')
+q=Path(__file__).parent/'native_sta_v1.py';assert not q.exists();q.write_text(s);compile(s,str(q),'exec')
+save(O/'NATIVE_STA_TOOL_DERIVATION.json',dict(original=rec(p),derived=rec(q),changes=['New isolated standalone reports/runtime; exact constraint parser shape_exact and17retained foreground groups','No change native setup/hold FF D/CE/SR RAM/DSP endpoint batches, official foreach_in_collection exact/net checks, all actual clock pairs, unregistered DSP through checks, I3 or resources'],old_physical_PASS_reused=False))
+print('STANDALONE_NATIVE_FULL_STA_DERIVED')

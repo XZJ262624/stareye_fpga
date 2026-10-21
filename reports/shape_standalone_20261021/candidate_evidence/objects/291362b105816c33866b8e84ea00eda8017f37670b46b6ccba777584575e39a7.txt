@@ -1,0 +1,13 @@
+from standalone_physical_runtime import *
+F,P=active();p=Path(__file__).parent/'audit_native_clocks_v1.py';s=p.read_text();needle="pin=name+'|'+port;net=native[pin]";assert s.count(needle)==1
+replacement='''pin=name+'|'+port
+  if pin not in native:
+   assert kind=='EFX_RAM10'and port=='WCLK'and c['ports'][port]=="1'b0"
+   assert all(re.fullmatch(r"\\{?\\d+'b0+\\}?",c['ports'][k])for k in['WCLKE','WADDREN','WE','WADDR'])
+   actual_write_pins=[p for p in native if p.startswith(name+'|W')];assert not actual_write_pins
+   assert name in {f'ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/controller_main/map_ram/ram__D${v}'for v in['2','b12','12','c1']}
+   rows.append(dict(kind=kind,cell=name,logical_clock_port=port,native_pin=None,clock=None,classification='EXACT_READ_ONLY_ROM_WRITE_PORT_ABSENT_NO_TIMING_PASS',mapped_write_ports={k:v for k,v in c['ports'].items()if k.startswith('W')},actual_native_write_pins=[]));continue
+  net=native[pin]'''
+s=s.replace(needle,replacement);s=s.replace("'NATIVE_PRIMITIVE_CLOCK_COVERAGE.json'","'NATIVE_PRIMITIVE_CLOCK_COVERAGE_V2.json'");s=s.replace("undefined=[],scope=","undefined=[],disabled_ROM_write_clock_ports=4,scope=")
+save(F/'NATIVE_CLOCK_V1_RECOVERY.json',dict(original=rec(p),new_wrapper=rec(Path(__file__)),observed='Read-only auditv1 KeyError on first DDR ROM WCLK; no timing/source failure. All four DDR ROMs have no actual native write pins, WCLK/WCLKE/WADDREN/WE/WADDR all exact constant0 in mapped source. v2 records explicitly absent write ports, never classifies them as native clock or timing PASS.',no_RTL_SDC_or_native_report_change=True))
+exec(compile(s,str(p),'exec'))

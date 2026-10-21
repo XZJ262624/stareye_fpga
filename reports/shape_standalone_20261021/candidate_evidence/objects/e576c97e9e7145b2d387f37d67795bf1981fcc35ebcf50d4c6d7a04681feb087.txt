@@ -1,0 +1,18 @@
+from common import *
+import shutil
+W=O/('components_'+time.strftime('%H%M%S'));W.mkdir();T=R/'tb/shape_standalone';P=R/'efinity/shape_standalone_i3';Q=R/'rtl/shape_standalone'
+for p in [R/'tb/gaussian_cap_integration/tb_cap_components.sv',R/'tb/gaussian_integration/reference_shape_osd.sv']:
+ q=T/p.name;assert not q.exists();shutil.copyfile(p,q)
+src=[R/n for n in json.loads((O/'COMPILE_SOURCE_FILES.json').read_text())]+[T/'tb_cap_components.sv',T/'reference_shape_osd.sv'];cases=R/'reports/gaussian_cap_remote_v2_20261021/package/cap_cases';deps=src+[P/'src/lcd_para.v']+[Path(__file__),Path(__file__).parent/'common.py']+sorted((cases/'fixed100').glob('*'))+sorted((cases/'new128').glob('*'));deps=[p for p in deps if p.is_file()];pre=[rec(p) for p in deps];save(W/'INPUTS_PRE.json',pre)
+d=json.loads((O/'PHASE_RESULT.json').read_text());d['phase']='FIXED_GAU_ACTUAL_UPSTREAM_COMPONENT_NATIVE_GATES';save(O/'PHASE_RESULT.json',d);heartbeat(d['phase'],native_running=True)
+try:
+ result=[]
+ for name,cmd in [('vlib',[str(M/'vlib.exe'),'work']),('vmap_create',[str(M/'vmap.exe'),'-c']),('vmap_work',[str(M/'vmap.exe'),'-modelsimini','modelsim.ini','work',(W/'work').as_posix()])]:result.append(execute(W,name,cmd))
+ inc=[P/'src',P/'ip/DdrCtrl',P/'ip/csi_rx',P/'ip/dsi_tx',T]
+ result.append(execute(W,'compile',[str(M/'vlog.exe'),'-modelsimini','modelsim.ini','-sv','-work','work',*['+incdir+'+p.as_posix() for p in inc],*map(str,src)]));(W/'run.do').write_text('onerror {quit -code 11}\nonbreak {quit -code 12}\nrun -all\nquit -code 0\n')
+ for label,n in [('fixed100',100),('new128',128)]:
+  heartbeat('FIXED_GAU_NATIVE_'+label,native_running=True);X=W/label;X.mkdir();args=['+ROOT='+(cases/label).as_posix(),'+GOLDROOT='+(cases/label).as_posix(),'-gFRAMES='+str(n)]
+  result.append(execute(X,'native',[str(M/'vsim.exe'),'-c','-novopt','-onfinish','exit','-modelsimini','../modelsim.ini','-lib','work','tb_cap_components',*args,'-wlf','NUL','-do','do {'+(W/'run.do').as_posix()+'}'],'PASS_GAUSSIAN_COMPONENT_CHAIN_MODEL',timeout=5400))
+ save(W/'RESULT.json',dict(passed=True,status='PASS_NEW_PROFILE_FIXED_GAU_COMPONENT100_128_FULL_PIXEL_MODEL_AND_PREVIOUS_OSD_HEADER',tests=result,scope='Actual new GAU pixel/gradient/NMS/support/local edge→byte-exact cap core with CE and full source identity, unchanged expected/gold/truth; old header render rows0..33 only, new ROI guide requires separate full720p OSD gate. No complete DDR/HDMI frame qualification yet.'));save(O/'COMPONENT_GATE_RECEIPT.json',dict(passed=True,result=rec(W/'RESULT.json')));print('STANDALONE_GAU_COMPONENTS_COMPLETE',flush=True)
+finally:
+ post=[rec(p) for p in deps];save(W/'INPUTS_POST.json',post);assert pre==post

@@ -1,0 +1,23 @@
+from common import *
+import collections
+a=json.loads((O/'ACTIVE_PHYSICAL.json').read_text());F=R/a['path'];P=R/a['project'];assert json.loads((F/'interface/RESULT.json').read_text())['passed'];p=P/'outflow/Ti60_Demo.map.v';s=re.sub(r'/\*.*?\*/','',p.read_text().split('endmodule',1)[0],flags=re.S)
+cells={m[2].lstrip('\\'):dict(type=m[1],ports={k:re.sub(r'\s+','',v).replace('\\','')for k,v in re.findall(r'\.(\w+)\((.*?)\)',m[3],re.S)})for m in re.finditer(r'^    (EFX_\w+)\s+(\\\S+|\w+)\s+\((.*?)\)\s*;',s,re.M|re.S)};assert cells
+groups=json.loads((O/'STANDALONE_EXACT_GROUPS.json').read_text())['groups'];missing=[]
+for g in groups:
+ for pin in g['pins']:
+  name,port=pin.rsplit('|',1)
+  if name not in cells or port not in cells[name]['ports']:missing.append(dict(group=g['name'],pin=pin))
+for i in range(2):
+ name=f'u_shape_system/u_controls/key_meta[{i}]~FF'
+ if name not in cells or 'D'not in cells[name]['ports']:missing.append(dict(group='key_meta',pin=name+'|D'))
+save(F/'CURRENT_EXACT_GROUPS.json',dict(groups=groups));save(F/'MAPPED_ALL_CELLS.json',cells)
+forbidden=[n for n in cells if re.search(r'/(background|bg_mux|pair|u_pair|u_fusion|u_global|u_backend)(/|_|\[)',n)]
+median=[n for n in cells if 'u_median/u_median/' in n];gaussian=[n for n in cells if 'u_median/u_gaussian/' in n]
+ffs={n:c for n,c in cells.items()if c['type']=='EFX_FF'};shape={n:c for n,c in ffs.items()if'/u_shape/'in n};front={n:c for n,c in ffs.items()if n.startswith('u_shape_system/u_m5b1/')}
+assert shape and front and gaussian;assert not forbidden and not median,(forbidden[:10],median[:10]);assert all(c['ports']['CLK']=='clk_pixel'for c in shape.values())
+save(F/'PROFILE_PRUNING_MAPPED_PROOF.json',dict(passed=True,all_cells=len(cells),all_FF=len(ffs),foreground_FF=len(front),shape_FF=len(shape),shape_clocks=collections.Counter(c['ports']['CLK']for c in shape.values()),global_fusion_pair_instances=forbidden,median_data_path=median,gaussian_cells=len(gaussian),gaussian_types=collections.Counter(cells[n]['type']for n in gaussian),source=rec(p)))
+save(F/'STATIC_SELECTOR_GATE.json',dict(passed=not missing,groups=len(groups),group_pins=sum(g['count']for g in groups),keys=2,missing=missing,map=rec(p),sdc=rec(P/'Ti60_Demo_I3.sdc')))
+assert not missing,missing
+pins=sorted(n+'|'+k for n,c in ffs.items()for k in['CLK','D','CE','SR','Q']);save(F/'NATIVE_REQUIRED_PIN_SET.json',pins)
+q=(P/'Ti60_Demo_I3.sdc').read_text()+'\nset f [open standalone_native_allpins_pre_place.txt w];puts $f [get_pins {*|*}];close $f\nputs "STANDALONE_NATIVE_SELECTOR_EXISTENCE_COMPLETE_NO_PACK_PLACE_ROUTE"\nexit 0\n';(P/'standalone_query.sdc').write_text(q)
+print('STANDALONE_STATIC_SELECTOR_GATE_PASS',len(groups),len(pins),'native pins',len(cells),'cells',flush=True)

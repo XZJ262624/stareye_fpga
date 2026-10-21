@@ -1,0 +1,96 @@
+
+Efinix Timing Path Constraint Report
+Version: 2025.1.110.5.9
+Date: Wed Oct 21 17:52:18 2026
+
+Copyright (C) 2013 - 2025 Efinix, Inc. All rights reserved.
+
+User command: report_timing -through {u_shape_system/u_shape/recognize/mult_194|A[4]} -npaths 1 -nworst 1 -setup -detail full_path -file {dsp_184_setup.rpt}
+
+Timing Model: I3
+	process : typical
+	temperature : -40C to 100C
+	voltage : 0.95 +/-30mV
+	speedgrade : 3
+	technology : t16ff
+	status : final
+
+Summary:
+
+ Path #  | Slack (ns) | Delay (ns) |                   Start Pin                    |                   End Pin                   |  Launch Clk   |  Capture Clk
+=================================================================================================================================================================
+ 1       |  7.307     |  5.875     | u_shape_system/u_shape/recognize/width[4]~FF|Q | u_shape_system/u_shape/result_class[0]~FF|D | clk_pixel (R) | clk_pixel (R)
+
+++++ Path 1 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : u_shape_system/u_shape/recognize/width[4]~FF|CLK
+Path End      : u_shape_system/u_shape/result_class[0]~FF|D     
+Launch Clock  : clk_pixel (RISE)                                
+Capture Clock : clk_pixel (RISE)                                
+Slack         : 7.307 (required time - arrival time)            
+Delay         : 5.875                                           
+
+Logic Level             : 9
+Non-global nets on path : 9
+Global nets on path     : 0
+
+Launch Clock Path Delay        : 2.095
++ Clock To Q + Data Path Delay : 6.008
+--------------------------------------
+End-of-path arrival time       : 8.103
+
+Constraint                     : 13.441
++ Capture Clock Path Delay     :  2.095
+- Clock Uncertainty            :  0.126
+---------------------------------------
+End-of-path required time      : 15.410
+
+Launch Clock Path
+                      name                        model name   delay (ns)  cumulative delay (ns) pins on net    location
+==========================================================================================================================
+clk_pixel                                           inpad        0.000             0.000                0       (0,159) 
+clk_pixel                                           inpad        0.126             0.126             3569       (0,159) 
+clk_pixel                                           net          1.969             2.095             3569       (0,159) 
+u_shape_system/u_shape/recognize/width[4]~FF|CLK    ff           0.000             2.095             3569       (82,227)
+
+Data Path
+                     name                        model name   delay (ns)  cumulative delay (ns) pins on net    location
+=========================================================================================================================
+u_shape_system/u_shape/recognize/width[4]~FF|Q   ff             0.130             0.130              9        (82,227) 
+u_shape_system/u_shape/recognize/width[4]        net            0.876             1.006              9        (82,227) 
+u_shape_system/u_shape/recognize/mult_194|A[4]   dsp48_prim     1.312             2.318              9        (81,242) 
+u_shape_system/u_shape/recognize/mult_194|O[14]  dsp48_prim     0.000             2.318              5        (81,242) 
+u_shape_system/u_shape/recognize/n820            net            0.599             2.917              5        (81,242) 
+LUT__46033|in[1]                                 lut            0.061             2.978              5        (89,244) 
+LUT__46033|out                                   lut            0.000             2.978              2        (89,244) 
+n22110                                           net            0.458             3.436              2        (89,244) 
+LUT__46034|in[3]                                 lut            0.063             3.499              2        (114,262)
+LUT__46034|out                                   lut            0.000             3.499              2        (114,262)
+n22111                                           net            0.390             3.889              2        (114,262)
+LUT__46035|in[3]                                 lut            0.063             3.952              2        (108,255)
+LUT__46035|out                                   lut            0.000             3.952              2        (108,255)
+n22112                                           net            0.134             4.086              2        (108,255)
+LUT__46036|in[3]                                 lut            0.061             4.147              2        (104,255)
+LUT__46036|out                                   lut            0.000             4.147              2        (104,255)
+n22113                                           net            0.544             4.691              2        (104,255)
+LUT__46037|in[3]                                 lut            0.061             4.752              2        (97,237) 
+LUT__46037|out                                   lut            0.000             4.752              2        (97,237) 
+n22114                                           net            0.507             5.259              2        (97,237) 
+LUT__46038|in[3]                                 lut            0.063             5.322              2        (99,253) 
+LUT__46038|out                                   lut            0.000             5.322              2        (99,253) 
+n22115                                           net            0.249             5.571              2        (99,253) 
+LUT__46039|in[3]                                 lut            0.061             5.632              2        (94,258) 
+LUT__46039|out                                   lut            0.000             5.632              3        (94,258) 
+n22116                                           net            0.312             5.944              3        (94,258) 
+LUT__46477|in[1]                                 lut            0.061             6.005              3        (94,259) 
+LUT__46477|out                                   lut            0.000             6.005              2        (94,259) 
+u_shape_system/u_shape/result_class[0]~FF|D      ff             0.003             6.008              2        (94,259) 
+
+Capture Clock Path
+                    name                       model name   delay (ns)  cumulative delay (ns) pins on net    location
+=======================================================================================================================
+clk_pixel                                        inpad        0.000             0.000                0       (0,159) 
+clk_pixel                                        inpad        0.126             0.126             3569       (0,159) 
+clk_pixel                                        net          1.969             2.095             3569       (0,159) 
+u_shape_system/u_shape/result_class[0]~FF|CLK    ff           0.000             2.095             3569       (94,259)
+

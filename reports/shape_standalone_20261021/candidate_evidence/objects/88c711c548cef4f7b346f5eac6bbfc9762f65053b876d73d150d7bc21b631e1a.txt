@@ -1,0 +1,144 @@
+{
+  "status": "AWAIT_WORK_EXACT_TWO_DEAD_DIAGNOSTIC_SELECTOR_REMOVAL_APPROVAL",
+  "map": {
+    "path": "reports/shape_standalone_20261021/physical_20261021_172300/mirror/efinity/shape_standalone_i3/outflow/Ti60_Demo.map.v",
+    "bytes": 20261876,
+    "sha256": "3c0073d4f740782dd4ca3b5e4c18d19afe70b85814d956ae7243f6d7bcfeff7e"
+  },
+  "source": {
+    "path": "rtl/shape_standalone/frontend/m5b1_video_dma.sv",
+    "bytes": 9681,
+    "sha256": "be136373c2bd09fcbfe794af5ee4af28e80c15b93a4ba627595f7b1ad5401791"
+  },
+  "frontend": {
+    "path": "rtl/shape_standalone/frontend/shape_standalone_frontend.sv",
+    "bytes": 4283,
+    "sha256": "377151ce6012352fc3063fb9cfa8e3fb610467766b5090d76ae1d5b3a9b214f2"
+  },
+  "old_sdc": {
+    "path": "reports/shape_standalone_20261021/physical_20261021_172300/mirror/efinity/shape_standalone_i3/Ti60_Demo_I3.sdc",
+    "bytes": 96870,
+    "sha256": "e434ed4786e0d565b5d871dba0c605177d1d67471822a03c11a66dff41b3119e"
+  },
+  "candidate_sdc": {
+    "path": "reports/shape_standalone_20261021/SELECTOR_RECOVERY_PROPOSAL_V3/candidate_Ti60_Demo_I3.sdc",
+    "bytes": 96742,
+    "sha256": "1c940879a836382cd7c9fa308693a4d3f01ba7c188deb01c47f272687c91a964"
+  },
+  "missing_exactly": [
+    {
+      "group": "m5b1_status_first",
+      "pin": "u_shape_system/u_m5b1/video/camera_over_sync[0]~FF|D"
+    },
+    {
+      "group": "m5b1_status_first",
+      "pin": "u_shape_system/u_m5b1/video/display_under_sync[0]~FF|D"
+    }
+  ],
+  "proof": [
+    {
+      "dead_source_register": "camera_over_sync",
+      "dead_FF_count": 0,
+      "live_first": {
+        "name": "u_shape_system/u_m5b1/video/cf[0]~FF",
+        "type": "EFX_FF",
+        "ports": {
+          "D": "u_shape_system/u_m5b1/video/n1966",
+          "CE": "1'b1",
+          "CLK": "clk_sys",
+          "SR": "rstn_sys",
+          "Q": "u_shape_system/u_m5b1/video/cf[0]"
+        }
+      },
+      "live_second": {
+        "name": "u_shape_system/u_m5b1/video/cf[1]~FF",
+        "type": "EFX_FF",
+        "ports": {
+          "D": "u_shape_system/u_m5b1/video/cf[0]",
+          "CE": "1'b1",
+          "CLK": "clk_sys",
+          "SR": "rstn_sys",
+          "Q": "u_shape_system/u_m5b1/video/cf[1]"
+        }
+      },
+      "live_fault_source": {
+        "name": "u_shape_system/u_m5b1/video/camera_over~FF",
+        "type": "EFX_FF",
+        "ports": {
+          "D": "u_shape_system/u_m5b1/fifo_ready[0]",
+          "CE": "ceg_net79",
+          "CLK": "cmos_pclk",
+          "SR": "u_shape_system/u_m5b1/fifo_ready[0]",
+          "Q": "u_shape_system/u_m5b1/video/camera_over"
+        }
+      },
+      "OR_driver": {
+        "name": "LUT__41756",
+        "type": "EFX_LUT4",
+        "ports": {
+          "I0": "u_shape_system/u_m5b1/video/cam_fault",
+          "I1": "u_shape_system/u_m5b1/video/camera_over",
+          "O": "u_shape_system/u_m5b1/video/n1966"
+        }
+      },
+      "live_first_already_exactly_constrained": "u_shape_system/u_m5b1/video/cf[0]~FF|D",
+      "semantic": "Standalone deletes the sole video_fifo_faults diagnostic consumer. Separate two-bit diagnostic synchronizer is unobservable and removed. Functional fault OR ->cf/pf two-stage chain remains; these are not aliases or bit substitutions."
+    },
+    {
+      "dead_source_register": "display_under_sync",
+      "dead_FF_count": 0,
+      "live_first": {
+        "name": "u_shape_system/u_m5b1/video/pf[0]~FF",
+        "type": "EFX_FF",
+        "ports": {
+          "D": "u_shape_system/u_m5b1/video/n1967",
+          "CE": "1'b1",
+          "CLK": "clk_sys",
+          "SR": "rstn_sys",
+          "Q": "u_shape_system/u_m5b1/video/pf[0]"
+        }
+      },
+      "live_second": {
+        "name": "u_shape_system/u_m5b1/video/pf[1]~FF",
+        "type": "EFX_FF",
+        "ports": {
+          "D": "u_shape_system/u_m5b1/video/pf[0]",
+          "CE": "1'b1",
+          "CLK": "clk_sys",
+          "SR": "rstn_sys",
+          "Q": "u_shape_system/u_m5b1/video/pf[1]"
+        }
+      },
+      "live_fault_source": {
+        "name": "u_shape_system/u_m5b1/video/display_under~FF",
+        "type": "EFX_FF",
+        "ports": {
+          "D": "u_shape_system/u_m5b1/fifo_ready[3]",
+          "CE": "ceg_net100",
+          "CLK": "clk_pixel",
+          "SR": "u_shape_system/u_m5b1/fifo_ready[3]",
+          "Q": "u_shape_system/u_m5b1/video/display_under"
+        }
+      },
+      "OR_driver": {
+        "name": "LUT__41766",
+        "type": "EFX_LUT4",
+        "ports": {
+          "I0": "u_shape_system/u_m5b1/video/pix_fault",
+          "I1": "u_shape_system/u_m5b1/video/display_under",
+          "O": "u_shape_system/u_m5b1/video/n1967"
+        }
+      },
+      "live_first_already_exactly_constrained": "u_shape_system/u_m5b1/video/pf[0]~FF|D",
+      "semantic": "Standalone deletes the sole video_fifo_faults diagnostic consumer. Separate two-bit diagnostic synchronizer is unobservable and removed. Functional fault OR ->cf/pf two-stage chain remains; these are not aliases or bit substitutions."
+    }
+  ],
+  "source_lines": {
+    "diagnostic_only": "video_dma116\u2013121 ->fifo_faults output; standalone frontend output binds video_fifo_faults wire without any consumer",
+    "functional": "video_dma133\u2013134 cf<=cam_fault||camera_over, pf<=pix_fault||display_under; cf/pf[1] sets sticky fault135"
+  },
+  "all_other_SDC_bytes_equal_after_reinserting_exact_lines": true,
+  "no_RTL_change": true,
+  "no_numeric_or_other_selector_change": true,
+  "fresh_native_query_still_required": true
+}

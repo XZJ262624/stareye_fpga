@@ -1,0 +1,28 @@
+候选前审查材料草稿：实际配置文件/资产/证据已完成；尚未创建candidate，Work须填入固定commit/parent并核准后才能发送和开始独审。
+实际HEX：{'path': 'reports/shape_standalone_20261021/candidate_assets/artifacts/Ti60_Demo.hex', 'bytes': 2313474, 'sha256': '9754187101e1ede9462bfa81fe14cdff8d50f7a71cec32e1b5d3b4907defa319'}
+实际payload：771158B SHA19b05048e8bf9cdc09cf9410e00f84973b312ad4e0ae6e1e0a9d64f1d6af8dbb，CRC94649cab。
+冻结727黄金数据已归档：{'path': 'reports/shape_standalone_20261021/candidate_assets/frozen_test_assets.zip', 'bytes': 34158761, 'sha256': 'a48b7a300da54f69370900fd5b8b9291343b3c2501bc395e51ee44aa853e3c0a'}。已在新隔离根真实解包核全部字节并完成114源+727gold的100us compile。完整72帧未重复。
+审查原始证据按candidate_evidence/SOURCE_TO_OBJECT_INDEX.json映射到纯文本objects，可用scripts/shape_standalone/read_candidate_evidence_v1.py --path <原路径>读取并核SHA；补充隔离100us证据见SUPPLEMENTAL_OBJECT_INDEX。正式生产源仍在正常rtl/efinity路径，无需通过索引读。
+固定commit/parent仍为必须填写的停止项。
+
+你是用户在独立可见Codex对话委派的Codex A独立审查者。仅审查Work最后填入的固定candidate及parent，不修改、不暂存、不提交、不运行Programmer、不连接硬件、不下载、不写Flash。不能把Work的证据运输核或开发者自检当独审。不要访问另一审查者的报告。
+
+branch: codex/m5c-fusion-prototype
+candidate: <Work填入真实固定40位commit>
+parent: <Work核实candidate parent，当前开发HEAD为821387c43a3999acb25438cd8982619b09a0a019，不能事先冒填candidate parent>
+scope: <Work填入批准的逐文件候选清单及隔离快照manifest>
+bitstream: 见本提示开头实际产物及candidate_assets/ARTIFACT_METADATA.json
+
+本版是固定GAU、当前帧局部Canny、单个深色实心圆/轴对齐矩形/UNKNOWN的独立profile；摄像头→前台DDR→1280×720显示→真实识别→OSD。模式6局部边缘、0灰度、5强边，双键短按循环；单键bit0有效(mask10)升H16、bit1有效(mask01)降H16，默认H64，阈值只在实际SOF发布新配置代际，饱和拒绝。ROI x384..895/y168..551，边距16，bbox80..280；静态ROI线不是检测框。
+
+重点核查：新profile删去后台/融合/pair和UART诊断后，仍保留使用中的DDR真实B/R生命周期、有效帧资格、冷启动failstop、FIFO/CDC；不得伪造排空ACK。实际分类必须来自GAU/梯度/NMS/support/local edge；不得旧类冒新配置，PREV及源fid/seq/config/epoch必须对应。共享生产SUT与完整视频TB的连接、CE/SOF/EOF、输入无效与阈值失效、4*1650+25前端延迟及OSD一级对齐。确认固定GAU选择有实际负例依据，未改原分类核、模型或truth。
+
+已完成开发者证据：核104及356矩阵/生命周期/尺寸/预算/adapter，实际像素fixed100为60/60正例、0/40误受；new128为64/64正例、0/64误受；controls和三类全720p OSD；真实负例/冷启动；完整72相机帧产生75输出、73healthy/73results、67,276,800逐像素、A65254/done65254、16场景阈值组合，H64→80一次真实事件、三显示模式覆盖。源码及黄金PRE/POST保留。早期测试夹具按键极性/启动/runner错误原FAIL不删除，后续修复及输入绑定需查原件；不要将36个H80源帧误读为36次阈值事件。
+
+新鲜本版map/interface/place/route/完整原生STA/CDC：XLR15400含routing0、RAM105、DSP9；normal setup+0.195ns/hold+0.009ns。6731真实FF D/CE/SR六组、RAM3793/DSP945控制端点、14时钟完整对、321CDC端点+2真实按键、579metadataFF源字段及当前tag/FIFO双slot、实际RAM地址/纯组合DSP/禁用ROM WCLK证明。查看FINAL_PHYSICAL_RECEIPT、NATIVE_PRIMITIVE_CLOCK_COVERAGE_V3和PHYSICAL_CLOSED_RECEIPT，历史执行pending不能替代最终PASS；旧v3 collection返回错误已撤销，不能复用其物理资格。
+
+明确限制：外部7输入/135输出和6PLL异步SR保留原边界，不能称板级外部时序PASS；完整视频仿真在真实OSD RGB到原HDMI串行器输入边界，不验证传感器/I2C/hardPHY/TMDS电气；不证明暖DDR复位恢复、PLL丢锁中事务排空；MED尝试new128有2/64误受，保留FAIL并未采用。固定GAU仍保留共享MED排序硬件且已计资源。全部实物现象待独审后的用户节点。
+
+证据入口：reports/shape_standalone_20261021/OFFLINE_FINAL_RECEIPT.json、FULL720P_FINAL_RECEIPT.json、PHYSICAL_CLOSED_RECEIPT.json、SOURCE_MANIFEST.json、FINAL_EVIDENCE_MANIFEST.json，以及Work最后批准的候选证据和测试资产闭包。114主要文件与candidate_assets中的727项冻结资产包合并闭合实际运行依赖；已做隔离恢复和100us编译，审查者仍须独立核manifest和范围，不能冒称已独立跑72帧。旧GAU V2远端结果不能代替本版72帧资格。
+
+问题表列：严重程度、文件/位置、问题、证据、影响、建议。最终结论只能PASS、PASS_WITH_FINDINGS或FAIL；说明实际检查/运行范围及未执行项。遇scope/固定commit/证据缺项明确列阻断，不推断已通过。

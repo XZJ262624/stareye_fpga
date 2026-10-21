@@ -1,0 +1,70 @@
+
+Efinix Timing Path Constraint Report
+Version: 2025.1.110.5.9
+Date: Wed Oct 21 17:51:25 2026
+
+Copyright (C) 2013 - 2025 Efinix, Inc. All rights reserved.
+
+User command: report_timing -from_clock {clk_pixel} -to_clock {clk_pixel} -npaths 1 -nworst 1 -hold -detail full_path -file {clock_45_hold.rpt}
+
+Timing Model: I3
+	process : typical
+	temperature : -40C to 100C
+	voltage : 0.95 +/-30mV
+	speedgrade : 3
+	technology : t16ff
+	status : final
+
+Summary:
+
+ Path #  | Slack (ns) | Delay (ns) |                            Start Pin                             |                            End Pin                             |  Launch Clk   |  Capture Clk
+======================================================================================================================================================================================================
+ 1       |  0.026     |  0.135     | u_shape_system/u_m5a_stream/u_nms/u_window/bottom_pixel[12]~FF|Q | u_shape_system/u_m5a_stream/u_nms/u_window/row1__D$b1|WDATA[2] | clk_pixel (R) | clk_pixel (R)
+
+++++ Path 1 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : u_shape_system/u_m5a_stream/u_nms/u_window/bottom_pixel[12]~FF|CLK
+Path End      : u_shape_system/u_m5a_stream/u_nms/u_window/row1__D$b1|WDATA[2]    
+Launch Clock  : clk_pixel (RISE)                                                  
+Capture Clock : clk_pixel (RISE)                                                  
+Slack         : 0.026 (arrival time - required time)                              
+Delay         : 0.135                                                             
+
+Logic Level             : 0
+Non-global nets on path : 1
+Global nets on path     : 0
+
+Launch Clock Path Delay        : 1.184
++ Clock To Q + Data Path Delay : 0.096
+--------------------------------------
+End-of-path arrival time       : 1.280
+
+Constraint                     : 0.000
++ Capture Clock Path Delay     : 1.184
++ Clock Uncertainty            : 0.070
+--------------------------------------
+End-of-path required time      : 1.254
+
+Launch Clock Path
+                               name                                 model name   delay (ns)  cumulative delay (ns) pins on net    location
+============================================================================================================================================
+clk_pixel                                                             inpad        0.000             0.000                0       (0,159) 
+clk_pixel                                                             inpad        0.070             0.070             3569       (0,159) 
+clk_pixel                                                             net          1.114             1.184             3569       (0,159) 
+u_shape_system/u_m5a_stream/u_nms/u_window/bottom_pixel[12]~FF|CLK    ff           0.000             1.184             3569       (47,164)
+
+Data Path
+                              name                                model name   delay (ns)  cumulative delay (ns) pins on net    location
+==========================================================================================================================================
+u_shape_system/u_m5a_stream/u_nms/u_window/bottom_pixel[12]~FF|Q ff               0.072            0.072              2         (47,164)
+u_shape_system/u_m5a_stream/u_nms/u_window/bottom_pixel[12]      net              0.135            0.207              2         (47,164)
+u_shape_system/u_m5a_stream/u_nms/u_window/row1__D$b1|WDATA[2]   ram_8192x20     -0.111            0.096              2         (48,162)
+
+Capture Clock Path
+                           name                             model name   delay (ns)  cumulative delay (ns) pins on net    location
+====================================================================================================================================
+clk_pixel                                                  inpad           0.000             0.000                0       (0,159) 
+clk_pixel                                                  inpad           0.070             0.070             3569       (0,159) 
+clk_pixel                                                  net             1.114             1.184             3569       (0,159) 
+u_shape_system/u_m5a_stream/u_nms/u_window/row1__D$b1|WCLK ram_8192x20     0.000             1.184             3569       (48,162)
+

@@ -1,0 +1,11 @@
+from common import *
+import xml.etree.ElementTree as ET
+P=R/'efinity/shape_standalone_i3';F=R/json.loads((O/'ACTIVE_PHYSICAL.json').read_text())['path'];assert not json.loads((F/'map/RESULT.json').read_text())['passed'];S=O/'PROJECT_SCHEMA_RECOVERY_V2';S.mkdir()
+for p in [P/'Ti60_Demo.xml',O/'SOURCE_MANIFEST.json',O/'SOURCE_CLOSURE.json',O/'ACTIVE_PHYSICAL.json']:(S/p.name).write_bytes(p.read_bytes())
+ns='http://www.efinixinc.com/enf_proj';ET.register_namespace('efx',ns);ET.register_namespace('xsi','http://www.w3.org/2001/XMLSchema-instance');tree=ET.parse(P/'Ti60_Demo.xml');di=tree.getroot().find('{'+ns+'}design_info');arch=di.find('{'+ns+'}top_vhdl_arch');di.remove(arch);di.append(arch)
+inc=[]
+for e in tree.getroot().iter():
+ if e.tag=='{'+ns+'}param' and e.attrib.get('name')=='include' and '/gaussian_integration/m5c' in e.attrib.get('value',''):inc.append(dict(before=dict(e.attrib),after='src'));e.set('value','src')
+assert len(inc)==1;ET.indent(tree);tree.write(P/'Ti60_Demo.xml',encoding='unicode')
+save(S/'RECOVERY.json',dict(passed=True,failed_physical=F.relative_to(R).as_posix(),cause='design_info child order violated Efinity2025.1 enf_proj.xsd lines85-89: top_vhdl_arch must follow all design_file nodes. XML parse failed before synthesis.',schema=rec(E/'bin/enf_proj.xsd'),before=rec(S/'Ti60_Demo.xml'),after=rec(P/'Ti60_Demo.xml'),changes=['Moved top_vhdl_arch to final design_info child; all48 actual design_file entries unchanged','Replaced unused historical shared include directory with project src; actual lcd_para header already bound in source closure'],include_change=inc,production_RTL_unchanged=True,no_test_relabel=True))
+print('PROJECT_SCHEMA_RECOVERED_NEW_MIRROR_REQUIRED')

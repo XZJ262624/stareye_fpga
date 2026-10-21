@@ -1,0 +1,15 @@
+from common import *
+a=json.loads((O/'ACTIVE_PHYSICAL.json').read_text());F=R/a['path'];P=R/a['project'];C=json.loads((F/'MAPPED_ALL_CELLS.json').read_text());G=json.loads((O/'STANDALONE_EXACT_GROUPS.json').read_text());bad=json.loads((F/'STATIC_SELECTOR_GATE.json').read_text());assert len(bad['missing'])==2
+W=O/'SELECTOR_RECOVERY_PROPOSAL_V3';W.mkdir();source=R/'rtl/shape_standalone/frontend/m5b1_video_dma.sv';front=R/'rtl/shape_standalone/frontend/shape_standalone_frontend.sv';proof=[]
+for dead,live,root in [('camera_over_sync','cf','camera_over'),('display_under_sync','pf','display_under')]:
+ assert not any('/'+dead in n for n in C)
+ first=f'u_shape_system/u_m5b1/video/{live}[0]~FF';second=first.replace('[0]','[1]');src=f'u_shape_system/u_m5b1/video/{root}~FF';assert all(n in C for n in[first,second,src]);f=C[first];s=C[second];r=C[src];assert f['ports']['CLK']==s['ports']['CLK']=='clk_sys' and f['ports']['Q']==s['ports']['D']
+ d=f['ports']['D'];driver=[dict(name=n,**c)for n,c in C.items()if c['ports'].get('O')==d];assert len(driver)==1 and r['ports']['Q']in driver[0]['ports'].values()
+ pin=first+'|D';assert any(pin in g['pins']for g in G['groups'])
+ proof.append(dict(dead_source_register=dead,dead_FF_count=0,live_first=dict(name=first,**f),live_second=dict(name=second,**s),live_fault_source=dict(name=src,**r),OR_driver=driver[0],live_first_already_exactly_constrained=pin,semantic='Standalone deletes the sole video_fifo_faults diagnostic consumer. Separate two-bit diagnostic synchronizer is unobservable and removed. Functional fault OR ->cf/pf two-stage chain remains; these are not aliases or bit substitutions.'))
+old=(P/'Ti60_Demo_I3.sdc').read_text();new=old
+for m in bad['missing']:
+ line=' {^'+re.escape(m['pin'])+'$}\n';assert new.count(line)==1;new=new.replace(line,'')
+(W/'candidate_Ti60_Demo_I3.sdc').write_text(new)
+save(W/'PROPOSAL.json',dict(status='AWAIT_WORK_EXACT_TWO_DEAD_DIAGNOSTIC_SELECTOR_REMOVAL_APPROVAL',map=rec(P/'outflow/Ti60_Demo.map.v'),source=rec(source),frontend=rec(front),old_sdc=rec(P/'Ti60_Demo_I3.sdc'),candidate_sdc=rec(W/'candidate_Ti60_Demo_I3.sdc'),missing_exactly=bad['missing'],proof=proof,source_lines=dict(diagnostic_only='video_dma116–121 ->fifo_faults output; standalone frontend output binds video_fifo_faults wire without any consumer',functional='video_dma133–134 cf<=cam_fault||camera_over, pf<=pix_fault||display_under; cf/pf[1] sets sticky fault135'),all_other_SDC_bytes_equal_after_reinserting_exact_lines=True,no_RTL_change=True,no_numeric_or_other_selector_change=True,fresh_native_query_still_required=True))
+print('DEAD_DIAGNOSTIC_SELECTOR_PROPOSAL_READY',W,flush=True)

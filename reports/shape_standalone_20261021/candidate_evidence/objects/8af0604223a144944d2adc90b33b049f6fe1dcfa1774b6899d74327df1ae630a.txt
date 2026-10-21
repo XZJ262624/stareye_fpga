@@ -1,0 +1,123 @@
+
+Efinix Timing Path Constraint Report
+Version: 2025.1.110.5.9
+Date: Wed Oct 21 17:52:32 2026
+
+Copyright (C) 2013 - 2025 Efinix, Inc. All rights reserved.
+
+User command: report_timing -through {u_shape_system/u_shape/recognize/mult_84|A[8]} -npaths 1 -nworst 1 -setup -detail full_path -file {dsp_473_setup.rpt}
+
+Timing Model: I3
+	process : typical
+	temperature : -40C to 100C
+	voltage : 0.95 +/-30mV
+	speedgrade : 3
+	technology : t16ff
+	status : final
+
+Summary:
+
+ Path #  | Slack (ns) | Delay (ns) |                      Start Pin                       |                       End Pin                        |  Launch Clk   |  Capture Clk
+================================================================================================================================================================================
+ 1       |  6.933     |  5.018     | u_shape_system/u_shape/recognize/rows__D$2|RDATA[11] | u_shape_system/u_shape/recognize/bottom_bar[12]~FF|D | clk_pixel (R) | clk_pixel (R)
+
+++++ Path 1 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : u_shape_system/u_shape/recognize/rows__D$2|RCLK     
+Path End      : u_shape_system/u_shape/recognize/bottom_bar[12]~FF|D
+Launch Clock  : clk_pixel (RISE)                                    
+Capture Clock : clk_pixel (RISE)                                    
+Slack         : 6.933 (required time - arrival time)                
+Delay         : 5.018                                               
+
+Logic Level             : 18
+Non-global nets on path : 18
+Global nets on path     :  0
+
+Launch Clock Path Delay        : 2.095
++ Clock To Q + Data Path Delay : 6.382
+--------------------------------------
+End-of-path arrival time       : 8.477
+
+Constraint                     : 13.441
++ Capture Clock Path Delay     :  2.095
+- Clock Uncertainty            :  0.126
+---------------------------------------
+End-of-path required time      : 15.410
+
+Launch Clock Path
+                     name                        model name   delay (ns)  cumulative delay (ns) pins on net    location
+=========================================================================================================================
+clk_pixel                                       inpad           0.000             0.000                0      (0,159)  
+clk_pixel                                       inpad           0.126             0.126             3569      (0,159)  
+clk_pixel                                       net             1.969             2.095             3569      (0,159)  
+u_shape_system/u_shape/recognize/rows__D$2|RCLK ram_8192x20     0.000             2.095             3569      (102,202)
+
+Data Path
+                        name                          model name   delay (ns)  cumulative delay (ns) pins on net    location
+==============================================================================================================================
+u_shape_system/u_shape/recognize/rows__D$2|RDATA[11] ram_8192x20     1.361             1.361               3       (102,202)
+u_shape_system/u_shape/recognize/row_q[9]            net             0.439             1.800               3       (102,202)
+u_shape_system/u_shape/recognize/sub_70/add_2/i1|I0  adder           0.052             1.852               3       (106,217)
+u_shape_system/u_shape/recognize/sub_70/add_2/i1|CO  adder           0.000             1.852               2       (106,217)
+u_shape_system/u_shape/recognize/sub_70/add_2/n2     net             0.000             1.852               2       (106,217)
+u_shape_system/u_shape/recognize/sub_70/add_2/i2|CI  adder           0.024             1.876               2       (106,218)
+u_shape_system/u_shape/recognize/sub_70/add_2/i2|CO  adder           0.000             1.876               2       (106,218)
+u_shape_system/u_shape/recognize/sub_70/add_2/n4     net             0.000             1.876               2       (106,218)
+u_shape_system/u_shape/recognize/sub_70/add_2/i3|CI  adder           0.024             1.900               2       (106,219)
+u_shape_system/u_shape/recognize/sub_70/add_2/i3|CO  adder           0.000             1.900               2       (106,219)
+u_shape_system/u_shape/recognize/sub_70/add_2/n6     net             0.000             1.900               2       (106,219)
+u_shape_system/u_shape/recognize/sub_70/add_2/i4|CI  adder           0.024             1.924               2       (106,220)
+u_shape_system/u_shape/recognize/sub_70/add_2/i4|CO  adder           0.000             1.924               2       (106,220)
+u_shape_system/u_shape/recognize/sub_70/add_2/n8     net             0.000             1.924               2       (106,220)
+u_shape_system/u_shape/recognize/sub_70/add_2/i5|CI  adder           0.024             1.948               2       (106,221)
+u_shape_system/u_shape/recognize/sub_70/add_2/i5|CO  adder           0.000             1.948               2       (106,221)
+u_shape_system/u_shape/recognize/sub_70/add_2/n10    net             0.000             1.948               2       (106,221)
+u_shape_system/u_shape/recognize/sub_70/add_2/i6|CI  adder           0.097             2.045               2       (106,222)
+u_shape_system/u_shape/recognize/sub_70/add_2/i6|O   adder           0.000             2.045               4       (106,222)
+u_shape_system/u_shape/recognize/n263                net             0.420             2.465               4       (106,222)
+LUT__45738|in[1]                                     lut             0.063             2.528               4       (105,230)
+LUT__45738|out                                       lut             0.000             2.528               4       (105,230)
+n21885                                               net             0.264             2.792               4       (105,230)
+LUT__45740|in[2]                                     lut             0.061             2.853               4       (100,237)
+LUT__45740|out                                       lut             0.000             2.853              10       (100,237)
+u_shape_system/u_shape/recognize/n9546               net             0.732             3.585               9       (100,237)
+u_shape_system/u_shape/recognize/mult_84|A[8]        dsp48_prim      1.312             4.897              10       (96,242) 
+u_shape_system/u_shape/recognize/mult_84|O[8]        dsp48_prim      0.000             4.897               3       (96,242) 
+u_shape_system/u_shape/recognize/density_product[8]  net             0.827             5.724               3       (96,242) 
+u_shape_system/u_shape/recognize/add_387/i6|I1       adder           0.057             5.781               3       (79,246) 
+u_shape_system/u_shape/recognize/add_387/i6|CO       adder           0.000             5.781               2       (79,246) 
+u_shape_system/u_shape/recognize/add_387/n12         net             0.000             5.781               2       (79,246) 
+u_shape_system/u_shape/recognize/add_387/i7|CI       adder           0.024             5.805               2       (79,247) 
+u_shape_system/u_shape/recognize/add_387/i7|CO       adder           0.000             5.805               2       (79,247) 
+u_shape_system/u_shape/recognize/add_387/n14         net             0.000             5.805               2       (79,247) 
+u_shape_system/u_shape/recognize/add_387/i8|CI       adder           0.024             5.829               2       (79,248) 
+u_shape_system/u_shape/recognize/add_387/i8|CO       adder           0.000             5.829               2       (79,248) 
+u_shape_system/u_shape/recognize/add_387/n16         net             0.000             5.829               2       (79,248) 
+u_shape_system/u_shape/recognize/add_387/i9|CI       adder           0.024             5.853               2       (79,249) 
+u_shape_system/u_shape/recognize/add_387/i9|CO       adder           0.000             5.853               2       (79,249) 
+u_shape_system/u_shape/recognize/add_387/n18         net             0.000             5.853               2       (79,249) 
+u_shape_system/u_shape/recognize/add_387/i10|CI      adder           0.024             5.877               2       (79,250) 
+u_shape_system/u_shape/recognize/add_387/i10|CO      adder           0.000             5.877               2       (79,250) 
+u_shape_system/u_shape/recognize/add_387/n20         net             0.000             5.877               2       (79,250) 
+u_shape_system/u_shape/recognize/add_387/i11|CI      adder           0.024             5.901               2       (79,251) 
+u_shape_system/u_shape/recognize/add_387/i11|CO      adder           0.000             5.901               2       (79,251) 
+u_shape_system/u_shape/recognize/add_387/n22         net             0.000             5.901               2       (79,251) 
+u_shape_system/u_shape/recognize/add_387/i12|CI      adder           0.024             5.925               2       (79,252) 
+u_shape_system/u_shape/recognize/add_387/i12|CO      adder           0.000             5.925               2       (79,252) 
+u_shape_system/u_shape/recognize/add_387/n24         net             0.000             5.925               2       (79,252) 
+u_shape_system/u_shape/recognize/add_387/i13|CI      adder           0.097             6.022               2       (79,253) 
+u_shape_system/u_shape/recognize/add_387/i13|O       adder           0.000             6.022               2       (79,253) 
+u_shape_system/u_shape/recognize/n2338               net             0.296             6.318               2       (79,253) 
+LUT__47146|in[1]                                     lut             0.061             6.379               2       (77,251) 
+LUT__47146|out                                       lut             0.000             6.379               2       (77,251) 
+u_shape_system/u_shape/recognize/bottom_bar[12]~FF|D ff              0.003             6.382               2       (77,251) 
+
+Capture Clock Path
+                         name                           model name   delay (ns)  cumulative delay (ns) pins on net    location
+================================================================================================================================
+clk_pixel                                                 inpad        0.000             0.000                0       (0,159) 
+clk_pixel                                                 inpad        0.126             0.126             3569       (0,159) 
+clk_pixel                                                 net          1.969             2.095             3569       (0,159) 
+u_shape_system/u_shape/recognize/bottom_bar[12]~FF|CLK    ff           0.000             2.095             3569       (77,251)
+

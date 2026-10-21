@@ -1,0 +1,51 @@
+from common import *
+import shutil,sys
+Q=R/'rtl/shape_standalone';P=R/'efinity/shape_standalone_i3';oldP=R/'efinity/gaussian_shape_cap_i3';copy=[]
+def cp(p,q,role):
+ assert not q.exists(),q;q.parent.mkdir(parents=True,exist_ok=True);shutil.copyfile(p,q);assert rec(p)['sha256']==rec(q)['sha256'];copy.append(dict(original=rec(p),copy=rec(q),role=role))
+source=json.loads((R/'reports/gaussian_cap_integration_20261020/SOURCE_MANIFEST.json').read_text());verify(source)
+for x in source:
+ p=R/x['path']
+ if p.is_relative_to(oldP):cp(p,P/p.relative_to(oldP),'Unchanged camera/clock/pin/IP/settings/project template; only new top/XML/SDC will later be adapted.')
+for p in sorted((R/'rtl/m5c_fusion/m5a_copy').glob('*.v')):
+ if p.name not in ['m5a_controls.v','m5a_osd.v']:cp(p,Q/'m5a'/p.name,'Verified MED-only streaming Canny source byte copy; fixed filter_request=1. No GAU branch.')
+for name in ['m5b1_video_dma.sv','m5b1_arbiter.sv','m5b1_failstop.sv','m5b1_async_fifo.sv','m5b1_mailbox.sv']:cp(R/'rtl/m5c_fusion'/name,Q/'frontend'/name,'Foreground camera/display DMA, permissions, failstop and actual B/R drainage unchanged.')
+cp(R/'rtl/gaussian_cap_integration/shape/shape_recognizer_epoch.sv',Q/'shape/shape_recognizer_epoch.sv','Latest approved cap classifier byte exact; no algorithm changes.')
+cp(R/'rtl/gaussian_integration/shape/shape_stream_adapter_contract_v2.sv',Q/'shape/shape_stream_adapter_contract_v2.sv','Same-clock source/final metadata FIFO and fail-closed lifecycle byte exact.')
+cp(R/'rtl/gaussian_integration/shape/shape_osd.sv',Q/'shape/shape_osd.sv','Shape previous-frame label and filter OSD template; new profile ROI border will be explicit.')
+save(O/'ORIGINAL_SOURCE_COPY_MANIFEST.json',dict(files=copy,count=len(copy),settings=sum(x['copy']['path'].endswith('/settings.json') for x in copy),no_IP_regeneration=True))
+# Derive a two-client frontend with all actual video/arbiter/failstop instances intact.
+base=R/'rtl/m5c_fusion/m5b1_system.sv';s=base.read_text();axi=s[s.index(' output [7:0] aid,alen,wid,'):s.index(' wire run,stop,ack,')]
+header='''module shape_standalone_frontend(
+ input ui_clk,cam_clk,pix_clk,rst_n,pll_locked,cal_done,cal_pass,
+ input cam_vs,cam_valid,input [7:0] cam_data,input pix_sof,pix_request,
+ output [7:0] pix_data,output [63:0] frame_id,epoch,output pix_qualified,output [5:0] led,
+'''+axi
+decl=''' wire run,stop,ack,video_fault,quarantine,reset_request,arb_busy;
+ wire [3:0] error_reason;wire [3:0] fifo_ready;wire [223:0] error_counts;wire [3:0] video_fifo_faults;
+ wire [95:0] max_wait,max_service;wire [31:0] qos_exceeded,accepts,completes,rejects;
+ wire [2:0] ca,car,cw,cwl,cwr,cb,cr,crl,crr,rejected;wire [95:0] cad;
+ wire [23:0] cl,ci,cbi,cri;wire [2:0] ct;wire [383:0] cwd,crd;wire [5:0] cbr,crresp;
+ wire [3:0] wp,rp;wire [6:0] bwp=7'd0,brp=7'd0;
+ wire [13:0] camera_bytes,display_bytes,camera_max,display_min;
+ wire [1:0] urgent;wire safe_window,display_valid;
+'''
+front=s[s.index(' m5b1_failstop bridge('):s.index(' m5b1_backend #')]
+arb=s[s.index(' m5b1_arbiter arbiter('):s.index(' reg [26:0] heartbeat;')]
+ties=''' // Client2 does not exist in this profile; its request and payload inputs are inert.
+ assign ca[2]=0;assign cad[95:64]=0;assign cl[23:16]=0;assign ci[23:16]=0;assign ct[2]=0;
+ assign cw[2]=0;assign cwl[2]=0;assign cwd[383:256]=0;assign crr[2]=1;
+'''
+tail=''' reg [26:0] heartbeat;always @(posedge ui_clk or negedge rst_n)if(!rst_n)heartbeat<=0;else heartbeat<=heartbeat+1'b1;
+ assign led={2'b0,video_fault||quarantine||stop,1'b0,cal_done&&cal_pass,heartbeat[25]};
+endmodule
+'''
+(Q/'frontend/shape_standalone_frontend.sv').write_text(header+decl+front+ties+arb+tail)
+save(O/'FRONTEND_DERIVATION.json',dict(original=rec(base),derived=rec(Q/'frontend/shape_standalone_frontend.sv'),unchanged_instantiation_blocks=['m5b1_failstop bridge','m5b1_video_dma video','m5b1_arbiter arbiter'],deleted=['background','fusion','telemetry','bg_mux','capture/client2 reset dependency'],added=['Client2 inputs tied inert; its permissions zero. No changes inside arbiter or video state machines.'],domains_ready='All four in-use camera/display FIFO reset acknowledgements; no deleted-client acknowledgements required.'))
+V=R/'reports/gaussian_cap_remote_v2_20261021';m=json.loads((V/'package/manifest.json').read_text());assert len(m['files'])==908
+for n,x in m['files'].items():p=V/'package'/n;assert rec(p)['sha256']==x['sha256'] and p.stat().st_size==x['size']
+delivery=json.loads((V/'DELIVERY_RECEIPT.json').read_text());verify([delivery['archive'],delivery['instructions'],delivery['manifest']]);phys=R/'reports/gaussian_cap_integration_20261020/physical_recovery_v2_20261020_203714/FINAL_EVIDENCE_MANIFEST.json';verify(json.loads(phys.read_text())['files'])
+save(O/'PROTECTED_INPUTS_PRE.json',dict(production108=source,GAU_V2_manifest=rec(V/'package/manifest.json'),GAU_V2_files=m['files'],GAU_V2_archive=delivery['archive'],GAU_V2_instructions=delivery['instructions'],physical685=rec(phys),physical_files=json.loads(phys.read_text())['files']))
+architecture=dict(status='IMPLEMENTATION_RUNNING_MINIMAL_MED_PROFILE_SELECTED_PENDING_NEW_MED_PIXEL_QUALIFICATION',entry='efinity/shape_standalone_i3/Ti60_Demo.xml -> example_top',filter=dict(selected='Fixed MED=1 only',reason='Handoff preference and smallest old proven MED source closure; unlike dynamic GAU integration, no algorithm changes on display-mode selection. New MED host228 assessment runs; actual MED RTL samples mandatory. GAU scores never relabelled MED.',alternative='Fixed GAU=2 only if actual MED qualification fails and existing positive/negative evidence justifies; do not change classifier or lower truth thresholds.'),source_closure=copy,frontend=rec(Q/'frontend/shape_standalone_frontend.sv'),control_table={'K1_short':'threshold+16 saturating255','K2_short':'threshold-16 saturating0','both_short':'RAW0 -> local Canny5 -> red local-edge overlay6 -> RAW0','both_long':'No fusion action; release ignored for long simultaneous hold','default':'Overlay6, threshold64, low32, MED fixed'},latency=dict(input_to_local_final_accepted_CE_ticks=6625,OSD_extra_ticks=1,DDR='Variable true frame-ready/lease/drain; no fabricated fixed latency',recognition='At actual full final EOF; result bounded4096 cycles, previous qualified result shown at following final SOF with identity/config rejection.'),deleted_instances=['Global engine/backend','fusion/session/age/line caches','pair capture/controller/lease/UART transport','fusion diagnostics/telemetry/shadow pipeline','GAU filter and MED/GAU selector'],preserved_safety=['Original foreground DMA camera EOF + last real B completion','Display READ_LEASE through every R drain and last pixel consumption','Original permission/epoch arbiter with client2 inert','Original cold failstop/PLL/calibration/FIFO readiness','Same-clock adapter metadata FIFO / source qualification / actual support/edge recognizer'],display='Original real camera capture and HDMI paths, clocks/pins/voltage/720p unchanged; MED local edges, truthful PREV class/UNKNOWN/filter, visible ROI border; no FUS/cyan/global output.',scope='Only five new directories; no Git stage/commit/bit/hardware. New native physical map/place/route/fullSTA/CDC required; source copies are reuse, not qualification. Long full720p test packaged remotely if >120min.',estimated_first_short_and_resource_minutes=[60,120])
+save(O/'ARCHITECTURE_AND_SCOPE.json',architecture);heartbeat('NEW_PROFILE_SOURCE_COPY_AND_FRONTEND_IMPLEMENTED',native_running=False,host_MED_assessment_running=True)
+print('STANDALONE_ARCHITECTURE_AND_FIRST_FRONTEND_IMPLEMENTED',len(copy),flush=True)
