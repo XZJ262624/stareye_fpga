@@ -1,0 +1,12 @@
+from common import *
+T=R/'tb/shape_wide_roi';previous=next(p for p in O.glob('targeted_tests_*') if (p/'tb_wide_recognizer_RESULT.json').exists() and json.loads((p/'tb_wide_recognizer_RESULT.json').read_text())['passed'])
+old_inputs=json.loads((previous/'INPUTS_PRE.json').read_text());core_inputs=[x for x in old_inputs if not x['path'].endswith('tb_wide_adapter_osd.sv')];verify(core_inputs)
+W=O/('osd_recovery_'+time.strftime('%H%M%S'));W.mkdir()
+sources=[R/'rtl/shape_wide_roi/shape_recognizer_epoch.sv',R/'rtl/shape_wide_roi/shape_osd.sv',R/'rtl/shape_standalone/shape/shape_stream_adapter_contract_v2.sv',T/'reference_wide_parent_osd.sv',T/'tb_wide_adapter_osd.sv'];deps=[rec(p) for p in sources];save(W/'INPUTS_PRE.json',deps)
+for label,cmd in [('vlib',[str(M/'vlib.exe'),'work']),('vmap_create',[str(M/'vmap.exe'),'-c']),('vmap_work',[str(M/'vmap.exe'),'-modelsimini','modelsim.ini','work',(W/'work').as_posix()])]:execute(W,label,cmd)
+execute(W,'compile',[str(M/'vlog.exe'),'-modelsimini','modelsim.ini','-sv','-work','work',*map(str,sources)])
+(W/'run.do').write_text('onerror {quit -code 11}\nonbreak {quit -code 12}\nrun -all\nquit -code 0\n')
+result=execute(W,'osd',[str(M/'vsim.exe'),'-c','-novopt','-onfinish','exit','-modelsimini','modelsim.ini','-lib','work','tb_wide_adapter_osd','+ROOT='+(O/'test_data').as_posix(),'-wlf','NUL','-do','do {'+(W/'run.do').as_posix()+'}'],'PASS_WIDE_ADAPTER_OSD')
+verify(deps);verify(core_inputs);save(W/'INPUTS_POST.json',deps)
+save(O/'TARGETED_TEST_RESULT.json',dict(passed=True,status='PASS_TARGETED_RTL_AND_TWO_FRAME_720P_ADAPTER_OSD',cases=41,core=rec(previous/'tb_wide_recognizer_RESULT.json'),core_log=rec(previous/'tb_wide_recognizer.log'),osd=result,core_inputs_still_match=True,recovery='Only OSD TB scoreboard enabled after reset-release; initial6ns failure before reset deassertion retained, RTL unchanged. Core not rerun.',limitations='2 full raster frames at unchanged production adapter plus actual recognizer/OSD; no new whole DDR/DMA/GAU system72 regression'))
+print('WIDE_TARGETED_TESTS_COMPLETE',flush=True)

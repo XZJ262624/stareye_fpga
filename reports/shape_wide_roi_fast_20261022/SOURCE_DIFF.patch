@@ -1,0 +1,203 @@
+--- baseline/shape_recognizer_epoch.sv
++++ new/shape_recognizer_epoch.sv
+@@ -1,5 +1,5 @@
+ `timescale 1ns/1ps
+-// Fixed 1280x720 source; ROI 384..895 x 168..551. See IMPLEMENTATION.md.
++// Fixed 1280x720 source; ROI 160..1119 x 90..629. See IMPLEMENTATION.md.
+ module shape_recognizer_epoch #(parameter ANALYSIS_LIMIT=32768)(
+  input wire clk,rst_n,ce,sof,eof,active,support,edge_pixel,source_valid,
+  input wire [11:0] x,y,
+@@ -15,21 +15,21 @@
+  localparam IDLE=0,CAPTURE=1,READ=2,EVALUATE=3,NORMALIZE=4,SCORE=5,FINISH=6;
+  reg [2:0] state;
+  assign busy=state!=IDLE;
+- // 24 bits: present, rounded eighth-density, saturated segments, right, left.
+- (* syn_ramstyle="block_ram" *) reg [23:0] rows[0:383];
+- reg [23:0] row_q;
+- reg [8:0] scan;
++ // 26 bits: present[25], density[24:22], segments[21:20], right[19:10], left[9:0].
++ (* syn_ramstyle="block_ram" *) reg [25:0] rows[0:539];
++ reg [25:0] row_q;
++ reg [9:0] scan;
+  reg [9:0] ex;
+- reg [8:0] ey;
++ reg [9:0] ey;
+  reg [18:0] pixels;
+  reg bad,pending;
+  reg [63:0] fid,cfg,ep,seq;
+- reg [8:0] left_x,right_x;
++ reg [9:0] left_x,right_x;
+  reg [9:0] edge_count;
+  reg [2:0] segments;
+  reg [2:0] gap;
+  reg seen;
+- reg [8:0] minx,maxx,miny,maxy;
++ reg [9:0] minx,maxx,miny,maxy;
+  reg any_edge;
+  reg [9:0] width,height,reference_width;
+  reg reference_read;
+@@ -39,23 +39,23 @@
+  reg [8:0] middle_rows,rect_good,circle_good;
+  reg [18:0] circle_error;
+  reg contour_bad,circle_segments_bad;
+- reg [2:0] cap_fragment_rows;
++ reg [3:0] cap_fragment_rows;
+  wire [10:0] cap_height_sum={1'b0,height}+11'd63;
+  wire [4:0] cap_row_limit=cap_height_sum>>6;
+  wire [9:0] cap_relative_row={1'b0,scan}-{1'b0,miny};
+  wire [9:0] cap_from_bottom={1'b0,maxy}-{1'b0,scan};
+  wire in_outer_cap=cap_relative_row<cap_row_limit || cap_from_bottom<cap_row_limit;
+  reg [15:0] top_bar,bottom_bar;
+- wire roi=active && x>=384 && x<=895 && y>=168 && y<=551;
+- wire [8:0] rx=x-384;
+- wire [8:0] ry=y-168;
+- wire [8:0] next_left=(!seen && edge_pixel)?rx:left_x;
+- wire [8:0] next_right=edge_pixel?rx:right_x;
++ wire roi=active && x>=160 && x<=1119 && y>=90 && y<=629;
++ wire [9:0] rx=x-160;
++ wire [9:0] ry=y-90;
++ wire [9:0] next_left=(!seen && edge_pixel)?rx:left_x;
++ wire [9:0] next_right=edge_pixel?rx:right_x;
+  wire [9:0] next_count=edge_count+(edge_pixel?10'd1:10'd0);
+  wire new_segment=edge_pixel && (!seen || gap>=3);
+  wire [2:0] next_segments=(new_segment && segments!=7)?segments+1'b1:segments;
+  wire next_seen=seen||edge_pixel;
+- wire [9:0] current_width={1'b0,next_right}-{1'b0,next_left}+1'b1;
++ wire [9:0] current_width=next_right-next_left+1'b1;
+  wire [13:0] density_numerator=(next_count<<3)+(current_width>>1);
+  reg [2:0] density;
+  always @* begin
+@@ -68,12 +68,12 @@
+   else if(density_numerator>=current_width)density=1;
+   else density=0;
+  end
+- wire [9:0] row_width={1'b0,row_q[17:9]}-{1'b0,row_q[8:0]}+1'b1;
+- wire [10:0] center_sum={2'b0,row_q[17:9]}+{2'b0,row_q[8:0]};
+- wire [10:0] bbox_center={2'b0,minx}+{2'b0,maxx};
++ wire [9:0] row_width=row_q[19:10]-row_q[9:0]+1'b1;
++ wire [10:0] center_sum={1'b0,row_q[19:10]}+{1'b0,row_q[9:0]};
++ wire [10:0] bbox_center={1'b0,minx}+{1'b0,maxx};
+  wire [10:0] center_error=(center_sum>bbox_center)?center_sum-bbox_center:bbox_center-center_sum;
+  wire [9:0] rect_error=(row_width>reference_width)?row_width-reference_width:reference_width-row_width;
+- wire [12:0] density_product=row_width*row_q[22:20];
++ wire [12:0] density_product=row_width*row_q[24:22];
+  reg [8:0] chord;
+  always @* begin
+   case(bin)
+@@ -95,9 +95,9 @@
+  wire in_middle=(scan-miny)*10>=height && (scan-miny)*10<height*9;
+  wire rect_match=middle_rows!=0 && rect_good*10>=middle_rows*9 && top_bar*4>=reference_width*3 && bottom_bar*4>=reference_width*3 && width*2>=height && height*2>=width;
+  wire circle_match=!circle_segments_bad && cap_fragment_rows<=cap_row_limit && middle_rows!=0 && circle_good*10>=middle_rows*9 && circle_error*100<=middle_rows*width*6 && width*100>=height*90 && width*100<=height*110;
+- // Synchronous one-write/one-read RAM; all 384 rows overwritten per qualified frame.
++ // Synchronous one-write/one-read RAM; all 540 rows overwritten per qualified frame.
+  always @(posedge clk) if(ce) begin
+-  if(state==CAPTURE && !sof && roi && x==895)
++  if(state==CAPTURE && !sof && roi && x==1119)
+    rows[ry]<={next_seen,density,(next_segments>2?2'd3:next_segments[1:0]),next_right,next_left};
+   if(state==READ)row_q<=rows[scan];
+  end
+@@ -106,7 +106,7 @@
+    state<=IDLE;result_done<=0;result_valid<=0;result_class<=0;result_frame_id<=0;result_config_generation<=0;result_epoch<=0;result_source_display_seq<=0;
+    display_class<=0;display_valid<=0;display_frame_id<=0;display_config_generation<=0;display_epoch<=0;display_source_display_seq<=0;
+    bad<=0;pending<=0;fid<=0;cfg<=0;ep<=0;seq<=0;ex<=0;ey<=0;pixels<=0;left_x<=0;right_x<=0;edge_count<=0;segments<=0;gap<=7;seen<=0;
+-   minx<=511;maxx<=0;miny<=383;maxy<=0;any_edge<=0;width<=0;height<=0;reference_width<=0;reference_read<=0;budget<=0;scan<=0;remainder<=0;bin<=0;
++   minx<=959;maxx<=0;miny<=539;maxy<=0;any_edge<=0;width<=0;height<=0;reference_width<=0;reference_read<=0;budget<=0;scan<=0;remainder<=0;bin<=0;
+    middle_rows<=0;rect_good<=0;circle_good<=0;circle_error<=0;contour_bad<=0;circle_segments_bad<=0;cap_fragment_rows<=0;top_bar<=0;bottom_bar<=0;
+   end else if(ce)begin
+    result_done<=0;
+@@ -119,20 +119,20 @@
+     if(state!=IDLE)begin result_done<=1;result_valid<=0;result_class<=0;result_frame_id<=fid;result_config_generation<=cfg;result_epoch<=ep;result_source_display_seq<=seq;end
+     pending<=0;state<=CAPTURE;cap_fragment_rows<=0;fid<=frame_id;cfg<=config_generation;ep<=epoch;seq<=source_display_seq;bad<=!source_valid||active||eof;
+     ex<=0;ey<=0;pixels<=0;left_x<=0;right_x<=0;edge_count<=0;segments<=0;gap<=7;seen<=0;
+-    minx<=511;maxx<=0;miny<=383;maxy<=0;any_edge<=0;budget<=0;
++    minx<=959;maxx<=0;miny<=539;maxy<=0;any_edge<=0;budget<=0;
+    end else begin
+     // Display invalidation is immediate on an accepted CE with changed qualification/config.
+     if(!source_valid || (config_generation!=display_config_generation || epoch!=display_epoch))begin display_class<=0;display_valid<=0;end
+     if(state!=IDLE && (!source_valid || frame_id!=fid || (config_generation!=cfg || epoch!=ep || source_display_seq!=seq)))bad<=1;
+     if(state==CAPTURE)begin
+      if(roi)begin
+-      if(rx!=ex || ry!=ey || !support || pixels>=196608)bad<=1;
+-      if(pixels<196609)pixels<=pixels+1'b1;
++      if(rx!=ex || ry!=ey || !support || pixels>=518400)bad<=1;
++      if(pixels<518401)pixels<=pixels+1'b1;
+       if(edge_pixel)begin
+        any_edge<=1;if(rx<minx)minx<=rx;if(rx>maxx)maxx<=rx;if(ry<miny)miny<=ry;if(ry>maxy)maxy<=ry;
+       end
+-      if(x==895)begin
+-       ex<=0;if(ey<383)ey<=ey+1'b1;
++      if(x==1119)begin
++       ex<=0;if(ey<539)ey<=ey+1'b1;
+        left_x<=0;right_x<=0;edge_count<=0;segments<=0;gap<=7;seen<=0;
+       end else begin
+        ex<=ex+1'b1;left_x<=next_left;right_x<=next_right;edge_count<=next_count;segments<=next_segments;seen<=next_seen;
+@@ -142,8 +142,8 @@
+      if(eof)begin
+       width<={1'b0,maxx}-{1'b0,minx}+1'b1;height<={1'b0,maxy}-{1'b0,miny}+1'b1;
+       // EOF is a separate control beat after all active pixels.
+-      if(active || pixels!=196608 || !any_edge || minx<16 || maxx>495 || miny<16 || maxy>367)bad<=1;
+-      scan<=any_edge?miny+(maxy-miny+1)/2:383;reference_read<=1;
++      if(active || pixels!=518400 || !any_edge || minx<16 || maxx>943 || miny<16 || maxy>523)bad<=1;
++      scan<=any_edge?miny+(maxy-miny+1)/2:539;reference_read<=1;
+       remainder<=32;bin<=0;
+       middle_rows<=0;rect_good<=0;circle_good<=0;circle_error<=0;contour_bad<=0;circle_segments_bad<=0;cap_fragment_rows<=0;top_bar<=0;bottom_bar<=0;
+       state<=READ;budget<=0;
+@@ -156,11 +156,11 @@
+       EVALUATE:begin
+        if(reference_read)begin reference_width<=row_width;reference_read<=0;scan<=miny;state<=READ;end
+        else begin
+-        if(row_q[19:18]>2)begin
++        if(row_q[21:20]>2)begin
+          if(!in_outer_cap || center_error>16)circle_segments_bad<=1;
+-         if(in_outer_cap && cap_fragment_rows!=7)cap_fragment_rows<=cap_fragment_rows+1'b1;
++         if(in_outer_cap && cap_fragment_rows!=15)cap_fragment_rows<=cap_fragment_rows+1'b1;
+         end
+-        if(!row_q[23] || (in_middle && (row_q[19:18]>2 || center_error>16)))contour_bad<=1;
++        if(!row_q[25] || (in_middle && (row_q[21:20]>2 || center_error>16)))contour_bad<=1;
+         if((scan-miny)*10<height)top_bar<=top_bar+(density_product>>3);
+         if((maxy-scan)*10<height)bottom_bar<=bottom_bar+(density_product>>3);
+         state<=NORMALIZE;
+@@ -171,7 +171,7 @@
+        else state<=SCORE;
+       end
+       SCORE:begin
+-       if(row_q[19:18]>2 && in_outer_cap && row_width>expected_width && chord_error*10>width)circle_segments_bad<=1;
++       if(row_q[21:20]>2 && in_outer_cap && row_width>expected_width && chord_error*10>width)circle_segments_bad<=1;
+        if(in_middle)begin
+         middle_rows<=middle_rows+1'b1;
+         if(rect_error*100<=reference_width*4 || rect_error<=3)rect_good<=rect_good+1'b1;
+@@ -184,7 +184,7 @@
+        result_done<=1;result_frame_id<=fid;result_config_generation<=cfg;result_epoch<=ep;result_source_display_seq<=seq;
+        result_valid<=!bad && source_valid && frame_id==fid && config_generation==cfg && epoch==ep && source_display_seq==seq;
+        result_class<=0;
+-       if(!bad && source_valid && frame_id==fid && config_generation==cfg && epoch==ep && source_display_seq==seq && !contour_bad && width>=80 && width<=280 && height>=80 && height<=280)
++       if(!bad && source_valid && frame_id==fid && config_generation==cfg && epoch==ep && source_display_seq==seq && !contour_bad && width>=80 && width<=440 && height>=80 && height<=440)
+         if(rect_match!=circle_match)result_class<=rect_match?2'd2:2'd1;
+        pending<=1;state<=IDLE;
+       end
+
+--- baseline/shape_osd.sv
++++ new/shape_osd.sv
+@@ -151,7 +151,7 @@
+    else if(mode==6&&fusion_enable&&x>=244&&x<412&&y>=12&&y<34)out_rgb<=fink?24'hffffff:24'h000000;
+    else if(x>=444&&x<644&&y>=12&&y<34)out_rgb<=sink?24'hffff00:24'h000000;
+    else if(x>=664&&x<720&&y>=12&&y<34)out_rgb<=gink?24'h00ff00:24'h000000;
+-   else if(((x==384||x==895)&&y>=168&&y<=551)||((y==168||y==551)&&x>=384&&x<=895))out_rgb<=24'h408040;
++   else if(((x==160||x==1119)&&y>=90&&y<=629)||((y==90||y==629)&&x>=160&&x<=1119))out_rgb<=24'h408040;
+    else out_rgb<=rgb;
+   end
+  end
+
+--- baseline/Ti60_Demo.xml
++++ new/Ti60_Demo.xml
+@@ -31,8 +31,8 @@
+     <efx:design_file name="../../rtl/shape_standalone/frontend/m5b1_mailbox.sv" version="system_verilog" library="default" />
+     <efx:design_file name="../../rtl/shape_standalone/frontend/m5b1_video_dma.sv" version="system_verilog" library="default" />
+     <efx:design_file name="../../rtl/shape_standalone/frontend/shape_standalone_frontend.sv" version="system_verilog" library="default" />
+-    <efx:design_file name="../../rtl/shape_standalone/shape/shape_osd.sv" version="system_verilog" library="default" />
+-    <efx:design_file name="../../rtl/shape_standalone/shape/shape_recognizer_epoch.sv" version="system_verilog" library="default" />
++    <efx:design_file name="../../rtl/shape_wide_roi/shape_osd.sv" version="system_verilog" library="default" />
++    <efx:design_file name="../../rtl/shape_wide_roi/shape_recognizer_epoch.sv" version="system_verilog" library="default" />
+     <efx:design_file name="../../rtl/shape_standalone/shape/shape_stream_adapter_contract_v2.sv" version="system_verilog" library="default" />
+     <efx:design_file name="../../rtl/shape_standalone/gaussian_m5a/m5a_centered_sobel.v" version="default" library="default" />
+     <efx:design_file name="../../rtl/shape_standalone/gaussian_m5a/m5a_colorize.v" version="default" library="default" />
