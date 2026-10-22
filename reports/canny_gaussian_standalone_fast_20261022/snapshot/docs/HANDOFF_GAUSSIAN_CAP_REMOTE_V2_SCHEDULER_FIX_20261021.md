@@ -1,0 +1,19 @@
+# Work冻结：V2仅修baseline真实按键调度
+
+依据sol_diag_v1/SOL_DIAG_WORK_RETURN.json及MINIMAL_FIX_PROPOSAL.md，Work核7绑定/480证据大小和SHA通过，并核原149行每SOF短按、新controls换filter必换generation、生产完整config相等准入。根因系夹具沿用旧版模式不换算法身份的假设；无证据需改生产RTL。基准branch codex/m5c-fusion-prototype，HEAD821387c43a3999acb25438cd8982619b09a0a019/parent99ea359c6a5f5432296e992ec76495e441c9d1a0。
+
+同一Sol High唯一writer立即实施，仅新增reports/gaussian_cap_remote_v2_20261021及对应scripts/gaussian_cap_remote_v2_20261021、tb/gaussian_cap_remote_v2_20261021。从原V1 ZIP固定906输入复制到新V2包，保留全部旧文件/失败/诊断及108生产源/685物理证据。允许baseline按键块、新调度状态/日志/严格断言及必要编译路径/manifest/管理说明变更。matrix场景/负载、gold/oracle及其余有限门不改。
+
+按键仍真实key_n：初始长按和后续短按20cycle、消抖参数、SOF后100cycle发键相位不变。模式2→3→4→5→6→0→1，不直接写mode/filter/generation、不force。当前目标模式至少一完整真实健康帧后才允许下一短按；同filter模式切换不换代、跨filter换代后等待新结果，保持原各模式健康统计和完整MED/GAU全像素验收，不把等待伪装为减少七模式。
+
+Work冻结mode6离开条件：除了当前mode6至少一健康完整帧，还需锁存同一次one-shot原始tap完整921600计数与final平面pair_pixels921600，以及生产pair_capture成功发送事件。成功事件以pix域真实pair_capture.send脉冲且reason==0、position==921600、sample_lane==0为证，sid/source/seq须与该次raw身份一致；采用稳定采样边沿避免NBA先后误读。send仅在两个尾字真实push后FINISH产生，不能用末像素或selected/arm取代，不用UI最终UART导出完成作为离开条件。任何失败原因不得放行；不干涉原真实B/metadata/CRC/最终pair DONE/释放后publication/quiet门。完整资格仅远端原全流程可给。
+
+4秒watchdog、BG96M、SERVICE384、CAMERA_BLANK478667、seed50708、UART速率/相机真实场景、HEALTHY_FRAMES2和七模式各1、DDR预算全保留。若同4秒预算仍不成立，报最早等待点回Work，不扩大超时/加速负载/删断言。原V1 FAIL保留为敏感度依据，不称仅因为跑完短观测就全baseline成功。
+
+先实现有限调度测试：按键一次一跳、健康前禁切、mode6捕获完成前禁切、MED/GAU边界代际和旧缓存仍拒用。若用合成健康/完成事件验证新测试调度自身，明确只是fixture单元门，不冒充生产全帧。负向至少早切、缺尾/失败send不能获准、过期descriptor不能冒充新健康。必要原native新观测短门保持源/参数/负载及严格原断言，可明确诊断终点，不跑本机多小时完整baseline。
+
+新最终manifest真实compile+100us+后检和PREPOST重新量测，保留所有原有限门及baseline→完整matrix→独立软件检查的执行顺序。生产108/已物理SDC/DB逐SHA不变后只做物理资格绑定复核，不重跑P&R/STA；如超范围改生产源必须先回Work并新物理。
+
+封包后必须用真实QQ生成器生成新的唯一task_id的*_instructions.txt（schema qq_sim_workflow_v1、ZIP名大小/SHA、manifestSHA、有序cases、pass_only、完整requirements），普通README不能作为投递TXT。两个附件<=512MiB/展开<=2GiB，先交Work完整核定后给用户投递，不擅自发QQ。预计实施有限门30–60分钟+封包15–30分钟；远端完整回归仍约3–5小时以上，不能保证无下一个失败。
+
+普通内部门通过自动接续封包，不等用户重复继续。不得生成bit/candidate、Git写入、独审发送或硬件操作，无弹窗。独审/实物停止节点保持。

@@ -1,0 +1,33 @@
+from common import *
+# Focused direct-reference adapter proves every promotion coordinate against
+# independent BFS; the separate full-system gate owns real DDR/cache coverage.
+src=(R/'tb/m5c_fusion_core/tb_m5c_m5a_connection.sv').read_text()
+src=src.replace('module tb_m5c_m5a_connection;','module tb_canny_fusion_pixels;').replace('FRAMES=12','FRAMES=2')
+src=src.replace('edge_local,filter,fault','edge_local,fault;wire [1:0] filter').replace('wire tv,tf;','wire tv;wire [1:0] tf;')
+src=src.replace(".filter_request(1'b1)",".filter_request(2'd2)")
+src=src.replace('.tap_input_frame_id(tag)',".source_pixel_tick(64'd0),.source_display_seq(tag),.source_config_generation(64'd1),.tap_display_seq(),.tap_config_generation(),.fusion_tap_valid(),.fusion_tap_qualified(),.fusion_tap_support(),\n  .tap_input_frame_id(tag)")
+src=src.replace('reg [35:0] gold[0:W*H-1];reg [2047:0] file_name;','reg [93:0] gold[0:W*H-1];reg bfs[0:W*H-1];reg [2047:0] file_name,bfs_name;')
+src=src.replace('wire row_invalid=tv&&tid==11&&ty==400&&tx==10;',"wire row_invalid=1'b0;")
+src=src.replace('wire row_qualified=!(tv&&tid==10&&ty==300&&tx==1279);',"wire row_qualified=1'b1;")
+src=src.replace('wire reference_ready=!(tv&&tid==8&&ty==100&&tx==20);',"wire reference_ready=1'b1;")
+src=src.replace('tv&&tid==9&&ty==200&&tx==0','tv&&tid==1&&ty==200&&tx==0')
+src=src.replace('(tv&&tid==7&&ty==100&&tx==1279)?(tc==0?1:0):gold[ty*W+tx][31:30]','gold[ty*W+tx][93:92]')
+src=src.replace('gold[ty*W+tx][32]','bfs[ty*W+tx]').replace('gold[ty*W+tx][31:30]','gold[ty*W+tx][93:92]')
+src=src.replace('m5c_row_fusion #(.WIDTH(W),.HEIGHT(H),.H_TOTAL(HT)) fusion(','m5c_row_fusion #(.WIDTH(W),.HEIGHT(H),.H_TOTAL(HT),.REF_STAGE(0)) fusion(\n  .context_block(1\'b0),.context_quiet(),.context_tail_fault(),')
+src=src.replace('reg [35:0] e;','reg [93:0] e;').replace('om!==frameout%7','om!==6')
+src=src.replace('ep=expected_frame&&!(frameout==7&&oy==100)&&e[31:30]==1&&e[32]&&e[27]', 'ep=expected_frame&&!e[29]&&e[93:92]==1&&bfs[pos]&&e[27]')
+src=src.replace('mode=f%7;','mode=6;').replace('if(f==2&&cycles%5003==99)','if(f==1&&cycles%5003==99)')
+src=src.replace('$readmemh(file_name,gold);','$readmemh(file_name,gold);\n  if(!$value$plusargs("BFS=%s",bfs_name))$fatal(1,"BFS_ARG");$readmemh(bfs_name,bfs);')
+a=src.index('  for(i=0;i<7;i=i+1)begin\n   if(mode_pixels')
+b=src.index('  for(i=0;i<FRAMES;i=i+1)if(frame_pixels',a)
+src=src[:a]+'  if(frame_promotions[0]!=1391||frame_promotions[1]!=0)$fatal(1,"PROMOTION_COVERAGE");\n'+src[b:]
+src=src.replace('M5C_PASS real_m5a_connection pixels=%0d taps=%0d stalls=%0d seven_healthy_modes=7 fault_frames=5 nms_delay=1653','PASS_CANNY_FUSION_PIXELS pixels=%0d taps=%0d stalls=%0d positive_frame=1391 wrong_identity_frame=0 direct_reference_adapter=1')
+tb=R/'tb/canny_gaussian_standalone/tb_canny_fusion_pixels.sv';tb.write_text(src)
+W=O/('fusion_pixels_'+time.strftime('%H%M%S'));W.mkdir()
+for label,cmd in [('vlib',[str(M/'vlib.exe'),'work']),('vmap_create',[str(M/'vmap.exe'),'-c']),('vmap_work',[str(M/'vmap.exe'),'-modelsimini','modelsim.ini','work',(W/'work').as_posix()])]:execute(W,label,cmd)
+files=list((R/'rtl/canny_gaussian_standalone').rglob('*.v'))+list((R/'rtl/canny_gaussian_standalone').rglob('*.sv'))+[tb]
+save(W/'INPUTS.json',[rec(p) for p in files]+[rec(O/'data/gau.hex'),rec(O/'data/gau_bfs.hex')])
+execute(W,'compile',[str(M/'vlog.exe'),'-modelsimini','modelsim.ini','-sv','-work','work','+incdir+'+str(R/'rtl/canny_gaussian_standalone/m5c'),*[str(p) for p in files]])
+(W/'run.do').write_text('onerror {quit -code 11}\nonbreak {quit -code 12}\nrun -all\nquit -code 0\n')
+r=execute(W,'sim',[str(M/'vsim.exe'),'-c','-novopt','-onfinish','exit','-modelsimini','modelsim.ini','-lib','work','tb_canny_fusion_pixels','+GOLD='+str(O/'data/gau.hex'),'+BFS='+str(O/'data/gau_bfs.hex'),'-wlf','NUL','-do','do {'+(W/'run.do').as_posix()+'}'],'PASS_CANNY_FUSION_PIXELS',900)
+verify(json.loads((W/'INPUTS.json').read_text()));save(O/'FUSION_PIXEL_RESULT.json',dict(passed=True,result=r,scope='Actual GAU frontend and row fusion with direct synchronous reference adapter REF_STAGE0; no DDR claim. Every final promotion coordinate checked against independent BFS, identity rejection, CE stalls.'))

@@ -1,0 +1,2765 @@
+--- rtl/gaussian_integration/pair/m5c_pair_backend.sv
++++ rtl/canny_gaussian_standalone/core/canny_backend.sv
+@@ -1,11 +1,4 @@
+-// EXPORT_CYCLES is a deprecated unused compatibility parameter in pair-only profile.
+-// Actual pair export timeout is m5c_pair_controller.EXPORT_CYCLES (6144000000 UI cycles).
+-module m5c_pair_backend #(parameter REQUEST_CYCLES=96000000,CAPTURE_CYCLES=96000000,EXPORT_CYCLES=960000000,DIAGNOSTICS=0)(
+- input pair_local_rst_n,input pair_request,pair_wait_expired,input [767:0] active_pair_descriptor,input [63:0] pair_session,pair_request_session,
+- output pair_request_take,pair_arm,pair_cancel,pair_terminal,
+- input pair_arm_busy,pair_done,input [31:0] pair_reason,output pair_done_take,
+- input pair_empty,input [9:0] pair_count,input [127:0] pair_data,output pair_pop,
+- output pair_current_write,pair_metadata_write,pair_current_read,pair_metadata_read,
++module canny_backend #(parameter REQUEST_CYCLES=96000000,CAPTURE_CYCLES=96000000,EXPORT_CYCLES=960000000,DIAGNOSTICS=0)(
+  input ui_clk,pix_clk,rst_n,run,stop,input [63:0] epoch,
+  input tap_valid,input [1:0] tap_class,input [11:0] tap_x,tap_y,input [7:0] tap_high,tap_low,input [1:0] tap_filter,
+  input [63:0] tap_frame_id,tap_epoch,tap_timestamp,tap_display_seq,tap_config_generation,
+@@ -14,12 +7,6 @@
+  output fusion_ack,fusion_denied,output [3:0] pair_leased,
+  output result_valid,result_slot,output [767:0] result_descriptor,
+  output export_exclusive,capture_priority,output lease_fault,output job_rejected_event,
+- input diag_ready,diag_window,input [7:0] diag_byte,input diag_byte_valid,
+- output [8:0] diag_index,output diag_done,diag_cancel,
+- input telemetry_ready,input [319:0] telemetry_descriptor,input [7:0] telemetry_byte,
+- output [8:0] telemetry_index,output reg telemetry_take,
+- input [95:0] max_wait,max_service,input [13:0] camera_max,display_min,
+- input [31:0] system_status, input [223:0] error_counts,input [3:0] video_fifo_faults,
+  output uart_tx,output job_busy,output reg publish_toggle,output reg bg_fault,
+  output [1:0] capture_reset_done,
+  output avalid,input aready,output [31:0] aaddr,output [7:0] alen,aid,output atype,
+@@ -30,8 +17,7 @@
+ 
+  localparam IDLE=0,HEADER=1,CAPTURE=2,CAPWAIT=3,FREEZE=4,ENGINE=5,ENGINE_WAIT=6,
+   STATS=7,STATS_WAIT=8,DRAIN=14,FAULT_REPORT=16,FAULT_IDLE=17,
+-  RESERVE_WAIT=18,BIND=19,BIND_WAIT=20,TELEMETRY=23,TELEMETRY_WAIT=24;
+- reg packet_start,packet_abort;wire packet_busy,packet_done,payload_ready;
++  RESERVE_WAIT=18,BIND=19,BIND_WAIT=20;
+  wire tx_busy,tx_done,tx_error,tx_cancelled,tx_read_beat,tx_write_beat;wire [7:0] tx_beat;
+ 
+  reg [4:0] state;reg fault_reported,ever_run,job_failed;reg [31:0] local_cancels;
+@@ -57,37 +43,7 @@
+  wire reserve_ack,reserve_denied,reserve_slot,bind_ack,acquire_ack,acquire_denied;
+  wire lease_latest_valid,lease_latest_slot,publication_accept;wire [1:0] reserved,committed;
+  wire event_rejected;
+- wire pair_buffer_write;wire [4:0] pair_buffer_write_address,pair_buffer_read_address;wire [127:0] pair_buffer_write_data;
+- wire pair_fail_selected,pair_packet_reserve,pair_hold,pair_retain_owner,pair_selected,pair_release,pair_retire,pair_export,pair_reference_read;
+- wire pair_tx_start,pair_tx_write,pair_tx_cancel;wire [31:0] pair_tx_addr;wire [7:0] pair_tx_len;wire [127:0] pair_tx_data;
+- wire pair_packet_start,pair_packet_abort,pair_payload_valid;wire [7:0] pair_packet_type,pair_payload;
+- wire [31:0] pair_packet_length,pair_failure;wire [3:0] pair_attempts;
+- // Consume the independent mailbox promptly; preserve the latest observed full SID.
+- reg [63:0] pair_latest_request_session;
+- reg pair_latest_request_valid;
+- always @(posedge ui_clk or negedge pair_local_rst_n)
+-  if(!pair_local_rst_n)begin pair_latest_request_session<=0;pair_latest_request_valid<=0;end
+-  else if(pair_request)begin pair_latest_request_session<=pair_request_session;pair_latest_request_valid<=1;end
+- wire pair_effective_request_valid=pair_request||pair_latest_request_valid;
+- wire [63:0] pair_effective_request_session=pair_request?pair_request_session:pair_latest_request_session;
+- reg fresh_publication_seen;
+- always @(posedge ui_clk or negedge pair_local_rst_n)
+-  if(!pair_local_rst_n)fresh_publication_seen<=0;
+-  else if(pair_selected)fresh_publication_seen<=0;
+-  else if(publication_accept)fresh_publication_seen<=1;
+- // Capture may retain this acquisition while ordinary type4 finishes.
+- // UART ownership remains with type4 until its actual DONE/TAKE fence;
+- // the pair controller cannot export until release/retire and packet quiet.
+- wire pair_selection_window=(state==IDLE&&!packet_busy&&!packet_start)||
+-  state==TELEMETRY||state==TELEMETRY_WAIT;
+- assign pair_selected=!pair_wait_expired&&pair_effective_request_valid&&pair_effective_request_session==pair_session&&fusion_acquire&&fresh_publication_seen&&
+-  active_pair_descriptor==result_descriptor&&!pair_terminal&&!pair_hold&&pair_selection_window&&
+-  !tx_busy&&!eng_busy&&!arm_busy&&!writer_owned&&!stop;
+- assign pair_fail_selected=pair_wait_expired&&!pair_terminal&&!pair_hold&&state==IDLE&&
+-  !tx_busy&&!eng_busy&&!arm_busy&&!writer_owned&&!packet_busy&&!packet_start&&!stop;
+- // ACK every visible message, independently of ordinary fusion acquisition.
+- assign pair_request_take=pair_request;
+- wire want_reserve=run&&!stop&&tick==REQUEST_CYCLES-1&&state==IDLE&&!arm_busy&&!writer_owned&&!pair_hold&&!pair_selected&&!pair_fail_selected;
++ wire want_reserve=run&&!stop&&tick==REQUEST_CYCLES-1&&state==IDLE&&!arm_busy&&!writer_owned;
+  // One event for a scheduling request not admitted, or its later slot denial.
+  assign job_rejected_event=run&&!stop&&((tick==REQUEST_CYCLES-1&&!want_reserve)||
+   (state==RESERVE_WAIT&&reserve_denied));
+@@ -115,10 +71,10 @@
+   .cancel_valid(cancel_writer),.cancel_slot(class_slot),.write_drained(writer_drained),.cancel_identity(writer_identity),
+   .acquire_valid(fusion_acquire),.acquire_slot(fusion_slot),.acquire_uart(1'b0),.acquire_identity(fusion_identity),.acquire_token(fusion_token),
+   .acquire_ack(acquire_ack),.acquire_denied(acquire_denied),
+-  .release_valid(pair_retain_owner?pair_release:fusion_release),.release_slot(fusion_slot),.release_uart(1'b0),.release_identity(fusion_identity),.release_token(fusion_token),
+-  .retire_valid(pair_retain_owner?pair_retire:fusion_retire),.retire_slot(fusion_slot),.retire_uart(1'b0),.retire_identity(fusion_identity),.retire_token(fusion_token),
+-  .read_accept(fusion_read_accept||(pair_hold&&transfer_segment_accept&&!transfer_segment_write)),.read_slot(fusion_slot),.read_uart(1'b0),.read_identity(fusion_identity),.read_token(fusion_token),
+-  .read_done(fusion_read_done||(pair_hold&&transfer_segment_done&&!transfer_segment_write)),.done_slot(fusion_slot),.done_uart(1'b0),.done_identity(fusion_identity),.done_token(fusion_token),
++  .release_valid(fusion_release),.release_slot(fusion_slot),.release_uart(1'b0),.release_identity(fusion_identity),.release_token(fusion_token),
++  .retire_valid(fusion_retire),.retire_slot(fusion_slot),.retire_uart(1'b0),.retire_identity(fusion_identity),.retire_token(fusion_token),
++  .read_accept(fusion_read_accept),.read_slot(fusion_slot),.read_uart(1'b0),.read_identity(fusion_identity),.read_token(fusion_token),
++  .read_done(fusion_read_done),.done_slot(fusion_slot),.done_uart(1'b0),.done_identity(fusion_identity),.done_token(fusion_token),
+   .latest_valid(lease_latest_valid),.latest_slot(lease_latest_slot),.reserved(reserved),.committed(committed),.leased(pair_leased),
+   .protocol_fault(lease_fault),.event_rejected(event_rejected),.publication_accept(publication_accept));
+  wire eng_reserved;
+@@ -140,67 +96,17 @@
+ 
+  wire [31:0] transfer_address=eng_selected?eng_tx_address:class_base+offset;
+  wire transfer_write=eng_selected?eng_tx_write:state==CAPTURE;
+- m5b1_transfer transfer(.clk(ui_clk),.rst_n(rst_n),.stop(stop),.start(pair_hold?pair_tx_start:transfer_start),.cancel(pair_hold?pair_tx_cancel:transfer_cancel),.write_op(pair_hold?pair_tx_write:transfer_write),
+-  .address(pair_hold?pair_tx_addr:transfer_address),.length(pair_hold?pair_tx_len:eng_selected?eng_tx_length:8'd31),.busy(tx_busy),.done(tx_done),.error(tx_error),.cancelled(tx_cancelled),.beat(tx_beat),.read_beat(tx_read_beat),.write_beat(tx_write_beat),
++ m5b1_transfer transfer(.clk(ui_clk),.rst_n(rst_n),.stop(stop),.start(transfer_start),.cancel(transfer_cancel),.write_op(transfer_write),
++  .address(transfer_address),.length(eng_selected?eng_tx_length:8'd31),.busy(tx_busy),.done(tx_done),.error(tx_error),.cancelled(tx_cancelled),.beat(tx_beat),.read_beat(tx_read_beat),.write_beat(tx_write_beat),
+   .segment_accept(transfer_segment_accept),.segment_is_write(transfer_segment_write),.segment_done(transfer_segment_done),.segment_error(),.logical_drained(),
+   .avalid(avalid),.aready(aready),.aaddr(aaddr),.alen(alen),.aid(aid),.atype(atype),
+-  .source_data(pair_hold?pair_tx_data:eng_selected?eng_tx_data:cap_data),.wdata(wdata),.wvalid(wvalid),.wlast(wlast),.wready(wready),
++  .source_data(eng_selected?eng_tx_data:cap_data),.wdata(wdata),.wvalid(wvalid),.wlast(wlast),.wready(wready),
+   .bvalid(bvalid),.bid(bid),.bresp(bresp),.rvalid(rvalid),.rlast(rlast),.rid(rid),.rresp(rresp),.rready(rready),.rejected(rejected));
+- reg [2047:0] stats;reg [8:0] byte_index;
+- (* syn_ramstyle="block_ram" *) reg [127:0] export_mem[0:31];reg [127:0] export_head;
+- wire shared_write_enable=pair_buffer_write;
+- wire [4:0] shared_write_address=pair_buffer_write_address;
+- wire [4:0] shared_read_address=pair_buffer_read_address;
+- wire [127:0] shared_write_data=pair_buffer_write_data;
+- always @(posedge ui_clk)begin
+-  if(shared_write_enable)export_mem[shared_write_address]<=shared_write_data;
+-  export_head<=export_mem[shared_read_address];
+- end
+-
+- wire diag_busy;reg diag_slot;
+- wire diag_grant=DIAGNOSTICS&&diag_slot&&diag_ready&&diag_window&&run&&!stop&&state==IDLE&&
+-  !packet_busy&&!packet_start&&!telemetry_ready&&!telemetry_take&&!want_reserve&&!arm_busy&&!writer_owned&&
+-  REQUEST_CYCLES>700000&&tick<REQUEST_CYCLES-700000;
+- always @(posedge ui_clk or negedge rst_n)begin
+-  if(!rst_n)diag_slot<=0;
+-  else if(!diag_window||stop||diag_grant)diag_slot<=0;
+-  else if(state==TELEMETRY_WAIT&&packet_done)diag_slot<=1;
+- end
+- assign telemetry_index=byte_index;
+- wire [7:0] payload=state==TELEMETRY_WAIT?telemetry_byte:stats[byte_index*8+:8];
+- wire payload_valid=state==STATS_WAIT||state==TELEMETRY_WAIT;
+- m5b1_packet_tx #(.DIAGNOSTICS(DIAGNOSTICS)) packet(.clk(ui_clk),.rst_n(rst_n),.abort(packet_abort||(pair_export&&pair_packet_abort)),.start(pair_export?pair_packet_start:packet_start),.packet_type(pair_export?pair_packet_type:state==TELEMETRY_WAIT?8'd4:8'd1),
+-  .length(pair_export?pair_packet_length:32'd256),.descriptor(pair_export?active_pair_descriptor[319:0]:state==TELEMETRY_WAIT?telemetry_descriptor:frozen),
+-  .diag_grant(diag_grant),.diag_byte(diag_byte),.diag_byte_valid(diag_byte_valid),.diag_index(diag_index),.diag_busy(diag_busy),.diag_done(diag_done),.diag_cancel(diag_cancel),
+-  .payload(pair_export?pair_payload:payload),.payload_valid(pair_export?pair_payload_valid:payload_valid),.payload_ready(payload_ready),.busy(packet_busy),.done(packet_done),.uart_tx(uart_tx));
+- m5c_pair_controller pair_controller(.clk(ui_clk),.rst_n(pair_local_rst_n),.stop(stop),.select(pair_selected),.wait_expired(pair_fail_selected),
+- .acquire_ack(fusion_ack),.acquire_denied(fusion_denied),.descriptor(active_pair_descriptor),.identity(fusion_identity),.session(pair_session),.token(fusion_token),.slot(fusion_slot),
+- .fusion_release(fusion_release),.fusion_retire(fusion_retire),.held(pair_leased[fusion_slot?2:0]),
+- .hold(pair_hold),.retain_owner(pair_retain_owner),.arm(pair_arm),.cancel_capture(pair_cancel),.release_owned(pair_release),.retire_owned(pair_retire),
+- .cap_arm_busy(pair_arm_busy),.cap_done(pair_done),.cap_reason(pair_reason),.cap_take(pair_done_take),.cap_empty(pair_empty),.cap_count(pair_count),.cap_data(pair_data),.cap_pop(pair_pop),
+- .tx_start(pair_tx_start),.tx_write(pair_tx_write),.tx_cancel(pair_tx_cancel),.tx_addr(pair_tx_addr),.tx_len(pair_tx_len),.tx_data(pair_tx_data),
+- .tx_busy(tx_busy),.tx_done(tx_done),.tx_error(tx_error),.tx_read_beat(tx_read_beat),.tx_write_beat(tx_write_beat),.tx_beat(tx_beat),.rdata(rdata),
+- .buffer_write(pair_buffer_write),.buffer_write_address(pair_buffer_write_address),.buffer_read_address(pair_buffer_read_address),.buffer_write_data(pair_buffer_write_data),.buffer_read_data(export_head),
+- .packet_start(pair_packet_start),.packet_abort(pair_packet_abort),.packet_type(pair_packet_type),.packet_length(pair_packet_length),.payload(pair_payload),.payload_valid(pair_payload_valid),
+- .payload_ready(pair_export&&payload_ready),.packet_done(pair_export&&packet_done),.packet_busy(packet_busy||packet_start||state==TELEMETRY||state==TELEMETRY_WAIT),
+- .packet_reserve(pair_packet_reserve),.export_active(pair_export),.current_write(pair_current_write),.metadata_write(pair_metadata_write),.current_read(pair_current_read),.metadata_read(pair_metadata_read),.reference_read(pair_reference_read),
+- .terminal(pair_terminal),.failure(pair_failure),.attempts(pair_attempts));
+- // synthesis translate_off
+- always @(posedge ui_clk)if(rst_n&&!stop)begin
+-  if(pair_selected&&want_reserve)$fatal(1,"PAIR_SELECTED_WRITER_COLLISION");
+-  if(pair_hold&&writer_owned)$fatal(1,"PAIR_HELD_WITH_WRITER");
+-  if(pair_selected&&publication_accept)$fatal(1,"PAIR_PUBLICATION_SELECTION_SAME_EDGE");
+-  if(pair_leased[3]||pair_leased[1])$fatal(1,"PAIR_ONLY_UART_OWNER_NONZERO");
+-  if(pair_export&&packet_start)$fatal(1,"PAIR_PACKET_ORIGINAL_COLLISION");
+- end
+- // synthesis translate_on
++ // UART is deliberately idle; no packet engine or pair owner exists.
++ assign uart_tx=1'b1;
+  assign job_busy=state!=IDLE;
+  always @*begin
+   write_permission=0;read_permission=0;
+-  if(pair_reference_read)begin
+-   read_permission[fusion_slot?1:0]=1;
+-   read_permission[fusion_slot?5:4]=1;
+-  end
+   if(state==CAPTURE||state==CAPWAIT)write_permission[class_slot?1:0]=1;
+   if(state==ENGINE_WAIT)begin
+    read_permission[class_slot?1:0]=1;read_permission[3:2]=3;
+@@ -212,12 +118,12 @@
+  always @(posedge ui_clk or negedge rst_n)begin
+   if(!rst_n)begin
+    state<=IDLE;fault_reported<=0;ever_run<=0;job_failed<=0;local_cancels<=0;class_slot<=1;latest_slot<=0;latest_valid<=0;job_id<=0;tick<=0;requests<=0;accepted<=0;busy_rejected<=0;capture_drop<=0;published_count<=0;result_age<=0;
+-   offset<=0;capture_age<=0;arm<=0;descriptor_take<=0;frozen<=0;publish_toggle<=0;bg_fault<=0;stats<=0;byte_index<=0;packet_start<=0;packet_abort<=0;
++   offset<=0;capture_age<=0;arm<=0;descriptor_take<=0;frozen<=0;publish_toggle<=0;bg_fault<=0;
+    frozen_extended<=0;latest_descriptor<=0;writer_identity<=0;generation<=0;
+-   writer_owned<=0;cancel_sent<=0;metadata_committed<=0;telemetry_take<=0;
++   writer_owned<=0;cancel_sent<=0;metadata_committed<=0;
+   end else begin
+-   arm<=0;descriptor_take<=0;packet_start<=0;packet_abort<=0;
+-   telemetry_take<=0;
++   arm<=0;descriptor_take<=0;
++   
+    if(cancel_writer)cancel_sent<=1;
+    if(writer_drained)begin writer_owned<=0;cancel_sent<=0;end
+    if(state==ENGINE)metadata_committed<=0;
+@@ -239,12 +145,7 @@
+    if(state>=HEADER&&state<=FREEZE)capture_age<=capture_age+1'b1;
+ 
+    case(state)
+-    IDLE:if(!pair_fail_selected&&!pair_packet_reserve&&telemetry_ready&&!telemetry_take&&!want_reserve&&!stop)state<=TELEMETRY;
+-    TELEMETRY:begin byte_index<=0;packet_start<=1;state<=TELEMETRY_WAIT;end
+-    TELEMETRY_WAIT:begin
+-     if(payload_ready&&payload_valid&&byte_index<255)byte_index<=byte_index+1'b1;
+-     if(packet_done)begin telemetry_take<=1;state<=IDLE;end
+-    end
++    IDLE:begin end
+     RESERVE_WAIT:begin
+      if(reserve_ack)begin
+       accepted<=accepted+1'b1;job_id<=job_id+1'b1;generation<=generation+1'b1;job_failed<=0;
+@@ -278,24 +179,12 @@
+      if(publication_ok)begin latest_valid<=1;latest_slot<=eng_result_slot;published_count<=published_count+1'b1;publish_toggle<=!publish_toggle;result_age<=0;end
+      state<=STATS;
+     end
+-    STATS:begin
+-     stats<=0;stats[31:0]<=requests;stats[63:32]<=accepted;stats[95:64]<=busy_rejected;
+-     stats[127:96]<=capture_drop;stats[159:128]<=published_count;stats[191:160]<=result_age;
+-     stats[223:192]<={18'b0,camera_max};stats[255:224]<={18'b0,display_min};
+-     stats[351:256]<=max_wait;stats[447:352]<=max_service;
+-     stats[479:448]<={eng_scans,eng_pairs};stats[511:480]<=eng_elapsed;stats[543:512]<=eng_changed;
+-     stats[575:544]<=system_status;stats[639:576]<=job_id;stats[703:640]<=frozen[127:64];
+-     stats[735:704]<={28'b0,job_failed,stop,eng_failed,dropped_sync[1]};
+-     stats[767:736]<={18'b0,capture_min};stats[799:768]<={18'b0,capture_max};
+-     stats[831:800]<={26'b0,capture_fifo_faults,video_fifo_faults};stats[1055:832]<=error_counts;stats[1087:1056]<=local_cancels;byte_index<=0;packet_start<=1;state<=STATS_WAIT;
+-    end
+-    STATS_WAIT:begin
+-     if(payload_ready&&payload_valid&&byte_index<255)byte_index<=byte_index+1'b1;
+-     if(packet_done)begin
+-      if(stop)state<=FAULT_IDLE;
+-      else state<=IDLE;
+-     end
+-    end
++    // Cancellation is issued in STATS and retained through real drain.
++    // Returning to IDLE requires the original writer/transfer/arm fences;
++    // there is no synthetic UART DONE or DDR acknowledgment.
++    STATS:state<=STATS_WAIT;
++    STATS_WAIT:if(!writer_owned&&!tx_busy&&!eng_busy&&!arm_busy&&cap_empty&&!descriptor_valid)
++      state<=stop?FAULT_IDLE:IDLE;
+     FAULT_REPORT:state<=STATS;
+     FAULT_IDLE:begin end
+     DRAIN:begin
+@@ -306,9 +195,9 @@
+    // Keep CAPWAIT's payload/pop contract until the owned transaction drains.
+    // Cancelling only a queued request also terminates without future READY.
+    if(capture_timeout&&!tx_busy)begin bg_fault<=1;job_failed<=1;capture_drop<=capture_drop+1'b1;state<=DRAIN;end
+-   // UART fault telemetry is independent of the quarantined DDR transaction.
++   // Fail-stop retains the quarantined DDR owner; only cold reconfiguration recovers.
+    // Keep the owner/busy state intact: this is not a DDR reset or synthetic ACK.
+-   if(stop&&ever_run&&!fault_reported)begin fault_reported<=1;latest_valid<=0;bg_fault<=1;packet_abort<=1;state<=FAULT_REPORT;end
++   if(stop&&ever_run&&!fault_reported)begin fault_reported<=1;latest_valid<=0;bg_fault<=1;state<=FAULT_REPORT;end
+   end
+  end
+ endmodule
+
+--- rtl/gaussian_integration/shape/shape_pair_system_guard.sv
++++ rtl/canny_gaussian_standalone/core/canny_system.sv
+@@ -1,9 +1,4 @@
+-module shape_pair_system_guard #(parameter DIAGNOSTICS=0)(
+- input pair_source_tap_valid,pair_source_tap_qualified,
+- input pair_cov,input pair_sof,pair_admit,pair_kill,pair_identity_ok,pair_capture_eligible,
+- input [63:0] pair_pixel_session,pair_pixel_source,pair_pixel_ticks,pair_pixel_seq,
+- input pair_de,input [11:0] pair_x,pair_y,input [1:0] pair_class,
+- input pair_support,pair_local,pair_domain,pair_row_complete,pair_row_tag,
++module canny_system #(parameter DIAGNOSTICS=0)(
+  input ui_clk,cam_clk,pix_clk,rst_n,pll_locked,cal_done,cal_pass,
+  input cam_vs,cam_valid,input [7:0] cam_data,input pix_sof,pix_request,
+  output [7:0] pix_data,output [63:0] frame_id,output [63:0] epoch,output pix_qualified,
+@@ -17,38 +12,11 @@
+  output fusion_context_block,input fusion_context_quiet,fusion_context_tail_fault,
+  input fusion_retire,input [11:0] fusion_retire_row,input fusion_flush,output fusion_prefilled,output fusion_stop,
+  output fusion_export_status,fusion_ddr_error_status,fusion_hardstop_status,
+- input diag_ready,diag_window,input [7:0] diag_byte,input diag_byte_valid,
+- output [8:0] diag_index,output diag_done,diag_cancel,output [63:0] diag_token,output diag_slot,
+- input fusion_frame_done,input [479:0] fusion_telemetry_snapshot,
+  output [7:0] aid,alen,wid,output [31:0] aaddr,output [2:0] asize,
+  output [1:0] aburst,alock,output avalid,atype,input aready,
+  output [127:0] wdata,output [15:0] wstrb,output wlast,wvalid,input wready,
+  input [7:0] bid,input [1:0] bresp,input bvalid,output bready,
+  input [7:0] rid,input [1:0] rresp,input [127:0] rdata,input rlast,rvalid,output rready);
+- (* async_reg="true" *)reg [1:0] pair_ui_release,pair_pix_release;
+- always @(posedge ui_clk or negedge rst_n)if(!rst_n)pair_ui_release<=0;else pair_ui_release<={pair_ui_release[0],1'b1};
+- always @(posedge pix_clk or negedge rst_n)if(!rst_n)pair_pix_release<=0;else pair_pix_release<={pair_pix_release[0],1'b1};
+- wire pair_ui_rst_n=pair_ui_release[1],pair_pix_rst_n=pair_pix_release[1];
+- wire pair_request,pair_request_busy,pair_request_take;
+- wire [63:0] pair_request_data;
+- wire pair_arm,pair_cancel,pair_terminal,pair_arm_busy,pair_done,pair_done_take,pair_empty,pair_pop;
+- wire [31:0] pair_reason;wire [9:0] pair_count;wire [127:0] pair_data;wire [1:0] pair_reset_done,pair_faults;
+- wire pair_current_write,pair_metadata_write,pair_current_read,pair_metadata_read;
+- reg pair_wait_started,pair_wait_expired_pix;reg [12:0] pair_wait_frames;
+- (* async_reg="true" *)reg [1:0] pair_wait_expired_ui;
+- (* async_reg="true" *)reg [1:0] pair_terminal_pix; wire pair_send=fusion_request&&pair_cov&&!pair_wait_expired_pix&&!pair_terminal_pix[1]&&!pair_request_busy;
+- always @(posedge pix_clk or negedge pair_pix_rst_n)if(!pair_pix_rst_n)begin pair_terminal_pix<=0;pair_wait_started<=0;pair_wait_frames<=0;pair_wait_expired_pix<=0;end
+- else begin pair_terminal_pix<={pair_terminal_pix[0],pair_terminal};
+-  if(pix_sof&&!pair_terminal_pix[1])begin
+-   if(pair_cov)pair_wait_started<=1;
+-   if(pair_wait_started&&!pair_wait_expired_pix)begin
+-    if(pair_wait_frames==7199)pair_wait_expired_pix<=1;else pair_wait_frames<=pair_wait_frames+1'b1;
+-   end
+-
+-  end
+- end
+- always @(posedge ui_clk or negedge pair_ui_rst_n)if(!pair_ui_rst_n)pair_wait_expired_ui<=0;else pair_wait_expired_ui<={pair_wait_expired_ui[0],pair_wait_expired_pix};
+- m5b1_mailbox #(.WIDTH(64)) pair_request_box(.sclk(pix_clk),.dclk(ui_clk),.arst_n(rst_n),.send(pair_send),.sdata(fusion_request_seq),.busy(pair_request_busy),.valid(pair_request),.ddata(pair_request_data),.take(pair_request_take));
+  wire run,stop,ack,video_fault,quarantine,reset_request,arb_busy;
+  wire [3:0] error_reason;wire [5:0] fifo_ready;
+  wire [223:0] error_counts;wire [3:0] video_fifo_faults;
+@@ -57,7 +25,7 @@
+  wire [23:0] cl,ci,cbi,cri;wire [2:0] ct;wire [383:0] cwd,crd;wire [5:0] cbr,crresp;
+  wire [3:0] wp,rp;wire [6:0] bwp,brp;wire [13:0] camera_bytes,display_bytes,camera_max,display_min;
+  wire [1:0] urgent;wire safe_window;wire display_valid;
+- wire job_busy,publish_toggle,bg_fault;
++ wire job_busy,publish_toggle,bg_fault,job_rejected_event;
+  wire [1:0] sa,sar,sw,swl,swr,sb,sr,srr,srej,sat;
+  wire [63:0] sad;wire [15:0] sal,sai;wire [255:0] swd;wire [127:0] srd;
+  wire [7:0] sbi,sri;wire [1:0] sbr,sresp;wire srl;
+@@ -66,23 +34,6 @@
+  wire [767:0] result_descriptor;wire [3:0] pair_leased;
+  wire lease_acquire,lease_slot,lease_ack,lease_denied,lease_release,lease_retire,read_accept,read_done;
+  wire [319:0] lease_identity;wire [63:0] lease_token;
+- wire telemetry_ready,telemetry_take,telemetry_pending,telemetry_fault;
+- wire job_rejected_event;
+- (* syn_keep="true" *) reg [63:0] rejected_job_count,protocol_fault_count;
+- (* syn_keep="true" *) reg [4:0] fault_seen;
+- wire [4:0] fault_levels={reset_request,quarantine,telemetry_fault,session_fault,lease_fault};
+- // Count UI cycles with a newly asserted protocol source, coalescing same-cycle sources.
+- always @(posedge ui_clk or negedge rst_n)begin
+-  if(!rst_n)begin rejected_job_count<=0;protocol_fault_count<=0;fault_seen<=0;end
+-  else begin
+-   fault_seen<=fault_levels;
+-   if(job_rejected_event&&rejected_job_count!=64'hffffffffffffffff)rejected_job_count<=rejected_job_count+1'b1;
+-   if(|(fault_levels&~fault_seen)&&protocol_fault_count!=64'hffffffffffffffff)protocol_fault_count<=protocol_fault_count+1'b1;
+-  end
+- end
+- wire [319:0] telemetry_header;wire [7:0] telemetry_byte;wire [8:0] telemetry_index;
+- wire [767:0] telemetry_descriptor;wire [63:0] telemetry_session;
+- assign diag_token=lease_token;assign diag_slot=lease_slot;
+  assign bwp=backend_wp;assign brp=backend_rp|fusion_rp;
+  assign fusion_stop=stop||!run||lease_fault||session_fault;
+  assign fusion_export_status=export_exclusive;
+@@ -100,20 +51,13 @@
+   .rejected(rejected[1:0]),.write_permission(wp),.read_permission(rp),.camera_bytes(camera_bytes),.display_bytes(display_bytes),.urgent(urgent),.safe_window(safe_window),
+   .fifo_ready(fifo_ready[3:0]),.camera_max(camera_max),.display_min(display_min),.fifo_faults(video_fifo_faults));
+  assign cw[1]=0;assign cwl[1]=0;assign cwd[255:128]=0;assign crr[0]=1;
+- m5c_pair_backend #(.DIAGNOSTICS(DIAGNOSTICS)) background(.pair_local_rst_n(pair_ui_rst_n),.pair_wait_expired(pair_wait_expired_ui[1]),.pair_request(pair_request&&!pair_wait_expired_ui[1]),.pair_request_take(pair_request_take),.pair_request_session(pair_request_data),.active_pair_descriptor(telemetry_descriptor),.pair_session(telemetry_session),
+-  .pair_arm(pair_arm),.pair_cancel(pair_cancel),.pair_terminal(pair_terminal),.pair_arm_busy(pair_arm_busy),.pair_done(pair_done),.pair_reason(pair_reason),.pair_done_take(pair_done_take),
+-  .pair_empty(pair_empty),.pair_count(pair_count),.pair_data(pair_data),.pair_pop(pair_pop),
+-  .pair_current_write(pair_current_write),.pair_metadata_write(pair_metadata_write),.pair_current_read(pair_current_read),.pair_metadata_read(pair_metadata_read),.ui_clk(ui_clk),.pix_clk(pix_clk),.rst_n(rst_n),.run(run),.stop(stop),.epoch(epoch),
++ canny_backend #(.DIAGNOSTICS(DIAGNOSTICS)) background(.ui_clk(ui_clk),.pix_clk(pix_clk),.rst_n(rst_n),.run(run),.stop(stop),.epoch(epoch),
+   .tap_valid(tap_valid),.tap_class(tap_class),.tap_x(tap_x),.tap_y(tap_y),.tap_high(tap_high),.tap_low(tap_low),.tap_filter(tap_filter),
+   .tap_frame_id(tap_frame_id),.tap_epoch(tap_epoch),.tap_timestamp(tap_timestamp),.tap_display_seq(tap_display_seq),.tap_config_generation(tap_config_generation),
+   .fusion_acquire(lease_acquire),.fusion_slot(lease_slot),.fusion_identity(lease_identity),.fusion_token(lease_token),
+   .fusion_release(lease_release),.fusion_retire(lease_retire),.fusion_read_accept(read_accept),.fusion_read_done(read_done),
+   .fusion_ack(lease_ack),.fusion_denied(lease_denied),.pair_leased(pair_leased),.result_valid(result_valid),.result_slot(result_slot),
+   .result_descriptor(result_descriptor),.export_exclusive(export_exclusive),.capture_priority(capture_priority),.lease_fault(lease_fault),.job_rejected_event(job_rejected_event),
+-  .diag_ready(diag_ready&&!telemetry_pending),.diag_window(diag_window),.diag_byte(diag_byte),.diag_byte_valid(diag_byte_valid),.diag_index(diag_index),.diag_done(diag_done),.diag_cancel(diag_cancel),
+-  .telemetry_ready(telemetry_ready),.telemetry_descriptor(telemetry_header),.telemetry_byte(telemetry_byte),.telemetry_index(telemetry_index),.telemetry_take(telemetry_take),
+-  .max_wait(max_wait),.max_service(max_service),.camera_max(camera_max),.display_min(display_min),
+-  .system_status({19'b0,ack,error_reason,4'b0,stop,quarantine,cal_pass,cal_done}),.error_counts(error_counts),.video_fifo_faults(video_fifo_faults),
+   .uart_tx(uart_tx),.job_busy(job_busy),.publish_toggle(publish_toggle),.bg_fault(bg_fault),.capture_reset_done(fifo_ready[5:4]),
+   .avalid(sa[0]),.aready(sar[0]),.aaddr(sad[31:0]),.alen(sal[7:0]),.aid(sai[7:0]),.atype(sat[0]),
+   .wvalid(sw[0]),.wlast(swl[0]),.wdata(swd[127:0]),.wready(swr[0]),.bvalid(sb[0]),.bid(sbi),.bresp(sbr),
+@@ -126,7 +70,7 @@
+   .acquire(lease_acquire),.lease_slot(lease_slot),.lease_identity(lease_identity),.lease_token(lease_token),
+   .acquire_ack(lease_ack),.acquire_denied(lease_denied),.pair_leased(pair_leased),.lease_release(lease_release),.lease_retire(lease_retire),
+   .read_accept(read_accept),.read_done(read_done),.session_fault(session_fault),
+-  .telemetry_pending(telemetry_pending),.telemetry_descriptor(telemetry_descriptor),.telemetry_session(telemetry_session),
++  .telemetry_pending(1'b0),.telemetry_descriptor(),.telemetry_session(),
+   .offer_valid(fusion_offer_valid),.offer_take(fusion_offer_take),.offer_descriptor(fusion_descriptor),.offer_session(fusion_session),
+   .context_block(fusion_context_block),.context_quiet(fusion_context_quiet),.context_tail_fault(fusion_context_tail_fault),
+   .ce(fusion_ce),.read_valid(fusion_read),.read_x(fusion_x),.read_y(fusion_y),.read_session(fusion_read_session),
+@@ -134,18 +78,6 @@
+   .retire(fusion_retire),.retire_row(fusion_retire_row),.flush(fusion_flush),.prefilled(fusion_prefilled),
+   .avalid(sa[1]),.aready(sar[1]),.aaddr(sad[63:32]),.alen(sal[15:8]),.aid(sai[15:8]),.atype(sat[1]),
+   .rvalid(sr[1]),.rlast(srl),.rdata(srd),.rid(sri),.rresp(sresp),.rready(srr[1]),.rejected(srej[1]),.read_permission(fusion_rp));
+- m5c_pair_capture #(.SEPARATE_ELIGIBILITY(1)) pair_capture(.ui_clk(ui_clk),.pix_clk(pix_clk),.arst_n(rst_n),.arm(pair_arm),.arm_session(telemetry_session),.cancel(pair_cancel),
+- .arm_busy(pair_arm_busy),.done_valid(pair_done),.done_reason(pair_reason),.done_take(pair_done_take),
+- .source_tap_valid(pair_source_tap_valid),.source_tap_qualified(pair_source_tap_qualified),.ce(fusion_ce),.frame_sof(pair_sof),.frame_admit(pair_admit),.mode_cov(pair_cov),.fusion_enabled(pair_cov),.kill(pair_kill),.identity_ok(pair_identity_ok),.capture_eligible(pair_capture_eligible),
+- .session(pair_pixel_session),.current_source_frame(pair_pixel_source),.display_seq(pair_pixel_seq),.pixel_ticks(pair_pixel_ticks),
+- .final_de(pair_de),.final_x(pair_x),.final_y(pair_y),.final_class(pair_class),.support(pair_support),.local_edge(pair_local),.accepted_domain(pair_domain),.row_complete(pair_row_complete),.row_tag(pair_row_tag),
+- .data(pair_data),.empty(pair_empty),.pop(pair_pop),.count(pair_count),.reset_done(pair_reset_done),.fifo_faults(pair_faults));
+- shape_telemetry_guard telemetry(.pix_clk(pix_clk),.ui_clk(ui_clk),.rst_n(rst_n),
+-  .frame_done(fusion_frame_done),.pixel_snapshot(fusion_telemetry_snapshot),.active_descriptor(telemetry_descriptor),
+-  .active_session(telemetry_session),.active_token(lease_token),.active_slot(lease_slot),
+-  .rejected_jobs(rejected_job_count),.protocol_faults(protocol_fault_count),
+-  .payload_ready(telemetry_ready),.header_descriptor(telemetry_header),.payload_take(telemetry_take),
+-  .byte_index(telemetry_index),.payload_byte(telemetry_byte),.snapshot_pending(telemetry_pending),.snapshot_fault(telemetry_fault));
+  m5c_bg_mux bg_mux(.clk(ui_clk),.rst_n(rst_n),.stop(stop),.capture_priority(capture_priority),
+   .s_avalid(sa),.s_aready(sar),.s_aaddr(sad),.s_alen(sal),.s_aid(sai),.s_atype(sat),
+   .s_wvalid(sw),.s_wlast(swl),.s_wdata(swd),.s_wready(swr),.s_bvalid(sb),.s_bid(sbi),.s_bresp(sbr),
+@@ -153,7 +85,7 @@
+   .avalid(ca[2]),.aready(car[2]),.aaddr(cad[95:64]),.alen(cl[23:16]),.aid(ci[23:16]),.atype(ct[2]),
+   .wvalid(cw[2]),.wlast(cwl[2]),.wdata(cwd[383:256]),.wready(cwr[2]),.bvalid(cb[2]),.bid(cbi[23:16]),.bresp(cbr[5:4]),
+   .rvalid(cr[2]),.rlast(crl[2]),.rdata(crd[383:256]),.rid(cri[23:16]),.rresp(crresp[5:4]),.rready(crr[2]),.rejected(rejected[2]));
+- m5c_pair_arbiter arbiter(.pair_write_permission({pair_metadata_write,pair_current_write}),.pair_read_permission({pair_metadata_read,pair_current_read}),.clk(ui_clk),.rst_n(rst_n),.soft_reset(1'b0),.ddr_reset_ack(ack),.urgent(urgent),.safe_window(safe_window),
++ m5c_pair_arbiter arbiter(.pair_write_permission(2'b00),.pair_read_permission(2'b00),.clk(ui_clk),.rst_n(rst_n),.soft_reset(1'b0),.ddr_reset_ack(ack),.urgent(urgent),.safe_window(safe_window),
+   .emergency_stop(stop||!run),.epoch(epoch),.c_epoch({epoch,epoch,epoch}),.video_write_permission(wp),.video_read_permission(rp),.bg_write_permission(bwp),.bg_read_permission(brp),
+   .error_counts(error_counts),.max_wait(max_wait),.max_service(max_service),.qos_exceeded(qos_exceeded),.accepts(accepts),.completes(completes),.rejects(rejects),
+   .c_avalid(ca),.c_aready(car),.c_aaddr(cad),.c_alen(cl),.c_aid(ci),.c_atype(ct),
+
+--- rtl/gaussian_integration/shape/shape_osd.sv
++++ rtl/canny_gaussian_standalone/core/canny_osd.sv
+@@ -1,9 +1,8 @@
+ // M5A-only CE adaptation of committed rtl/m4_color_overlay/m4_osd.v.
+ `timescale 1ns/1ps
+ // One matched sampling stage for pixel and all raster signals.
+-module shape_osd(input clk,input ce,input arst_n,input [23:0] rgb,input de,hs,vs,
++module canny_osd(input clk,input ce,input arst_n,input [23:0] rgb,input de,hs,vs,
+  input [7:0] threshold,input [2:0] mode,input [1:0] filter_id,
+- input [1:0] shape_class,input shape_valid,
+  input fusion_enable,fusion_active,fusion_age_valid,input [31:0] fusion_age,
+  output reg [23:0] out_rgb,output reg out_de,out_hs,out_vs);
+  (* async_reg="true" *) reg [1:0] reset_release;
+@@ -12,7 +11,6 @@
+  wire rst_n=reset_release[1];
+  reg de_d,vs_d;reg [11:0] x,y;
+  reg [7:0] gsymbol;reg [34:0] gbitmap;reg gink;wire [11:0] gx=x-12'd668;
+- reg [7:0] ssymbol;reg [34:0] sbitmap;reg sink;wire [11:0] sx=x-12'd448;
+  reg [7:0] symbol;reg [34:0] bitmap;reg ink;
+  reg [11:0] bcd,bcd_next,bcd_low,bcd_low_next;
+  wire [7:0] low_threshold={1'b0,threshold[7:1]};
+@@ -110,18 +108,6 @@
+    9:fsymbol=fusion_age_valid?48+fbcd[3:0]:"-";
+   endcase
+ 
+-  // Previous display-frame result. Fixed new rectangle x444..644, y12..33.
+-  ssymbol=" ";
+-  case(sx[7:4])
+-   0:ssymbol="P";1:ssymbol="R";2:ssymbol="E";3:ssymbol="V";
+-   5:ssymbol=shape_valid&&shape_class==1?"C":shape_valid&&shape_class==2?"R":"U";
+-   6:ssymbol=shape_valid&&shape_class==1?"I":shape_valid&&shape_class==2?"E":"N";
+-   7:ssymbol=shape_valid&&shape_class==1?"R":shape_valid&&shape_class==2?"C":"K";
+-   8:ssymbol=shape_valid&&shape_class==1?"C":shape_valid&&shape_class==2?"T":"N";
+-   9:ssymbol=shape_valid&&shape_class==1?"L":shape_valid&&shape_class==2?" ":"O";
+-   10:ssymbol=shape_valid&&shape_class==1?"E":shape_valid&&shape_class==2?" ":"W";
+-   11:ssymbol=shape_valid&&(shape_class==1||shape_class==2)?" ":"N";
+-  endcase
+   gsymbol=" ";
+   case(gx[5:4])
+    0:gsymbol=filter_id==0?"N":filter_id==1?"M":filter_id==2?"G":"E";
+@@ -130,8 +116,6 @@
+   endcase
+   gbitmap=font(gsymbol);gink=0;
+   if(x>=668&&x<716&&y>=16&&y<30&&gx[3:1]<5)gink=gbitmap[34-row*5-gx[3:1]];
+-  sbitmap=font(ssymbol);sink=0;
+-  if(x>=448&&x<640&&y>=16&&y<30&&sx[3:1]<5)sink=sbitmap[34-row*5-sx[3:1]];
+   fbitmap=font(fsymbol);fink=0;
+   if(x>=248&&x<408&&y>=16&&y<30&&fx[3:1]<5)fink=fbitmap[34-row*5-fx[3:1]];
+  end
+@@ -149,7 +133,6 @@
+    if(!de) out_rgb<=0;
+    else if(x>=12 && x<((mode<4)?148:228) && y>=12 && y<34) out_rgb<=ink?24'hffffff:24'h000000;
+    else if(mode==6&&fusion_enable&&x>=244&&x<412&&y>=12&&y<34)out_rgb<=fink?24'hffffff:24'h000000;
+-   else if(x>=444&&x<644&&y>=12&&y<34)out_rgb<=sink?24'hffff00:24'h000000;
+    else if(x>=664&&x<720&&y>=12&&y<34)out_rgb<=gink?24'h00ff00:24'h000000;
+    else out_rgb<=rgb;
+   end
+
+--- efinity/gaussian_shape_cap_i3/example_top.v
++++ efinity/canny_gaussian_standalone_i3/example_top.v
+@@ -944,15 +944,13 @@
+     wire [1:0] fusion_ref_class;wire [11:0] fusion_ref_x,fusion_ref_y,fusion_retire_row;
+     wire fusion_tap_valid,fusion_tap_qualified,fusion_tap_support;
+     wire [11:0] final_x,final_y;wire local_edge,shape_support,shape_raster_fault;
+-    wire [1:0] shape_class,final_filter;wire shape_valid;wire [7:0] final_gray;
+-    wire [63:0] shape_display_config,shape_display_epoch;
++    wire [1:0] final_filter;wire [7:0] final_gray;
+     wire [7:0] source_threshold;wire [2:0] source_mode;wire [1:0] source_filter;
+     wire [63:0] source_generation;wire source_fusion;
+     reg final_vs_d,final_fusion_enable;
+     always @(posedge clk_pixel or negedge rstn_pixel)
+      if(!rstn_pixel)begin final_vs_d<=1;final_fusion_enable<=0;end
+      else begin final_vs_d<=sobel_vs;if(final_vs_d&&!sobel_vs)final_fusion_enable<=fusion_enable;end
+-    wire shape_visible=shape_valid&&shape_display_config==config_generation&&shape_display_epoch==m5b1_lcd_epoch&&config_generation!=64'hffffffffffffffff&&source_filter!=3&&source_mode!=7;
+     wire [23:0] fused_rgb;wire fusion_eligible,fusion_promoted,fusion_frame_ok;
+     wire [31:0] fusion_age_frames,fusion_age_ticks;
+     wire fusion_release_ready,fusion_release_final;wire fusion_frame_done;wire [479:0] fusion_telemetry_snapshot;
+@@ -977,11 +975,7 @@
+       if(!rstn_pixel)fusion_stop_sync<=3;else fusion_stop_sync<={fusion_stop_sync[0],fusion_stop_ui};
+     reg m5b1_vs_d=1'b1;
+     always @(posedge clk_pixel or negedge rstn_pixel)if(!rstn_pixel)m5b1_vs_d<=1'b1;else m5b1_vs_d<=lcd_vs;
+-    shape_pair_system_guard #(.DIAGNOSTICS(0)) u_m5b1(.pair_source_tap_valid(fusion_tap_valid),.pair_source_tap_qualified(fusion_tap_qualified),.pair_cov(control_mode==6&&fusion_enable),.pair_sof(diag_sof),.pair_admit(diag_admit),.pair_kill(diag_kill),
+-      .pair_identity_ok(fusion_config==fusion_descriptor[735:576]&&m5b1_epoch==fusion_descriptor[63:0]),.pair_capture_eligible(fusion_eligible),
+-      .pair_pixel_session(diag_sid),.pair_pixel_source(tap_frame_id),.pair_pixel_ticks(pixel_ticks),.pair_pixel_seq(display_seq),
+-      .pair_de(sobel_de),.pair_x(final_x),.pair_y(final_y),.pair_class(pair_final_class),.pair_support(diag_support),.pair_local(local_edge),
+-      .pair_domain(!fusion_context_block&&!fusion_context_tail_fault&&diag_tag&&fusion_frame_ok&&fusion_eligible),.pair_row_complete(diag_rc),.pair_row_tag(diag_rt),.ui_clk(w_ddr3_ui_clk),.cam_clk(cmos_pclk),.pix_clk(clk_pixel),.rst_n(rstn_sys),
++    canny_system u_m5b1(.ui_clk(w_ddr3_ui_clk),.cam_clk(cmos_pclk),.pix_clk(clk_pixel),.rst_n(rstn_sys),
+       .pll_locked(w_pll_lock),.cal_done(w_ddr3_cal_done),.cal_pass(w_ddr3_cal_pass),
+       .cam_vs(cmos_frame_vsync),.cam_valid(cmos_frame_href),.cam_data(cmos_frame_Gray[7:0]),
+       .pix_sof(m5b1_vs_d&&!lcd_vs),.pix_request(lcd_request),.pix_data(lcd_data),.frame_id(m5b1_frame_id),.epoch(m5b1_epoch),.pix_qualified(m5b1_pix_qualified),
+@@ -995,8 +989,6 @@
+       .fusion_ref_ready(fusion_ref_ready),.fusion_ref_class(fusion_ref_class),.fusion_ref_mask(fusion_ref_mask),.fusion_ref_x(fusion_ref_x),.fusion_ref_y(fusion_ref_y),.fusion_ref_session(fusion_ref_session),
+       .fusion_retire(fusion_retire),.fusion_retire_row(fusion_retire_row),.fusion_flush(fusion_flush),.fusion_prefilled(fusion_prefilled),.fusion_stop(fusion_stop_ui),
+       .fusion_export_status(fusion_export_ui),.fusion_ddr_error_status(fusion_ddr_error_ui),.fusion_hardstop_status(fusion_hardstop_ui),
+-      .diag_ready(1'b0),.diag_window(1'b0),.diag_byte(8'd0),.diag_byte_valid(1'b0),.diag_index(diag_index),.diag_done(diag_done),.diag_cancel(diag_cancel),.diag_token(diag_token),.diag_slot(diag_source_slot),
+-      .fusion_frame_done(fusion_frame_done),.fusion_telemetry_snapshot(fusion_telemetry_snapshot),
+       .aid(w_ddr3_aid),.alen(w_ddr3_alen),.wid(w_ddr3_wid),.aaddr(w_ddr3_aaddr),.asize(w_ddr3_asize),
+       .aburst(w_ddr3_aburst),.alock(w_ddr3_alock),.avalid(w_ddr3_avalid),.atype(w_ddr3_atype),.aready(w_ddr3_aready),
+       .wdata(w_ddr3_wdata),.wstrb(w_ddr3_wstrb),.wlast(w_ddr3_wlast),.wvalid(w_ddr3_wvalid),.wready(w_ddr3_wready),
+@@ -1049,7 +1041,7 @@
+     wire [2:0] display_mode;
+     wire osd_de,osd_hs,osd_vs;
+     // One common delayed raster; OVR edges are centered on original RAW.
+-    shape_osd u_osd(.shape_class(shape_class),.shape_valid(shape_visible),.filter_id(final_filter),.clk(clk_pixel),.ce(1'b1),.arst_n(rstn_pixel),.rgb(fused_rgb),
++    canny_osd u_osd(.filter_id(final_filter),.clk(clk_pixel),.ce(1'b1),.arst_n(rstn_pixel),.rgb(fused_rgb),
+         .fusion_enable(final_fusion_enable),.fusion_active(fusion_frame_ok),.fusion_age(fusion_age_frames),.fusion_age_valid(fusion_eligible),
+         .de(sobel_de),.hs(sobel_hs),.vs(sobel_vs),.threshold(display_threshold),
+         .mode(display_mode),.out_rgb(osd_rgb),.out_de(osd_de),.out_hs(osd_hs),.out_vs(osd_vs));
+@@ -1065,13 +1057,6 @@
+         .tap_frame_id(tap_frame_id),.tap_epoch(tap_epoch),.tap_timestamp(tap_timestamp),.tap_display_seq(tap_display_seq),.tap_config_generation(tap_config_generation),
+         .fusion_tap_valid(fusion_tap_valid),.fusion_tap_qualified(fusion_tap_qualified),.fusion_tap_support(fusion_tap_support),
+         .out_x(final_x),.out_y(final_y),.out_overlay_valid(),.out_overlay_edge(),.out_nms_valid(),.out_canny_valid(shape_support),.out_canny_edge(local_edge),.raster_fault(shape_raster_fault));
+-    shape_stream_adapter_contract_v2 u_shape(.clk(clk_pixel),.rst_n(rstn_pixel),.ce(1'b1),
+-      .source_sof(control_vs_d&&!lcd_vs),.source_de(lcd_de),.source_qualified(m5b1_lcd_qualified&&source_generation!=64'hffffffffffffffff&&source_filter!=3&&source_mode!=7),
+-      .source_frame_id(m5b1_lcd_frame_id),.source_epoch(m5b1_lcd_epoch),.source_config(source_generation),.source_display_seq(display_seq),
+-      .final_de(sobel_de),.final_support(shape_support),.final_edge(local_edge),.final_raster_fault(shape_raster_fault),.final_x(final_x),.final_y(final_y),
+-      .display_class(shape_class),.display_valid(shape_valid),.display_frame_id(),.display_epoch(shape_display_epoch),.display_config(shape_display_config),.display_source_seq(),
+-      .result_done(),.result_valid(),.result_class(),.result_frame_id(),.result_epoch(),.result_config(),.result_source_seq(),
+-      .adapter_fault(),.recognition_sof(),.recognition_eof(),.aligned_frame_id(),.aligned_epoch(),.aligned_config(),.aligned_source_seq(),.aligned_qualified());
+     m5c_fusion_display u_fusion_display(.context_block(fusion_context_block),.context_quiet(fusion_context_quiet),.context_tail_fault(fusion_context_tail_fault),.clk(clk_pixel),.rst_n(rstn_pixel),.ce(1'b1),.raw_sof(control_vs_d&&!lcd_vs),
+         .stop(fusion_stop_sync[1]),.enable(fusion_enable),.export_status(fusion_export_sync[1]),.ddr_error_status(fusion_ddr_error_sync[1]),.hardstop_status(fusion_hardstop_sync[1]),.epoch(m5b1_epoch),.config_generation(source_generation),
+         .high_threshold(source_threshold),.filter_enable(source_filter),.final_enable(final_fusion_enable),
+@@ -1088,9 +1073,6 @@
+         .diag_shadow_valid(diag_sv),.diag_shadow64(diag_s64),.diag_shadow128(diag_s128),.diag_strong_loss(diag_sl),.diag_illegal(diag_il),
+         .promoted(fusion_promoted),.frame_ok(fusion_frame_ok),.frame_done(fusion_frame_done),.telemetry_snapshot(fusion_telemetry_snapshot));
+ 
+-    // Complete class follows the same CE-aligned 1653-entry delay as row fusion.
+-    m5a_packet_delay #(.BITS(2),.DELAY(1652)) pair_class_delay(.clk(clk_pixel),.rst_n(rstn_pixel),.ce(1'b1),.in_packet(diag_class),.out_packet(pair_final_class),.out_ready());
+-
+ 	//	HDMI Interface. 
+ 	
+ 	//	HDMI requires specific timing, thus is not compatible with LCD & LVDS & DSI. Must implement standalone. 
+
+--- efinity/gaussian_shape_cap_i3/src/cmos_i2c/I2C_AR0135_1280720_Config.v
++++ efinity/canny_gaussian_standalone_i3/src/cmos_i2c/I2C_AR0135_1280720_Config.v
+@@ -53,7 +53,7 @@
+     
+     16 :    LUT_DATA    =   {16'h30A2, 16'h0001};  //X_ODD_INC
+     17 :    LUT_DATA    =   {16'h30A6, 16'h0001};  //Y_ODD_INC
+-    18 :    LUT_DATA    =   {16'h3040, 16'h8000};  //READ_MODE
++    18 :    LUT_DATA    =   {16'h3040, 16'hC000};  //READ_MODE
+     19 :    LUT_DATA    =   {16'h3028, 16'h0010};  //ROW_SPEED
+     
+     //Manual Gain & Expsoure Parameter
+
+--- efinity/gaussian_shape_cap_i3/Ti60_Demo.xml
++++ efinity/canny_gaussian_standalone_i3/Ti60_Demo.xml
+@@ -1,4 +1,4 @@
+-<efx:project xmlns:efx="http://www.efinixinc.com/enf_proj" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="Ti60_Demo" description="" last_change="1792403606" sw_version="2025.1.110.5.9" last_run_state="pass" last_run_flow="syn" config_result_in_sync="sync" design_ood="sync" place_ood="sync" route_ood="sync" xsi:schemaLocation="http://www.efinixinc.com/enf_proj enf_proj.xsd">
++<efx:project xmlns:efx="http://www.efinixinc.com/enf_proj" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="Ti60_Demo" description="" last_change="1792662589" sw_version="2025.1.110.5.9" last_run_state="pass" last_run_flow="bitstream" config_result_in_sync="sync" design_ood="sync" place_ood="sync" route_ood="sync" xsi:schemaLocation="http://www.efinixinc.com/enf_proj enf_proj.xsd">
+   <efx:device_info>
+     <efx:family name="Titanium" />
+     <efx:device name="Ti60F225" />
+@@ -6,72 +6,64 @@
+   </efx:device_info>
+   <efx:design_info def_veri_version="verilog_2k" def_vhdl_version="vhdl_2008" unified_flow="false">
+     <efx:top_module name="example_top" />
+-    <efx:design_file name="F:/Projects/stareye_fpga/rtl/gaussian_cap_integration/shape/shape_recognizer_epoch.sv" version="system_verilog" library="default" />
+-    <efx:design_file name="F:/Projects/stareye_fpga/rtl/gaussian_integration/shape/shape_stream_adapter_contract_v2.sv" version="system_verilog" library="default" />
+-
+-    <efx:design_file name="F:/Projects/stareye_fpga/rtl/gaussian_integration/pair/m5c_pair_capture.sv" version="system_verilog" library="default" />
+-    <efx:design_file name="F:/Projects/stareye_fpga/rtl/gaussian_integration/pair/m5c_pair_controller.sv" version="system_verilog" library="default" />
+-    <efx:design_file name="F:/Projects/stareye_fpga/efinity/gaussian_shape_cap_i3/example_top.v" version="default" library="default" />
+-    <efx:design_file name="F:/Projects/stareye_fpga/efinity/gaussian_shape_cap_i3/src/cmos_i2c/i2c_timing_ctrl_16bit.v" version="default" library="default" />
+-    <efx:design_file name="F:/Projects/stareye_fpga/efinity/gaussian_shape_cap_i3/src/cmos_i2c/CMOS_Capture_RAW_Gray.v" version="default" library="default" />
+-    <efx:design_file name="F:/Projects/stareye_fpga/efinity/gaussian_shape_cap_i3/src/cmos_i2c/I2C_MT9M001_Gray_Config.v" version="default" library="default" />
+-    <efx:design_file name="F:/Projects/stareye_fpga/efinity/gaussian_shape_cap_i3/src/lcd_para.v" version="default" library="default" />
+-    <efx:design_file name="F:/Projects/stareye_fpga/efinity/gaussian_shape_cap_i3/src/lcd_driver.v" version="default" library="default" />
+-    <efx:design_file name="F:/Projects/stareye_fpga/efinity/gaussian_shape_cap_i3/src/hdmi_ip/hdmi_tx_ip.v" version="default" library="default" />
+-    <efx:design_file name="F:/Projects/stareye_fpga/efinity/gaussian_shape_cap_i3/src/hdmi_ip/encode.v" version="default" library="default" />
+-    <efx:design_file name="F:/Projects/stareye_fpga/efinity/gaussian_shape_cap_i3/src/hdmi_ip/serdes_4b_10to1.v" version="default" library="default" />
+-    <efx:design_file name="F:/Projects/stareye_fpga/efinity/gaussian_shape_cap_i3/src/cmos_i2c/I2C_SC130GS_12801024_4Lanes_Config.v" version="default" library="default" />
+-    <efx:design_file name="F:/Projects/stareye_fpga/efinity/gaussian_shape_cap_i3/src/PWMLite.v" version="default" library="default" />
+-    <efx:design_file name="F:/Projects/stareye_fpga/efinity/gaussian_shape_cap_i3/src/lcd_display.v" version="default" library="default" />
+-    <efx:design_file name="F:/Projects/stareye_fpga/efinity/gaussian_shape_cap_i3/src/dsi/dsi_init.v" version="default" library="default" />
+-    <efx:design_file name="F:/Projects/stareye_fpga/efinity/gaussian_shape_cap_i3/src/Sensor_Image_XYCrop.v" version="default" library="default" />
+-    <efx:design_file name="F:/Projects/stareye_fpga/efinity/gaussian_shape_cap_i3/src/cmos_i2c/i2c_timing_ctrl_reg16_dat16.v" version="default" library="default" />
+-    <efx:design_file name="F:/Projects/stareye_fpga/efinity/gaussian_shape_cap_i3/src/cmos_i2c/I2C_AR0135_1280720_Config.v" version="default" library="default" />
+-    <efx:design_file name="F:/Projects/stareye_fpga/efinity/gaussian_shape_cap_i3/src/lvds/LCDDual2LVDS.v" version="default" library="default" />
+-    <efx:design_file name="F:/Projects/stareye_fpga/efinity/gaussian_shape_cap_i3/src/hdmi_ip/tmds_channel.v" version="default" library="default" />
+-    <efx:design_file name="F:/Projects/stareye_fpga/efinity/gaussian_shape_cap_i3/src/hdmi_ip/rgb2dvi.v" version="default" library="default" />
+-    <efx:design_file name="F:/Projects/stareye_fpga/rtl/gaussian_integration/m5a_copy/m5a_centered_sobel.v" version="default" library="default" />
+-    <efx:design_file name="F:/Projects/stareye_fpga/rtl/gaussian_integration/m5a_copy/m5a_colorize.v" version="default" library="default" />
+-    <efx:design_file name="F:/Projects/stareye_fpga/rtl/gaussian_integration/m5a_copy/m5a_controls.v" version="default" library="default" />
+-    <efx:design_file name="F:/Projects/stareye_fpga/rtl/gaussian_integration/m5a_copy/m5a_direction.v" version="default" library="default" />
+-    <efx:design_file name="F:/Projects/stareye_fpga/rtl/gaussian_integration/m5a_copy/m5a_dual_threshold.v" version="default" library="default" />
+-    <efx:design_file name="F:/Projects/stareye_fpga/rtl/gaussian_integration/m5a_copy/m5a_legacy_threshold.v" version="default" library="default" />
+-    <efx:design_file name="F:/Projects/stareye_fpga/rtl/gaussian_integration/m5a_copy/m5a_line_buffer.v" version="default" library="default" />
+-    <efx:design_file name="F:/Projects/stareye_fpga/rtl/gaussian_integration/m5a_copy/m5a_local_hysteresis.v" version="default" library="default" />
+-    <efx:design_file name="F:/Projects/stareye_fpga/rtl/gaussian_integration/m5a_copy/m5a_m32_stream.v" version="default" library="default" />
+-    <efx:design_file name="F:/Projects/stareye_fpga/rtl/gaussian_integration/m5a_copy/m5a_median.v" version="default" library="default" />
+-    <efx:design_file name="F:/Projects/stareye_fpga/rtl/gaussian_integration/m5a_copy/m5a_median_stream.v" version="default" library="default" />
+-    <efx:design_file name="F:/Projects/stareye_fpga/rtl/gaussian_integration/m5a_copy/m5a_neighborhood.v" version="default" library="default" />
+-    <efx:design_file name="F:/Projects/stareye_fpga/rtl/gaussian_integration/m5a_copy/m5a_nms.v" version="default" library="default" />
+-    <efx:design_file name="F:/Projects/stareye_fpga/rtl/gaussian_integration/shape/shape_osd.sv" version="system_verilog" library="default" />
+-    <efx:design_file name="F:/Projects/stareye_fpga/rtl/gaussian_integration/m5a_copy/m5a_packet_delay.v" version="default" library="default" />
+-    <efx:design_file name="F:/Projects/stareye_fpga/rtl/gaussian_integration/m5a_copy/m5a_sobel.v" version="default" library="default" />
+-    <efx:design_file name="F:/Projects/stareye_fpga/rtl/gaussian_integration/m5a_copy/m5a_sobel_stream.v" version="default" library="default" />
+-    <efx:design_file name="F:/Projects/stareye_fpga/rtl/gaussian_integration/m5a_copy/m5a_stream_top.v" version="default" library="default" />
+-    <efx:design_file name="F:/Projects/stareye_fpga/rtl/gaussian_integration/m5a_copy/m5a_window.v" version="default" library="default" />
+-    <efx:design_file name="F:/Projects/stareye_fpga/rtl/gaussian_integration/pair/m5c_pair_arbiter.sv" version="system_verilog" library="default" />
+-    <efx:design_file name="F:/Projects/stareye_fpga/rtl/gaussian_integration/m5c/m5b1_async_fifo.sv" version="system_verilog" library="default" />
+-    <efx:design_file name="F:/Projects/stareye_fpga/rtl/gaussian_integration/pair/m5c_pair_backend.sv" version="system_verilog" library="default" />
+-    <efx:design_file name="F:/Projects/stareye_fpga/rtl/gaussian_integration/m5c/m5b1_capture.sv" version="system_verilog" library="default" />
+-    <efx:design_file name="F:/Projects/stareye_fpga/rtl/gaussian_integration/m5c/m5b1_failstop.sv" version="system_verilog" library="default" />
+-    <efx:design_file name="F:/Projects/stareye_fpga/rtl/gaussian_integration/m5c/m5b1_global_engine.sv" version="system_verilog" library="default" />
+-    <efx:design_file name="F:/Projects/stareye_fpga/rtl/gaussian_integration/m5c/m5b1_mailbox.sv" version="system_verilog" library="default" />
+-    <efx:design_file name="F:/Projects/stareye_fpga/rtl/gaussian_integration/shape/shape_pair_system_guard.sv" version="system_verilog" library="default" />
+-    <efx:design_file name="F:/Projects/stareye_fpga/rtl/gaussian_integration/m5c/m5b1_transfer.sv" version="system_verilog" library="default" />
+-    <efx:design_file name="F:/Projects/stareye_fpga/rtl/gaussian_integration/m5c/m5b1_uart.sv" version="system_verilog" library="default" />
+-    <efx:design_file name="F:/Projects/stareye_fpga/rtl/gaussian_integration/m5c/m5b1_video_dma.sv" version="system_verilog" library="default" />
+-
+-    <efx:design_file name="F:/Projects/stareye_fpga/rtl/gaussian_integration/pair/m5c_pair_diag_lease.sv" version="system_verilog" library="default" />
+-    <efx:design_file name="F:/Projects/stareye_fpga/rtl/gaussian_integration/m5c/m5c_age_guard.sv" version="system_verilog" library="default" />
+-    <efx:design_file name="F:/Projects/stareye_fpga/rtl/gaussian_integration/m5c/m5c_row_fusion.sv" version="system_verilog" library="default" />
+-    <efx:design_file name="F:/Projects/stareye_fpga/rtl/gaussian_integration/m5c/m5c_bg_mux.sv" version="system_verilog" library="default" />
+-    <efx:design_file name="F:/Projects/stareye_fpga/rtl/gaussian_integration/m5c/m5c_mask_reader.sv" version="system_verilog" library="default" />
+-    <efx:design_file name="F:/Projects/stareye_fpga/rtl/gaussian_integration/m5c/m5c_line_cache.sv" version="system_verilog" library="default" />
+-    <efx:design_file name="F:/Projects/stareye_fpga/rtl/gaussian_integration/m5c/m5c_display_session.sv" version="system_verilog" library="default" />
+-    <efx:design_file name="F:/Projects/stareye_fpga/rtl/gaussian_integration/m5c/m5c_fusion_display.sv" version="system_verilog" library="default" />
+-    <efx:design_file name="F:/Projects/stareye_fpga/rtl/gaussian_integration/shape/shape_telemetry_guard.sv" version="system_verilog" library="default" />
+-    <efx:design_file name="F:/Projects/stareye_fpga/rtl/gaussian_integration/filter/gaussian_3x3.v" version="default" library="default" />
+-    <efx:design_file name="F:/Projects/stareye_fpga/rtl/gaussian_integration/filter/gaussian_median_stream.v" version="default" library="default" />
++    <efx:design_file name="F:/Projects/stareye_fpga/rtl/canny_gaussian_standalone/filter/gaussian_3x3.v" version="default" library="default" />
++    <efx:design_file name="F:/Projects/stareye_fpga/rtl/canny_gaussian_standalone/filter/gaussian_median_stream.v" version="default" library="default" />
++    <efx:design_file name="F:/Projects/stareye_fpga/rtl/canny_gaussian_standalone/m5a_copy/m5a_centered_sobel.v" version="default" library="default" />
++    <efx:design_file name="F:/Projects/stareye_fpga/rtl/canny_gaussian_standalone/m5a_copy/m5a_colorize.v" version="default" library="default" />
++    <efx:design_file name="F:/Projects/stareye_fpga/rtl/canny_gaussian_standalone/m5a_copy/m5a_controls.v" version="default" library="default" />
++    <efx:design_file name="F:/Projects/stareye_fpga/rtl/canny_gaussian_standalone/m5a_copy/m5a_direction.v" version="default" library="default" />
++    <efx:design_file name="F:/Projects/stareye_fpga/rtl/canny_gaussian_standalone/m5a_copy/m5a_dual_threshold.v" version="default" library="default" />
++    <efx:design_file name="F:/Projects/stareye_fpga/rtl/canny_gaussian_standalone/m5a_copy/m5a_legacy_threshold.v" version="default" library="default" />
++    <efx:design_file name="F:/Projects/stareye_fpga/rtl/canny_gaussian_standalone/m5a_copy/m5a_line_buffer.v" version="default" library="default" />
++    <efx:design_file name="F:/Projects/stareye_fpga/rtl/canny_gaussian_standalone/m5a_copy/m5a_local_hysteresis.v" version="default" library="default" />
++    <efx:design_file name="F:/Projects/stareye_fpga/rtl/canny_gaussian_standalone/m5a_copy/m5a_m32_stream.v" version="default" library="default" />
++    <efx:design_file name="F:/Projects/stareye_fpga/rtl/canny_gaussian_standalone/m5a_copy/m5a_median.v" version="default" library="default" />
++    <efx:design_file name="F:/Projects/stareye_fpga/rtl/canny_gaussian_standalone/m5a_copy/m5a_median_stream.v" version="default" library="default" />
++    <efx:design_file name="F:/Projects/stareye_fpga/rtl/canny_gaussian_standalone/m5a_copy/m5a_neighborhood.v" version="default" library="default" />
++    <efx:design_file name="F:/Projects/stareye_fpga/rtl/canny_gaussian_standalone/m5a_copy/m5a_nms.v" version="default" library="default" />
++    <efx:design_file name="F:/Projects/stareye_fpga/rtl/canny_gaussian_standalone/m5a_copy/m5a_packet_delay.v" version="default" library="default" />
++    <efx:design_file name="F:/Projects/stareye_fpga/rtl/canny_gaussian_standalone/m5a_copy/m5a_sobel.v" version="default" library="default" />
++    <efx:design_file name="F:/Projects/stareye_fpga/rtl/canny_gaussian_standalone/m5a_copy/m5a_sobel_stream.v" version="default" library="default" />
++    <efx:design_file name="F:/Projects/stareye_fpga/rtl/canny_gaussian_standalone/m5a_copy/m5a_stream_top.v" version="default" library="default" />
++    <efx:design_file name="F:/Projects/stareye_fpga/rtl/canny_gaussian_standalone/m5a_copy/m5a_window.v" version="default" library="default" />
++    <efx:design_file name="F:/Projects/stareye_fpga/rtl/canny_gaussian_standalone/core/canny_backend.sv" version="system_verilog" library="default" />
++    <efx:design_file name="F:/Projects/stareye_fpga/rtl/canny_gaussian_standalone/core/canny_osd.sv" version="system_verilog" library="default" />
++    <efx:design_file name="F:/Projects/stareye_fpga/rtl/canny_gaussian_standalone/core/canny_system.sv" version="system_verilog" library="default" />
++    <efx:design_file name="F:/Projects/stareye_fpga/rtl/canny_gaussian_standalone/core/m5c_pair_arbiter.sv" version="system_verilog" library="default" />
++    <efx:design_file name="F:/Projects/stareye_fpga/rtl/canny_gaussian_standalone/core/m5c_pair_diag_lease.sv" version="system_verilog" library="default" />
++    <efx:design_file name="F:/Projects/stareye_fpga/rtl/canny_gaussian_standalone/m5c/m5b1_async_fifo.sv" version="system_verilog" library="default" />
++    <efx:design_file name="F:/Projects/stareye_fpga/rtl/canny_gaussian_standalone/m5c/m5b1_capture.sv" version="system_verilog" library="default" />
++    <efx:design_file name="F:/Projects/stareye_fpga/rtl/canny_gaussian_standalone/m5c/m5b1_failstop.sv" version="system_verilog" library="default" />
++    <efx:design_file name="F:/Projects/stareye_fpga/rtl/canny_gaussian_standalone/m5c/m5b1_global_engine.sv" version="system_verilog" library="default" />
++    <efx:design_file name="F:/Projects/stareye_fpga/rtl/canny_gaussian_standalone/m5c/m5b1_mailbox.sv" version="system_verilog" library="default" />
++    <efx:design_file name="F:/Projects/stareye_fpga/rtl/canny_gaussian_standalone/m5c/m5b1_transfer.sv" version="system_verilog" library="default" />
++    <efx:design_file name="F:/Projects/stareye_fpga/rtl/canny_gaussian_standalone/m5c/m5b1_video_dma.sv" version="system_verilog" library="default" />
++    <efx:design_file name="F:/Projects/stareye_fpga/rtl/canny_gaussian_standalone/m5c/m5c_age_guard.sv" version="system_verilog" library="default" />
++    <efx:design_file name="F:/Projects/stareye_fpga/rtl/canny_gaussian_standalone/m5c/m5c_bg_mux.sv" version="system_verilog" library="default" />
++    <efx:design_file name="F:/Projects/stareye_fpga/rtl/canny_gaussian_standalone/m5c/m5c_display_session.sv" version="system_verilog" library="default" />
++    <efx:design_file name="F:/Projects/stareye_fpga/rtl/canny_gaussian_standalone/m5c/m5c_fusion_display.sv" version="system_verilog" library="default" />
++    <efx:design_file name="F:/Projects/stareye_fpga/rtl/canny_gaussian_standalone/m5c/m5c_line_cache.sv" version="system_verilog" library="default" />
++    <efx:design_file name="F:/Projects/stareye_fpga/rtl/canny_gaussian_standalone/m5c/m5c_mask_reader.sv" version="system_verilog" library="default" />
++    <efx:design_file name="F:/Projects/stareye_fpga/rtl/canny_gaussian_standalone/m5c/m5c_row_fusion.sv" version="system_verilog" library="default" />
++    <efx:design_file name="F:/Projects/stareye_fpga/efinity/canny_gaussian_standalone_i3/example_top.v" version="default" library="default" />
++    <efx:design_file name="F:/Projects/stareye_fpga/efinity/canny_gaussian_standalone_i3/src/cmos_i2c/CMOS_Capture_RAW_Gray.v" version="default" library="default" />
++    <efx:design_file name="F:/Projects/stareye_fpga/efinity/canny_gaussian_standalone_i3/src/cmos_i2c/I2C_AR0135_1280720_Config.v" version="default" library="default" />
++    <efx:design_file name="F:/Projects/stareye_fpga/efinity/canny_gaussian_standalone_i3/src/cmos_i2c/I2C_MT9M001_Gray_Config.v" version="default" library="default" />
++    <efx:design_file name="F:/Projects/stareye_fpga/efinity/canny_gaussian_standalone_i3/src/cmos_i2c/I2C_SC130GS_12801024_4Lanes_Config.v" version="default" library="default" />
++    <efx:design_file name="F:/Projects/stareye_fpga/efinity/canny_gaussian_standalone_i3/src/cmos_i2c/i2c_timing_ctrl_16bit.v" version="default" library="default" />
++    <efx:design_file name="F:/Projects/stareye_fpga/efinity/canny_gaussian_standalone_i3/src/cmos_i2c/i2c_timing_ctrl_reg16_dat16.v" version="default" library="default" />
++    <efx:design_file name="F:/Projects/stareye_fpga/efinity/canny_gaussian_standalone_i3/src/dsi/dsi_init.v" version="default" library="default" />
++    <efx:design_file name="F:/Projects/stareye_fpga/efinity/canny_gaussian_standalone_i3/src/hdmi_ip/encode.v" version="default" library="default" />
++    <efx:design_file name="F:/Projects/stareye_fpga/efinity/canny_gaussian_standalone_i3/src/hdmi_ip/hdmi_tx_ip.v" version="default" library="default" />
++    <efx:design_file name="F:/Projects/stareye_fpga/efinity/canny_gaussian_standalone_i3/src/hdmi_ip/rgb2dvi.v" version="default" library="default" />
++    <efx:design_file name="F:/Projects/stareye_fpga/efinity/canny_gaussian_standalone_i3/src/hdmi_ip/serdes_4b_10to1.v" version="default" library="default" />
++    <efx:design_file name="F:/Projects/stareye_fpga/efinity/canny_gaussian_standalone_i3/src/hdmi_ip/tmds_channel.v" version="default" library="default" />
++    <efx:design_file name="F:/Projects/stareye_fpga/efinity/canny_gaussian_standalone_i3/src/lcd_display.v" version="default" library="default" />
++    <efx:design_file name="F:/Projects/stareye_fpga/efinity/canny_gaussian_standalone_i3/src/lcd_driver.v" version="default" library="default" />
++    <efx:design_file name="F:/Projects/stareye_fpga/efinity/canny_gaussian_standalone_i3/src/lcd_para.v" version="default" library="default" />
++    <efx:design_file name="F:/Projects/stareye_fpga/efinity/canny_gaussian_standalone_i3/src/lvds/LCDDual2LVDS.v" version="default" library="default" />
++    <efx:design_file name="F:/Projects/stareye_fpga/efinity/canny_gaussian_standalone_i3/src/PWMLite.v" version="default" library="default" />
++    <efx:design_file name="F:/Projects/stareye_fpga/efinity/canny_gaussian_standalone_i3/src/Sensor_Image_XYCrop.v" version="default" library="default" />
+     <efx:top_vhdl_arch name="" />
+   </efx:design_info>
+   <efx:constraint_info>
+@@ -141,7 +133,7 @@
+     <efx:param name="allow-const-ram-index" value="0" value_type="e_option" />
+     <efx:param name="hdl-compile-unit" value="1" value_type="e_option" />
+     <efx:param name="create-onehot-fsms" value="0" value_type="e_option" />
+-    <efx:param name="include" value="F:/Projects/stareye_fpga/rtl/gaussian_integration/m5c" value_type="e_string" />
++    <efx:param name="include" value="F:/Projects/stareye_fpga/rtl/canny_gaussian_standalone/m5c" value_type="e_string" />
+     <efx:param name="include" value="ip/W0_FIFO" value_type="e_string" />
+     <efx:param name="include" value="ip/R0_FIFO" value_type="e_string" />
+     <efx:param name="include" value="ip/dsi_tx" value_type="e_string" />
+
+--- efinity/gaussian_shape_cap_i3/Ti60_Demo_I3.sdc
++++ efinity/canny_gaussian_standalone_i3/Ti60_Demo_I3.sdc
+@@ -3435,12 +3435,8 @@
+ 
+ set m5b1_status_first [m5b1_exact {
+  {^u_m5b1/background/capture/cancel_meta\~FF\|D$}
+- {^u_m5b1/background/capture/over_sync\[0\]\~FF\|D$}
+- {^u_m5b1/background/dropped_sync\[0\]\~FF\|D$}
+  {^u_m5b1/video/cam_run\[0\]\~FF\|D$}
+- {^u_m5b1/video/camera_over_sync\[0\]\~FF\|D$}
+  {^u_m5b1/video/cf\[0\]\~FF\|D$}
+- {^u_m5b1/video/display_under_sync\[0\]\~FF\|D$}
+  {^u_m5b1/video/pf\[0\]\~FF\|D$}
+  {^u_m5b1/video/pix_run\[0\]\~FF\|D$}
+ } status_first]
+@@ -3618,6 +3614,164 @@
+ # u_m5b1/background/capture/descriptor_box
+ 
+ set m5c1b_held_0_source [m5b1_exact {
++ {^u_m5b1/background/capture/descriptor_box/held\[0\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[100\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[101\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[102\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[103\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[104\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[105\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[106\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[107\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[108\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[109\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[110\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[111\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[112\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[113\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[114\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[115\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[116\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[117\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[118\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[119\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[120\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[121\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[122\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[123\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[124\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[125\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[126\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[127\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[128\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[129\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[130\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[131\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[132\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[133\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[134\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[135\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[136\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[137\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[138\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[139\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[140\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[141\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[142\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[143\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[144\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[145\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[146\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[147\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[148\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[149\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[150\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[151\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[152\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[153\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[154\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[155\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[156\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[157\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[158\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[159\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[160\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[161\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[162\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[163\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[164\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[165\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[166\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[167\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[168\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[169\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[170\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[171\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[172\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[173\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[174\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[175\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[176\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[177\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[178\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[179\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[180\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[181\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[182\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[183\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[184\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[185\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[186\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[187\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[188\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[189\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[190\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[191\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[192\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[193\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[194\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[195\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[196\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[197\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[198\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[199\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[200\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[201\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[202\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[203\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[204\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[205\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[206\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[207\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[208\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[209\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[210\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[211\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[212\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[213\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[214\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[215\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[216\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[217\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[218\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[219\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[220\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[221\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[222\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[223\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[224\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[225\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[226\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[227\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[228\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[229\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[230\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[231\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[232\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[233\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[234\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[235\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[236\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[237\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[238\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[239\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[240\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[241\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[242\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[243\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[244\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[245\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[246\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[247\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[248\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[249\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[250\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[251\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[252\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[253\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[254\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[255\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[308\]\~FF\|CLK$}
+  {^u_m5b1/background/capture/descriptor_box/held\[320\]\~FF\|CLK$}
+  {^u_m5b1/background/capture/descriptor_box/held\[321\]\~FF\|CLK$}
+  {^u_m5b1/background/capture/descriptor_box/held\[322\]\~FF\|CLK$}
+@@ -3682,149 +3836,279 @@
+  {^u_m5b1/background/capture/descriptor_box/held\[381\]\~FF\|CLK$}
+  {^u_m5b1/background/capture/descriptor_box/held\[382\]\~FF\|CLK$}
+  {^u_m5b1/background/capture/descriptor_box/held\[383\]\~FF\|CLK$}
+- {^u_m5b1/background/capture/descriptor_box/held\[672\]\~FF\|CLK$}
+- {^u_m5b1/background/capture/descriptor_box/held\[673\]\~FF\|CLK$}
+- {^u_m5b1/background/capture/descriptor_box/held\[674\]\~FF\|CLK$}
+- {^u_m5b1/background/capture/descriptor_box/held\[675\]\~FF\|CLK$}
+- {^u_m5b1/background/capture/descriptor_box/held\[676\]\~FF\|CLK$}
+- {^u_m5b1/background/capture/descriptor_box/held\[677\]\~FF\|CLK$}
+- {^u_m5b1/background/capture/descriptor_box/held\[678\]\~FF\|CLK$}
+- {^u_m5b1/background/capture/descriptor_box/held\[679\]\~FF\|CLK$}
+- {^u_m5b1/background/capture/descriptor_box/held\[680\]\~FF\|CLK$}
+- {^u_m5b1/background/capture/descriptor_box/held\[681\]\~FF\|CLK$}
+- {^u_m5b1/background/capture/descriptor_box/held\[682\]\~FF\|CLK$}
+- {^u_m5b1/background/capture/descriptor_box/held\[683\]\~FF\|CLK$}
+- {^u_m5b1/background/capture/descriptor_box/held\[684\]\~FF\|CLK$}
+- {^u_m5b1/background/capture/descriptor_box/held\[685\]\~FF\|CLK$}
+- {^u_m5b1/background/capture/descriptor_box/held\[686\]\~FF\|CLK$}
+- {^u_m5b1/background/capture/descriptor_box/held\[687\]\~FF\|CLK$}
+- {^u_m5b1/background/capture/descriptor_box/held\[688\]\~FF\|CLK$}
+- {^u_m5b1/background/capture/descriptor_box/held\[689\]\~FF\|CLK$}
+- {^u_m5b1/background/capture/descriptor_box/held\[690\]\~FF\|CLK$}
+- {^u_m5b1/background/capture/descriptor_box/held\[691\]\~FF\|CLK$}
+- {^u_m5b1/background/capture/descriptor_box/held\[692\]\~FF\|CLK$}
+- {^u_m5b1/background/capture/descriptor_box/held\[693\]\~FF\|CLK$}
+- {^u_m5b1/background/capture/descriptor_box/held\[694\]\~FF\|CLK$}
+- {^u_m5b1/background/capture/descriptor_box/held\[695\]\~FF\|CLK$}
+- {^u_m5b1/background/capture/descriptor_box/held\[696\]\~FF\|CLK$}
+- {^u_m5b1/background/capture/descriptor_box/held\[697\]\~FF\|CLK$}
+- {^u_m5b1/background/capture/descriptor_box/held\[698\]\~FF\|CLK$}
+- {^u_m5b1/background/capture/descriptor_box/held\[699\]\~FF\|CLK$}
+- {^u_m5b1/background/capture/descriptor_box/held\[700\]\~FF\|CLK$}
+- {^u_m5b1/background/capture/descriptor_box/held\[701\]\~FF\|CLK$}
+- {^u_m5b1/background/capture/descriptor_box/held\[702\]\~FF\|CLK$}
+- {^u_m5b1/background/capture/descriptor_box/held\[703\]\~FF\|CLK$}
+- {^u_m5b1/background/capture/descriptor_box/held\[704\]\~FF\|CLK$}
+- {^u_m5b1/background/capture/descriptor_box/held\[705\]\~FF\|CLK$}
+- {^u_m5b1/background/capture/descriptor_box/held\[706\]\~FF\|CLK$}
+- {^u_m5b1/background/capture/descriptor_box/held\[707\]\~FF\|CLK$}
+- {^u_m5b1/background/capture/descriptor_box/held\[708\]\~FF\|CLK$}
+- {^u_m5b1/background/capture/descriptor_box/held\[709\]\~FF\|CLK$}
+- {^u_m5b1/background/capture/descriptor_box/held\[710\]\~FF\|CLK$}
+- {^u_m5b1/background/capture/descriptor_box/held\[711\]\~FF\|CLK$}
+- {^u_m5b1/background/capture/descriptor_box/held\[712\]\~FF\|CLK$}
+- {^u_m5b1/background/capture/descriptor_box/held\[713\]\~FF\|CLK$}
+- {^u_m5b1/background/capture/descriptor_box/held\[714\]\~FF\|CLK$}
+- {^u_m5b1/background/capture/descriptor_box/held\[715\]\~FF\|CLK$}
+- {^u_m5b1/background/capture/descriptor_box/held\[716\]\~FF\|CLK$}
+- {^u_m5b1/background/capture/descriptor_box/held\[717\]\~FF\|CLK$}
+- {^u_m5b1/background/capture/descriptor_box/held\[718\]\~FF\|CLK$}
+- {^u_m5b1/background/capture/descriptor_box/held\[719\]\~FF\|CLK$}
+- {^u_m5b1/background/capture/descriptor_box/held\[720\]\~FF\|CLK$}
+- {^u_m5b1/background/capture/descriptor_box/held\[721\]\~FF\|CLK$}
+- {^u_m5b1/background/capture/descriptor_box/held\[722\]\~FF\|CLK$}
+- {^u_m5b1/background/capture/descriptor_box/held\[723\]\~FF\|CLK$}
+- {^u_m5b1/background/capture/descriptor_box/held\[724\]\~FF\|CLK$}
+- {^u_m5b1/background/capture/descriptor_box/held\[725\]\~FF\|CLK$}
+- {^u_m5b1/background/capture/descriptor_box/held\[726\]\~FF\|CLK$}
+- {^u_m5b1/background/capture/descriptor_box/held\[727\]\~FF\|CLK$}
+- {^u_m5b1/background/capture/descriptor_box/held\[728\]\~FF\|CLK$}
+- {^u_m5b1/background/capture/descriptor_box/held\[729\]\~FF\|CLK$}
+- {^u_m5b1/background/capture/descriptor_box/held\[730\]\~FF\|CLK$}
+- {^u_m5b1/background/capture/descriptor_box/held\[731\]\~FF\|CLK$}
+- {^u_m5b1/background/capture/descriptor_box/held\[732\]\~FF\|CLK$}
+- {^u_m5b1/background/capture/descriptor_box/held\[733\]\~FF\|CLK$}
+- {^u_m5b1/background/capture/descriptor_box/held\[734\]\~FF\|CLK$}
+- {^u_m5b1/background/capture/descriptor_box/held\[735\]\~FF\|CLK$}
+- {^u_m5b1/background/capture/descriptor_box/held\[192\]\~FF\|CLK$}
+- {^u_m5b1/background/capture/descriptor_box/held\[513\]\~FF\|CLK$}
+- {^u_m5b1/background/capture/descriptor_box/held\[514\]\~FF\|CLK$}
+- {^u_m5b1/background/capture/descriptor_box/held\[515\]\~FF\|CLK$}
+- {^u_m5b1/background/capture/descriptor_box/held\[516\]\~FF\|CLK$}
+- {^u_m5b1/background/capture/descriptor_box/held\[517\]\~FF\|CLK$}
+- {^u_m5b1/background/capture/descriptor_box/held\[518\]\~FF\|CLK$}
+- {^u_m5b1/background/capture/descriptor_box/held\[519\]\~FF\|CLK$}
+- {^u_m5b1/background/capture/descriptor_box/held\[520\]\~FF\|CLK$}
+- {^u_m5b1/background/capture/descriptor_box/held\[521\]\~FF\|CLK$}
+- {^u_m5b1/background/capture/descriptor_box/held\[522\]\~FF\|CLK$}
+- {^u_m5b1/background/capture/descriptor_box/held\[523\]\~FF\|CLK$}
+- {^u_m5b1/background/capture/descriptor_box/held\[524\]\~FF\|CLK$}
+- {^u_m5b1/background/capture/descriptor_box/held\[525\]\~FF\|CLK$}
+- {^u_m5b1/background/capture/descriptor_box/held\[526\]\~FF\|CLK$}
+- {^u_m5b1/background/capture/descriptor_box/held\[527\]\~FF\|CLK$}
+- {^u_m5b1/background/capture/descriptor_box/held\[528\]\~FF\|CLK$}
+- {^u_m5b1/background/capture/descriptor_box/held\[529\]\~FF\|CLK$}
+- {^u_m5b1/background/capture/descriptor_box/held\[530\]\~FF\|CLK$}
+- {^u_m5b1/background/capture/descriptor_box/held\[531\]\~FF\|CLK$}
+- {^u_m5b1/background/capture/descriptor_box/held\[532\]\~FF\|CLK$}
+- {^u_m5b1/background/capture/descriptor_box/held\[533\]\~FF\|CLK$}
+- {^u_m5b1/background/capture/descriptor_box/held\[534\]\~FF\|CLK$}
+- {^u_m5b1/background/capture/descriptor_box/held\[535\]\~FF\|CLK$}
+- {^u_m5b1/background/capture/descriptor_box/held\[536\]\~FF\|CLK$}
+- {^u_m5b1/background/capture/descriptor_box/held\[537\]\~FF\|CLK$}
+- {^u_m5b1/background/capture/descriptor_box/held\[538\]\~FF\|CLK$}
+- {^u_m5b1/background/capture/descriptor_box/held\[539\]\~FF\|CLK$}
+- {^u_m5b1/background/capture/descriptor_box/held\[540\]\~FF\|CLK$}
+- {^u_m5b1/background/capture/descriptor_box/held\[541\]\~FF\|CLK$}
+- {^u_m5b1/background/capture/descriptor_box/held\[542\]\~FF\|CLK$}
+- {^u_m5b1/background/capture/descriptor_box/held\[543\]\~FF\|CLK$}
+- {^u_m5b1/background/capture/descriptor_box/held\[544\]\~FF\|CLK$}
+- {^u_m5b1/background/capture/descriptor_box/held\[545\]\~FF\|CLK$}
+- {^u_m5b1/background/capture/descriptor_box/held\[546\]\~FF\|CLK$}
+- {^u_m5b1/background/capture/descriptor_box/held\[547\]\~FF\|CLK$}
+- {^u_m5b1/background/capture/descriptor_box/held\[548\]\~FF\|CLK$}
+- {^u_m5b1/background/capture/descriptor_box/held\[549\]\~FF\|CLK$}
+- {^u_m5b1/background/capture/descriptor_box/held\[550\]\~FF\|CLK$}
+- {^u_m5b1/background/capture/descriptor_box/held\[551\]\~FF\|CLK$}
+- {^u_m5b1/background/capture/descriptor_box/held\[552\]\~FF\|CLK$}
+- {^u_m5b1/background/capture/descriptor_box/held\[553\]\~FF\|CLK$}
+- {^u_m5b1/background/capture/descriptor_box/held\[554\]\~FF\|CLK$}
+- {^u_m5b1/background/capture/descriptor_box/held\[555\]\~FF\|CLK$}
+- {^u_m5b1/background/capture/descriptor_box/held\[556\]\~FF\|CLK$}
+- {^u_m5b1/background/capture/descriptor_box/held\[557\]\~FF\|CLK$}
+- {^u_m5b1/background/capture/descriptor_box/held\[558\]\~FF\|CLK$}
+- {^u_m5b1/background/capture/descriptor_box/held\[559\]\~FF\|CLK$}
+- {^u_m5b1/background/capture/descriptor_box/held\[560\]\~FF\|CLK$}
+- {^u_m5b1/background/capture/descriptor_box/held\[561\]\~FF\|CLK$}
+- {^u_m5b1/background/capture/descriptor_box/held\[562\]\~FF\|CLK$}
+- {^u_m5b1/background/capture/descriptor_box/held\[563\]\~FF\|CLK$}
+- {^u_m5b1/background/capture/descriptor_box/held\[564\]\~FF\|CLK$}
+- {^u_m5b1/background/capture/descriptor_box/held\[565\]\~FF\|CLK$}
+- {^u_m5b1/background/capture/descriptor_box/held\[566\]\~FF\|CLK$}
+- {^u_m5b1/background/capture/descriptor_box/held\[567\]\~FF\|CLK$}
+- {^u_m5b1/background/capture/descriptor_box/held\[568\]\~FF\|CLK$}
+- {^u_m5b1/background/capture/descriptor_box/held\[569\]\~FF\|CLK$}
+- {^u_m5b1/background/capture/descriptor_box/held\[570\]\~FF\|CLK$}
+- {^u_m5b1/background/capture/descriptor_box/held\[571\]\~FF\|CLK$}
+- {^u_m5b1/background/capture/descriptor_box/held\[572\]\~FF\|CLK$}
+- {^u_m5b1/background/capture/descriptor_box/held\[573\]\~FF\|CLK$}
+- {^u_m5b1/background/capture/descriptor_box/held\[574\]\~FF\|CLK$}
+- {^u_m5b1/background/capture/descriptor_box/held\[575\]\~FF\|CLK$}
+- {^u_m5b1/background/capture/descriptor_box/held\[615\]\~FF\|CLK$}
+- {^u_m5b1/background/capture/descriptor_box/held\[624\]\~FF\|CLK$}
+- {^u_m5b1/background/capture/descriptor_box/held\[625\]\~FF\|CLK$}
+- {^u_m5b1/background/capture/descriptor_box/held\[626\]\~FF\|CLK$}
+- {^u_m5b1/background/capture/descriptor_box/held\[627\]\~FF\|CLK$}
+- {^u_m5b1/background/capture/descriptor_box/held\[628\]\~FF\|CLK$}
+- {^u_m5b1/background/capture/descriptor_box/held\[629\]\~FF\|CLK$}
+- {^u_m5b1/background/capture/descriptor_box/held\[630\]\~FF\|CLK$}
+- {^u_m5b1/background/capture/descriptor_box/held\[631\]\~FF\|CLK$}
+- {^u_m5b1/background/capture/descriptor_box/held\[665\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[384\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[385\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[386\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[387\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[388\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[389\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[390\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[391\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[392\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[393\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[394\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[395\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[396\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[397\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[398\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[399\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[400\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[401\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[402\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[403\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[404\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[405\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[406\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[407\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[408\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[409\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[410\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[411\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[412\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[413\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[414\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[415\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[416\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[417\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[418\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[419\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[420\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[421\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[422\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[423\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[424\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[425\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[426\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[427\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[428\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[429\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[430\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[431\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[432\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[433\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[434\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[435\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[436\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[437\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[438\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[439\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[440\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[441\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[442\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[443\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[444\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[445\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[446\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[447\]\~FF\|CLK$}
+  {^u_m5b1/background/capture/descriptor_box/held\[602\]\~FF\|CLK$}
+  {^u_m5b1/background/capture/descriptor_box/held\[603\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[612\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[613\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[616\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[617\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[618\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[619\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[620\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[621\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[622\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[624\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[64\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[65\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[66\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[67\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[68\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[69\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[70\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[71\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[72\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[73\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[74\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[75\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[76\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[77\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[78\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[79\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[80\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[81\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[82\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[83\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[84\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[85\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[86\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[87\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[88\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[89\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[90\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[91\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[92\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[93\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[94\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[95\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[96\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[97\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[98\]\~FF\|CLK$}
++ {^u_m5b1/background/capture/descriptor_box/held\[99\]\~FF\|CLK$}
+ } m5c1b_held_0_source]
+ 
+ set m5c1b_held_0_destination [m5b1_exact {
++ {^u_m5b1/background/cap_descriptor\[0\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[100\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[101\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[102\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[103\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[104\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[105\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[106\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[107\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[108\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[109\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[110\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[111\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[112\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[113\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[114\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[115\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[116\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[117\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[118\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[119\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[120\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[121\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[122\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[123\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[124\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[125\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[126\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[127\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[128\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[129\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[130\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[131\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[132\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[133\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[134\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[135\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[136\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[137\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[138\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[139\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[140\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[141\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[142\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[143\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[144\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[145\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[146\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[147\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[148\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[149\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[150\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[151\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[152\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[153\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[154\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[155\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[156\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[157\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[158\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[159\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[160\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[161\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[162\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[163\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[164\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[165\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[166\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[167\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[168\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[169\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[170\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[171\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[172\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[173\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[174\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[175\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[176\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[177\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[178\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[179\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[180\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[181\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[182\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[183\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[184\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[185\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[186\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[187\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[188\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[189\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[190\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[191\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[192\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[193\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[194\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[195\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[196\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[197\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[198\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[199\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[200\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[201\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[202\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[203\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[204\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[205\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[206\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[207\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[208\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[209\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[210\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[211\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[212\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[213\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[214\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[215\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[216\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[217\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[218\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[219\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[220\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[221\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[222\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[223\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[224\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[225\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[226\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[227\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[228\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[229\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[230\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[231\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[232\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[233\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[234\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[235\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[236\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[237\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[238\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[239\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[240\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[241\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[242\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[243\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[244\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[245\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[246\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[247\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[248\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[249\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[250\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[251\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[252\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[253\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[254\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[255\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[308\]\~FF\|D$}
+  {^u_m5b1/background/cap_descriptor\[320\]\~FF\|D$}
+  {^u_m5b1/background/cap_descriptor\[321\]\~FF\|D$}
+  {^u_m5b1/background/cap_descriptor\[322\]\~FF\|D$}
+@@ -3889,146 +4173,118 @@
+  {^u_m5b1/background/cap_descriptor\[381\]\~FF\|D$}
+  {^u_m5b1/background/cap_descriptor\[382\]\~FF\|D$}
+  {^u_m5b1/background/cap_descriptor\[383\]\~FF\|D$}
+- {^u_m5b1/background/cap_descriptor\[672\]\~FF\|D$}
+- {^u_m5b1/background/cap_descriptor\[673\]\~FF\|D$}
+- {^u_m5b1/background/cap_descriptor\[674\]\~FF\|D$}
+- {^u_m5b1/background/cap_descriptor\[675\]\~FF\|D$}
+- {^u_m5b1/background/cap_descriptor\[676\]\~FF\|D$}
+- {^u_m5b1/background/cap_descriptor\[677\]\~FF\|D$}
+- {^u_m5b1/background/cap_descriptor\[678\]\~FF\|D$}
+- {^u_m5b1/background/cap_descriptor\[679\]\~FF\|D$}
+- {^u_m5b1/background/cap_descriptor\[680\]\~FF\|D$}
+- {^u_m5b1/background/cap_descriptor\[681\]\~FF\|D$}
+- {^u_m5b1/background/cap_descriptor\[682\]\~FF\|D$}
+- {^u_m5b1/background/cap_descriptor\[683\]\~FF\|D$}
+- {^u_m5b1/background/cap_descriptor\[684\]\~FF\|D$}
+- {^u_m5b1/background/cap_descriptor\[685\]\~FF\|D$}
+- {^u_m5b1/background/cap_descriptor\[686\]\~FF\|D$}
+- {^u_m5b1/background/cap_descriptor\[687\]\~FF\|D$}
+- {^u_m5b1/background/cap_descriptor\[688\]\~FF\|D$}
+- {^u_m5b1/background/cap_descriptor\[689\]\~FF\|D$}
+- {^u_m5b1/background/cap_descriptor\[690\]\~FF\|D$}
+- {^u_m5b1/background/cap_descriptor\[691\]\~FF\|D$}
+- {^u_m5b1/background/cap_descriptor\[692\]\~FF\|D$}
+- {^u_m5b1/background/cap_descriptor\[693\]\~FF\|D$}
+- {^u_m5b1/background/cap_descriptor\[694\]\~FF\|D$}
+- {^u_m5b1/background/cap_descriptor\[695\]\~FF\|D$}
+- {^u_m5b1/background/cap_descriptor\[696\]\~FF\|D$}
+- {^u_m5b1/background/cap_descriptor\[697\]\~FF\|D$}
+- {^u_m5b1/background/cap_descriptor\[698\]\~FF\|D$}
+- {^u_m5b1/background/cap_descriptor\[699\]\~FF\|D$}
+- {^u_m5b1/background/cap_descriptor\[700\]\~FF\|D$}
+- {^u_m5b1/background/cap_descriptor\[701\]\~FF\|D$}
+- {^u_m5b1/background/cap_descriptor\[702\]\~FF\|D$}
+- {^u_m5b1/background/cap_descriptor\[703\]\~FF\|D$}
+- {^u_m5b1/background/cap_descriptor\[704\]\~FF\|D$}
+- {^u_m5b1/background/cap_descriptor\[705\]\~FF\|D$}
+- {^u_m5b1/background/cap_descriptor\[706\]\~FF\|D$}
+- {^u_m5b1/background/cap_descriptor\[707\]\~FF\|D$}
+- {^u_m5b1/background/cap_descriptor\[708\]\~FF\|D$}
+- {^u_m5b1/background/cap_descriptor\[709\]\~FF\|D$}
+- {^u_m5b1/background/cap_descriptor\[710\]\~FF\|D$}
+- {^u_m5b1/background/cap_descriptor\[711\]\~FF\|D$}
+- {^u_m5b1/background/cap_descriptor\[712\]\~FF\|D$}
+- {^u_m5b1/background/cap_descriptor\[713\]\~FF\|D$}
+- {^u_m5b1/background/cap_descriptor\[714\]\~FF\|D$}
+- {^u_m5b1/background/cap_descriptor\[715\]\~FF\|D$}
+- {^u_m5b1/background/cap_descriptor\[716\]\~FF\|D$}
+- {^u_m5b1/background/cap_descriptor\[717\]\~FF\|D$}
+- {^u_m5b1/background/cap_descriptor\[718\]\~FF\|D$}
+- {^u_m5b1/background/cap_descriptor\[719\]\~FF\|D$}
+- {^u_m5b1/background/cap_descriptor\[720\]\~FF\|D$}
+- {^u_m5b1/background/cap_descriptor\[721\]\~FF\|D$}
+- {^u_m5b1/background/cap_descriptor\[722\]\~FF\|D$}
+- {^u_m5b1/background/cap_descriptor\[723\]\~FF\|D$}
+- {^u_m5b1/background/cap_descriptor\[724\]\~FF\|D$}
+- {^u_m5b1/background/cap_descriptor\[725\]\~FF\|D$}
+- {^u_m5b1/background/cap_descriptor\[726\]\~FF\|D$}
+- {^u_m5b1/background/cap_descriptor\[727\]\~FF\|D$}
+- {^u_m5b1/background/cap_descriptor\[728\]\~FF\|D$}
+- {^u_m5b1/background/cap_descriptor\[729\]\~FF\|D$}
+- {^u_m5b1/background/cap_descriptor\[730\]\~FF\|D$}
+- {^u_m5b1/background/cap_descriptor\[731\]\~FF\|D$}
+- {^u_m5b1/background/cap_descriptor\[732\]\~FF\|D$}
+- {^u_m5b1/background/cap_descriptor\[733\]\~FF\|D$}
+- {^u_m5b1/background/cap_descriptor\[734\]\~FF\|D$}
+- {^u_m5b1/background/cap_descriptor\[735\]\~FF\|D$}
+- {^u_m5b1/background/cap_descriptor\[192\]\~FF\|D$}
+- {^u_m5b1/background/cap_descriptor\[513\]\~FF\|D$}
+- {^u_m5b1/background/cap_descriptor\[514\]\~FF\|D$}
+- {^u_m5b1/background/cap_descriptor\[515\]\~FF\|D$}
+- {^u_m5b1/background/cap_descriptor\[516\]\~FF\|D$}
+- {^u_m5b1/background/cap_descriptor\[517\]\~FF\|D$}
+- {^u_m5b1/background/cap_descriptor\[518\]\~FF\|D$}
+- {^u_m5b1/background/cap_descriptor\[519\]\~FF\|D$}
+- {^u_m5b1/background/cap_descriptor\[520\]\~FF\|D$}
+- {^u_m5b1/background/cap_descriptor\[521\]\~FF\|D$}
+- {^u_m5b1/background/cap_descriptor\[522\]\~FF\|D$}
+- {^u_m5b1/background/cap_descriptor\[523\]\~FF\|D$}
+- {^u_m5b1/background/cap_descriptor\[524\]\~FF\|D$}
+- {^u_m5b1/background/cap_descriptor\[525\]\~FF\|D$}
+- {^u_m5b1/background/cap_descriptor\[526\]\~FF\|D$}
+- {^u_m5b1/background/cap_descriptor\[527\]\~FF\|D$}
+- {^u_m5b1/background/cap_descriptor\[528\]\~FF\|D$}
+- {^u_m5b1/background/cap_descriptor\[529\]\~FF\|D$}
+- {^u_m5b1/background/cap_descriptor\[530\]\~FF\|D$}
+- {^u_m5b1/background/cap_descriptor\[531\]\~FF\|D$}
+- {^u_m5b1/background/cap_descriptor\[532\]\~FF\|D$}
+- {^u_m5b1/background/cap_descriptor\[533\]\~FF\|D$}
+- {^u_m5b1/background/cap_descriptor\[534\]\~FF\|D$}
+- {^u_m5b1/background/cap_descriptor\[535\]\~FF\|D$}
+- {^u_m5b1/background/cap_descriptor\[536\]\~FF\|D$}
+- {^u_m5b1/background/cap_descriptor\[537\]\~FF\|D$}
+- {^u_m5b1/background/cap_descriptor\[538\]\~FF\|D$}
+- {^u_m5b1/background/cap_descriptor\[539\]\~FF\|D$}
+- {^u_m5b1/background/cap_descriptor\[540\]\~FF\|D$}
+- {^u_m5b1/background/cap_descriptor\[541\]\~FF\|D$}
+- {^u_m5b1/background/cap_descriptor\[542\]\~FF\|D$}
+- {^u_m5b1/background/cap_descriptor\[543\]\~FF\|D$}
+- {^u_m5b1/background/cap_descriptor\[544\]\~FF\|D$}
+- {^u_m5b1/background/cap_descriptor\[545\]\~FF\|D$}
+- {^u_m5b1/background/cap_descriptor\[546\]\~FF\|D$}
+- {^u_m5b1/background/cap_descriptor\[547\]\~FF\|D$}
+- {^u_m5b1/background/cap_descriptor\[548\]\~FF\|D$}
+- {^u_m5b1/background/cap_descriptor\[549\]\~FF\|D$}
+- {^u_m5b1/background/cap_descriptor\[550\]\~FF\|D$}
+- {^u_m5b1/background/cap_descriptor\[551\]\~FF\|D$}
+- {^u_m5b1/background/cap_descriptor\[552\]\~FF\|D$}
+- {^u_m5b1/background/cap_descriptor\[553\]\~FF\|D$}
+- {^u_m5b1/background/cap_descriptor\[554\]\~FF\|D$}
+- {^u_m5b1/background/cap_descriptor\[555\]\~FF\|D$}
+- {^u_m5b1/background/cap_descriptor\[556\]\~FF\|D$}
+- {^u_m5b1/background/cap_descriptor\[557\]\~FF\|D$}
+- {^u_m5b1/background/cap_descriptor\[558\]\~FF\|D$}
+- {^u_m5b1/background/cap_descriptor\[559\]\~FF\|D$}
+- {^u_m5b1/background/cap_descriptor\[560\]\~FF\|D$}
+- {^u_m5b1/background/cap_descriptor\[561\]\~FF\|D$}
+- {^u_m5b1/background/cap_descriptor\[562\]\~FF\|D$}
+- {^u_m5b1/background/cap_descriptor\[563\]\~FF\|D$}
+- {^u_m5b1/background/cap_descriptor\[564\]\~FF\|D$}
+- {^u_m5b1/background/cap_descriptor\[565\]\~FF\|D$}
+- {^u_m5b1/background/cap_descriptor\[566\]\~FF\|D$}
+- {^u_m5b1/background/cap_descriptor\[567\]\~FF\|D$}
+- {^u_m5b1/background/cap_descriptor\[568\]\~FF\|D$}
+- {^u_m5b1/background/cap_descriptor\[569\]\~FF\|D$}
+- {^u_m5b1/background/cap_descriptor\[570\]\~FF\|D$}
+- {^u_m5b1/background/cap_descriptor\[571\]\~FF\|D$}
+- {^u_m5b1/background/cap_descriptor\[572\]\~FF\|D$}
+- {^u_m5b1/background/cap_descriptor\[573\]\~FF\|D$}
+- {^u_m5b1/background/cap_descriptor\[574\]\~FF\|D$}
+- {^u_m5b1/background/cap_descriptor\[575\]\~FF\|D$}
+- {^u_m5b1/background/cap_descriptor\[615\]\~FF\|D$}
+- {^u_m5b1/background/cap_descriptor\[624\]\~FF\|D$}
+- {^u_m5b1/background/cap_descriptor\[625\]\~FF\|D$}
+- {^u_m5b1/background/cap_descriptor\[626\]\~FF\|D$}
+- {^u_m5b1/background/cap_descriptor\[627\]\~FF\|D$}
+- {^u_m5b1/background/cap_descriptor\[628\]\~FF\|D$}
+- {^u_m5b1/background/cap_descriptor\[629\]\~FF\|D$}
+- {^u_m5b1/background/cap_descriptor\[630\]\~FF\|D$}
+- {^u_m5b1/background/cap_descriptor\[631\]\~FF\|D$}
+- {^u_m5b1/background/cap_descriptor\[665\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[384\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[385\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[386\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[387\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[388\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[389\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[390\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[391\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[392\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[393\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[394\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[395\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[396\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[397\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[398\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[399\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[400\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[401\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[402\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[403\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[404\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[405\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[406\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[407\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[408\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[409\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[410\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[411\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[412\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[413\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[414\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[415\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[416\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[417\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[418\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[419\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[420\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[421\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[422\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[423\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[424\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[425\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[426\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[427\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[428\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[429\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[430\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[431\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[432\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[433\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[434\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[435\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[436\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[437\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[438\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[439\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[440\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[441\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[442\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[443\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[444\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[445\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[446\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[447\]\~FF\|D$}
+  {^u_m5b1/background/cap_descriptor\[602\]\~FF\|D$}
+  {^u_m5b1/background/cap_descriptor\[603\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[612\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[613\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[616\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[617\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[618\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[619\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[620\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[621\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[622\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[624\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[64\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[65\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[66\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[67\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[68\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[69\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[70\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[71\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[72\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[73\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[74\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[75\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[76\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[77\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[78\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[79\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[80\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[81\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[82\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[83\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[84\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[85\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[86\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[87\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[88\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[89\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[90\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[91\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[92\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[93\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[94\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[95\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[96\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[97\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[98\]\~FF\|D$}
++ {^u_m5b1/background/cap_descriptor\[99\]\~FF\|D$}
+ } m5c1b_held_0_destination]
+ 
+ set_max_delay -from $m5c1b_held_0_source -to $m5c1b_held_0_destination 5.0
+@@ -4038,37 +4294,242 @@
+ # u_m5b1/fusion/active_tuple
+ 
+ set m5c1b_held_1_source [m5b1_exact {
++ {^u_m5b1/fusion/active_descriptor\[308\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_descriptor\[320\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_descriptor\[321\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_descriptor\[322\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_descriptor\[323\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_descriptor\[324\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_descriptor\[325\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_descriptor\[326\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_descriptor\[327\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_descriptor\[328\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_descriptor\[329\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_descriptor\[330\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_descriptor\[331\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_descriptor\[332\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_descriptor\[333\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_descriptor\[334\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_descriptor\[335\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_descriptor\[336\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_descriptor\[337\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_descriptor\[338\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_descriptor\[339\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_descriptor\[340\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_descriptor\[341\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_descriptor\[342\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_descriptor\[343\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_descriptor\[344\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_descriptor\[345\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_descriptor\[346\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_descriptor\[347\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_descriptor\[348\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_descriptor\[349\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_descriptor\[350\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_descriptor\[351\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_descriptor\[352\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_descriptor\[353\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_descriptor\[354\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_descriptor\[355\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_descriptor\[356\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_descriptor\[357\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_descriptor\[358\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_descriptor\[359\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_descriptor\[360\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_descriptor\[361\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_descriptor\[362\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_descriptor\[363\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_descriptor\[364\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_descriptor\[365\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_descriptor\[366\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_descriptor\[367\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_descriptor\[368\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_descriptor\[369\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_descriptor\[370\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_descriptor\[371\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_descriptor\[372\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_descriptor\[373\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_descriptor\[374\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_descriptor\[375\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_descriptor\[376\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_descriptor\[377\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_descriptor\[378\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_descriptor\[379\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_descriptor\[380\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_descriptor\[381\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_descriptor\[382\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_descriptor\[383\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_descriptor\[512\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_descriptor\[513\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_descriptor\[514\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_descriptor\[515\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_descriptor\[516\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_descriptor\[517\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_descriptor\[518\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_descriptor\[519\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_descriptor\[520\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_descriptor\[521\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_descriptor\[522\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_descriptor\[523\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_descriptor\[524\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_descriptor\[525\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_descriptor\[526\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_descriptor\[527\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_descriptor\[528\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_descriptor\[529\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_descriptor\[530\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_descriptor\[531\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_descriptor\[532\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_descriptor\[533\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_descriptor\[534\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_descriptor\[535\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_descriptor\[536\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_descriptor\[537\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_descriptor\[538\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_descriptor\[539\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_descriptor\[540\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_descriptor\[541\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_descriptor\[542\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_descriptor\[543\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_descriptor\[544\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_descriptor\[545\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_descriptor\[546\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_descriptor\[547\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_descriptor\[548\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_descriptor\[549\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_descriptor\[550\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_descriptor\[551\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_descriptor\[552\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_descriptor\[553\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_descriptor\[554\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_descriptor\[555\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_descriptor\[556\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_descriptor\[557\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_descriptor\[558\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_descriptor\[559\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_descriptor\[560\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_descriptor\[561\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_descriptor\[562\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_descriptor\[563\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_descriptor\[564\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_descriptor\[565\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_descriptor\[566\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_descriptor\[567\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_descriptor\[568\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_descriptor\[569\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_descriptor\[570\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_descriptor\[571\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_descriptor\[572\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_descriptor\[573\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_descriptor\[574\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_descriptor\[575\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_descriptor\[602\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_descriptor\[603\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_descriptor\[615\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_descriptor\[624\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_descriptor\[625\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_descriptor\[626\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_descriptor\[627\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_descriptor\[628\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_descriptor\[629\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_descriptor\[630\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_descriptor\[631\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_descriptor\[665\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_session\[0\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_session\[10\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_session\[11\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_session\[12\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_session\[13\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_session\[14\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_session\[15\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_session\[16\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_session\[17\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_session\[18\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_session\[19\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_session\[1\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_session\[20\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_session\[21\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_session\[22\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_session\[23\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_session\[24\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_session\[25\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_session\[26\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_session\[27\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_session\[28\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_session\[29\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_session\[2\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_session\[30\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_session\[31\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_session\[32\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_session\[33\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_session\[34\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_session\[35\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_session\[36\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_session\[37\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_session\[38\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_session\[39\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_session\[3\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_session\[40\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_session\[41\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_session\[42\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_session\[43\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_session\[44\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_session\[45\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_session\[46\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_session\[47\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_session\[48\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_session\[49\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_session\[4\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_session\[50\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_session\[51\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_session\[52\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_session\[53\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_session\[54\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_session\[55\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_session\[56\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_session\[57\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_session\[58\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_session\[59\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_session\[5\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_session\[60\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_session\[61\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_session\[62\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_session\[63\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_session\[6\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_session\[7\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_session\[8\]\~FF\|CLK$}
++ {^u_m5b1/fusion/active_session\[9\]\~FF\|CLK$}
+  {^u_m5b1/lease_identity\[0\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[708\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[709\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[710\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[711\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[712\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[713\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[714\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[715\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[716\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[717\]\~FF\|CLK$}
++ {^u_m5b1/lease_identity\[100\]\~FF\|CLK$}
++ {^u_m5b1/lease_identity\[101\]\~FF\|CLK$}
++ {^u_m5b1/lease_identity\[102\]\~FF\|CLK$}
++ {^u_m5b1/lease_identity\[103\]\~FF\|CLK$}
++ {^u_m5b1/lease_identity\[104\]\~FF\|CLK$}
++ {^u_m5b1/lease_identity\[105\]\~FF\|CLK$}
++ {^u_m5b1/lease_identity\[106\]\~FF\|CLK$}
++ {^u_m5b1/lease_identity\[107\]\~FF\|CLK$}
++ {^u_m5b1/lease_identity\[108\]\~FF\|CLK$}
++ {^u_m5b1/lease_identity\[109\]\~FF\|CLK$}
+  {^u_m5b1/lease_identity\[10\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[718\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[719\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[720\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[721\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[722\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[723\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[724\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[725\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[726\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[727\]\~FF\|CLK$}
++ {^u_m5b1/lease_identity\[110\]\~FF\|CLK$}
++ {^u_m5b1/lease_identity\[111\]\~FF\|CLK$}
++ {^u_m5b1/lease_identity\[112\]\~FF\|CLK$}
++ {^u_m5b1/lease_identity\[113\]\~FF\|CLK$}
++ {^u_m5b1/lease_identity\[114\]\~FF\|CLK$}
++ {^u_m5b1/lease_identity\[115\]\~FF\|CLK$}
++ {^u_m5b1/lease_identity\[116\]\~FF\|CLK$}
++ {^u_m5b1/lease_identity\[117\]\~FF\|CLK$}
++ {^u_m5b1/lease_identity\[118\]\~FF\|CLK$}
++ {^u_m5b1/lease_identity\[119\]\~FF\|CLK$}
+  {^u_m5b1/lease_identity\[11\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[728\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[729\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[730\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[731\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[732\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[733\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[734\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[735\]\~FF\|CLK$}
++ {^u_m5b1/lease_identity\[120\]\~FF\|CLK$}
++ {^u_m5b1/lease_identity\[121\]\~FF\|CLK$}
++ {^u_m5b1/lease_identity\[122\]\~FF\|CLK$}
++ {^u_m5b1/lease_identity\[123\]\~FF\|CLK$}
++ {^u_m5b1/lease_identity\[124\]\~FF\|CLK$}
++ {^u_m5b1/lease_identity\[125\]\~FF\|CLK$}
++ {^u_m5b1/lease_identity\[126\]\~FF\|CLK$}
++ {^u_m5b1/lease_identity\[127\]\~FF\|CLK$}
+  {^u_m5b1/lease_identity\[128\]\~FF\|CLK$}
+  {^u_m5b1/lease_identity\[129\]\~FF\|CLK$}
+  {^u_m5b1/lease_identity\[12\]\~FF\|CLK$}
+@@ -4255,251 +4716,46 @@
+  {^u_m5b1/lease_identity\[61\]\~FF\|CLK$}
+  {^u_m5b1/lease_identity\[62\]\~FF\|CLK$}
+  {^u_m5b1/lease_identity\[63\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[672\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[673\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[674\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[675\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[676\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[677\]\~FF\|CLK$}
++ {^u_m5b1/lease_identity\[64\]\~FF\|CLK$}
++ {^u_m5b1/lease_identity\[65\]\~FF\|CLK$}
++ {^u_m5b1/lease_identity\[66\]\~FF\|CLK$}
++ {^u_m5b1/lease_identity\[67\]\~FF\|CLK$}
++ {^u_m5b1/lease_identity\[68\]\~FF\|CLK$}
++ {^u_m5b1/lease_identity\[69\]\~FF\|CLK$}
+  {^u_m5b1/lease_identity\[6\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[678\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[679\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[680\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[681\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[682\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[683\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[684\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[685\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[686\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[687\]\~FF\|CLK$}
++ {^u_m5b1/lease_identity\[70\]\~FF\|CLK$}
++ {^u_m5b1/lease_identity\[71\]\~FF\|CLK$}
++ {^u_m5b1/lease_identity\[72\]\~FF\|CLK$}
++ {^u_m5b1/lease_identity\[73\]\~FF\|CLK$}
++ {^u_m5b1/lease_identity\[74\]\~FF\|CLK$}
++ {^u_m5b1/lease_identity\[75\]\~FF\|CLK$}
++ {^u_m5b1/lease_identity\[76\]\~FF\|CLK$}
++ {^u_m5b1/lease_identity\[77\]\~FF\|CLK$}
++ {^u_m5b1/lease_identity\[78\]\~FF\|CLK$}
++ {^u_m5b1/lease_identity\[79\]\~FF\|CLK$}
+  {^u_m5b1/lease_identity\[7\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[688\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[689\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[690\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[691\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[692\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[693\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[694\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[695\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[696\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[697\]\~FF\|CLK$}
++ {^u_m5b1/lease_identity\[80\]\~FF\|CLK$}
++ {^u_m5b1/lease_identity\[81\]\~FF\|CLK$}
++ {^u_m5b1/lease_identity\[82\]\~FF\|CLK$}
++ {^u_m5b1/lease_identity\[83\]\~FF\|CLK$}
++ {^u_m5b1/lease_identity\[84\]\~FF\|CLK$}
++ {^u_m5b1/lease_identity\[85\]\~FF\|CLK$}
++ {^u_m5b1/lease_identity\[86\]\~FF\|CLK$}
++ {^u_m5b1/lease_identity\[87\]\~FF\|CLK$}
++ {^u_m5b1/lease_identity\[88\]\~FF\|CLK$}
++ {^u_m5b1/lease_identity\[89\]\~FF\|CLK$}
+  {^u_m5b1/lease_identity\[8\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[698\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[699\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[700\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[701\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[702\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[703\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[704\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[705\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[706\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[707\]\~FF\|CLK$}
++ {^u_m5b1/lease_identity\[90\]\~FF\|CLK$}
++ {^u_m5b1/lease_identity\[91\]\~FF\|CLK$}
++ {^u_m5b1/lease_identity\[92\]\~FF\|CLK$}
++ {^u_m5b1/lease_identity\[93\]\~FF\|CLK$}
++ {^u_m5b1/lease_identity\[94\]\~FF\|CLK$}
++ {^u_m5b1/lease_identity\[95\]\~FF\|CLK$}
++ {^u_m5b1/lease_identity\[96\]\~FF\|CLK$}
++ {^u_m5b1/lease_identity\[97\]\~FF\|CLK$}
++ {^u_m5b1/lease_identity\[98\]\~FF\|CLK$}
++ {^u_m5b1/lease_identity\[99\]\~FF\|CLK$}
+  {^u_m5b1/lease_identity\[9\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[320\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[321\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[322\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[323\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[324\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[325\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[326\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[327\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[328\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[329\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[330\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[331\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[332\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[333\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[334\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[335\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[336\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[337\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[338\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[339\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[340\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[341\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[342\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[343\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[344\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[345\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[346\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[347\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[348\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[349\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[350\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[351\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[352\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[353\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[354\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[355\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[356\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[357\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[358\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[359\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[360\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[361\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[362\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[363\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[364\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[365\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[366\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[367\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[368\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[369\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[370\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[371\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[372\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[373\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[374\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[375\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[376\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[377\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[378\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[379\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[380\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[381\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[382\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[383\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[512\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[513\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[514\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[515\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[516\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[517\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[518\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[519\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[520\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[521\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[522\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[523\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[524\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[525\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[526\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[527\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[528\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[529\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[530\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[531\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[532\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[533\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[534\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[535\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[536\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[537\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[538\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[539\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[540\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[541\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[542\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[543\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[544\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[545\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[546\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[547\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[548\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[549\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[550\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[551\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[552\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[553\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[554\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[555\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[556\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[557\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[558\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[559\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[560\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[561\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[562\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[563\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[564\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[565\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[566\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[567\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[568\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[569\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[570\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[571\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[572\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[573\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[574\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[255\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[615\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[624\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[625\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[626\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[627\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[628\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[629\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[630\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[631\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[665\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_session\[0\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_session\[10\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_session\[11\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_session\[12\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_session\[13\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_session\[14\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_session\[15\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_session\[16\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_session\[17\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_session\[18\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_session\[19\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_session\[1\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_session\[20\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_session\[21\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_session\[22\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_session\[23\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_session\[24\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_session\[25\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_session\[26\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_session\[27\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_session\[28\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_session\[29\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_session\[2\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_session\[30\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_session\[31\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_session\[32\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_session\[33\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_session\[34\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_session\[35\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_session\[36\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_session\[37\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_session\[38\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_session\[39\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_session\[3\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_session\[40\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_session\[41\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_session\[42\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_session\[43\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_session\[44\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_session\[45\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_session\[46\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_session\[47\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_session\[48\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_session\[49\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_session\[4\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_session\[50\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_session\[51\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_session\[52\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_session\[53\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_session\[54\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_session\[55\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_session\[56\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_session\[57\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_session\[58\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_session\[59\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_session\[5\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_session\[60\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_session\[61\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_session\[62\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_session\[63\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_session\[6\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_session\[7\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_session\[8\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_session\[9\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[308\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[602\]\~FF\|CLK$}
+- {^u_m5b1/telemetry_descriptor\[603\]\~FF\|CLK$}
+ } m5c1b_held_1_source]
+ 
+ set m5c1b_held_1_destination [m5b1_exact {
+@@ -4596,6 +4852,7 @@
+  {^fusion_descriptor\[189\]\~FF\|D$}
+  {^fusion_descriptor\[190\]\~FF\|D$}
+  {^fusion_descriptor\[191\]\~FF\|D$}
++ {^fusion_descriptor\[308\]\~FF\|D$}
+  {^fusion_descriptor\[320\]\~FF\|D$}
+  {^fusion_descriptor\[321\]\~FF\|D$}
+  {^fusion_descriptor\[322\]\~FF\|D$}
+@@ -4787,7 +5044,9 @@
+  {^fusion_descriptor\[572\]\~FF\|D$}
+  {^fusion_descriptor\[573\]\~FF\|D$}
+  {^fusion_descriptor\[574\]\~FF\|D$}
+- {^fusion_descriptor\[255\]\~FF\|D$}
++ {^fusion_descriptor\[575\]\~FF\|D$}
++ {^fusion_descriptor\[602\]\~FF\|D$}
++ {^fusion_descriptor\[603\]\~FF\|D$}
+  {^fusion_descriptor\[615\]\~FF\|D$}
+  {^fusion_descriptor\[624\]\~FF\|D$}
+  {^fusion_descriptor\[625\]\~FF\|D$}
+@@ -4962,9 +5221,6 @@
+  {^fusion_session\[7\]\~FF\|D$}
+  {^fusion_session\[8\]\~FF\|D$}
+  {^fusion_session\[9\]\~FF\|D$}
+- {^fusion_descriptor\[308\]\~FF\|D$}
+- {^fusion_descriptor\[602\]\~FF\|D$}
+- {^fusion_descriptor\[603\]\~FF\|D$}
+ } m5c1b_held_1_destination]
+ 
+ set_max_delay -from $m5c1b_held_1_source -to $m5c1b_held_1_destination 5.0
+@@ -5668,6 +5924,9 @@
+  {^u_m5b1/fusion/request_box/held\[221\]\~FF\|CLK$}
+  {^u_m5b1/fusion/request_box/held\[222\]\~FF\|CLK$}
+  {^u_m5b1/fusion/request_box/held\[223\]\~FF\|CLK$}
++ {^u_m5b1/fusion/request_box/held\[26\]\~FF\|CLK$}
++ {^u_m5b1/fusion/request_box/held\[27\]\~FF\|CLK$}
++ {^u_m5b1/fusion/request_box/held\[39\]\~FF\|CLK$}
+  {^u_m5b1/fusion/request_box/held\[51\]\~FF\|CLK$}
+  {^u_m5b1/fusion/request_box/held\[52\]\~FF\|CLK$}
+  {^u_m5b1/fusion/request_box/held\[53\]\~FF\|CLK$}
+@@ -5678,9 +5937,6 @@
+  {^u_m5b1/fusion/request_box/held\[97\]\~FF\|CLK$}
+  {^u_m5b1/fusion/request_box/held\[98\]\~FF\|CLK$}
+  {^u_m5b1/fusion/request_box/held\[99\]\~FF\|CLK$}
+- {^u_m5b1/fusion/request_box/held\[26\]\~FF\|CLK$}
+- {^u_m5b1/fusion/request_box/held\[27\]\~FF\|CLK$}
+- {^u_m5b1/fusion/request_box/held\[39\]\~FF\|CLK$}
+ } m5c1b_held_12_source]
+ 
+ set m5c1b_held_12_destination [m5b1_exact {
+@@ -5808,6 +6064,9 @@
+  {^u_m5b1/fusion/req_data\[221\]\~FF\|D$}
+  {^u_m5b1/fusion/req_data\[222\]\~FF\|D$}
+  {^u_m5b1/fusion/req_data\[223\]\~FF\|D$}
++ {^u_m5b1/fusion/req_data\[26\]\~FF\|D$}
++ {^u_m5b1/fusion/req_data\[27\]\~FF\|D$}
++ {^u_m5b1/fusion/req_data\[39\]\~FF\|D$}
+  {^u_m5b1/fusion/req_data\[51\]\~FF\|D$}
+  {^u_m5b1/fusion/req_data\[52\]\~FF\|D$}
+  {^u_m5b1/fusion/req_data\[53\]\~FF\|D$}
+@@ -5818,9 +6077,6 @@
+  {^u_m5b1/fusion/req_data\[97\]\~FF\|D$}
+  {^u_m5b1/fusion/req_data\[98\]\~FF\|D$}
+  {^u_m5b1/fusion/req_data\[99\]\~FF\|D$}
+- {^u_m5b1/fusion/req_data\[26\]\~FF\|D$}
+- {^u_m5b1/fusion/req_data\[27\]\~FF\|D$}
+- {^u_m5b1/fusion/req_data\[39\]\~FF\|D$}
+ } m5c1b_held_12_destination]
+ 
+ set_max_delay -from $m5c1b_held_12_source -to $m5c1b_held_12_destination 5.0
+@@ -5829,143 +6085,11 @@
+ 
+ # u_m5b1/telemetry
+ 
+-set m5c1b_held_13_source [m5b1_exact {
+- {^u_m5b1/telemetry/held\[0\]\~FF\|CLK$}
+- {^u_m5b1/telemetry/held\[1\]\~FF\|CLK$}
+- {^u_m5b1/telemetry/held\[2\]\~FF\|CLK$}
+- {^u_m5b1/telemetry/held\[3\]\~FF\|CLK$}
+- {^u_m5b1/telemetry/held\[4\]\~FF\|CLK$}
+- {^u_m5b1/telemetry/held\[5\]\~FF\|CLK$}
+- {^u_m5b1/telemetry/held\[6\]\~FF\|CLK$}
+- {^u_m5b1/telemetry/held\[7\]\~FF\|CLK$}
+- {^u_m5b1/telemetry/held\[8\]\~FF\|CLK$}
+- {^u_m5b1/telemetry/held\[9\]\~FF\|CLK$}
+- {^u_m5b1/telemetry/held\[10\]\~FF\|CLK$}
+- {^u_m5b1/telemetry/held\[11\]\~FF\|CLK$}
+- {^u_m5b1/telemetry/held\[12\]\~FF\|CLK$}
+- {^u_m5b1/telemetry/held\[13\]\~FF\|CLK$}
+- {^u_m5b1/telemetry/held\[14\]\~FF\|CLK$}
+- {^u_m5b1/telemetry/held\[15\]\~FF\|CLK$}
+- {^u_m5b1/telemetry/held\[16\]\~FF\|CLK$}
+- {^u_m5b1/telemetry/held\[17\]\~FF\|CLK$}
+- {^u_m5b1/telemetry/held\[18\]\~FF\|CLK$}
+- {^u_m5b1/telemetry/held\[19\]\~FF\|CLK$}
+- {^u_m5b1/telemetry/held\[20\]\~FF\|CLK$}
+- {^u_m5b1/telemetry/held\[21\]\~FF\|CLK$}
+- {^u_m5b1/telemetry/held\[22\]\~FF\|CLK$}
+- {^u_m5b1/telemetry/held\[23\]\~FF\|CLK$}
+- {^u_m5b1/telemetry/held\[24\]\~FF\|CLK$}
+- {^u_m5b1/telemetry/held\[25\]\~FF\|CLK$}
+- {^u_m5b1/telemetry/held\[26\]\~FF\|CLK$}
+- {^u_m5b1/telemetry/held\[27\]\~FF\|CLK$}
+- {^u_m5b1/telemetry/held\[28\]\~FF\|CLK$}
+- {^u_m5b1/telemetry/held\[29\]\~FF\|CLK$}
+- {^u_m5b1/telemetry/held\[30\]\~FF\|CLK$}
+- {^u_m5b1/telemetry/held\[31\]\~FF\|CLK$}
+- {^u_m5b1/telemetry/held\[32\]\~FF\|CLK$}
+- {^u_m5b1/telemetry/held\[33\]\~FF\|CLK$}
+- {^u_m5b1/telemetry/held\[34\]\~FF\|CLK$}
+- {^u_m5b1/telemetry/held\[35\]\~FF\|CLK$}
+- {^u_m5b1/telemetry/held\[36\]\~FF\|CLK$}
+- {^u_m5b1/telemetry/held\[37\]\~FF\|CLK$}
+- {^u_m5b1/telemetry/held\[38\]\~FF\|CLK$}
+- {^u_m5b1/telemetry/held\[39\]\~FF\|CLK$}
+- {^u_m5b1/telemetry/held\[40\]\~FF\|CLK$}
+- {^u_m5b1/telemetry/held\[41\]\~FF\|CLK$}
+- {^u_m5b1/telemetry/held\[42\]\~FF\|CLK$}
+- {^u_m5b1/telemetry/held\[43\]\~FF\|CLK$}
+- {^u_m5b1/telemetry/held\[44\]\~FF\|CLK$}
+- {^u_m5b1/telemetry/held\[45\]\~FF\|CLK$}
+- {^u_m5b1/telemetry/held\[46\]\~FF\|CLK$}
+- {^u_m5b1/telemetry/held\[47\]\~FF\|CLK$}
+- {^u_m5b1/telemetry/held\[48\]\~FF\|CLK$}
+- {^u_m5b1/telemetry/held\[49\]\~FF\|CLK$}
+- {^u_m5b1/telemetry/held\[50\]\~FF\|CLK$}
+- {^u_m5b1/telemetry/held\[51\]\~FF\|CLK$}
+- {^u_m5b1/telemetry/held\[52\]\~FF\|CLK$}
+- {^u_m5b1/telemetry/held\[53\]\~FF\|CLK$}
+- {^u_m5b1/telemetry/held\[54\]\~FF\|CLK$}
+- {^u_m5b1/telemetry/held\[55\]\~FF\|CLK$}
+- {^u_m5b1/telemetry/held\[56\]\~FF\|CLK$}
+- {^u_m5b1/telemetry/held\[57\]\~FF\|CLK$}
+- {^u_m5b1/telemetry/held\[58\]\~FF\|CLK$}
+- {^u_m5b1/telemetry/held\[59\]\~FF\|CLK$}
+- {^u_m5b1/telemetry/held\[60\]\~FF\|CLK$}
+- {^u_m5b1/telemetry/held\[61\]\~FF\|CLK$}
+- {^u_m5b1/telemetry/held\[62\]\~FF\|CLK$}
+- {^u_m5b1/telemetry/held\[63\]\~FF\|CLK$}
+-} m5c1b_held_13_source]
+-
+-set m5c1b_held_13_destination [m5b1_exact {
+- {^u_m5b1/telemetry/source_guard\[0\]\~FF\|D$}
+- {^u_m5b1/telemetry/source_guard\[1\]\~FF\|D$}
+- {^u_m5b1/telemetry/source_guard\[2\]\~FF\|D$}
+- {^u_m5b1/telemetry/source_guard\[3\]\~FF\|D$}
+- {^u_m5b1/telemetry/source_guard\[4\]\~FF\|D$}
+- {^u_m5b1/telemetry/source_guard\[5\]\~FF\|D$}
+- {^u_m5b1/telemetry/source_guard\[6\]\~FF\|D$}
+- {^u_m5b1/telemetry/source_guard\[7\]\~FF\|D$}
+- {^u_m5b1/telemetry/source_guard\[8\]\~FF\|D$}
+- {^u_m5b1/telemetry/source_guard\[9\]\~FF\|D$}
+- {^u_m5b1/telemetry/source_guard\[10\]\~FF\|D$}
+- {^u_m5b1/telemetry/source_guard\[11\]\~FF\|D$}
+- {^u_m5b1/telemetry/source_guard\[12\]\~FF\|D$}
+- {^u_m5b1/telemetry/source_guard\[13\]\~FF\|D$}
+- {^u_m5b1/telemetry/source_guard\[14\]\~FF\|D$}
+- {^u_m5b1/telemetry/source_guard\[15\]\~FF\|D$}
+- {^u_m5b1/telemetry/source_guard\[16\]\~FF\|D$}
+- {^u_m5b1/telemetry/source_guard\[17\]\~FF\|D$}
+- {^u_m5b1/telemetry/source_guard\[18\]\~FF\|D$}
+- {^u_m5b1/telemetry/source_guard\[19\]\~FF\|D$}
+- {^u_m5b1/telemetry/source_guard\[20\]\~FF\|D$}
+- {^u_m5b1/telemetry/source_guard\[21\]\~FF\|D$}
+- {^u_m5b1/telemetry/source_guard\[22\]\~FF\|D$}
+- {^u_m5b1/telemetry/source_guard\[23\]\~FF\|D$}
+- {^u_m5b1/telemetry/source_guard\[24\]\~FF\|D$}
+- {^u_m5b1/telemetry/source_guard\[25\]\~FF\|D$}
+- {^u_m5b1/telemetry/source_guard\[26\]\~FF\|D$}
+- {^u_m5b1/telemetry/source_guard\[27\]\~FF\|D$}
+- {^u_m5b1/telemetry/source_guard\[28\]\~FF\|D$}
+- {^u_m5b1/telemetry/source_guard\[29\]\~FF\|D$}
+- {^u_m5b1/telemetry/source_guard\[30\]\~FF\|D$}
+- {^u_m5b1/telemetry/source_guard\[31\]\~FF\|D$}
+- {^u_m5b1/telemetry/source_guard\[32\]\~FF\|D$}
+- {^u_m5b1/telemetry/source_guard\[33\]\~FF\|D$}
+- {^u_m5b1/telemetry/source_guard\[34\]\~FF\|D$}
+- {^u_m5b1/telemetry/source_guard\[35\]\~FF\|D$}
+- {^u_m5b1/telemetry/source_guard\[36\]\~FF\|D$}
+- {^u_m5b1/telemetry/source_guard\[37\]\~FF\|D$}
+- {^u_m5b1/telemetry/source_guard\[38\]\~FF\|D$}
+- {^u_m5b1/telemetry/source_guard\[39\]\~FF\|D$}
+- {^u_m5b1/telemetry/source_guard\[40\]\~FF\|D$}
+- {^u_m5b1/telemetry/source_guard\[41\]\~FF\|D$}
+- {^u_m5b1/telemetry/source_guard\[42\]\~FF\|D$}
+- {^u_m5b1/telemetry/source_guard\[43\]\~FF\|D$}
+- {^u_m5b1/telemetry/source_guard\[44\]\~FF\|D$}
+- {^u_m5b1/telemetry/source_guard\[45\]\~FF\|D$}
+- {^u_m5b1/telemetry/source_guard\[46\]\~FF\|D$}
+- {^u_m5b1/telemetry/source_guard\[47\]\~FF\|D$}
+- {^u_m5b1/telemetry/source_guard\[48\]\~FF\|D$}
+- {^u_m5b1/telemetry/source_guard\[49\]\~FF\|D$}
+- {^u_m5b1/telemetry/source_guard\[50\]\~FF\|D$}
+- {^u_m5b1/telemetry/source_guard\[51\]\~FF\|D$}
+- {^u_m5b1/telemetry/source_guard\[52\]\~FF\|D$}
+- {^u_m5b1/telemetry/source_guard\[53\]\~FF\|D$}
+- {^u_m5b1/telemetry/source_guard\[54\]\~FF\|D$}
+- {^u_m5b1/telemetry/source_guard\[55\]\~FF\|D$}
+- {^u_m5b1/telemetry/source_guard\[56\]\~FF\|D$}
+- {^u_m5b1/telemetry/source_guard\[57\]\~FF\|D$}
+- {^u_m5b1/telemetry/source_guard\[58\]\~FF\|D$}
+- {^u_m5b1/telemetry/source_guard\[59\]\~FF\|D$}
+- {^u_m5b1/telemetry/source_guard\[60\]\~FF\|D$}
+- {^u_m5b1/telemetry/source_guard\[61\]\~FF\|D$}
+- {^u_m5b1/telemetry/source_guard\[62\]\~FF\|D$}
+- {^u_m5b1/telemetry/source_guard\[63\]\~FF\|D$}
+-} m5c1b_held_13_destination]
+-
+-set_max_delay -from $m5c1b_held_13_source -to $m5c1b_held_13_destination 5.0
+-
+-set_false_path -hold -from $m5c1b_held_13_source -to $m5c1b_held_13_destination
++# Removed diagnostic group m5c1b_held_13_source
++
++# Removed diagnostic group m5c1b_held_13_destination
++
++
+ 
+ set m5c1b_new_status_first_stage [m5b1_exact {
+  {^fusion_ddr_error_sync\[0\]\~FF\|D$}
+@@ -5974,7 +6098,6 @@
+  {^fusion_stop_sync\[0\]\~FF\|D$}
+  {^u_m5b1/fusion/cap_drain_sync\[0\]\~FF\|D$}
+  {^u_m5b1/fusion/context_fault_sync\[0\]\~FF\|D$}
+- {^u_m5b1/telemetry/inflight_sync\[0\]\~FF\|D$}
+ } m5c1b_new_status_first_stage]
+ 
+ set_false_path -to $m5c1b_new_status_first_stage
+@@ -6006,8 +6129,6 @@
+  {^u_m5b1/fusion/request_box/req_sync\[0\]\~FF\|D$}
+  {^u_m5b1/fusion/revoke_ack_sync\[0\]\~FF\|D$}
+  {^u_m5b1/fusion/revoke_req_sync\[0\]\~FF\|D$}
+- {^u_m5b1/telemetry/snapshot_box/ack_sync\[0\]\~FF\|D$}
+- {^u_m5b1/telemetry/snapshot_box/req_sync\[0\]\~FF\|D$}
+ } m5c1b_new_toggle_first_stage]
+ 
+ set_false_path -to $m5c1b_new_toggle_first_stage
+@@ -6039,8 +6160,6 @@
+  {^u_m5b1/fusion/release_box/srelease\[1\]\~FF\|SR$}
+  {^u_m5b1/fusion/request_box/srelease\[0\]\~FF\|SR$}
+  {^u_m5b1/fusion/request_box/srelease\[1\]\~FF\|SR$}
+- {^u_m5b1/telemetry/snapshot_box/srelease\[0\]\~FF\|SR$}
+- {^u_m5b1/telemetry/snapshot_box/srelease\[1\]\~FF\|SR$}
+ } m5c1b_new_reset_release_async_entry]
+ 
+ set_false_path -to $m5c1b_new_reset_release_async_entry
+@@ -6049,394 +6168,35 @@
+ 
+ # Stage2 diagnostic exact groups; no ordinary D/CE/SR controls cut.
+ 
+-set pair_first_stage [m5b1_exact {
+- {^u_m5b1/pair_capture/arm_box/ack_sync\[0\]\~FF\|D$}
+- {^u_m5b1/pair_capture/arm_box/req_sync\[0\]\~FF\|D$}
+- {^u_m5b1/pair_capture/cancel_sync\[0\]\~FF\|D$}
+- {^u_m5b1/pair_capture/result_box/ack_sync\[0\]\~FF\|D$}
+- {^u_m5b1/pair_capture/result_box/req_sync\[0\]\~FF\|D$}
+- {^u_m5b1/pair_request_box/ack_sync\[0\]\~FF\|D$}
+- {^u_m5b1/pair_request_box/req_sync\[0\]\~FF\|D$}
+- {^u_m5b1/pair_terminal_pix\[0\]\~FF\|D$}
+- {^u_m5b1/pair_wait_expired_ui\[0\]\~FF\|D$}
+-} pair_first_stage]
+-
+-set pair_arm_source [m5b1_exact {
+- {^u_m5b1/pair_capture/arm_box/held\[0\]\~FF\|CLK$}
+- {^u_m5b1/pair_capture/arm_box/held\[10\]\~FF\|CLK$}
+- {^u_m5b1/pair_capture/arm_box/held\[11\]\~FF\|CLK$}
+- {^u_m5b1/pair_capture/arm_box/held\[12\]\~FF\|CLK$}
+- {^u_m5b1/pair_capture/arm_box/held\[13\]\~FF\|CLK$}
+- {^u_m5b1/pair_capture/arm_box/held\[14\]\~FF\|CLK$}
+- {^u_m5b1/pair_capture/arm_box/held\[15\]\~FF\|CLK$}
+- {^u_m5b1/pair_capture/arm_box/held\[16\]\~FF\|CLK$}
+- {^u_m5b1/pair_capture/arm_box/held\[17\]\~FF\|CLK$}
+- {^u_m5b1/pair_capture/arm_box/held\[18\]\~FF\|CLK$}
+- {^u_m5b1/pair_capture/arm_box/held\[19\]\~FF\|CLK$}
+- {^u_m5b1/pair_capture/arm_box/held\[1\]\~FF\|CLK$}
+- {^u_m5b1/pair_capture/arm_box/held\[20\]\~FF\|CLK$}
+- {^u_m5b1/pair_capture/arm_box/held\[21\]\~FF\|CLK$}
+- {^u_m5b1/pair_capture/arm_box/held\[22\]\~FF\|CLK$}
+- {^u_m5b1/pair_capture/arm_box/held\[23\]\~FF\|CLK$}
+- {^u_m5b1/pair_capture/arm_box/held\[24\]\~FF\|CLK$}
+- {^u_m5b1/pair_capture/arm_box/held\[25\]\~FF\|CLK$}
+- {^u_m5b1/pair_capture/arm_box/held\[26\]\~FF\|CLK$}
+- {^u_m5b1/pair_capture/arm_box/held\[27\]\~FF\|CLK$}
+- {^u_m5b1/pair_capture/arm_box/held\[28\]\~FF\|CLK$}
+- {^u_m5b1/pair_capture/arm_box/held\[29\]\~FF\|CLK$}
+- {^u_m5b1/pair_capture/arm_box/held\[2\]\~FF\|CLK$}
+- {^u_m5b1/pair_capture/arm_box/held\[30\]\~FF\|CLK$}
+- {^u_m5b1/pair_capture/arm_box/held\[31\]\~FF\|CLK$}
+- {^u_m5b1/pair_capture/arm_box/held\[32\]\~FF\|CLK$}
+- {^u_m5b1/pair_capture/arm_box/held\[33\]\~FF\|CLK$}
+- {^u_m5b1/pair_capture/arm_box/held\[34\]\~FF\|CLK$}
+- {^u_m5b1/pair_capture/arm_box/held\[35\]\~FF\|CLK$}
+- {^u_m5b1/pair_capture/arm_box/held\[36\]\~FF\|CLK$}
+- {^u_m5b1/pair_capture/arm_box/held\[37\]\~FF\|CLK$}
+- {^u_m5b1/pair_capture/arm_box/held\[38\]\~FF\|CLK$}
+- {^u_m5b1/pair_capture/arm_box/held\[39\]\~FF\|CLK$}
+- {^u_m5b1/pair_capture/arm_box/held\[3\]\~FF\|CLK$}
+- {^u_m5b1/pair_capture/arm_box/held\[40\]\~FF\|CLK$}
+- {^u_m5b1/pair_capture/arm_box/held\[41\]\~FF\|CLK$}
+- {^u_m5b1/pair_capture/arm_box/held\[42\]\~FF\|CLK$}
+- {^u_m5b1/pair_capture/arm_box/held\[43\]\~FF\|CLK$}
+- {^u_m5b1/pair_capture/arm_box/held\[44\]\~FF\|CLK$}
+- {^u_m5b1/pair_capture/arm_box/held\[45\]\~FF\|CLK$}
+- {^u_m5b1/pair_capture/arm_box/held\[46\]\~FF\|CLK$}
+- {^u_m5b1/pair_capture/arm_box/held\[47\]\~FF\|CLK$}
+- {^u_m5b1/pair_capture/arm_box/held\[48\]\~FF\|CLK$}
+- {^u_m5b1/pair_capture/arm_box/held\[49\]\~FF\|CLK$}
+- {^u_m5b1/pair_capture/arm_box/held\[4\]\~FF\|CLK$}
+- {^u_m5b1/pair_capture/arm_box/held\[50\]\~FF\|CLK$}
+- {^u_m5b1/pair_capture/arm_box/held\[51\]\~FF\|CLK$}
+- {^u_m5b1/pair_capture/arm_box/held\[52\]\~FF\|CLK$}
+- {^u_m5b1/pair_capture/arm_box/held\[53\]\~FF\|CLK$}
+- {^u_m5b1/pair_capture/arm_box/held\[54\]\~FF\|CLK$}
+- {^u_m5b1/pair_capture/arm_box/held\[55\]\~FF\|CLK$}
+- {^u_m5b1/pair_capture/arm_box/held\[56\]\~FF\|CLK$}
+- {^u_m5b1/pair_capture/arm_box/held\[57\]\~FF\|CLK$}
+- {^u_m5b1/pair_capture/arm_box/held\[58\]\~FF\|CLK$}
+- {^u_m5b1/pair_capture/arm_box/held\[59\]\~FF\|CLK$}
+- {^u_m5b1/pair_capture/arm_box/held\[5\]\~FF\|CLK$}
+- {^u_m5b1/pair_capture/arm_box/held\[60\]\~FF\|CLK$}
+- {^u_m5b1/pair_capture/arm_box/held\[61\]\~FF\|CLK$}
+- {^u_m5b1/pair_capture/arm_box/held\[62\]\~FF\|CLK$}
+- {^u_m5b1/pair_capture/arm_box/held\[63\]\~FF\|CLK$}
+- {^u_m5b1/pair_capture/arm_box/held\[6\]\~FF\|CLK$}
+- {^u_m5b1/pair_capture/arm_box/held\[7\]\~FF\|CLK$}
+- {^u_m5b1/pair_capture/arm_box/held\[8\]\~FF\|CLK$}
+- {^u_m5b1/pair_capture/arm_box/held\[9\]\~FF\|CLK$}
+-} pair_arm_source]
+-
+-set pair_arm_destination [m5b1_exact {
+- {^u_m5b1/pair_capture/asid\[0\]\~FF\|D$}
+- {^u_m5b1/pair_capture/asid\[10\]\~FF\|D$}
+- {^u_m5b1/pair_capture/asid\[11\]\~FF\|D$}
+- {^u_m5b1/pair_capture/asid\[12\]\~FF\|D$}
+- {^u_m5b1/pair_capture/asid\[13\]\~FF\|D$}
+- {^u_m5b1/pair_capture/asid\[14\]\~FF\|D$}
+- {^u_m5b1/pair_capture/asid\[15\]\~FF\|D$}
+- {^u_m5b1/pair_capture/asid\[16\]\~FF\|D$}
+- {^u_m5b1/pair_capture/asid\[17\]\~FF\|D$}
+- {^u_m5b1/pair_capture/asid\[18\]\~FF\|D$}
+- {^u_m5b1/pair_capture/asid\[19\]\~FF\|D$}
+- {^u_m5b1/pair_capture/asid\[1\]\~FF\|D$}
+- {^u_m5b1/pair_capture/asid\[20\]\~FF\|D$}
+- {^u_m5b1/pair_capture/asid\[21\]\~FF\|D$}
+- {^u_m5b1/pair_capture/asid\[22\]\~FF\|D$}
+- {^u_m5b1/pair_capture/asid\[23\]\~FF\|D$}
+- {^u_m5b1/pair_capture/asid\[24\]\~FF\|D$}
+- {^u_m5b1/pair_capture/asid\[25\]\~FF\|D$}
+- {^u_m5b1/pair_capture/asid\[26\]\~FF\|D$}
+- {^u_m5b1/pair_capture/asid\[27\]\~FF\|D$}
+- {^u_m5b1/pair_capture/asid\[28\]\~FF\|D$}
+- {^u_m5b1/pair_capture/asid\[29\]\~FF\|D$}
+- {^u_m5b1/pair_capture/asid\[2\]\~FF\|D$}
+- {^u_m5b1/pair_capture/asid\[30\]\~FF\|D$}
+- {^u_m5b1/pair_capture/asid\[31\]\~FF\|D$}
+- {^u_m5b1/pair_capture/asid\[32\]\~FF\|D$}
+- {^u_m5b1/pair_capture/asid\[33\]\~FF\|D$}
+- {^u_m5b1/pair_capture/asid\[34\]\~FF\|D$}
+- {^u_m5b1/pair_capture/asid\[35\]\~FF\|D$}
+- {^u_m5b1/pair_capture/asid\[36\]\~FF\|D$}
+- {^u_m5b1/pair_capture/asid\[37\]\~FF\|D$}
+- {^u_m5b1/pair_capture/asid\[38\]\~FF\|D$}
+- {^u_m5b1/pair_capture/asid\[39\]\~FF\|D$}
+- {^u_m5b1/pair_capture/asid\[3\]\~FF\|D$}
+- {^u_m5b1/pair_capture/asid\[40\]\~FF\|D$}
+- {^u_m5b1/pair_capture/asid\[41\]\~FF\|D$}
+- {^u_m5b1/pair_capture/asid\[42\]\~FF\|D$}
+- {^u_m5b1/pair_capture/asid\[43\]\~FF\|D$}
+- {^u_m5b1/pair_capture/asid\[44\]\~FF\|D$}
+- {^u_m5b1/pair_capture/asid\[45\]\~FF\|D$}
+- {^u_m5b1/pair_capture/asid\[46\]\~FF\|D$}
+- {^u_m5b1/pair_capture/asid\[47\]\~FF\|D$}
+- {^u_m5b1/pair_capture/asid\[48\]\~FF\|D$}
+- {^u_m5b1/pair_capture/asid\[49\]\~FF\|D$}
+- {^u_m5b1/pair_capture/asid\[4\]\~FF\|D$}
+- {^u_m5b1/pair_capture/asid\[50\]\~FF\|D$}
+- {^u_m5b1/pair_capture/asid\[51\]\~FF\|D$}
+- {^u_m5b1/pair_capture/asid\[52\]\~FF\|D$}
+- {^u_m5b1/pair_capture/asid\[53\]\~FF\|D$}
+- {^u_m5b1/pair_capture/asid\[54\]\~FF\|D$}
+- {^u_m5b1/pair_capture/asid\[55\]\~FF\|D$}
+- {^u_m5b1/pair_capture/asid\[56\]\~FF\|D$}
+- {^u_m5b1/pair_capture/asid\[57\]\~FF\|D$}
+- {^u_m5b1/pair_capture/asid\[58\]\~FF\|D$}
+- {^u_m5b1/pair_capture/asid\[59\]\~FF\|D$}
+- {^u_m5b1/pair_capture/asid\[5\]\~FF\|D$}
+- {^u_m5b1/pair_capture/asid\[60\]\~FF\|D$}
+- {^u_m5b1/pair_capture/asid\[61\]\~FF\|D$}
+- {^u_m5b1/pair_capture/asid\[62\]\~FF\|D$}
+- {^u_m5b1/pair_capture/asid\[63\]\~FF\|D$}
+- {^u_m5b1/pair_capture/asid\[6\]\~FF\|D$}
+- {^u_m5b1/pair_capture/asid\[7\]\~FF\|D$}
+- {^u_m5b1/pair_capture/asid\[8\]\~FF\|D$}
+- {^u_m5b1/pair_capture/asid\[9\]\~FF\|D$}
+-} pair_arm_destination]
+-
+-set pair_fifo_read_gray_source [m5b1_exact {
+- {^u_m5b1/pair_capture/fifo/rg\[0\]\~FF\|CLK$}
+- {^u_m5b1/pair_capture/fifo/rg\[1\]\~FF\|CLK$}
+- {^u_m5b1/pair_capture/fifo/rg\[2\]\~FF\|CLK$}
+- {^u_m5b1/pair_capture/fifo/rg\[3\]\~FF\|CLK$}
+- {^u_m5b1/pair_capture/fifo/rg\[4\]\~FF\|CLK$}
+- {^u_m5b1/pair_capture/fifo/rg\[5\]\~FF\|CLK$}
+- {^u_m5b1/pair_capture/fifo/rg\[6\]\~FF\|CLK$}
+- {^u_m5b1/pair_capture/fifo/rg\[7\]\~FF\|CLK$}
+- {^u_m5b1/pair_capture/fifo/rg\[8\]\~FF\|CLK$}
+- {^u_m5b1/pair_capture/fifo/rp\[9\]\~FF\|CLK$}
+-} pair_fifo_read_gray_source]
+-
+-set pair_fifo_read_gray_destination [m5b1_exact {
+- {^u_m5b1/pair_capture/fifo/rgs1\[0\]\~FF\|D$}
+- {^u_m5b1/pair_capture/fifo/rgs1\[1\]\~FF\|D$}
+- {^u_m5b1/pair_capture/fifo/rgs1\[2\]\~FF\|D$}
+- {^u_m5b1/pair_capture/fifo/rgs1\[3\]\~FF\|D$}
+- {^u_m5b1/pair_capture/fifo/rgs1\[4\]\~FF\|D$}
+- {^u_m5b1/pair_capture/fifo/rgs1\[5\]\~FF\|D$}
+- {^u_m5b1/pair_capture/fifo/rgs1\[6\]\~FF\|D$}
+- {^u_m5b1/pair_capture/fifo/rgs1\[7\]\~FF\|D$}
+- {^u_m5b1/pair_capture/fifo/rgs1\[8\]\~FF\|D$}
+- {^u_m5b1/pair_capture/fifo/rgs1\[9\]\~FF\|D$}
+-} pair_fifo_read_gray_destination]
+-
+-set pair_fifo_write_gray_source [m5b1_exact {
+- {^u_m5b1/pair_capture/fifo/wg\[0\]\~FF\|CLK$}
+- {^u_m5b1/pair_capture/fifo/wg\[1\]\~FF\|CLK$}
+- {^u_m5b1/pair_capture/fifo/wg\[2\]\~FF\|CLK$}
+- {^u_m5b1/pair_capture/fifo/wg\[3\]\~FF\|CLK$}
+- {^u_m5b1/pair_capture/fifo/wg\[4\]\~FF\|CLK$}
+- {^u_m5b1/pair_capture/fifo/wg\[5\]\~FF\|CLK$}
+- {^u_m5b1/pair_capture/fifo/wg\[6\]\~FF\|CLK$}
+- {^u_m5b1/pair_capture/fifo/wg\[7\]\~FF\|CLK$}
+- {^u_m5b1/pair_capture/fifo/wg\[8\]\~FF\|CLK$}
+- {^u_m5b1/pair_capture/fifo/wp\[9\]\~FF\|CLK$}
+-} pair_fifo_write_gray_source]
+-
+-set pair_fifo_write_gray_destination [m5b1_exact {
+- {^u_m5b1/pair_capture/fifo/wgs1\[0\]\~FF\|D$}
+- {^u_m5b1/pair_capture/fifo/wgs1\[1\]\~FF\|D$}
+- {^u_m5b1/pair_capture/fifo/wgs1\[2\]\~FF\|D$}
+- {^u_m5b1/pair_capture/fifo/wgs1\[3\]\~FF\|D$}
+- {^u_m5b1/pair_capture/fifo/wgs1\[4\]\~FF\|D$}
+- {^u_m5b1/pair_capture/fifo/wgs1\[5\]\~FF\|D$}
+- {^u_m5b1/pair_capture/fifo/wgs1\[6\]\~FF\|D$}
+- {^u_m5b1/pair_capture/fifo/wgs1\[7\]\~FF\|D$}
+- {^u_m5b1/pair_capture/fifo/wgs1\[8\]\~FF\|D$}
+- {^u_m5b1/pair_capture/fifo/wgs1\[9\]\~FF\|D$}
+-} pair_fifo_write_gray_destination]
+-
+-set pair_result_source [m5b1_exact {
+- {^u_m5b1/pair_capture/result_box/held\[0\]\~FF\|CLK$}
+- {^u_m5b1/pair_capture/result_box/held\[1\]\~FF\|CLK$}
+- {^u_m5b1/pair_capture/result_box/held\[2\]\~FF\|CLK$}
+-} pair_result_source]
+-
+-set pair_result_destination [m5b1_exact {
+- {^u_m5b1/pair_reason\[0\]\~FF\|D$}
+- {^u_m5b1/pair_reason\[1\]\~FF\|D$}
+- {^u_m5b1/pair_reason\[2\]\~FF\|D$}
+-} pair_result_destination]
+-
+-set pair_reset_release_entry [m5b1_exact {
+- {^u_m5b1/pair_capture/arm_box/drelease\[0\]\~FF\|SR$}
+- {^u_m5b1/pair_capture/arm_box/drelease\[1\]\~FF\|SR$}
+- {^u_m5b1/pair_capture/arm_box/srelease\[0\]\~FF\|SR$}
+- {^u_m5b1/pair_capture/arm_box/srelease\[1\]\~FF\|SR$}
+- {^u_m5b1/pair_capture/cancel_sync\[0\]\~FF\|SR$}
+- {^u_m5b1/pair_capture/cancel_sync\[1\]\~FF\|SR$}
+- {^u_m5b1/pair_capture/fifo/rrs\[0\]\~FF\|SR$}
+- {^u_m5b1/pair_capture/fifo/wrs\[0\]\~FF\|SR$}
+- {^u_m5b1/pair_capture/release_pix\[0\]\~FF\|SR$}
+- {^u_m5b1/pair_capture/release_pix\[1\]\~FF\|SR$}
+- {^u_m5b1/pair_capture/result_box/drelease\[0\]\~FF\|SR$}
+- {^u_m5b1/pair_capture/result_box/drelease\[1\]\~FF\|SR$}
+- {^u_m5b1/pair_capture/result_box/srelease\[0\]\~FF\|SR$}
+- {^u_m5b1/pair_capture/result_box/srelease\[1\]\~FF\|SR$}
+- {^u_m5b1/pair_pix_release\[0\]\~FF\|SR$}
+- {^u_m5b1/pair_pix_release\[1\]\~FF\|SR$}
+- {^u_m5b1/pair_request_box/drelease\[0\]\~FF\|SR$}
+- {^u_m5b1/pair_request_box/drelease\[1\]\~FF\|SR$}
+- {^u_m5b1/pair_request_box/srelease\[0\]\~FF\|SR$}
+- {^u_m5b1/pair_request_box/srelease\[1\]\~FF\|SR$}
+- {^u_m5b1/pair_reset_done\[0\]\~FF\|SR$}
+- {^u_m5b1/pair_reset_done\[1\]\~FF\|SR$}
+- {^u_m5b1/pair_ui_release\[0\]\~FF\|SR$}
+- {^u_m5b1/pair_ui_release\[1\]\~FF\|SR$}
+-} pair_reset_release_entry]
+-
+-set_max_delay -from $pair_arm_source -to $pair_arm_destination 5.0
+-
+-set_false_path -hold -from $pair_arm_source -to $pair_arm_destination
+-
+-set_max_delay -from $pair_result_source -to $pair_result_destination 5.0
+-
+-set_false_path -hold -from $pair_result_source -to $pair_result_destination
+-
+-set_max_delay -from $pair_fifo_read_gray_source -to $pair_fifo_read_gray_destination 5.0
+-
+-set_false_path -hold -from $pair_fifo_read_gray_source -to $pair_fifo_read_gray_destination
+-
+-set_max_delay -from $pair_fifo_write_gray_source -to $pair_fifo_write_gray_destination 5.0
+-
+-set_false_path -hold -from $pair_fifo_write_gray_source -to $pair_fifo_write_gray_destination
+-
+-set_false_path -to $pair_first_stage
+-
+-set_false_path -to $pair_reset_release_entry
+-
+-set pair_request_sid_source [m5b1_exact {
+- {^u_m5b1/pair_request_box/held\[0\]\~FF\|CLK$}
+- {^u_m5b1/pair_request_box/held\[1\]\~FF\|CLK$}
+- {^u_m5b1/pair_request_box/held\[2\]\~FF\|CLK$}
+- {^u_m5b1/pair_request_box/held\[3\]\~FF\|CLK$}
+- {^u_m5b1/pair_request_box/held\[4\]\~FF\|CLK$}
+- {^u_m5b1/pair_request_box/held\[5\]\~FF\|CLK$}
+- {^u_m5b1/pair_request_box/held\[6\]\~FF\|CLK$}
+- {^u_m5b1/pair_request_box/held\[7\]\~FF\|CLK$}
+- {^u_m5b1/pair_request_box/held\[8\]\~FF\|CLK$}
+- {^u_m5b1/pair_request_box/held\[9\]\~FF\|CLK$}
+- {^u_m5b1/pair_request_box/held\[10\]\~FF\|CLK$}
+- {^u_m5b1/pair_request_box/held\[11\]\~FF\|CLK$}
+- {^u_m5b1/pair_request_box/held\[12\]\~FF\|CLK$}
+- {^u_m5b1/pair_request_box/held\[13\]\~FF\|CLK$}
+- {^u_m5b1/pair_request_box/held\[14\]\~FF\|CLK$}
+- {^u_m5b1/pair_request_box/held\[15\]\~FF\|CLK$}
+- {^u_m5b1/pair_request_box/held\[16\]\~FF\|CLK$}
+- {^u_m5b1/pair_request_box/held\[17\]\~FF\|CLK$}
+- {^u_m5b1/pair_request_box/held\[18\]\~FF\|CLK$}
+- {^u_m5b1/pair_request_box/held\[19\]\~FF\|CLK$}
+- {^u_m5b1/pair_request_box/held\[20\]\~FF\|CLK$}
+- {^u_m5b1/pair_request_box/held\[21\]\~FF\|CLK$}
+- {^u_m5b1/pair_request_box/held\[22\]\~FF\|CLK$}
+- {^u_m5b1/pair_request_box/held\[23\]\~FF\|CLK$}
+- {^u_m5b1/pair_request_box/held\[24\]\~FF\|CLK$}
+- {^u_m5b1/pair_request_box/held\[25\]\~FF\|CLK$}
+- {^u_m5b1/pair_request_box/held\[26\]\~FF\|CLK$}
+- {^u_m5b1/pair_request_box/held\[27\]\~FF\|CLK$}
+- {^u_m5b1/pair_request_box/held\[28\]\~FF\|CLK$}
+- {^u_m5b1/pair_request_box/held\[29\]\~FF\|CLK$}
+- {^u_m5b1/pair_request_box/held\[30\]\~FF\|CLK$}
+- {^u_m5b1/pair_request_box/held\[31\]\~FF\|CLK$}
+- {^u_m5b1/pair_request_box/held\[32\]\~FF\|CLK$}
+- {^u_m5b1/pair_request_box/held\[33\]\~FF\|CLK$}
+- {^u_m5b1/pair_request_box/held\[34\]\~FF\|CLK$}
+- {^u_m5b1/pair_request_box/held\[35\]\~FF\|CLK$}
+- {^u_m5b1/pair_request_box/held\[36\]\~FF\|CLK$}
+- {^u_m5b1/pair_request_box/held\[37\]\~FF\|CLK$}
+- {^u_m5b1/pair_request_box/held\[38\]\~FF\|CLK$}
+- {^u_m5b1/pair_request_box/held\[39\]\~FF\|CLK$}
+- {^u_m5b1/pair_request_box/held\[40\]\~FF\|CLK$}
+- {^u_m5b1/pair_request_box/held\[41\]\~FF\|CLK$}
+- {^u_m5b1/pair_request_box/held\[42\]\~FF\|CLK$}
+- {^u_m5b1/pair_request_box/held\[43\]\~FF\|CLK$}
+- {^u_m5b1/pair_request_box/held\[44\]\~FF\|CLK$}
+- {^u_m5b1/pair_request_box/held\[45\]\~FF\|CLK$}
+- {^u_m5b1/pair_request_box/held\[46\]\~FF\|CLK$}
+- {^u_m5b1/pair_request_box/held\[47\]\~FF\|CLK$}
+- {^u_m5b1/pair_request_box/held\[48\]\~FF\|CLK$}
+- {^u_m5b1/pair_request_box/held\[49\]\~FF\|CLK$}
+- {^u_m5b1/pair_request_box/held\[50\]\~FF\|CLK$}
+- {^u_m5b1/pair_request_box/held\[51\]\~FF\|CLK$}
+- {^u_m5b1/pair_request_box/held\[52\]\~FF\|CLK$}
+- {^u_m5b1/pair_request_box/held\[53\]\~FF\|CLK$}
+- {^u_m5b1/pair_request_box/held\[54\]\~FF\|CLK$}
+- {^u_m5b1/pair_request_box/held\[55\]\~FF\|CLK$}
+- {^u_m5b1/pair_request_box/held\[56\]\~FF\|CLK$}
+- {^u_m5b1/pair_request_box/held\[57\]\~FF\|CLK$}
+- {^u_m5b1/pair_request_box/held\[58\]\~FF\|CLK$}
+- {^u_m5b1/pair_request_box/held\[59\]\~FF\|CLK$}
+- {^u_m5b1/pair_request_box/held\[60\]\~FF\|CLK$}
+- {^u_m5b1/pair_request_box/held\[61\]\~FF\|CLK$}
+- {^u_m5b1/pair_request_box/held\[62\]\~FF\|CLK$}
+- {^u_m5b1/pair_request_box/held\[63\]\~FF\|CLK$}
+-} pair_request_sid_source]
+-set pair_request_sid_destination [m5b1_exact {
+- {^u_m5b1/pair_request_data\[0\]\~FF\|D$}
+- {^u_m5b1/pair_request_data\[1\]\~FF\|D$}
+- {^u_m5b1/pair_request_data\[2\]\~FF\|D$}
+- {^u_m5b1/pair_request_data\[3\]\~FF\|D$}
+- {^u_m5b1/pair_request_data\[4\]\~FF\|D$}
+- {^u_m5b1/pair_request_data\[5\]\~FF\|D$}
+- {^u_m5b1/pair_request_data\[6\]\~FF\|D$}
+- {^u_m5b1/pair_request_data\[7\]\~FF\|D$}
+- {^u_m5b1/pair_request_data\[8\]\~FF\|D$}
+- {^u_m5b1/pair_request_data\[9\]\~FF\|D$}
+- {^u_m5b1/pair_request_data\[10\]\~FF\|D$}
+- {^u_m5b1/pair_request_data\[11\]\~FF\|D$}
+- {^u_m5b1/pair_request_data\[12\]\~FF\|D$}
+- {^u_m5b1/pair_request_data\[13\]\~FF\|D$}
+- {^u_m5b1/pair_request_data\[14\]\~FF\|D$}
+- {^u_m5b1/pair_request_data\[15\]\~FF\|D$}
+- {^u_m5b1/pair_request_data\[16\]\~FF\|D$}
+- {^u_m5b1/pair_request_data\[17\]\~FF\|D$}
+- {^u_m5b1/pair_request_data\[18\]\~FF\|D$}
+- {^u_m5b1/pair_request_data\[19\]\~FF\|D$}
+- {^u_m5b1/pair_request_data\[20\]\~FF\|D$}
+- {^u_m5b1/pair_request_data\[21\]\~FF\|D$}
+- {^u_m5b1/pair_request_data\[22\]\~FF\|D$}
+- {^u_m5b1/pair_request_data\[23\]\~FF\|D$}
+- {^u_m5b1/pair_request_data\[24\]\~FF\|D$}
+- {^u_m5b1/pair_request_data\[25\]\~FF\|D$}
+- {^u_m5b1/pair_request_data\[26\]\~FF\|D$}
+- {^u_m5b1/pair_request_data\[27\]\~FF\|D$}
+- {^u_m5b1/pair_request_data\[28\]\~FF\|D$}
+- {^u_m5b1/pair_request_data\[29\]\~FF\|D$}
+- {^u_m5b1/pair_request_data\[30\]\~FF\|D$}
+- {^u_m5b1/pair_request_data\[31\]\~FF\|D$}
+- {^u_m5b1/pair_request_data\[32\]\~FF\|D$}
+- {^u_m5b1/pair_request_data\[33\]\~FF\|D$}
+- {^u_m5b1/pair_request_data\[34\]\~FF\|D$}
+- {^u_m5b1/pair_request_data\[35\]\~FF\|D$}
+- {^u_m5b1/pair_request_data\[36\]\~FF\|D$}
+- {^u_m5b1/pair_request_data\[37\]\~FF\|D$}
+- {^u_m5b1/pair_request_data\[38\]\~FF\|D$}
+- {^u_m5b1/pair_request_data\[39\]\~FF\|D$}
+- {^u_m5b1/pair_request_data\[40\]\~FF\|D$}
+- {^u_m5b1/pair_request_data\[41\]\~FF\|D$}
+- {^u_m5b1/pair_request_data\[42\]\~FF\|D$}
+- {^u_m5b1/pair_request_data\[43\]\~FF\|D$}
+- {^u_m5b1/pair_request_data\[44\]\~FF\|D$}
+- {^u_m5b1/pair_request_data\[45\]\~FF\|D$}
+- {^u_m5b1/pair_request_data\[46\]\~FF\|D$}
+- {^u_m5b1/pair_request_data\[47\]\~FF\|D$}
+- {^u_m5b1/pair_request_data\[48\]\~FF\|D$}
+- {^u_m5b1/pair_request_data\[49\]\~FF\|D$}
+- {^u_m5b1/pair_request_data\[50\]\~FF\|D$}
+- {^u_m5b1/pair_request_data\[51\]\~FF\|D$}
+- {^u_m5b1/pair_request_data\[52\]\~FF\|D$}
+- {^u_m5b1/pair_request_data\[53\]\~FF\|D$}
+- {^u_m5b1/pair_request_data\[54\]\~FF\|D$}
+- {^u_m5b1/pair_request_data\[55\]\~FF\|D$}
+- {^u_m5b1/pair_request_data\[56\]\~FF\|D$}
+- {^u_m5b1/pair_request_data\[57\]\~FF\|D$}
+- {^u_m5b1/pair_request_data\[58\]\~FF\|D$}
+- {^u_m5b1/pair_request_data\[59\]\~FF\|D$}
+- {^u_m5b1/pair_request_data\[60\]\~FF\|D$}
+- {^u_m5b1/pair_request_data\[61\]\~FF\|D$}
+- {^u_m5b1/pair_request_data\[62\]\~FF\|D$}
+- {^u_m5b1/pair_request_data\[63\]\~FF\|D$}
+-} pair_request_sid_destination]
+-set_max_delay -from $pair_request_sid_source -to $pair_request_sid_destination 5.0
+-set_false_path -hold -from $pair_request_sid_source -to $pair_request_sid_destination
++# Removed diagnostic group pair_first_stage
++
++# Removed diagnostic group pair_arm_source
++
++# Removed diagnostic group pair_arm_destination
++
++# Removed diagnostic group pair_fifo_read_gray_source
++
++# Removed diagnostic group pair_fifo_read_gray_destination
++
++# Removed diagnostic group pair_fifo_write_gray_source
++
++# Removed diagnostic group pair_fifo_write_gray_destination
++
++# Removed diagnostic group pair_result_source
++
++# Removed diagnostic group pair_result_destination
++
++# Removed diagnostic group pair_reset_release_entry
++
++
++
++
++
++
++
++
++
++
++
++# Removed diagnostic group pair_request_sid_source
++# Removed diagnostic group pair_request_sid_destination
+

@@ -1,0 +1,5 @@
+# 实物通过后精确封存
+
+本版维持原七模式和局部/全局共享阈值，不包含分离阈值或模式裁减。5分钟用户功能首验见hardware_acceptance/HARDWARE_ACCEPTANCE_RESULT_20261022.md，不能外推长期稳定性。
+
+snapshot/FROZEN_MANIFEST.json保留提交前历史身份，不回填candidate。新独立目录内文件按原路径提交；154项外部参考来源只提交snapshot/<原相对路径>的冻结副本，避免把其他工作区改动纳入提交。TRANSPORT_MAP.json给出每个原路径在固定commit里的实际blob路径。后续独立B从这些固定blob导出为完整工程相对路径并逐项核SHA，不发送未提交资料或A报告。原完整本机539项审查副本保持不变，不重复提交385项已有原路径副本。
