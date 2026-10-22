@@ -1,0 +1,70 @@
+
+Efinix Timing Path Constraint Report
+Version: 2025.1.110.5.9
+Date: Thu Oct 22 11:26:47 2026
+
+Copyright (C) 2013 - 2025 Efinix, Inc. All rights reserved.
+
+User command: report_timing -from_clock {clk_sys} -to_clock {twd_clk} -npaths 1 -nworst 1 -setup -detail full_path -file {clock_83_setup.rpt}
+
+Timing Model: I3
+	process : typical
+	temperature : -40C to 100C
+	voltage : 0.95 +/-30mV
+	speedgrade : 3
+	technology : t16ff
+	status : final
+
+Summary:
+
+ Path #  | Slack (ns) | Delay (ns) |   Start Pin   |                                                End Pin                                                | Launch Clk  | Capture Clk
+======================================================================================================================================================================================
+ 1       |  0.136     |  0.491     | rstn_sys~FF|Q | ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/twd_clk_rstn~FF|SR | clk_sys (R) | twd_clk (R)
+
+++++ Path 1 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : rstn_sys~FF|CLK                                                                                      
+Path End      : ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/twd_clk_rstn~FF|SR
+Launch Clock  : clk_sys (RISE)                                                                                       
+Capture Clock : twd_clk (RISE)                                                                                       
+Slack         : 0.136 (required time - arrival time)                                                                 
+Delay         : 0.491                                                                                                
+
+Logic Level             : 0
+Non-global nets on path : 1
+Global nets on path     : 0
+
+Launch Clock Path Delay        : 2.104
++ Clock To Q + Data Path Delay : 0.725
+--------------------------------------
+End-of-path arrival time       : 2.829
+
+Constraint                     : 0.651
++ Capture Clock Path Delay     : 2.440
+- Clock Uncertainty            : 0.126
+--------------------------------------
+End-of-path required time      : 2.965
+
+Launch Clock Path
+     name        model name   delay (ns)  cumulative delay (ns) pins on net    location
+=========================================================================================
+clk_sys            inpad        0.000             0.000                0       (0,162) 
+clk_sys            inpad        0.126             0.126             2026       (0,162) 
+clk_sys            net          1.978             2.104             2026       (0,162) 
+rstn_sys~FF|CLK    ff           0.000             2.104             2026       (129,41)
+
+Data Path
+                                                name                                                   model name   delay (ns)  cumulative delay (ns) pins on net    location
+===============================================================================================================================================================================
+rstn_sys~FF|Q                                                                                             ff          0.130             0.130             707        (129,41)
+rstn_sys                                                                                                  net         0.491             0.621             707        (129,41)
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/twd_clk_rstn~FF|SR     ff          0.104             0.725             707        (130,25)
+
+Capture Clock Path
+                                                 name                                                   model name   delay (ns)  cumulative delay (ns) pins on net    location
+================================================================================================================================================================================
+twd_clk                                                                                                   inpad        0.000             0.000               0       (219,159)
+twd_clk                                                                                                   inpad        0.126             0.126             429       (219,159)
+twd_clk                                                                                                   net          2.314             2.440             429       (219,159)
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/twd_clk_rstn~FF|CLK    ff           0.000             2.440             429       (130,25) 
+

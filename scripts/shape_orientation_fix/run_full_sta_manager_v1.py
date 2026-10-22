@@ -1,0 +1,12 @@
+from common import *
+a=json.loads((O/'ACTIVE_PHYSICAL.json').read_text());F=R/a['path'];P=R/a['project'];start=time.time()
+try:
+ while not(F/'route/RESULT.json').exists():
+  for stage in['query','place']:
+   if(F/stage/'RESULT.json').exists():assert json.loads((F/stage/'RESULT.json').read_text())['passed'],stage
+  assert time.time()-start<7200;save(F/'FINAL_MANAGER_HEARTBEAT.json',dict(status='WAIT_CURRENT_ROUTE',pid=os.getpid(),time=time.time()));time.sleep(10)
+ assert json.loads((F/'route/RESULT.json').read_text())['passed'];save(F/'SOURCE_MANIFEST.json',json.loads((O/'SOURCE_MANIFEST.json').read_text()))
+ execute(F/'full_sta_manager','native_all_FF_STA',[str(E/'python311/bin/python.exe'),'-B',str(Path(__file__).parent/'native_sta_v2.py')],timeout=7200)
+ save(O/'FULL_NATIVE_STA_EXECUTION_RECEIPT.json',dict(status='EXECUTION_COMPLETE_ALL_ENDPOINT_RECONCILIATION_PENDING',passed=False,execution_passed=True,physical=F.relative_to(R).as_posix(),chain=rec(F/'STA_CHAIN_COMPLETE.json')));print('STANDALONE_FULL_NATIVE_QUERIES_EXECUTED_AUDIT_PENDING',flush=True)
+except Exception as e:
+ save(O/'FULL_NATIVE_STA_EXECUTION_RECEIPT.json',dict(status='FAIL_NATIVE_EXECUTION_OR_PRIOR_STAGE',passed=False,error=repr(e),physical=F.relative_to(R).as_posix()));raise

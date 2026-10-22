@@ -1,0 +1,99 @@
+
+Efinix Timing Path Constraint Report
+Version: 2025.1.110.5.9
+Date: Thu Oct 22 11:26:48 2026
+
+Copyright (C) 2013 - 2025 Efinix, Inc. All rights reserved.
+
+User command: report_timing -from_clock {core_clk} -to_clock {core_clk} -npaths 1 -nworst 1 -setup -detail full_path -file {clock_105_setup.rpt}
+
+Timing Model: I3
+	process : typical
+	temperature : -40C to 100C
+	voltage : 0.95 +/-30mV
+	speedgrade : 3
+	technology : t16ff
+	status : final
+
+Summary:
+
+ Path #  | Slack (ns) | Delay (ns) |                                                   Start Pin                                                   |                                                       End Pin                                                        |  Launch Clk  | Capture Clk
+=======================================================================================================================================================================================================================================================================================================
+ 1       |  0.835     |  2.883     | ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_aw/ram__D$2|RDATA[12] | ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/controller_main/ram_raddr[4]~FF|D | core_clk (R) | core_clk (R)
+
+++++ Path 1 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_aw/ram__D$2|RCLK            
+Path End      : ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/controller_main/ram_raddr[4]~FF|D
+Launch Clock  : core_clk (RISE)                                                                                                     
+Capture Clock : core_clk (RISE)                                                                                                     
+Slack         : 0.835 (required time - arrival time)                                                                                
+Delay         : 2.883                                                                                                               
+
+Logic Level             : 10
+Non-global nets on path : 10
+Global nets on path     :  0
+
+Launch Clock Path Delay        : 2.047
++ Clock To Q + Data Path Delay : 4.247
+--------------------------------------
+End-of-path arrival time       : 6.294
+
+Constraint                     : 5.208
++ Capture Clock Path Delay     : 2.047
+- Clock Uncertainty            : 0.126
+--------------------------------------
+End-of-path required time      : 7.129
+
+Launch Clock Path
+                                                  name                                                    model name   delay (ns)  cumulative delay (ns) pins on net    location
+==================================================================================================================================================================================
+core_clk                                                                                                 inpad           0.000             0.000               0       (219,164)
+core_clk                                                                                                 inpad           0.126             0.126             812       (219,164)
+core_clk                                                                                                 net             1.921             2.047             812       (219,164)
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_aw/ram__D$2|RCLK ram_8192x20     0.000             2.047             812       (156,82) 
+
+Data Path
+                                                        name                                                          model name   delay (ns)  cumulative delay (ns) pins on net    location
+==============================================================================================================================================================================================
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/fifo_aw/ram__D$2|RDATA[12]        ram_8192x20     1.361             1.361              67        (156,82)
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/w_aw_fifo_rd_data[10]             net             0.497             1.858              67        (156,82)
+LUT__39838|in[2]                                                                                                     lut             0.063             1.921              67        (168,88)
+LUT__39838|out                                                                                                       lut             0.000             1.921               2        (168,88)
+n19075                                                                                                               net             0.171             2.092               2        (168,88)
+LUT__39839|in[3]                                                                                                     lut             0.063             2.155               2        (168,92)
+LUT__39839|out                                                                                                       lut             0.000             2.155               2        (168,92)
+n19076                                                                                                               net             0.202             2.357               2        (168,92)
+LUT__39840|in[1]                                                                                                     lut             0.061             2.418               2        (166,92)
+LUT__39840|out                                                                                                       lut             0.000             2.418               2        (166,92)
+n19077                                                                                                               net             0.272             2.690               2        (166,92)
+LUT__39846|in[2]                                                                                                     lut             0.063             2.753               2        (153,92)
+LUT__39846|out                                                                                                       lut             0.000             2.753               2        (153,92)
+n19083                                                                                                               net             0.365             3.118               2        (153,92)
+LUT__39884|in[1]                                                                                                     lut             0.061             3.179               2        (148,77)
+LUT__39884|out                                                                                                       lut             0.000             3.179               4        (148,77)
+n19121                                                                                                               net             0.250             3.429               4        (148,77)
+LUT__40202|in[1]                                                                                                     lut             0.061             3.490               4        (148,66)
+LUT__40202|out                                                                                                       lut             0.000             3.490               3        (148,66)
+n19323                                                                                                               net             0.203             3.693               3        (148,66)
+LUT__40236|in[1]                                                                                                     lut             0.061             3.754               3        (149,62)
+LUT__40236|out                                                                                                       lut             0.000             3.754               2        (149,62)
+n19354                                                                                                               net             0.185             3.939               2        (149,62)
+LUT__40237|in[2]                                                                                                     lut             0.061             4.000               2        (146,57)
+LUT__40237|out                                                                                                       lut             0.000             4.000               2        (146,57)
+n19355                                                                                                               net             0.061             4.061               2        (146,57)
+LUT__40241|in[1]                                                                                                     lut             0.061             4.122               2        (146,56)
+LUT__40241|out                                                                                                       lut             0.000             4.122               2        (146,56)
+n19359                                                                                                               net             0.061             4.183               2        (146,56)
+LUT__40242|in[0]                                                                                                     lut             0.061             4.244               2        (146,55)
+LUT__40242|out                                                                                                       lut             0.000             4.244               2        (146,55)
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/controller_main/ram_raddr[4]~FF|D ff              0.003             4.247               2        (146,55)
+
+Capture Clock Path
+                                                         name                                                           model name   delay (ns)  cumulative delay (ns) pins on net    location
+================================================================================================================================================================================================
+core_clk                                                                                                                  inpad        0.000             0.000               0       (219,164)
+core_clk                                                                                                                  inpad        0.126             0.126             812       (219,164)
+core_clk                                                                                                                  net          1.921             2.047             812       (219,164)
+ddr3_ctl_axi/u_efx_ddr3_soft_controller/genblk1.inst_ddr3_axi/inst_efx_ddr3/top_mc/controller_main/ram_raddr[4]~FF|CLK    ff           0.000             2.047             812       (146,55) 
+

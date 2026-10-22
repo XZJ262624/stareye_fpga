@@ -1,0 +1,7 @@
+from common import *
+old=Path(__file__).parent/'prepare_query_v1.py';s=old.read_text();assert s.count('assert not forbidden and not median,(forbidden[:10],median[:10]);')==1
+a=json.loads((O/'ACTIVE_PHYSICAL.json').read_text());F=R/a['path'];save(F/'PRUNING_EXPECTATION_V1_FAIL.json',dict(passed=False,script=rec(old),cause='Original shared gaussian_median_stream retains MED sorting data branch in mapped netlist, despite constant GAU request. No background/fusion/pair cells found. This is resource retention, not observed output mismatch.',original_assertion='assert not forbidden and not median',scope='Do not claim median hardware pruned. Retain proven shared pixel source; require actual final placed/routed resource limits.'))
+s=s.replace('assert not forbidden and not median,(forbidden[:10],median[:10]);','assert not forbidden,forbidden[:10];')
+s=s.replace('median_data_path=median,','retained_median_data_path=median,median_pruned=not bool(median),median_note="Shared unchanged filter source retains sorting logic; actual profile request is fixed2. Final resource gate counts all retained logic.",')
+save(F/'PRUNING_V2_RECONCILIATION.json',dict(original=rec(old),new_wrapper=rec(Path(__file__)),production_RTL_changes=[],strict_selector_checks_unchanged=True,global_fusion_pair_absence_assertion_unchanged=True,only_change='Replace invalid prediction of unused sorting hardware disappearance with explicit retained-cell inventory; physical limits unchanged.'))
+exec(compile(s,str(old),'exec'))

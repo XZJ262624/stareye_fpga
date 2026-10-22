@@ -1,0 +1,148 @@
+
+Efinix Timing Path Constraint Report
+Version: 2025.1.110.5.9
+Date: Thu Oct 22 11:26:47 2026
+
+Copyright (C) 2013 - 2025 Efinix, Inc. All rights reserved.
+
+User command: report_timing -from_clock {clk_sys} -to_clock {clk_sys} -npaths 1 -nworst 1 -setup -detail full_path -file {clock_75_setup.rpt}
+
+Timing Model: I3
+	process : typical
+	temperature : -40C to 100C
+	voltage : 0.95 +/-30mV
+	speedgrade : 3
+	technology : t16ff
+	status : final
+
+Summary:
+
+ Path #  | Slack (ns) | Delay (ns) |                       Start Pin                       |                   End Pin                   | Launch Clk  | Capture Clk
+====================================================================================================================================================================
+ 1       |  2.643     |  7.413     | u_shape_system/u_m5b1/video/display_fifo/rgs2[8]~FF|Q | u_shape_system/u_m5b1/arbiter/beat[5]~FF|CE | clk_sys (R) | clk_sys (R)
+
+++++ Path 1 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Path Begin    : u_shape_system/u_m5b1/video/display_fifo/rgs2[8]~FF|CLK
+Path End      : u_shape_system/u_m5b1/arbiter/beat[5]~FF|CE            
+Launch Clock  : clk_sys (RISE)                                         
+Capture Clock : clk_sys (RISE)                                         
+Slack         : 2.643 (required time - arrival time)                   
+Delay         : 7.413                                                  
+
+Logic Level             : 26
+Non-global nets on path : 27
+Global nets on path     :  0
+
+Launch Clock Path Delay        : 2.104
++ Clock To Q + Data Path Delay : 7.647
+--------------------------------------
+End-of-path arrival time       : 9.751
+
+Constraint                     : 10.416
++ Capture Clock Path Delay     :  2.104
+- Clock Uncertainty            :  0.126
+---------------------------------------
+End-of-path required time      : 12.394
+
+Launch Clock Path
+                         name                            model name   delay (ns)  cumulative delay (ns) pins on net    location
+=================================================================================================================================
+clk_sys                                                    inpad        0.000             0.000                0       (0,162)
+clk_sys                                                    inpad        0.126             0.126             2026       (0,162)
+clk_sys                                                    net          1.978             2.104             2026       (0,162)
+u_shape_system/u_m5b1/video/display_fifo/rgs2[8]~FF|CLK    ff           0.000             2.104             2026       (80,69)
+
+Data Path
+                           name                              model name   delay (ns)  cumulative delay (ns) pins on net    location
+=====================================================================================================================================
+u_shape_system/u_m5b1/video/display_fifo/rgs2[8]~FF|Q          ff           0.130             0.130               2        (80,69) 
+u_shape_system/u_m5b1/video/display_fifo/rgs2[8]               net          0.215             0.345               2        (80,69) 
+LUT__42054|in[0]                                               lut          0.061             0.406               2        (85,61) 
+LUT__42054|out                                                 lut          0.000             0.406               3        (85,61) 
+u_shape_system/u_m5b1/video/display_fifo/sub_16/n3             net          0.097             0.503               3        (85,61) 
+LUT__42055|in[1]                                               lut          0.061             0.564               3        (85,58) 
+LUT__42055|out                                                 lut          0.000             0.564               3        (85,58) 
+u_shape_system/u_m5b1/video/display_fifo/sub_16/n4             net          0.098             0.662               3        (85,58) 
+LUT__42056|in[1]                                               lut          0.061             0.723               3        (85,57) 
+LUT__42056|out                                                 lut          0.000             0.723               3        (85,57) 
+u_shape_system/u_m5b1/video/display_fifo/sub_16/n5             net          0.228             0.951               3        (85,57) 
+LUT__42057|in[1]                                               lut          0.061             1.012               3        (80,56) 
+LUT__42057|out                                                 lut          0.000             1.012               3        (80,56) 
+u_shape_system/u_m5b1/video/display_fifo/sub_16/n6             net          0.323             1.335               3        (80,56) 
+LUT__42058|in[1]                                               lut          0.061             1.396               3        (83,57) 
+LUT__42058|out                                                 lut          0.000             1.396               3        (83,57) 
+u_shape_system/u_m5b1/video/display_fifo/sub_16/n7             net          0.365             1.761               3        (83,57) 
+LUT__42059|in[1]                                               lut          0.061             1.822               3        (80,50) 
+LUT__42059|out                                                 lut          0.000             1.822               3        (80,50) 
+u_shape_system/u_m5b1/video/display_fifo/sub_16/n8             net          0.061             1.883               3        (80,50) 
+LUT__42060|in[1]                                               lut          0.061             1.944               3        (80,49) 
+LUT__42060|out                                                 lut          0.000             1.944               3        (80,49) 
+u_shape_system/u_m5b1/video/display_fifo/sub_16/n9             net          0.061             2.005               3        (80,49) 
+LUT__42061|in[1]                                               lut          0.061             2.066               3        (80,48) 
+LUT__42061|out                                                 lut          0.000             2.066               3        (80,48) 
+u_shape_system/u_m5b1/video/display_fifo/sub_16/n10            net          0.212             2.278               3        (80,48) 
+LUT__42062|in[1]                                               lut          0.061             2.339               3        (85,43) 
+LUT__42062|out                                                 lut          0.000             2.339               2        (85,43) 
+u_shape_system/u_m5b1/video/display_fifo/sub_16/n11            net          0.141             2.480               2        (85,43) 
+u_shape_system/u_m5b1/video/display_fifo/sub_16/add_2/i1|I1    adder        0.057             2.537               2        (85,47) 
+u_shape_system/u_m5b1/video/display_fifo/sub_16/add_2/i1|CO    adder        0.000             2.537               2        (85,47) 
+u_shape_system/u_m5b1/video/display_fifo/sub_16/add_2/n2       net          0.000             2.537               2        (85,47) 
+u_shape_system/u_m5b1/video/display_fifo/sub_16/add_2/i2|CI    adder        0.024             2.561               2        (85,48) 
+u_shape_system/u_m5b1/video/display_fifo/sub_16/add_2/i2|CO    adder        0.000             2.561               2        (85,48) 
+u_shape_system/u_m5b1/video/display_fifo/sub_16/add_2/n4       net          0.000             2.561               2        (85,48) 
+u_shape_system/u_m5b1/video/display_fifo/sub_16/add_2/i3|CI    adder        0.024             2.585               2        (85,49) 
+u_shape_system/u_m5b1/video/display_fifo/sub_16/add_2/i3|CO    adder        0.000             2.585               2        (85,49) 
+u_shape_system/u_m5b1/video/display_fifo/sub_16/add_2/n6       net          0.000             2.585               2        (85,49) 
+u_shape_system/u_m5b1/video/display_fifo/sub_16/add_2/i4|CI    adder        0.024             2.609               2        (85,50) 
+u_shape_system/u_m5b1/video/display_fifo/sub_16/add_2/i4|CO    adder        0.000             2.609               2        (85,50) 
+u_shape_system/u_m5b1/video/display_fifo/sub_16/add_2/n8       net          0.000             2.609               2        (85,50) 
+u_shape_system/u_m5b1/video/display_fifo/sub_16/add_2/i5|CI    adder        0.024             2.633               2        (85,51) 
+u_shape_system/u_m5b1/video/display_fifo/sub_16/add_2/i5|CO    adder        0.000             2.633               2        (85,51) 
+u_shape_system/u_m5b1/video/display_fifo/sub_16/add_2/n10      net          0.000             2.633               2        (85,51) 
+u_shape_system/u_m5b1/video/display_fifo/sub_16/add_2/i6|CI    adder        0.097             2.730               2        (85,52) 
+u_shape_system/u_m5b1/video/display_fifo/sub_16/add_2/i6|O     adder        0.000             2.730               2        (85,52) 
+u_shape_system/u_m5b1/display_bytes[9]                         net          0.346             3.076               2        (85,52) 
+LUT__38063|in[1]                                               lut          0.061             3.137               2        (89,50) 
+LUT__38063|out                                                 lut          0.000             3.137               2        (89,50) 
+n18404                                                         net          0.061             3.198               2        (89,50) 
+LUT__38064|in[2]                                               lut          0.061             3.259               2        (89,49) 
+LUT__38064|out                                                 lut          0.000             3.259               3        (89,49) 
+n18405                                                         net          0.224             3.483               3        (89,49) 
+LUT__41698|in[0]                                               lut          0.061             3.544               3        (89,52) 
+LUT__41698|out                                                 lut          0.000             3.544               2        (89,52) 
+n20120                                                         net          0.504             4.048               2        (89,52) 
+LUT__41699|in[2]                                               lut          0.061             4.109               2        (109,68)
+LUT__41699|out                                                 lut          0.000             4.109               2        (109,68)
+n20121                                                         net          0.350             4.459               2        (109,68)
+LUT__41702|in[0]                                               lut          0.061             4.520               2        (119,77)
+LUT__41702|out                                                 lut          0.000             4.520              17        (119,77)
+u_shape_system/u_m5b1/arbiter/choice[0]                        net          0.329             4.849              16        (119,77)
+LUT__42521|in[2]                                               lut          0.063             4.912              17        (120,86)
+LUT__42521|out                                                 lut          0.000             4.912               3        (120,86)
+u_shape_system/u_m5b1/arbiter/select_6/Select_18/n5            net          0.344             5.256               2        (120,86)
+LUT__42523|in[1]                                               lut          0.061             5.317               3        (118,82)
+LUT__42523|out                                                 lut          0.000             5.317               2        (118,82)
+n20378                                                         net          0.355             5.672               2        (118,82)
+LUT__42524|in[2]                                               lut          0.061             5.733               2        (122,80)
+LUT__42524|out                                                 lut          0.000             5.733               3        (122,80)
+n20379                                                         net          0.297             6.030               3        (122,80)
+LUT__42525|in[2]                                               lut          0.061             6.091               3        (116,79)
+LUT__42525|out                                                 lut          0.000             6.091               3        (116,79)
+n20380                                                         net          0.147             6.238               3        (116,79)
+LUT__42526|in[1]                                               lut          0.061             6.299               3        (118,79)
+LUT__42526|out                                                 lut          0.000             6.299              17        (118,79)
+u_shape_system/u_m5b1/arbiter/n10207                           net          0.453             6.752              17        (118,79)
+LUT__42531|in[0]                                               lut          0.063             6.815              17        (93,82) 
+LUT__42531|out                                                 lut          0.000             6.815               9        (93,82) 
+n23257_2                                                       net          0.728             7.543               9        (93,82) 
+u_shape_system/u_m5b1/arbiter/beat[5]~FF|CE                    ff           0.104             7.647               9        (88,81) 
+
+Capture Clock Path
+                    name                      model name   delay (ns)  cumulative delay (ns) pins on net    location
+======================================================================================================================
+clk_sys                                         inpad        0.000             0.000                0       (0,162)
+clk_sys                                         inpad        0.126             0.126             2026       (0,162)
+clk_sys                                         net          1.978             2.104             2026       (0,162)
+u_shape_system/u_m5b1/arbiter/beat[5]~FF|CLK    ff           0.000             2.104             2026       (88,81)
+

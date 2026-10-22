@@ -1,0 +1,44 @@
+from common import *
+import sys,xml.etree.ElementTree as ET,collections
+stage=sys.argv[1];assert stage in ['map_interface','query','place','route']
+assert json.loads((O/'I2C_GATE_RECEIPT.json').read_text())['passed']
+verify(json.loads((O/'PARENT_SOURCE_MANIFEST.json').read_text()))
+if stage=='map_interface':
+ project=R/'efinity/shape_orientation_fix_i3';src=[p for p in project.rglob('*') if p.is_file()];src += [R/n for n in json.loads((O/'COMPILE_SOURCE_FILES.json').read_text()) if n.startswith('rtl/')];src=sorted(set(src));sources=[rec(p) for p in src];available={p.resolve() for p in src};resolved=[]
+ for e in ET.parse(project/'Ti60_Demo.xml').getroot().iter():
+  if e.tag.endswith('}design_file'):assert (project/e.attrib['name']).resolve() in available,e.attrib['name']
+  if e.tag.endswith('}ip'):assert (project/e.attrib['path']).resolve() in available,e.attrib['path']
+ inc=[project/'src']+list((project/'ip').iterdir())
+ for p in src:
+  if p.suffix.lower() not in ['.v','.sv','.vh','.svh']:continue
+  text=re.sub(r'/\*.*?\*/','',p.read_text(errors='replace'),flags=re.S);text=re.sub(r'//[^\n]*','',text)
+  for n in re.findall(r'`include\s+"([^"\n]+)"',text):
+   found=next((q/n for q in [p.parent]+inc if(q/n).exists()),None);assert found is not None and found.resolve() in available,(p,n);resolved.append(dict(source=rec(p),include=n,resolved=rec(found)))
+ save(O/'SOURCE_MANIFEST.json',sources);save(O/'SOURCE_CLOSURE.json',dict(passed=True,count=len(sources),resolved_includes=resolved,no_IP_regeneration=True,uncompiled_MED_attempt_excluded=True))
+ F=O/('physical_'+time.strftime('%Y%m%d_%H%M%S'));F.mkdir();mirror=F/'mirror';copies=[]
+ for x in sources:
+  p=R/x['path'];q=mirror/x['path'];q.parent.mkdir(parents=True,exist_ok=True);q.write_bytes(p.read_bytes());copies.append(dict(source=x,copy=rec(q)))
+ P=mirror/'efinity/shape_orientation_fix_i3';save(F/'COPY_MANIFEST.json',dict(records=copies,relative_XML_requires_no_relocation=True));save(O/'ACTIVE_PHYSICAL.json',dict(path=F.relative_to(R).as_posix(),project=P.relative_to(R).as_posix()));stages=['map','interface']
+else:
+ a=json.loads((O/'ACTIVE_PHYSICAL.json').read_text());F=R/a['path'];P=R/a['project'];sources=json.loads((O/'SOURCE_MANIFEST.json').read_text());stages=[stage]
+tools=[rec(E/n) for n in ['bin/setup.bat','bin/efx_run.bat','bin/efx_map.exe','bin/efx_pnr.exe','scripts/efx_run_map.py','scripts/efx_run_pnr.py']]
+for s in stages:
+ d=json.loads((O/'PHASE_RESULT.json').read_text());d['phase']='FRESH_PHYSICAL_'+s.upper();save(O/'PHASE_RESULT.json',d);verify(sources);W=F/s;W.mkdir();before=[rec(p) for p in sorted((F/'mirror').rglob('*')) if p.is_file() and not any(v.startswith(('outflow','work_')) for v in p.relative_to(F/'mirror').parts)];save(W/'INPUTS_PRE.json',dict(source=sources,mirror=before,tools=tools,runner=rec(Path(__file__)),common=rec(Path(__file__).parent/'common.py')))
+ if s in ['map','interface']:cmd=rf'call E:\Efinity\2025.1\bin\setup.bat && call E:\Efinity\2025.1\bin\efx_run.bat Ti60_Demo.xml --flow {s}'
+ else:
+  assert json.loads((F/'STATIC_SELECTOR_GATE.json').read_text())['passed'];sdc='standalone_query.sdc' if s=='query' else 'Ti60_Demo_I3.sdc';work='work_query' if s=='query' else 'work_pnr'
+  if s=='place':assert json.loads((F/'query/RESULT.json').read_text())['passed']
+  if s=='route':assert json.loads((F/'place/RESULT.json').read_text())['passed']
+  opt='route' if s=='route' else 'pack place';cmd=rf'call E:\Efinity\2025.1\bin\setup.bat && E:\Efinity\2025.1\python311\bin\python.exe -B E:\Efinity\2025.1\scripts\efx_run_pnr.py Ti60_Demo --prj --family Titanium --device Ti60F225 --timing_model I3 --work_dir {work} --output_dir outflow --opt {opt} timing_analysis=on seed=1 max_threads=32 sdc_file={sdc}'
+ start=time.time()
+ with(W/'native.log').open('wb')as log:
+  p=subprocess.Popen(['cmd.exe','/d','/c',cmd],cwd=P,stdout=log,stderr=subprocess.STDOUT,creationflags=subprocess.CREATE_NO_WINDOW);owner=dict(pid=p.pid,manager_pid=os.getpid(),stage=s,command=cmd,cwd=str(P),running=True,started=start);save(W/'OWNER.json',owner);print('STANDALONE_NATIVE',s,p.pid,F,flush=True)
+  while p.poll()is None:save(F/'PHYSICAL_HEARTBEAT.json',dict(**owner,seconds=time.time()-start));heartbeat('FRESH_PHYSICAL_'+s.upper(),native_pid=p.pid,physical=str(F),native_running=True);time.sleep(10)
+ owner.update(running=False,exit=p.returncode,seconds=time.time()-start);save(W/'OWNER.json',owner);verify(sources);after=[rec(R/x['path'])for x in before];changed=[x['path']for x,y in zip(before,after)if x!=y];assert set(changed)<={(P/n).relative_to(R).as_posix()for n in ['Ti60_Demo.xml','Ti60_Demo.pt.sdc']},changed;save(W/'INPUTS_POST.json',dict(source=sources,mirror=after,tools=tools));text=(W/'native.log').read_text(errors='replace')
+ marker=bool(re.search(r'\b'+s+r'\s*:\s*PASS\b',text))if s in ['map','interface']else'STANDALONE_NATIVE_SELECTOR_EXISTENCE_COMPLETE_NO_PACK_PLACE_ROUTE'in text if s=='query'else'Post-placement primitive-level checks is successful'in text if s=='place'else'Ending stage final timing analysis'in text and(P/'outflow/Ti60_Demo.route.rpt').exists()
+ passed=p.returncode==0 and marker and not re.search(r'^\s*(?:ERROR|Error):',text,re.M)
+ if s=='query':
+  expected=set(json.loads((F/'NATIVE_REQUIRED_PIN_SET.json').read_text()));actual={v.strip('{}')for v in(P/'standalone_native_allpins_pre_place.txt').read_text().split()};assert expected<=actual;save(F/'NATIVE_PRE_PLACE_PIN_SET_AUDIT.json',dict(passed=True,required=len(expected),actual=len(actual),missing=[],native=rec(P/'standalone_native_allpins_pre_place.txt')))
+ if s in ['place','route']and passed:
+  report=P/f'outflow/Ti60_Demo.{s}.rpt';t=report.read_text();resource={k:int(re.search(p,t)[1])for k,p in dict(XLR=r'XLRs:\s*(\d+)',RAM=r'Memory Blocks:\s*(\d+)',DSP=r'DSP Blocks:\s*(\d+)').items()};fit=resource['XLR']<=51680 and resource['RAM']<=204 and resource['DSP']<=128;save(F/(s.upper()+'_RESOURCE_GATE.json'),dict(passed=fit,resource=resource,report=rec(report),limits=dict(XLR=51680,RAM=204,DSP=128)));passed=passed and fit
+ assert not list(F.rglob('*.bit'));save(W/'RESULT.json',dict(passed=passed,exit=p.returncode,marker=bool(marker),seconds=owner['seconds'],changed_tool_metadata=changed,no_bit_generated=True,log=rec(W/'native.log'),outputs=[rec(p)for p in sorted((P/'outflow').glob('*'))if p.is_file()]));assert passed,(s,F);print('STANDALONE_PHYSICAL_STAGE_PASS',s,flush=True)
