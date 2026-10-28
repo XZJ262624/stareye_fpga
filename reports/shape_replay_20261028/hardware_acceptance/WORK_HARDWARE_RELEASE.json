@@ -1,0 +1,36 @@
+{
+  "status": "RELEASE_SPECIFIED_BIT_FOR_USER_MANUAL_JTAG_CONTROLLED_DEMO_ONLY",
+  "date": "2026-10-28",
+  "identity": {
+    "branch": "codex/m5c-fusion-prototype",
+    "HEAD": "433a83e543cb40a52128d1eea4ae32ce83aecd16",
+    "parent": "b5f36414035193ab9c7aa8393732a93e10fe141e",
+    "candidate_commit": null,
+    "snapshot_manifest_sha256": "229651c8328909af42f5dffc016d0aec7413597de26bc8e3be936e299f453774"
+  },
+  "bit": {
+    "path": "reports/shape_replay_20261028/artifacts/StarEye_Shape_Replay.bit",
+    "bytes": 2392110,
+    "sha256": "d69dae300d37b78eda2a9e9b3b722f5c5ec5d506a01a202226b96cfa3f774d81"
+  },
+  "external_A": "PASS_WITH_FINDINGS",
+  "nonblocking_finding": {
+    "severity": "P2_NONBLOCKING",
+    "source": "User supplied external Codex A review, PASS_WITH_FINDINGS",
+    "location": "snapshot/files/rtl/shape_replay/replay_video_dma.sv:143",
+    "issue": "command_valid suppresses a REC sampling boundary even for no-op REC K1-short(command0) or K2-long(command2). If simultaneous with W_EOF/valid EOF/sample_gap0, sample spacing can grow from4 to5 camera frames.",
+    "work_static_verification": "Confirmed !command_valid is unconditional in next_slot selection; REC command0 and command2 do not change record state. No simulation rerun in this disposition.",
+    "impact_boundary": "Cadence disturbance; review found no premature registration, read-write collision or clip corruption. Does not establish all possible no-op effects beyond reviewed evidence.",
+    "disposition": "ACCEPT_DISCLOSED_DEFER_FOR_CONTROLLED_DEMO",
+    "not_fixed": true,
+    "operator_rule": "During normal REC wait for automatic completion; do not press K1-short/K2-long or other extra keys. Intentional K1-long cancellation is allowed only in the separate cancellation test.",
+    "future_fix": "In a later authorized technical revision suppress sampling only for commands actually changing recording state; add coincident W_EOF/EOF/gap0 directed tests and supplemental A review for changed bytes."
+  },
+  "user_manual_JTAG_only": true,
+  "agent_hardware_actions": false,
+  "SPI_Active_or_Flash_authorized": false,
+  "hardware_acceptance_passed": false,
+  "git_commit": false,
+  "DeepSeek_B": false,
+  "next_action": "User executes HARDWARE_CHECKLIST.md and returns observations; stop Work development while waiting."
+}
