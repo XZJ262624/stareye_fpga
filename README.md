@@ -1,3 +1,13 @@
+# 当前已验收交付入口（2026-10-29）
+
+可调阈值工业计件版已独立A审查通过，用户反馈全部测试正常；回放＋圆/矩形识别也已验收归档。
+
+- [已验收版本、工程入口、Git查询和离线恢复](docs/VERIFIED_REPOSITORY_20261029.md)
+- [工业计件工程](efinity/part_count_edge_keys_i3/Ti60_Demo.xml) · [已验收BIT](reports/part_count_edge_keys_20261028/artifacts/StarEye_CountEdgeKeys.bit)
+- [回放＋形状识别工程](efinity/shape_replay_i3/Ti60_Demo.xml)
+
+下面保留早期阶段记录，当前交付状态以上述索引及各版验收记录为准。
+
 # 星眸多算子边缘感知系统
 
 面向2026全国大学生嵌入式芯片与系统设计竞赛FPGA赛道，目标平台为易灵思VF-Ti60F225。

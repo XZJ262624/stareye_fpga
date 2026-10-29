@@ -1,0 +1,361 @@
+--- efinity/part_count_edge_open_i3/example_top.v
++++ efinity/part_count_edge_keys_i3/example_top.v
+@@ -925,7 +925,7 @@
+ 
+ 
+     wire [23:0] osd_rgb; wire osd_de,osd_hs,osd_vs;
+-    part_open_system u_shape_system(
++    part_keys_system u_shape_system(
+       .ui_clk(w_ddr3_ui_clk),
+       .cam_clk(cmos_pclk),
+       .pix_clk(clk_pixel),
+--- efinity/part_count_edge_open_i3/Ti60_Demo.xml
++++ efinity/part_count_edge_keys_i3/Ti60_Demo.xml
+@@ -49,17 +49,18 @@
+     <efx:design_file name="../../rtl/shape_standalone/gaussian_m5a/m5a_window.v" version="default" library="default" />
+     <efx:design_file name="../../rtl/shape_standalone/filter/gaussian_3x3.v" version="default" library="default" />
+     <efx:design_file name="../../rtl/shape_standalone/filter/gaussian_median_stream.v" version="default" library="default" />
+-    <efx:design_file name="../../rtl/part_count/part_count_controls.sv" version="system_verilog" library="default" />
+-    <efx:design_file name="../../rtl/part_count/part_count_stream_adapter.sv" version="system_verilog" library="default" />
+-    <efx:design_file name="../../rtl/part_count_edge_open/part_open_confirm.sv" version="system_verilog" library="default" />
+-    <efx:design_file name="../../rtl/part_count_edge_open/part_open_system.sv" version="system_verilog" library="default" />
++    <efx:design_file name="../../rtl/part_count_edge_keys/part_keys_controls.sv" version="system_verilog" library="default" />
++    <efx:design_file name="../../rtl/part_count_edge_keys/part_keys_adapter.sv" version="system_verilog" library="default" />
++    <efx:design_file name="../../rtl/part_count_edge_keys/part_keys_confirm.sv" version="system_verilog" library="default" />
++    <efx:design_file name="../../rtl/part_count_edge_keys/part_keys_system.sv" version="system_verilog" library="default" />
+     <efx:design_file name="../../rtl/part_count_edge_open/part_open_capture.sv" version="system_verilog" library="default" />
+     <efx:design_file name="../../rtl/part_count_edge_open/part_open_ccl.sv" version="system_verilog" library="default" />
+-    <efx:design_file name="../../rtl/part_count_edge_open/part_open_core.sv" version="system_verilog" library="default" />
++    <efx:design_file name="../../rtl/part_count_edge_keys/part_keys_core.sv" version="system_verilog" library="default" />
+     <efx:design_file name="../../rtl/part_count_edge_open/part_open_morph.sv" version="system_verilog" library="default" />
+-    <efx:design_file name="../../rtl/part_count_edge_open/part_open_osd.sv" version="system_verilog" library="default" />
++    <efx:design_file name="../../rtl/part_count_edge_keys/part_keys_osd.sv" version="system_verilog" library="default" />
+     <efx:design_file name="../../rtl/part_count_edge_open/part_open_frame_guard.sv" version="system_verilog" library="default" />
+     <efx:design_file name="../../rtl/part_count_edge_open/part_open_bank_ram.sv" version="system_verilog" library="default" />
++    <efx:design_file name="../../rtl/part_count_edge_keys/part_keys_config.sv" version="system_verilog" library="default" />
+     <efx:top_vhdl_arch name="" />
+   </efx:design_info>
+   <efx:constraint_info>
+--- rtl/part_count/part_count_controls.sv
++++ rtl/part_count_edge_keys/part_keys_controls.sv
+@@ -1,6 +1,9 @@
+ `timescale 1ns/1ps
+-// KEY0=key_n[0], KEY1=key_n[1]. Board silk mapping is an integration task.
+-module part_count_controls #(parameter DEBOUNCE_CYCLES=1488000,LONG_CYCLES=148500000)(
++// K1=N2=key_n[0] decrement; K2=M2=key_n[1] increment.
++// A single long hold emits exactly one single event on release, no autorepeat.
++// Any overlapping debounced gesture suppresses single events. SOF is unused.
++// event_valid/event_code are held through CE stalls and consumed once on CE.
++module part_keys_controls #(parameter DEBOUNCE_CYCLES=1488000,LONG_CYCLES=148500000)(
+  input wire clk,arst_n,ce,sof,input wire [1:0] key_n,
+  output reg event_valid,output reg [2:0] event_code,output reg event_fault
+ );
+@@ -10,18 +13,17 @@
+  (* async_reg="true" *) reg [1:0] release_sync,key_meta,key_sync;
+  wire rst_n=release_sync[1];
+  reg [1:0] stable,seen;reg [CW-1:0] c0,c1,released;
+- reg [LW-1:0] held;reg armed,long_seen;reg [2:0] pending;
++ reg [LW-1:0] held;reg armed,long_seen;
+  always @(posedge clk or negedge arst_n)
+   if(!arst_n)release_sync<=0;else release_sync<={release_sync[0],1'b1};
+  always @(posedge clk or negedge rst_n)begin
+   if(!rst_n)begin
+    key_meta<=3;key_sync<=3;stable<=3;seen<=0;c0<=0;c1<=0;released<=0;
+-   held<=0;armed<=0;long_seen<=0;pending<=0;event_valid<=0;event_code<=0;event_fault<=0;
++   held<=0;armed<=0;long_seen<=0;event_valid<=0;event_code<=0;event_fault<=0;
+   end else begin
+    key_meta<=key_n;key_sync<=key_meta;
+    if(ce)begin
+     event_valid<=0;
+-    if(sof&&pending!=0)begin event_valid<=1;event_code<=pending;pending<=0;end
+     if(key_sync[0]==stable[0])c0<=0;
+     else if(c0>=DEBOUNCE_CYCLES-1)begin stable[0]<=key_sync[0];c0<=0;end else c0<=c0+1'b1;
+     if(key_sync[1]==stable[1])c1<=0;
+@@ -33,8 +35,7 @@
+     end else begin
+      if(stable!=3)seen<=seen|~stable;
+      else if(seen!=0)begin
+-      if(pending!=0&&!sof)event_fault<=1;
+-      else pending<=long_seen?BOTH_LONG:seen==1?KEY0:seen==2?KEY1:BOTH_SHORT;
++      event_valid<=1;event_code<=long_seen?BOTH_LONG:seen==1?KEY0:seen==2?KEY1:BOTH_SHORT;
+       seen<=0;long_seen<=0;
+      end
+      if(stable==0)begin
+--- rtl/part_count/part_count_stream_adapter.sv
++++ rtl/part_count_edge_keys/part_keys_adapter.sv
+@@ -1,28 +1,30 @@
+ `timescale 1ns/1ps
+ // Derived from the validated same-clock shape adapter; RAW qualification only.
+-module part_count_stream_adapter #(parameter WIDTH=1280,HEIGHT=720)(
++module part_keys_adapter #(parameter WIDTH=1280,HEIGHT=720)(
+  input wire clk,rst_n,ce,source_sof,source_de,source_qualified,
+  input wire [63:0] source_frame_id,source_epoch,source_config,source_display_seq,
++ input wire [7:0] source_high,input wire source_view,
++ output wire [7:0] aligned_high,output wire aligned_view,
+  input wire final_de,final_raster_fault,input wire [11:0] final_x,final_y,
+  output reg adapter_fault,
+  output wire recognition_sof,recognition_eof,recognition_active,
+  output wire [63:0] aligned_frame_id,aligned_epoch,aligned_config,aligned_source_seq,
+  output wire aligned_qualified
+ );
+- reg [255:0] tags[0:1];
++ reg [264:0] tags[0:1];
+  reg [1:0] qualified;
+  reg [1:0] wr,rd;
+  reg source_armed,source_live,final_live;
+  reg synchronized,discard_live;
+  reg source_slot,final_slot;
+- reg [255:0] current_tag;
++ reg [264:0] current_tag;
+  reg completed_qualified,eof_pending;
+  wire empty=wr==rd;
+  wire full=(wr[0]==rd[0])&&(wr[1]!=rd[1]);
+  wire source_first=source_de&&source_armed&&!source_sof;
+  wire final_first=final_de&&final_x==0&&final_y==0;
+  wire final_last=final_de&&final_x==WIDTH-1&&final_y==HEIGHT-1;
+- wire [255:0] incoming_tag={source_frame_id,source_epoch,source_config,source_display_seq};
++ wire [264:0] incoming_tag={source_high,source_view,source_frame_id,source_epoch,source_config,source_display_seq};
+  // DMA qualification and frame ID are pixel-associated. Epoch/config/seq
+  // remain valid control fields in blanking, until the next explicit source SOF.
+  wire source_bad_now=source_live&&!source_sof&&
+@@ -36,8 +38,8 @@
+  wire live_qualified=qualified[final_slot]&&!(source_bad_now&&source_slot==final_slot);
+  assign recognition_sof=start_frame;
+  assign recognition_eof=eof_pending;
+- wire [255:0] selected_tag=start_frame?(bypass?incoming_tag:tags[rd[0]]):current_tag;
+- assign {aligned_frame_id,aligned_epoch,aligned_config,aligned_source_seq}=selected_tag;
++ wire [264:0] selected_tag=start_frame?(bypass?incoming_tag:tags[rd[0]]):current_tag;
++ assign {aligned_high,aligned_view,aligned_frame_id,aligned_epoch,aligned_config,aligned_source_seq}=selected_tag;
+  assign aligned_qualified=!adapter_fault&&!final_raster_fault&&
+   (discard_live?1'b0:final_first?start_frame&&head_qualified:final_live?live_qualified:
+    completed_qualified&&!(source_bad_now&&source_slot==final_slot));
+--- rtl/part_count_edge_open/part_open_confirm.sv
++++ rtl/part_count_edge_keys/part_keys_confirm.sv
+@@ -1,6 +1,6 @@
+ `timescale 1ns/1ps
+ // Three distinct camera jobs confirm CURRENT quantity. No arrival accumulator.
+-module part_open_confirm #(
++module part_keys_confirm #(
+  parameter CONFIRM_JOBS=3,parameter [63:0] STALE_TICKS=37200000
+ )(
+  input wire clk,rst_n,ce,invalidate,job_begin,job_done,job_good,
+@@ -79,7 +79,9 @@
+   end else if(ce)begin
+    if(invalidate||epoch!=ep||config_id!=cfg)begin
+     valid<=0;confirmations<=0;state<=IDLE;seen<=0;ep<=epoch;cfg<=config_id;
+-    if(epoch!=ep||config_id!=cfg)have_value<=0;
++    // Threshold changes revoke CURRENT and confirmation, preserving LAST.
++    // Epoch change retains the original history reset policy.
++    if(epoch!=ep)have_value<=0;
+    end else if((seen&&ticks<last_job_tick)||(state!=IDLE&&(job_begin||ticks<current_tick||ticks-current_tick>=STALE_TICKS)))begin
+     valid<=0;confirmations<=0;state<=IDLE;
+    end else begin
+--- rtl/part_count_edge_open/part_open_core.sv
++++ rtl/part_count_edge_keys/part_keys_core.sv
+@@ -1,5 +1,5 @@
+ `timescale 1ns/1ps
+-module part_open_core #(
++module part_keys_core #(
+  parameter RX=160,RY=90,RW=960,RH=540,
+  parameter [63:0] DIAG_ARM_TICKS=372000000,INTERVAL_TICKS=7440000,STALE_TICKS=37200000
+ )(
+@@ -7,14 +7,13 @@
+  input event_valid,event_fault,input [2:0] event_code,
+  input sof,eof,active,qualified,input [11:0] x,y,input edge_pixel,edge_support,
+  input [63:0] frame_id,epoch,config_id,display_seq,
+- output [63:0] generation,output reg view,output count_valid,have_value,busy,
++ input [63:0] generation,output count_valid,have_value,busy,
+  output [3:0] count,error_code,output [1:0] confirmations,output [63:0] count_frame,count_seq,count_tick,
+  output stale,output diag_held,diag_have,diag_armed,output [767:0] diag_record,
+  output job_done,job_good,output [20:0] service_cycles
+ );
+- assign generation=64'd1;
+- reg toggle_pending;reg [63:0] ep,observed_frame,observed_tick,last_job_frame;reg observed_valid,job_seen;reg fatal;
+- wire context_change=ep!=live_epoch;wire context_ok=epoch==live_epoch&&config_id==generation;
++ reg [63:0] cfg,ep,observed_frame,observed_tick,last_job_frame;reg observed_valid,job_seen;reg fatal;
++ wire context_change=ep!=live_epoch||cfg!=generation;wire context_ok=epoch==live_epoch&&config_id==generation;
+  wire age_bad=observed_valid&&(ticks<observed_tick||ticks-observed_tick>=STALE_TICKS);
+  wire complete_good,frame_bad;
+  part_open_frame_guard #(.RX(RX),.RY(RY),.RW(RW),.RH(RH)) frame_guard(.clk(clk),.rst_n(rst_n),.ce(ce),.invalidate(context_change||event_fault||fatal),.sof(sof),.eof(eof),.active(active),.qualified(qualified&&context_ok),.edge_support(edge_support),.x(x),.y(y),.frame_id(frame_id),.epoch(epoch),.config_id(config_id),.display_seq(display_seq),.complete_good(complete_good),.frame_bad(frame_bad));
+@@ -26,12 +25,10 @@
+  wire job_begin,matching,confirmed_valid,ccl_busy,accept_now;
+  wire candidate_new=(!observed_valid||frame_id>observed_frame)&&(!job_seen||frame_id>last_job_frame);
+  always @(posedge clk or negedge rst_n)begin
+-  if(!rst_n)begin view<=0;toggle_pending<=0;ep<=0;observed_frame<=0;observed_tick<=0;observed_valid<=0;last_job_frame<=0;job_seen<=0;fatal<=0;end
++  if(!rst_n)begin cfg<=0;ep<=0;observed_frame<=0;observed_tick<=0;observed_valid<=0;last_job_frame<=0;job_seen<=0;fatal<=0;end
+   else if(ce)begin
+-   if(source_sof&&toggle_pending)begin view<=!view;toggle_pending<=0;end
+-   if(event_valid&&(event_code==1||event_code==2))toggle_pending<=!toggle_pending;
+-   if(ticks==64'hffffffffffffffff||live_epoch==64'hffffffffffffffff||frame_id==64'hffffffffffffffff)fatal<=1;
+-   if(context_change)begin ep<=live_epoch;observed_valid<=0;job_seen<=0;end
++   if(generation==64'hffffffffffffffff||ticks==64'hffffffffffffffff||live_epoch==64'hffffffffffffffff||frame_id==64'hffffffffffffffff)fatal<=1;
++   if(context_change)begin cfg<=generation;ep<=live_epoch;observed_valid<=0;job_seen<=0;end
+    else begin
+     if(complete_good&&context_ok&&!event_fault&&(!observed_valid||frame_id>observed_frame))begin observed_valid<=1;observed_frame<=frame_id;observed_tick<=ticks;end
+     if(job_begin)begin job_seen<=1;last_job_frame<=job_frame;end
+@@ -43,12 +40,12 @@
+   .clk(clk),.rst_n(rst_n),.ce(ce),.invalidate(revoke),.ticks(ticks),.sof(sof),.eof(eof),.active(active),.qualified(qualified),.arm(!matching&&candidate_new),.x(x),.y(y),.edge_pixel(edge_pixel),.edge_support(edge_support),
+   .frame_id(frame_id),.epoch(epoch),.config_id(config_id),.display_seq(display_seq),.busy(ccl_busy),.accept_now(accept_now),.accepted(job_begin),.done(job_done),.good(job_good),.error_code(job_error),.count(job_count),.objects(job_objects),
+   .result_frame(job_frame),.result_epoch(job_epoch),.result_config(job_config),.result_seq(job_seq),.result_tick(job_tick),.service_cycles(service_cycles),.captured_runs(runs),.diag_event(diag_event),.diag_data(diag_data),.diag_tick(diag_tick));
+- part_open_confirm #(.STALE_TICKS(STALE_TICKS)) confirmation(
++ part_keys_confirm #(.STALE_TICKS(STALE_TICKS)) confirmation(
+   .clk(clk),.rst_n(rst_n),.ce(ce),.invalidate(revoke),.job_begin(job_begin),.job_done(job_done),.job_good(job_good),.ticks(ticks),.epoch(live_epoch),.config_id(generation),
+   .job_frame(job_frame),.job_epoch(job_epoch),.job_config(job_config),.job_seq(job_seq),.job_tick(job_tick),.job_count(job_count),.job_objects(job_objects),.valid(confirmed_valid),.have_value(have_value),.count(count),.confirmations(confirmations),.result_frame(count_frame),.result_seq(count_seq),.result_tick(count_tick),.matching(matching));
+  assign busy=ccl_busy||accept_now||matching;
+  assign count_valid=confirmed_valid&&!busy&&!revoke&&!stale;
+  assign error_code=event_fault||fatal?4'd15:source_bad||!context_ok?4'd8:stale?4'd11:job_error;
+- wire [767:0] live_record={32'h1,32'h454f5001,ticks,diag_tick,job_seq,job_config,job_epoch,job_frame,diag_data,28'd0,job_error,28'd0,job_error};
+- part_open_capture #(.ARM_TICKS(DIAG_ARM_TICKS)) diagnosis(.clk(clk),.rst_n(rst_n),.ce(ce),.ticks(ticks),.epoch(live_epoch),.config_id(generation),.fault(event_fault||fatal),.rearm(event_valid&&event_code==3),.event_valid(diag_event),.event_failure(1'b1),.live_record(live_record),.held(diag_held),.have(diag_have),.armed(diag_armed),.record(diag_record));
++ wire [767:0] live_record={32'h1,32'h454b5901,ticks,diag_tick,job_seq,job_config,job_epoch,job_frame,diag_data,28'd0,job_error,28'd0,job_error};
++ part_open_capture #(.ARM_TICKS(DIAG_ARM_TICKS)) diagnosis(.clk(clk),.rst_n(rst_n),.ce(ce),.ticks(ticks),.epoch(live_epoch),.config_id(generation),.fault(event_fault||fatal),.rearm(event_valid&&event_code==4),.event_valid(diag_event),.event_failure(1'b1),.live_record(live_record),.held(diag_held),.have(diag_have),.armed(diag_armed),.record(diag_record));
+ endmodule
+--- rtl/part_count_edge_open/part_open_osd.sv
++++ rtl/part_count_edge_keys/part_keys_osd.sv
+@@ -1,11 +1,13 @@
+ `timescale 1ns/1ps
+-module part_open_osd(
++module part_keys_osd(
+  input clk,rst_n,ce,sof,input [7:0] gray,input mask,de,hs,vs,view,input [11:0] x,y,
++ input [7:0] high_threshold,
+  input count_valid,have_value,busy,input [3:0] count,error_code,input [1:0] confirmations,
+  input [63:0] ticks,count_tick,input diag_held,diag_have,diag_armed,input [767:0] diag_record,
+  output reg [23:0] out_rgb,output reg out_de,out_hs,out_vs
+ );
+  `include "part_open_font.svh"
++ reg [7:0] hi;wire [7:0] lo=hi>>1;
+  reg vh,vld,hav,bsy,dh,dv,da;reg [3:0] cnt,err;reg [1:0] conf;reg [767:0] dr;
+  wire left=x>=16&&x<412&&y>=16&&y<70;
+  wire right=x>=624&&x<1200&&y>=16&&y<90;
+@@ -19,11 +21,16 @@
+    case(row)
+     0:line="CURRENT --   LAST --                            ";
+     1:line=vld?"READY   E0 C0                                   ":bsy?"SCAN    E0 C0                                   ":err!=0?"INVALID E0 C0                                   ":"WAIT    E0 C0                                   ";
+-    2:line=vh?"EDGE H48 L24 CLOSE 3X3                          ":"RAW  H48 L24 CLOSE 3X3                          ";
++    2:line=vh?"MSK H048 L024 CLOSE 3X3                         ":"RAW H048 L024 CLOSE 3X3                         ";
+     default:begin end
+    endcase
+    symbol=line[(47-slot)*8+:8];
+    if(row==0&&((vld&&(slot==8||slot==9))||(hav&&(slot==18||slot==19))))symbol=(slot==8||slot==18)?(cnt==10?"1":"0"):(cnt==10?"0":48+cnt);
++   if(row==2)case(slot)
++    5:symbol=48+hi/100;6:symbol=48+(hi/10)%10;7:symbol=48+hi%10;
++    10:symbol=48+lo/100;11:symbol=48+(lo/10)%10;12:symbol=48+lo%10;
++    default:begin end
++   endcase
+    if(row==1)case(slot)9:symbol=hexchar(err);12:symbol=48+conf;default:begin end endcase
+   end
+   if(right)begin
+@@ -52,9 +59,9 @@
+  end
+  wire roi_border=((x==160||x==1119)&&y>=90&&y<=629)||((y==90||y==629)&&x>=160&&x<=1119);
+  always @(posedge clk or negedge rst_n)begin
+-  if(!rst_n)begin vh<=0;vld<=0;hav<=0;bsy<=0;dh<=0;dv<=0;da<=0;cnt<=0;err<=0;conf<=0;dr<=0;out_rgb<=0;out_de<=0;out_hs<=1;out_vs<=1;end
++  if(!rst_n)begin hi<=48;vh<=0;vld<=0;hav<=0;bsy<=0;dh<=0;dv<=0;da<=0;cnt<=0;err<=0;conf<=0;dr<=0;out_rgb<=0;out_de<=0;out_hs<=1;out_vs<=1;end
+   else if(ce)begin
+-   if(sof)begin vh<=view;vld<=count_valid;hav<=have_value;bsy<=busy;cnt<=count;err<=error_code;conf<=confirmations;dh<=diag_held;dv<=diag_have;da<=diag_armed;dr<=diag_have?diag_record:768'd0;end
++   if(sof)begin hi<=high_threshold;vh<=view;vld<=count_valid;hav<=have_value;bsy<=busy;cnt<=count;err<=error_code;conf<=confirmations;dh<=diag_held;dv<=diag_have;da<=diag_armed;dr<=diag_have?diag_record:768'd0;end
+    out_de<=de;out_hs<=hs;out_vs<=vs;
+    if(!de)out_rgb<=0;
+    else if(left||right)out_rgb<=ink?(right?24'hffff80:24'hffffff):24'h000000;
+--- rtl/part_count_edge_open/part_open_system.sv
++++ rtl/part_count_edge_keys/part_keys_system.sv
+@@ -1,5 +1,5 @@
+ `timescale 1ns/1ps
+-module part_open_system #(parameter DEBOUNCE_CYCLES=1488000,LONG_CYCLES=148800000)(
++module part_keys_system #(parameter DEBOUNCE_CYCLES=1488000,LONG_CYCLES=148800000)(
+  input ui_clk,cam_clk,pix_clk,rst_n,pix_rst_n,pll_locked,cal_done,cal_pass,
+  input [1:0] key_n,input cam_vs,cam_valid,input [7:0] cam_data,
+  output [23:0] display_rgb_out,output display_de_out,display_hs_out,display_vs_out,
+@@ -59,17 +59,19 @@
+ 	
+ 
+  wire event_valid,event_fault;wire [2:0] event_code;
+- part_count_controls #(.DEBOUNCE_CYCLES(DEBOUNCE_CYCLES),.LONG_CYCLES(LONG_CYCLES)) u_controls(
++ part_keys_controls #(.DEBOUNCE_CYCLES(DEBOUNCE_CYCLES),.LONG_CYCLES(LONG_CYCLES)) u_controls(
+   .clk(pix_clk),.arst_n(pix_rst_n),.ce(1'b1),.sof(source_sof),.key_n(key_n),.event_valid(event_valid),.event_code(event_code),.event_fault(event_fault));
+  wire final_de,final_hs,final_vs,raster_fault,base_fault;wire [11:0] final_x,final_y;wire [7:0] final_gray;
+  wire base_de,base_hs,base_vs,base_edge,base_support;wire [7:0] base_gray;
+  wire [63:0] generation,count_frame,count_seq,count_tick;
++ wire [7:0] high_threshold,aligned_high;wire aligned_view,config_fault,view;
++ part_keys_config config_control(.clk(pix_clk),.rst_n(pix_rst_n),.ce(1'b1),.source_sof(source_sof),.event_valid(event_valid),.event_code(event_code),.high_threshold(high_threshold),.generation(generation),.view(view),.changed(),.config_fault(config_fault));
+  wire diag_held,diag_have,diag_armed;wire [767:0] diag_record;
+- wire view,count_valid,have_value,busy,stale,edge_pixel,edge_support;
++ wire count_valid,have_value,busy,stale,edge_pixel,edge_support;
+  wire [3:0] count,error_code;wire [1:0] confirmations;
+  m5a_stream_top #(.WIDTH(1280),.HEIGHT(720),.H_TOTAL(1650)) u_m5a_stream(
+   .clk(pix_clk),.ce(1'b1),.arst_n(pix_rst_n),.in_gray(lcd_gray),.in_de(lcd_de),.in_hs(lcd_hs),.in_vs(lcd_vs),.in_sof(~lcd_vs),
+-  .filter_request(2'd2),.threshold(8'd48),.mode(3'd0),.out_rgb(),.out_de(base_de),.out_hs(base_hs),.out_vs(base_vs),
++  .filter_request(2'd2),.threshold(high_threshold),.mode(3'd0),.out_rgb(),.out_de(base_de),.out_hs(base_hs),.out_vs(base_vs),
+   .out_raw(base_gray),.out_legacy_mag(),.out_legacy_bin(),.out_nms(),.out_threshold(),.out_mode(),.out_filter_enable(),
+   .out_overlay_valid(),.out_overlay_edge(),.out_nms_valid(),.out_canny_valid(base_support),.out_canny_edge(base_edge),.out_x(),.out_y(),.raster_fault(base_fault),
+   .tap_input_frame_id(m5b1_lcd_frame_id),.tap_input_epoch(m5b1_lcd_epoch),.tap_input_qualified(m5b1_lcd_qualified),
+@@ -80,22 +82,22 @@
+   .out_raw(final_gray),.out_de(final_de),.out_hs(final_hs),.out_vs(final_vs),.out_edge(edge_pixel),.out_support(edge_support),.out_fault(raster_fault),.out_x(final_x),.out_y(final_y));
+  wire rec_sof,rec_eof,rec_active,aligned_qualified,adapter_fault;
+  wire [63:0] aligned_frame,aligned_epoch,aligned_config,aligned_seq;
+- part_count_stream_adapter u_part_adapter(.clk(pix_clk),.rst_n(pix_rst_n),.ce(1'b1),
++ part_keys_adapter u_part_adapter(.clk(pix_clk),.rst_n(pix_rst_n),.ce(1'b1),
+   .source_sof(source_sof),.source_de(lcd_de),.source_qualified(m5b1_lcd_qualified&&!time_fault),
+-  .source_frame_id(m5b1_lcd_frame_id),.source_epoch(m5b1_lcd_epoch),.source_config(generation),.source_display_seq(display_seq),
++  .source_frame_id(m5b1_lcd_frame_id),.source_epoch(m5b1_lcd_epoch),.source_config(generation),.source_display_seq(display_seq),.source_high(high_threshold),.source_view(view),.aligned_high(aligned_high),.aligned_view(aligned_view),
+   .final_de(final_de),.final_raster_fault(raster_fault),.final_x(final_x),.final_y(final_y),.adapter_fault(adapter_fault),
+   .recognition_sof(rec_sof),.recognition_eof(rec_eof),.recognition_active(rec_active),
+   .aligned_frame_id(aligned_frame),.aligned_epoch(aligned_epoch),.aligned_config(aligned_config),.aligned_source_seq(aligned_seq),.aligned_qualified(aligned_qualified));
+- part_open_core u_part_core(.clk(pix_clk),.rst_n(pix_rst_n),.ce(1'b1),.source_sof(source_sof),.ticks(pixel_ticks),.live_epoch(m5b1_epoch),
+-  .event_valid(event_valid),.event_fault(event_fault||time_fault||adapter_fault),.event_code(event_code),
++ part_keys_core u_part_core(.clk(pix_clk),.rst_n(pix_rst_n),.ce(1'b1),.source_sof(source_sof),.ticks(pixel_ticks),.live_epoch(m5b1_epoch),
++  .event_valid(event_valid),.event_fault(event_fault||time_fault||adapter_fault||config_fault),.event_code(event_code),
+   .sof(rec_sof),.eof(rec_eof),.active(rec_active),.qualified(aligned_qualified),.x(final_x),.y(final_y),.edge_pixel(edge_pixel),.edge_support(edge_support),
+-  .frame_id(aligned_frame),.epoch(aligned_epoch),.config_id(aligned_config),.display_seq(aligned_seq),.generation(generation),.view(view),
++  .frame_id(aligned_frame),.epoch(aligned_epoch),.config_id(aligned_config),.display_seq(aligned_seq),.generation(generation),
+   .count_valid(count_valid),.have_value(have_value),.busy(busy),.count(count),.error_code(error_code),.confirmations(confirmations),
+   .count_frame(count_frame),.count_seq(count_seq),.count_tick(count_tick),.stale(stale),
+   .diag_held(diag_held),.diag_have(diag_have),.diag_armed(diag_armed),.diag_record(diag_record),.job_done(),.job_good(),.service_cycles());
+  assign uart_tx=1'b1;
+- part_open_osd u_osd(.clk(pix_clk),.rst_n(pix_rst_n),.ce(1'b1),.sof(rec_sof),.gray(final_gray),.mask(edge_pixel),
+-  .de(final_de),.hs(final_hs),.vs(final_vs),.x(final_x),.y(final_y),.view(view),.count_valid(count_valid),.have_value(have_value),.busy(busy),
++ part_keys_osd u_osd(.clk(pix_clk),.rst_n(pix_rst_n),.ce(1'b1),.sof(rec_sof),.gray(final_gray),.mask(edge_pixel),
++  .de(final_de),.hs(final_hs),.vs(final_vs),.x(final_x),.y(final_y),.view(aligned_view),.high_threshold(aligned_high),.count_valid(count_valid),.have_value(have_value),.busy(busy),
+   .count(count),.error_code(error_code),.confirmations(confirmations),.ticks(pixel_ticks),.count_tick(count_tick),
+   .diag_held(diag_held),.diag_have(diag_have),.diag_armed(diag_armed),.diag_record(diag_record),.out_rgb(display_rgb_out),.out_de(display_de_out),.out_hs(display_hs_out),.out_vs(display_vs_out));
+ endmodule
+--- /dev/null
++++ rtl/part_count_edge_keys/part_keys_config.sv
+@@ -0,0 +1,38 @@
++`timescale 1ns/1ps
++// Same-pixel-clock requests, committed only at source SOF. Effective bypass
++// presents the new value on that very edge to all source consumers.
++module part_keys_config(
++ input clk,rst_n,ce,source_sof,event_valid,input [2:0] event_code,
++ output [7:0] high_threshold,output [63:0] generation,output view,
++ output changed,output reg config_fault
++);
++ reg [7:0] pending_high,active_high;
++ reg pending_view,active_view;
++ reg [63:0] active_generation;
++ wire apply=source_sof&&ce;
++ wire change=apply&&pending_high!=active_high;
++ assign changed=change;
++ assign high_threshold=apply?pending_high:active_high;
++ assign view=apply?pending_view:active_view;
++ assign generation=change&&active_generation!=64'hffffffffffffffff ?
++                    active_generation+64'd1:active_generation;
++ always @(posedge clk or negedge rst_n)begin
++  if(!rst_n)begin pending_high<=48;active_high<=48;pending_view<=0;active_view<=0;active_generation<=1;config_fault<=0;end
++  else if(ce)begin
++   if(source_sof)begin
++    active_high<=pending_high;active_view<=pending_view;
++    if(change)begin
++     if(active_generation==64'hffffffffffffffff)config_fault<=1;
++     else active_generation<=active_generation+64'd1;
++    end
++   end
++   // A release arriving exactly on SOF is queued for the next source frame.
++   if(event_valid)case(event_code)
++    1:if(pending_high>8)pending_high<=pending_high-8'd8;
++    2:if(pending_high<128)pending_high<=pending_high+8'd8;
++    3:pending_view<=!pending_view;
++    default:begin end
++   endcase
++  end
++ end
++endmodule
